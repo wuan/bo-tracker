@@ -1,13 +1,11 @@
 The Debian Package blitzortung-tracker
 ----------------------------
 
-This is a source package with the main source missing. To build a working blitzortung tracker package,
-get the original linux tracker sources from http://www.blitzortung.org and copy the source file into
-the package source at the following location:
-  source/blitzortung-tracker.cc
-  
 To build the package, first install the missing dependencies via
-  sudo apt-get install debhelper build-essential
+  sudo apt-get install debhelper build-essential autotools
+
+make -f Makefile.cvs
+
 
 The go to the source package directory blitzortung-tracker-simple_15.0 to create the package via
   dpkg-buildpackage

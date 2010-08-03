@@ -1,6 +1,6 @@
-blitzortung-tracker (15.0) unstable; urgency=low
+blitzortung-tracker (20.0) unstable; urgency=low
 
   * Initial Release.
     * Modified general blitzortung-tracker package to avoid use of autoconf/automake on simple systems
 
- -- Andreas Wuerl <awuerl@gmx.net>  Mon, 26 Apr 2010 10:00:00 +0200
+ -- Andreas Wuerl <awuerl@gmx.net>  Mon, 2 Aug 2010 19:30:00 +0200

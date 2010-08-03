@@ -8,6 +8,7 @@
 #include <boost/thread/condition.hpp>
 
 #include "namespaces.h"
+#include "data/sample/Base.h"
 
 namespace blitzortung {
   namespace network {
@@ -60,22 +61,19 @@ namespace blitzortung {
 	  }
       };
 
-    void transfer(std::auto_ptr<bo::data::sample::Base> sample) {
-      std::cout << sample->getTime() << " " << sample->getAntennaLongitude() << " " << sample->getAntennaLatitude() << " " << (int) sample->getGpsNumberOfSatellites() << std::endl;
-      for (int peak=1; peak<=1; peak++) {
-	std::cout << "  " << peak << " " << sample->getTime(peak) << " " << sample->getAmplitude(peak) << " (" << sample->getXAmplitude(peak) << ", " << sample->getYAmplitude(peak) << ")" << std::endl;
-      }
-    }
 
     class Base : private boost::noncopyable {
 
-      Base();
+      public:
+	Base();
 
-      virtual ~Base();
+	virtual ~Base();
 
-      //! add sample to send queue
-      void put(std::auto_ptr<data::sample::Base>);
+	//! add sample to send queue
+	void put(std::auto_ptr<data::sample::Base>);
 
-    }
+    };
   }
 }
+
+#endif

@@ -10,6 +10,7 @@
 
 #include "namespaces.h"
 #include "hardware/pcb/V6.h"
+#include "network/Base.h"
 #include "util/RingBuffer.h"
 #include "exception/Base.h"
 
@@ -20,20 +21,23 @@ int main(int argc, char **argv) {
 
   std::string serialPort = "/dev/ttyUSB0";
   int serialBaudRate = 19200;
+
   bo::hardware::SerialPort serial(serialPort, serialBaudRate);
 
-  bo::hardware::pcb::V6 driver(serial);
+  //! hardware driver for blitzortung measurement hardware
+  std::auto_ptr<bo::hardware::pcb::Base> hardware(new bo::hardware::pcb::V6(serial));
 
-  boost::thread transferThread;
+  //! network driver for sample transmission
+  std::auto_ptr<bo::network::Base> network(new bo::network::Base());
 
-  while (driver.isOpen()) {
 
-    std::auto_ptr<bo::data::sample::Base> sample = driver.read();
+  while (hardware->isOpen()) {
+
+    std::auto_ptr<bo::data::sample::Base> sample = hardware->read();
 
     if (sample.get() != 0) {
-      boost::thread transferThread(boost::bind(transfer, sample));
+      network->put(sample);
     }
-
 
   }
 
