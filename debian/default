@@ -1,0 +1,20 @@
+# Defaults for blitzortung-tracker initscript
+# sourced by /etc/init.d/blitzortung-tracker
+# installed at /etc/default/blitzortung-tracker by the maintainer scripts
+
+#
+# This is a POSIX shell fragment
+#
+BLITZORTUNG_USERNAME=""
+BLITZORTUNG_PASSWORD=""
+
+# GPSTYPE (garmin_4800, garmin_19200, sirf_4800, or sirf_19200)
+BLITZORTUNG_TRACKER_GPSTYPE=sirf_19200
+
+BLITZORTUNG_TRACKER_DEVICE="/dev/ttyS0"
+# BAUDRATE (0=4800, 1=9600, 2=19200, 3=38400)
+BLITZORTUNG_TRACKER_BAUDRATE=2
+
+BLITZORTUNG_TRACKER_USER=root
+
+export DAEMON_OPTS="-i $BLITZORTUNG_TRACKER_GPSTYPE -b $BLITZORTUNG_TRACKER_BAUDRATE $BLITZORTUNG_TRACKER_DEVICE $BLITZORTUNG_USERNAME $BLITZORTUNG_PASSWORD"

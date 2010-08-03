@@ -1,0 +1,16 @@
+Source: blitzortung-tracker
+Section: misc
+Priority: extra
+Maintainer: Andreas Wuerl <awuerl@gmx.net>
+Build-Depends: debhelper (>= 7), build-essential
+Standards-Version: 3.8.1
+Homepage: http://www.blitzortung.org/
+
+Package: blitzortung-tracker
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Conflicts: blitzortung-tracker
+Replaces: blitzortung-tracker
+Description: blitzortung.org tracker software
+ <insert long description, indented with spaces>
+
