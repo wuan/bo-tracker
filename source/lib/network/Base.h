@@ -14,12 +14,13 @@ namespace blitzortung {
   namespace network {
 
     template <typename T>
-      class BlockingQueue {
+      class Queue {
 	private:
 	  std::queue<T> queue_;
 	  mutable boost::mutex mutex_;
 	  boost::condition condition_;
 
+	public:
 	  void push(const T& data) {
 	    boost::mutex::scoped_lock lock(mutex_);
 
@@ -63,6 +64,9 @@ namespace blitzortung {
 
 
     class Base : private boost::noncopyable {
+
+      private:
+	Queue<bo::data::sample::Base*> sampleQueue_;
 
       public:
 	Base();

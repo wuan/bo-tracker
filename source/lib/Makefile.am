@@ -1,7 +1,8 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
 AM_LDFLAGS = \
-	-lboost_regex
+	-lboost_regex-mt \
+	-lboost_thread-mt
 
 lib_LTLIBRARIES = libblitzortung.la
 

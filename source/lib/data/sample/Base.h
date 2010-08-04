@@ -80,8 +80,11 @@ namespace blitzortung {
 
 	  //! getter for antenna latitude value
 	  virtual unsigned char getGpsNumberOfSatellites() const = 0;
+
+
       };
       
+      std::ostream& operator << (std::ostream& os, const Base&);
     }
   }
 }

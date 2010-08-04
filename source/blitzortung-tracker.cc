@@ -14,9 +14,6 @@
 #include "util/RingBuffer.h"
 #include "exception/Base.h"
 
-
-
-
 int main(int argc, char **argv) {
 
   std::string serialPort = "/dev/ttyUSB0";
