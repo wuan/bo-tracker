@@ -19,8 +19,20 @@ namespace blitzortung {
 	}
 
 	void operator ()() {
-	  std::cout << "running\n";
-	  sampleQueue_.wait();
+	  std::cout << "network: running\n";
+
+	  while (true) {
+	    const boost::system_time timeout=boost::get_system_time() + boost::posix_time::milliseconds(500);
+	    sampleQueue_.timed_wait(timeout);
+
+	    if (! sampleQueue_.empty()) {
+	      samples_->push_back(sampleQueue_.front());
+	      sampleQueue_.pop();
+	      std::cout << "network: # of samples " << samples_->size() << std::endl;
+	    } else {
+	      std::cout << "network: timeout\n";
+	    }
+	  }
 	}
     };
 
