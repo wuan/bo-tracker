@@ -78,9 +78,14 @@ namespace blitzortung {
 	  //! setter for gps satellite count
 	  virtual void setGpsNumberOfSatellites(const unsigned char satelliteCount) = 0;
 
-	  //! getter for antenna latitude value
+	  //! getter for gps satelllite count
 	  virtual unsigned char getGpsNumberOfSatellites() const = 0;
 
+	  //! setter for gps status
+	  virtual void setGpsStatus(const char gpsStatus) = 0;
+
+	  //! getter for gps status
+	  virtual char getGpsStatus() const = 0;
 
       };
       

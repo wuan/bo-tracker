@@ -52,6 +52,9 @@ namespace blitzortung {
 	  //! read GPS status char
 	  const char getStatus() const;
 
+	  //! is GPS data valid?
+	  const bool isValid() const;
+
 	  //! add actual satellite count value
 	  void addSatelliteCount(const std::string &);
 

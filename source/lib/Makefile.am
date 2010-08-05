@@ -25,6 +25,7 @@ libblitzortung_la_SOURCES = \
 	\
 	namespace.h \
 	network/Base.h network/Base.cc \
+	network/Creds.h network/Creds.cc \
 	\
 	util/RingBuffer.h util/RingBuffer.cc \
 	util/String.h util/String.cc

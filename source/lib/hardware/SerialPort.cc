@@ -15,7 +15,7 @@ namespace blitzortung {
       buffer_(""),
       isOpen_(false)
     {
-      std::cout << "open serial port " << portName_ << std::endl;
+      //std::cout << "open serial port " << portName_ << std::endl;
 
       serialFd_ = open(portName_.c_str(), O_RDWR | O_NOCTTY);
 

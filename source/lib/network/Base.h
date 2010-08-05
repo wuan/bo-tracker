@@ -5,10 +5,13 @@
 
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/thread/xtime.hpp>
 #include <boost/thread/condition.hpp>
 
 #include "namespaces.h"
+#include "network/Creds.h"
 #include "data/sample/Base.h"
+
 
 namespace blitzortung {
   namespace network {
@@ -31,22 +34,23 @@ namespace blitzortung {
 	  void push(const T& data) {
 	    boost::mutex::scoped_lock lock(mutex_);
 
-	    const bool emptyBeforePush = empty();
+	    const bool emptyBeforePush = queue_.empty();
 
 	    queue_.push(data);
 
 	    if (emptyBeforePush)
 	      condition_.notify_one();
-
 	  }
 
 	  bool empty() const {
 	    boost::mutex::scoped_lock lock(mutex_);
+
 	    return queue_.empty();
 	  }
 
 	  T& front() {
 	    boost::mutex::scoped_lock lock(mutex_);
+
 	    return queue_.front();
 	  }
 
@@ -63,10 +67,10 @@ namespace blitzortung {
 	    }
 	  }
 
-	  void timed_wait(const boost::system_time& timeout) {
+	  void timed_wait(const boost::xtime& xtime) {
 	    boost::mutex::scoped_lock lock(mutex_);
 
-	    condition_.timed_wait(lock, timeout);
+	    condition_.timed_wait(lock, xtime);
 	  }
 
 	  void pop() {
@@ -83,13 +87,12 @@ namespace blitzortung {
 	Queue<bo::data::sample::Base*> sampleQueue_;
 
       public:
-	Base();
+	Base(const Creds& creds, int sleepTime);
 
 	virtual ~Base();
 
 	//! add sample to send queue
 	void put(std::auto_ptr<data::sample::Base>);
-
     };
   }
 }
