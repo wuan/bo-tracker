@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
 
   bo::hardware::SerialPort serial(serialPort, serialBaudRate);
 
+
   //! hardware driver for blitzortung measurement hardware
   std::auto_ptr<bo::hardware::pcb::Base> hardware(new bo::hardware::pcb::V6(serial));
 
