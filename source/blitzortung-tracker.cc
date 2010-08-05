@@ -28,6 +28,7 @@ int main(int argc, char **argv) {
   //! network driver for sample transmission
   std::auto_ptr<bo::network::Base> network(new bo::network::Base());
 
+	    boost::ptr_vector<bo::data::sample::Base> samples_;
 
   while (hardware->isOpen()) {
 

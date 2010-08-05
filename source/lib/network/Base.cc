@@ -3,10 +3,31 @@
 namespace blitzortung {
   namespace network {
 
-    Base::Base() {
-      callable networkThread(sampleQueue_);
+    class NetworkTransfer {
+      private:
+	Queue<data::sample::Base*>& sampleQueue_;
+        data::sample::Base::VP samples_;
 
-      boost::thread thread(networkThread);
+      public:
+	NetworkTransfer(Queue<bo::data::sample::Base*>& sampleQueue)
+	  : sampleQueue_(sampleQueue),
+	  samples_(new data::sample::Base::V())
+	{
+	}
+
+	virtual ~NetworkTransfer() {
+	}
+
+	void operator ()() {
+	  std::cout << "running\n";
+	  sampleQueue_.wait();
+	}
+    };
+
+    Base::Base() {
+      NetworkTransfer networkTransfer(sampleQueue_);
+
+      boost::thread thread(networkTransfer);
 
     }
 
