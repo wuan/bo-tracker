@@ -66,6 +66,27 @@ namespace blitzortung {
     class Base : private boost::noncopyable {
 
       private:
+
+	class callable {
+	  private:
+	    Queue<data::sample::Base*>& sampleQueue_;
+	    data::sample::Base::V samples_;
+	    //data::sample::Base::VP samples(new data::sample::Base::V());
+
+	  public:
+	    callable(Queue<bo::data::sample::Base*>& sampleQueue)
+	      : sampleQueue_(sampleQueue)
+	    {
+	    }
+
+	    ~callable() {
+	    }
+
+	    void operator ()() {
+	      std::cout << "running\n";
+	    }
+	};
+
 	Queue<bo::data::sample::Base*> sampleQueue_;
 
       public:

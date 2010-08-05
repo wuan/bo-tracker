@@ -4,6 +4,10 @@ namespace blitzortung {
   namespace network {
 
     Base::Base() {
+      callable networkThread(sampleQueue_);
+
+      boost::thread thread(networkThread);
+
     }
 
     Base::~Base() {
