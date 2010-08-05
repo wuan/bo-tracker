@@ -16,11 +16,18 @@ namespace blitzortung {
     template <typename T>
       class Queue {
 	private:
+	  int timeout_;
 	  std::queue<T> queue_;
 	  mutable boost::mutex mutex_;
 	  boost::condition condition_;
 
 	public:
+
+	  Queue(int timeout=0) :
+	    timeout_(timeout)
+	  {
+	  }
+
 	  void push(const T& data) {
 	    boost::mutex::scoped_lock lock(mutex_);
 
@@ -54,6 +61,12 @@ namespace blitzortung {
 	    while (queue_.empty()) {
 	      condition_.wait(lock);
 	    }
+	  }
+
+	  void timed_wait(const boost::system_time& timeout) {
+	    boost::mutex::scoped_lock lock(mutex_);
+
+	    condition_.timed_wait(lock, timeout);
 	  }
 
 	  void pop() {
