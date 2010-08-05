@@ -28,11 +28,14 @@ namespace blitzortung {
 	  typedef signed char TYPE_AMPLITUDE;
 	  // simple count type
 	  typedef unsigned char TYPE_GPSNUMBEROFSATELLITES;
+	  // simple char type
+	  typedef char TYPE_GPSSTATUS;
 
 	  static const unsigned int IDX_TIME;
 	  static const unsigned int IDX_LONGITUDE;
 	  static const unsigned int IDX_LATITUDE;
 	  static const unsigned int IDX_GPSNUMBEROFSATELLITES;
+	  static const unsigned int IDX_GPSSTATUS;
 	  static const unsigned int IDX_OFFSET1;
 	  static const unsigned int IDX_XAMP1;
 	  static const unsigned int IDX_YAMP1;
@@ -84,8 +87,14 @@ namespace blitzortung {
 	  //! setter for gps satellite count
 	  virtual void setGpsNumberOfSatellites(const unsigned char satelliteCount);
 
-	  //! getter for antenna latitude value
+	  //! getter for gps satellite count
 	  virtual unsigned char getGpsNumberOfSatellites() const;
+
+	  //! setter for gps status
+	  virtual void setGpsStatus(const char gpsStatus);
+
+	  //! getter for gps status
+	  virtual char getGpsStatus() const;
 
 	  //! return size of current data format
 	  virtual unsigned int getDataSize() const;

@@ -29,11 +29,16 @@ namespace blitzortung {
 
 	  pt::ptime eventtime = gps_.getTime(counter);
 
-	  sample = parseData(eventtime, fields[2]);
+	  if (gps_.isValid()) {
+	    sample = parseData(eventtime, fields[2]);
 
-	  sample->setAntennaLongitude(gps_.getLocation().getLongitude());
-	  sample->setAntennaLatitude(gps_.getLocation().getLatitude());
-	  sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
+	    sample->setAntennaLongitude(gps_.getLocation().getLongitude());
+	    sample->setAntennaLatitude(gps_.getLocation().getLatitude());
+	    sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
+	    sample->setGpsStatus(gps_.getStatus());
+	  } else {
+	    std::cout << "GPS not valid -> no sample\n";
+	  }
 
 	} else {
 	  throw exception::Base("blitzortung::hardware::pcb::V6.parse() wrong data to parse");

@@ -27,7 +27,7 @@ namespace blitzortung {
 
 	pt::time_facet *timefacet = new pt::time_facet();
 	timefacet->format("%Y%m%d %H:%M:%S.%f");
-	os.imbue(std::locale(std::locale::classic(), timefacet));
+	std::locale oldLocale = os.imbue(std::locale(std::locale::classic(), timefacet));
 
 	os << sample.getTime() << " " << sample.getAntennaLongitude() << " " << sample.getAntennaLatitude();
 	os << " " << (int) sample.getGpsNumberOfSatellites() << std::endl;
@@ -36,6 +36,9 @@ namespace blitzortung {
 	  os << "  " << peak << " " << sample.getTime(peak) << " " << sample.getAmplitude(peak);
 	  os << " (" << sample.getXAmplitude(peak) << ", " << sample.getYAmplitude(peak) << ")" << std::endl;
 	}
+
+	// restore original locale
+	os.imbue(oldLocale);
 
 	return os;
       }

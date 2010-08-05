@@ -24,6 +24,12 @@ namespace blitzortung {
 	return status_;
       }
 
+      const bool Base::isValid() const {
+	if (satelliteCount_.getActualSize() ==0)
+	  return false;
+	return true;
+      }
+
       void Base::addSatelliteCount(const std::string &satelliteCountString) {
 	int satelliteCount;
 	std::istringstream iss(satelliteCountString);
@@ -58,7 +64,8 @@ namespace blitzortung {
 
 	  // set GPS PPS time
 	  time_.setSecond(fields[4] + " " + fields[3], counter);
-	  std::cout << time_.getSecond() << std::endl;
+
+	  //std::cout << time_.getSecond() << "\r" << std::flush;
 
 	  location_.addLongitude(fields[7], fields[8][0]);
 	  location_.addLatitude(fields[5], fields[6][0]);

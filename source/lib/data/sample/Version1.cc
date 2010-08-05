@@ -21,7 +21,8 @@ namespace blitzortung {
       const unsigned int Version1::IDX_LONGITUDE = IDX_TIME + sizeof(TYPE_TIME);
       const unsigned int Version1::IDX_LATITUDE = IDX_LONGITUDE + sizeof(TYPE_COORDINATE);
       const unsigned int Version1::IDX_GPSNUMBEROFSATELLITES = IDX_LATITUDE + sizeof(TYPE_COORDINATE);
-      const unsigned int Version1::IDX_OFFSET1 = IDX_GPSNUMBEROFSATELLITES + sizeof(TYPE_GPSNUMBEROFSATELLITES);
+      const unsigned int Version1::IDX_GPSSTATUS = IDX_GPSNUMBEROFSATELLITES + sizeof(TYPE_GPSNUMBEROFSATELLITES);
+      const unsigned int Version1::IDX_OFFSET1 = IDX_GPSSTATUS + sizeof(TYPE_GPSSTATUS);
       const unsigned int Version1::IDX_XAMP1 = IDX_OFFSET1 + sizeof(TYPE_OFFSET);
       const unsigned int Version1::IDX_YAMP1 = IDX_XAMP1 + sizeof(TYPE_AMPLITUDE);
       const unsigned int Version1::DATASIZE = IDX_YAMP1 + sizeof(TYPE_AMPLITUDE);
@@ -118,6 +119,14 @@ namespace blitzortung {
 
       unsigned char Version1::getGpsNumberOfSatellites() const {
 	return *(TYPE_GPSNUMBEROFSATELLITES*)&data_[IDX_GPSNUMBEROFSATELLITES];
+      }
+
+      void Version1::setGpsStatus(const char gpsStatus) {
+	*(TYPE_GPSSTATUS*)&data_[IDX_GPSSTATUS] = gpsStatus;
+      }
+
+      char Version1::getGpsStatus() const {
+	return *(TYPE_GPSSTATUS*)&data_[IDX_GPSSTATUS];
       }
 
       unsigned int Version1::getDataSize() const {
