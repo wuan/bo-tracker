@@ -1,6 +1,7 @@
-blitzortung-tracker (20.0) unstable; urgency=low
+blitzortung-tracker (0.9) unstable; urgency=low
 
   * Initial Release.
-    * Modified general blitzortung-tracker package to avoid use of autoconf/automake on simple systems
+    * Use of autoconf/automake
+    * use of boost date-time / program_options / and shared_ptr
 
- -- Andreas Wuerl <awuerl@gmx.net>  Mon, 2 Aug 2010 19:30:00 +0200
+ -- Andreas Wuerl <awuerl@gmx.net>  Mon, 5 Aug 2010 23:30:00 +0200
