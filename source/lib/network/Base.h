@@ -63,6 +63,7 @@ namespace blitzortung {
       };
 
 
+
     class Base : private boost::noncopyable {
 
       private:

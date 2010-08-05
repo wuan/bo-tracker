@@ -21,12 +21,14 @@ int main(int argc, char **argv) {
 
   bo::hardware::SerialPort serial(serialPort, serialBaudRate);
 
+
   //! hardware driver for blitzortung measurement hardware
   std::auto_ptr<bo::hardware::pcb::Base> hardware(new bo::hardware::pcb::V6(serial));
 
   //! network driver for sample transmission
   std::auto_ptr<bo::network::Base> network(new bo::network::Base());
 
+	    boost::ptr_vector<bo::data::sample::Base> samples_;
 
   while (hardware->isOpen()) {
 
