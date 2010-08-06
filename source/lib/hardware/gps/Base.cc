@@ -12,6 +12,7 @@ namespace blitzortung {
 	type_(type),
 	satelliteCount_(data::Base::BUFFERSIZE)
       {
+	init();
       }
 
       Base::~Base() {
@@ -103,10 +104,17 @@ namespace blitzortung {
 	} else {
 	  throw exception::Base("hardware::gps::Base::init() unhandled baud rate");
 	}
+
+	dateInitialized_ = pt::second_clock::universal_time().date();
       }
 
-
       void Base::parse(const std::vector<std::string> &fields) {
+
+	// initialize gps modules at least once a day
+	if (dateInitialized_ != pt::second_clock::universal_time().date()) {
+	  init();
+	}
+
 	if (fields[0] == "BLSEC") {
 
 	  // read counter value

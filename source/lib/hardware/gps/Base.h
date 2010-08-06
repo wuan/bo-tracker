@@ -35,6 +35,9 @@ namespace blitzortung {
 	  //! gps status character
 	  char status_;
 
+	  //! date when gps was last initialized
+	  gr::date dateInitialized_;
+
 	  //! ring buffer to average satellite count values
 	  util::RingBuffer<int> satelliteCount_;
 
