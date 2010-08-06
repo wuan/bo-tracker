@@ -12,7 +12,7 @@ namespace blitzortung {
 	type_(type),
 	satelliteCount_(data::Base::BUFFERSIZE)
       {
-	init();
+	init(true);
       }
 
       Base::~Base() {
@@ -51,10 +51,12 @@ namespace blitzortung {
 	return location_;
       }
 
-      void Base::initWrite(const unsigned int baudRate) {
+      void Base::initWrite(const unsigned int baudRate, const unsigned int targetBaudRate) {
 
 	switch(type_) {
 	  case SIRF:
+
+	    communication_.setBaudRate(baudRate);
 
 	    // enable 1 HZ GCA message
 	    communication_.send("$PSRF103,00,00,01,01*25\r\n");
@@ -79,7 +81,7 @@ namespace blitzortung {
 	    // enable NMEA protocol, baud rate, 8 data bits, 1 stop bit, no parity '
 	    {
 	    std::ostringstream oss;
-	    oss << "$PSRF100,1," << baudRate << ",8,1,0*38\r\n";
+	    oss << "$PSRF100,1," << targetBaudRate << ",8,1,0*38\r\n";
 	    communication_.send(oss.str());
 	    }
 	    break;
@@ -92,18 +94,22 @@ namespace blitzortung {
 	}
       }
 
-      void Base::init() {
-	const unsigned int baudRate = communication_.getBaudRate();
+      void Base::init(bool force) {
 
-	if (baudRate == 9600) {
-	  initWrite(4800);
-	  initWrite(9600);
-	} else if (baudRate == 4800) {
-	  initWrite(9600);
-	  initWrite(4800);
-	} else {
-	  throw exception::Base("hardware::gps::Base::init() unhandled baud rate");
+	const unsigned int targetBaudRate = communication_.getBaudRate();
+
+	if (force) {
+	  std::vector<unsigned int> baudRates;
+	  baudRates.push_back(4800);
+	  baudRates.push_back(19200);
+
+	  for (std::vector<unsigned int>::const_iterator baudRate=baudRates.begin(); baudRate != baudRates.end(); baudRate++) {
+	    if (*baudRate != targetBaudRate)
+	      initWrite(*baudRate, targetBaudRate);
+	  }
 	}
+
+	initWrite(targetBaudRate, targetBaudRate);
 
 	dateInitialized_ = pt::second_clock::universal_time().date();
       }

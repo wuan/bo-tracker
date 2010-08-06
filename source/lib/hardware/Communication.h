@@ -22,6 +22,7 @@ namespace blitzortung {
 	//! Destructor
 	virtual ~Communication();
 
+	void setBaudRate(const unsigned int);
 	const unsigned int getBaudRate() const;
 
 	bool isOpen() const;

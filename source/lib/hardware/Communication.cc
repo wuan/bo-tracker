@@ -19,6 +19,10 @@ namespace blitzortung {
       return serialPort_.isOpen();
     }
 
+    void Communication::setBaudRate(const unsigned int baudRate) {
+      serialPort_.setBaudRate(baudRate);
+    }
+
     const unsigned int Communication::getBaudRate() const {
       return serialPort_.getBaudRate();
     }

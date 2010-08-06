@@ -22,6 +22,9 @@ namespace blitzortung {
 	  dateTimeInput_.str(timeString);
 	  dateTimeInput_ >> second_;
 
+	  // TODO this is only a temporary fix
+	  second_ += pt::seconds(1);
+
 	  int counterDifference = getCounterDifference(counter);
 
 	  if (firstValue_) {

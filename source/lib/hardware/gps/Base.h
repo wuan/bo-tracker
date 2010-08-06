@@ -41,7 +41,7 @@ namespace blitzortung {
 	  //! ring buffer to average satellite count values
 	  util::RingBuffer<int> satelliteCount_;
 
-	  void initWrite(const unsigned int);
+	  void initWrite(const unsigned int, const unsigned int);
 
 	public:
 
@@ -76,7 +76,7 @@ namespace blitzortung {
 	  const data::Location& getLocation() const;
 
 	  //! initialize GPS hardware
-	  void init();
+	  void init(bool force=false);
       };
 
     }

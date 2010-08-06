@@ -29,7 +29,7 @@ namespace blitzortung {
       struct termios tio;
       tio.c_iflag= IGNBRK | IGNPAR ;
       tio.c_oflag= OPOST | ONLCR ;
-      tio.c_cflag= B9600 | CS8 | CLOCAL | CREAD ; 
+      tio.c_cflag= B19200 | CS8 | CLOCAL | CREAD ; 
       tio.c_lflag= 0;
       tio.c_cc[VTIME]= 0;
       tio.c_cc[VMIN]= 1;
@@ -51,7 +51,10 @@ namespace blitzortung {
       isOpen_ = false;
     }
 
-    void SerialPort::setBaudRate(const int baudRate) {
+    void SerialPort::setBaudRate(const unsigned int baudRate) {
+      
+      if (baudRate == getBaudRate())
+	return;
 
       struct termios serialAttr;
 
@@ -60,8 +63,8 @@ namespace blitzortung {
       int baudBit = 0;
 
       switch(baudRate) {
-	case 9600:
-	  baudBit = B9600;
+	case 4800:
+	  baudBit = B4800;
 	  break;
 
 	case 19200:
@@ -88,10 +91,10 @@ namespace blitzortung {
 
       switch(baudBit) {
 	case B4800:
-	  return 4800U;
+	  return 4800;
 
 	case B19200:
-	  return 19200U;
+	  return 19200;
 
 	default:
 	  std::ostringstream oss;
@@ -102,7 +105,7 @@ namespace blitzortung {
 
     void SerialPort::send(const std::string& data) {
       int rc = write(serialFd_, data.c_str(), data.length());
-      if (rc != 0)
+      if (rc < 0)
 	throw exception::Base("hardware::SerialPort::send() write error");
     }
 

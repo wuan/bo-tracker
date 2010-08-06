@@ -28,7 +28,7 @@ namespace blitzortung {
 
 	bool isOpen() const;
 
-	void setBaudRate(const int);
+	void setBaudRate(const unsigned int);
 
 	const unsigned int getBaudRate() const;
 
