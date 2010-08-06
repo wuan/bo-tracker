@@ -22,7 +22,7 @@ namespace blitzortung {
 	int serialFd_;
 
       public:
-	SerialPort(const std::string &port="/dev/ttyS0", const int baudRate = 19200);
+	SerialPort(const std::string &port="/dev/ttyS0", const unsigned int baudRate = 19200);
 
 	virtual ~SerialPort();
 
@@ -30,11 +30,13 @@ namespace blitzortung {
 
 	void setBaudRate(const int);
 
-	const std::string readLine();
-	
-	void writeByte(unsigned char);
+	const unsigned int getBaudRate() const;
 
-	void write(const std::string &);
+	const std::string receive();
+	
+	void send(unsigned char);
+
+	void send(const std::string &);
 
     };
 

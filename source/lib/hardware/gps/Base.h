@@ -15,11 +15,16 @@ namespace blitzortung {
   namespace hardware {
     namespace gps {
 
+      enum Type {GARMIN, SIRF};
+
       class Base {
 
 	private:
 	  //! communication object
 	  Communication communication_;
+
+	  //! enum storing type of gps hardware
+	  const Type& type_;
 
 	  //! gps time data object
 	  data::Time time_;
@@ -33,12 +38,12 @@ namespace blitzortung {
 	  //! ring buffer to average satellite count values
 	  util::RingBuffer<int> satelliteCount_;
 
-	  void initWrite();
+	  void initWrite(const unsigned int);
 
 	public:
 
 	  //! constructor
-	  Base(const Communication&);
+	  Base(const Communication&, const Type&);
 
 	  //! destructor
 	  virtual ~Base();

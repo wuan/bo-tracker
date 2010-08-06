@@ -19,8 +19,16 @@ namespace blitzortung {
       return serialPort_.isOpen();
     }
 
-    std::string Communication::readLine() {
-      return serialPort_.readLine();
+    const unsigned int Communication::getBaudRate() const {
+      return serialPort_.getBaudRate();
+    }
+
+    std::string Communication::receive() {
+      return serialPort_.receive();
+    }
+
+    void Communication::send(const std::string& data) {
+      serialPort_.send(data);
     }
 
   }

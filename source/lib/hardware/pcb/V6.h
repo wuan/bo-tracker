@@ -15,7 +15,7 @@ namespace hardware {
 	short parseHex(const std::string &);
 
       public:
-	V6(SerialPort&);
+	V6(SerialPort&, const gps::Type&);
 	virtual ~V6();
 
 	std::auto_ptr<data::sample::Base> parse(const std::vector<std::string> &);

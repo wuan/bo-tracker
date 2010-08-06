@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
     ("server-host,h", po::value<std::string>(&servername), "blitzortung.org servername")
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
     ("sleep-time,s", po::value<int>(&sleepTime)->default_value(sleepTime), "sleep time between data transmission")
-    ("gps-init,i", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device")
+    ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device")
     ("verbose,v", "verbose mode")
     ;
 
@@ -84,19 +84,35 @@ int main(int argc, char **argv) {
       throw bo::exception::Base(oss.str());
   }
 
+  // select type of gps hardware
+
+  bo::hardware::gps::Type gpsTypeEnum;
+
+  if (gpsType == "garmin") {
+    gpsTypeEnum = bo::hardware::gps::GARMIN;
+  } else if (gpsType == "sirf") {
+    gpsTypeEnum = bo::hardware::gps::SIRF;
+  } else {
+    std::ostringstream oss;
+    oss << "invalid value of gps-type: '" << serialBaudEnum << "'";
+    throw bo::exception::Base(oss.str());
+  }
+
+  // create serial port object
+
   bo::hardware::SerialPort serial(serialPort, serialBaudRate);
 
-  //! hardware driver for blitzortung measurement hardware
-  std::auto_ptr<bo::hardware::pcb::Base> hardware(new bo::hardware::pcb::V6(serial));
+  // create hardware driver object for blitzortung measurement hardware
+  std::auto_ptr<bo::hardware::pcb::Base> hardware(new bo::hardware::pcb::V6(serial, gpsTypeEnum));
 
-  //! credentials/parameters for network connection
+  //! set credentials/parameters for network connection
   bo::network::Creds creds;
   creds.setServername(servername);
   creds.setServerport(serverport);
   creds.setUsername(username);
   creds.setPassword(password);
 
-  //! network driver for sample transmission
+  //! create object of network driver for sample transmission
   std::auto_ptr<bo::network::Base> network(new bo::network::Base(creds, sleepTime));
 
   while (hardware->isOpen()) {
