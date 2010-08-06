@@ -22,12 +22,13 @@ namespace blitzortung {
 	//! Destructor
 	virtual ~Communication();
 
-	void setBaudRate(const int);
+	const unsigned int getBaudRate() const;
 
 	bool isOpen() const;
 
-	std::string readLine();
+	std::string receive();
 
+	void send(const std::string&);
     };
 
   }

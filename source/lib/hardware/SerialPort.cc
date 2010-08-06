@@ -10,7 +10,7 @@
 namespace blitzortung {
   namespace hardware {
 
-    SerialPort::SerialPort(const std::string& portName, const int baudRate) :
+    SerialPort::SerialPort(const std::string& portName, const unsigned int baudRate) :
       portName_(portName),
       buffer_(""),
       isOpen_(false)
@@ -79,7 +79,34 @@ namespace blitzortung {
       tcsetattr(serialFd_, TCSANOW, &serialAttr);
     }
     
-    const std::string SerialPort::readLine() {
+    const unsigned int SerialPort::getBaudRate() const {
+      struct termios serialAttr;
+
+      tcgetattr(serialFd_, &serialAttr);
+
+      int baudBit = cfgetospeed(&serialAttr);
+
+      switch(baudBit) {
+	case B4800:
+	  return 4800U;
+
+	case B19200:
+	  return 19200U;
+
+	default:
+	  std::ostringstream oss;
+	  oss << "blitzortung::hardware::Serial::getBaudRate() unsupported Baud-Rate-Bit: " << baudBit;
+	  throw exception::Base(oss.str());
+      }
+    }
+
+    void SerialPort::send(const std::string& data) {
+      int rc = write(serialFd_, data.c_str(), data.length());
+      if (rc != 0)
+	throw exception::Base("hardware::SerialPort::send() write error");
+    }
+
+    const std::string SerialPort::receive() {
       char character;
 
       int readlength = 0;

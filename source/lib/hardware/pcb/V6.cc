@@ -6,8 +6,8 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
      
-      V6::V6(SerialPort& serial) :
-	Base(serial)
+      V6::V6(SerialPort& serial, const gps::Type& gpsType) :
+	Base(serial, gpsType)
       {
       }
 

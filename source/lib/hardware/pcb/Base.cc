@@ -10,9 +10,9 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
      
-      Base::Base(SerialPort& serial) :
+      Base::Base(SerialPort& serial, const gps::Type& gpsType) :
 	communication_(serial),
-	gps_(communication_)
+	gps_(communication_, gpsType)
       {
       }
 
@@ -24,7 +24,7 @@ namespace blitzortung {
       }
 
       std::auto_ptr<data::sample::Base> Base::read() {
-	std::string line = communication_.readLine();
+	std::string line = communication_.receive();
 
 	int linelength = line.size();
 

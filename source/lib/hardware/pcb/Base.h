@@ -25,7 +25,7 @@ namespace hardware {
 	gps::Base gps_;
 
       public:
-	Base(SerialPort&);
+	Base(SerialPort&, const gps::Type&);
 	virtual ~Base();
 
 	bool isOpen() const;
