@@ -7,8 +7,8 @@ namespace blitzortung {
       namespace data {
 
 	Time::Time() :
-	  timerSecond_(Base::BUFFERSIZE),
-	  firstValue_(true)
+	  counterTicksPerSecond_(Base::BUFFERSIZE),
+	  ignoreCounter_(2)
 	{
 	  pt::time_input_facet *facet = new pt::time_input_facet();
 	  facet->format("%d%m%y %H%M%S");
@@ -22,18 +22,18 @@ namespace blitzortung {
 	  dateTimeInput_.str(timeString);
 	  dateTimeInput_ >> second_;
 
-	  // TODO this is only a temporary fix
-	  second_ += pt::seconds(1);
+	  // counter difference between calls is number of ticks per second
+	  int counterTicksElapsed = getCounterDifference(counter);
 
-	  int counterDifference = getCounterDifference(counter);
+	  if (ignoreCounter_ <= 0)
+	    counterTicksPerSecond_.add(counterTicksElapsed);
+	  else
+	    ignoreCounter_--;
 
-	  if (firstValue_) {
-	    firstValue_ = false;
-	  } else {
-	    timerSecond_.add(counterDifference);
-	  }
+	  //if (counterTicksPerSecond_.getActualSize() > 0)
+	  //  std::cout << second_ << " " << counterTicksPerSecond_.getAverage() << std::endl;
 
-	  counter_ = counter;
+	  oldCounter_ = counter;
 	}
 
 	const pt::ptime& Time::getSecond() const {
@@ -41,14 +41,14 @@ namespace blitzortung {
 	}
 
 	int Time::getCounterDifference(const int counter) const {
-	  int counterDifference = counter - counter_;
+	  int counterDifference = counter - oldCounter_;
 	  if (counterDifference < 0)
-	    counterDifference += 0x1000000;
+	    counterDifference += 1<<24;
 	  return counterDifference;
 	}
 
 	pt::ptime Time::getTime(const int counter) const {
-	  int nanoseconds = 1e9 * getCounterDifference(counter) / timerSecond_.getAverage();
+	  int nanoseconds = 1e9 * getCounterDifference(counter) / counterTicksPerSecond_.getAverage();
 	  return second_ + pt::nanoseconds(nanoseconds);
 	}
 
