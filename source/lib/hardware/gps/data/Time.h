@@ -21,13 +21,13 @@ namespace blitzortung {
 	    pt::ptime second_;
 
 	    //! counter value of actual second
-	    int counter_;
+	    int oldCounter_;
 
-	    //! ring buffer for timer ticks per second
-	    util::RingBuffer<int> timerSecond_;
+	    //! ring buffer for counter ticks per second
+	    util::RingBuffer<int> counterTicksPerSecond_;
 
 	    //! flag for first data value
-	    bool firstValue_;
+	    int ignoreCounter_;
 
 	    //! calculate counter difference
 	    int getCounterDifference(const int counter) const;
