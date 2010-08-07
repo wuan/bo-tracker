@@ -105,7 +105,7 @@ namespace blitzortung {
 	   */
 
 	  oss << sampleDateTime;
-	  //out.setf(ios::fixed);
+	  oss.setf(std::ios::fixed);
 	  oss.precision(6);
 
 	  oss << " " << sample.getAntennaLatitude() << " " << sample.getAntennaLongitude();
