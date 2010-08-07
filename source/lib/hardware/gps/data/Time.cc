@@ -48,7 +48,10 @@ namespace blitzortung {
 	}
 
 	pt::ptime Time::getTime(const int counter) const {
-	  int nanoseconds = 1e9 * getCounterDifference(counter) / counterTicksPerSecond_.getAverage();
+	  double counterTicksPerSecond = double(counterTicksPerSecond_.getSum()) / counterTicksPerSecond_.getActualSize();
+
+	  int nanoseconds = 1e9 * getCounterDifference(counter) / counterTicksPerSecond;
+
 	  return second_ + pt::nanoseconds(nanoseconds);
 	}
 
