@@ -87,7 +87,7 @@ namespace blitzortung {
 	Queue<bo::data::sample::Base*> sampleQueue_;
 
       public:
-	Base(const Creds& creds, int sleepTime);
+	Base(const Creds& creds, const int sleepTime, const double eventRateLimit);
 
 	virtual ~Base();
 

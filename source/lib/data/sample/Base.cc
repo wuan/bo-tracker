@@ -23,6 +23,15 @@ namespace blitzortung {
 	return sqrt(xamp * xamp + yamp * yamp);
       }
 
+      bool Base::operator<(const Base &rhs) const {
+	return getTime() < rhs.getTime();
+      } 
+
+
+      bool Base::CompareAmplitude::operator()(const first_argument_type &x, const second_argument_type &y) const {
+	return x.getAmplitude(1) < y.getAmplitude(1);
+      } 
+
       std::ostream& operator <<(std::ostream& os, const bo::data::sample::Base &sample) {
 
 	pt::time_facet *timefacet = new pt::time_facet();

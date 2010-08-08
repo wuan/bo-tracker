@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
   std::string serialPort = "/dev/ttyUSB0";
   int serialBaudEnum = 2;
   int sleepTime = 20;
+  double eventRateLimit = 1.0;
   std::string gpsType = "sirf";
 
   // programm arguments/options
@@ -37,6 +38,7 @@ int main(int argc, char **argv) {
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
     ("sleep-time,s", po::value<int>(&sleepTime)->default_value(sleepTime), "sleep time between data transmission")
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device")
+    ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("verbose,v", "verbose mode")
     ;
 
@@ -113,7 +115,7 @@ int main(int argc, char **argv) {
   creds.setPassword(password);
 
   //! create object of network driver for sample transmission
-  std::auto_ptr<bo::network::Base> network(new bo::network::Base(creds, sleepTime));
+  std::auto_ptr<bo::network::Base> network(new bo::network::Base(creds, sleepTime, eventRateLimit));
 
   while (hardware->isOpen()) {
 

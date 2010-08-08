@@ -26,6 +26,8 @@ namespace blitzortung {
       std::auto_ptr<data::sample::Base> Base::read() {
 	std::string line = communication_.receive();
 
+	//std::cout << line << std::endl;
+
 	int linelength = line.size();
 
 	if (linelength > 3 && line[0] == '$' && line[linelength - 4] == '*') {
