@@ -25,10 +25,16 @@ namespace blitzortung {
 	  // counter difference between calls is number of ticks per second
 	  int counterTicksElapsed = getCounterDifference(counter);
 
-	  if (ignoreCounter_ <= 0)
-	    counterTicksPerSecond_.add(counterTicksElapsed);
-	  else
+	  //std::cout << "  " << second_ << " counterDiff " << counterTicksElapsed << std::endl;
+
+	  if (ignoreCounter_ <= 0) {
+	    // TODO this is a temporary fix to avoid problems introduce by bad counter values
+	    if (counterTicksElapsed > 2400000 && counterTicksElapsed < 2600000) {
+	      counterTicksPerSecond_.add(counterTicksElapsed);
+	    }
+	  } else {
 	    ignoreCounter_--;
+	  }
 
 	  //if (counterTicksPerSecond_.getActualSize() > 0)
 	  //  std::cout << second_ << " " << counterTicksPerSecond_.getAverage() << std::endl;
@@ -51,6 +57,8 @@ namespace blitzortung {
 	  double counterTicksPerSecond = double(counterTicksPerSecond_.getSum()) / counterTicksPerSecond_.getActualSize();
 
 	  int nanoseconds = 1e9 * getCounterDifference(counter) / counterTicksPerSecond;
+
+	  //std::cout << "counter: " << counter << " diff " << getCounterDifference(counter) << " ns: " << nanoseconds << " ticks / s: " << counterTicksPerSecond << std::endl;
 
 	  return second_ + pt::nanoseconds(nanoseconds);
 	}

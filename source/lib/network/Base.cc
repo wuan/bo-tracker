@@ -18,6 +18,7 @@ namespace blitzortung {
 	Queue<data::sample::Base*>& sampleQueue_;
 	const Creds& creds_;
         data::sample::Base::VP samples_;
+	double eventRateLimit_;
 
       public:
 	NetworkTransfer(Queue<bo::data::sample::Base*>& sampleQueue, const Creds& creds)
@@ -25,7 +26,8 @@ namespace blitzortung {
 	  creds_(creds),
 	  samples_(new data::sample::Base::V())
 	{
-	  sleepTime_=10;
+	  sleepTime_ = 20;
+	  eventRateLimit_ = 1.0;
 	}
 
 	virtual ~NetworkTransfer() {
@@ -34,6 +36,11 @@ namespace blitzortung {
 	//! set sleep time between data transfers in seconds
 	void setSleepTime(const int sleepTime) {
 	  sleepTime_ = sleepTime;
+	}
+
+	//! set limit of average number of events per minute transmitted
+	void setEventRateLimit(const double eventRateLimit) {
+	  eventRateLimit_ = eventRateLimit;
 	}
 
 	//! initialize network connection to server
@@ -95,15 +102,6 @@ namespace blitzortung {
 	  if (sampleTime > now.time_of_day())
 	    sampleDateTime -= gr::days(1);
 
-	  /*
-	     sprintf (buf, "%04d-%02d-%02d %02d:%02d:%02d.%09lld %.6f %.6f %s %s",
-	     strikes[cnt3].year, strikes[cnt3].mon, strikes[cnt3].day,
-	     strikes[cnt3].hour, strikes[cnt3].min, strikes[cnt3].sec, strikes[cnt3].nsec,
-	     strikes[cnt3].lat, strikes[cnt3].lon, username, password);
-	     sprintf (buf, "%s %d %d", buf, strikes[cnt3].A, strikes[cnt3].B);
-	     sprintf (buf, "%s %c %s\n", buf, strikes[cnt3].status, VERSION);
-	   */
-
 	  oss << sampleDateTime;
 	  oss.setf(std::ios::fixed);
 	  oss.precision(6);
@@ -140,13 +138,30 @@ namespace blitzortung {
 	    pt::ptime now = pt::second_clock::universal_time();
 	    if (now - lastSent >= pt::seconds(sleepTime_)) {
 
-	      double dataRate = double(samples_->size()) / ((now - lastSent).total_milliseconds() / 1000);
-
-	      lastSent = now;
 
 	      if (samples_->size() > 0) {
 
-	        //std::cout << "# sending " << samples_->size() << " (rate " << dataRate << " samples/second) at " << now << "\n";
+		double secondsElapsed = ((now - lastSent).total_milliseconds() / 1000);
+		double eventRate = double(samples_->size()) / secondsElapsed;
+
+		lastSent = now;
+
+	        //std::cout << "# sending " << samples_->size() << " (rate " << eventRate << " samples/second) at " << now << "\n";
+
+		if (eventRate > eventRateLimit_)
+		{
+		  samples_->sort(data::sample::Base::CompareAmplitude());
+
+		  //std::cout << "ratelimit: " << eventRateLimit_ << " seconds " << secondsElapsed << std::endl;
+		  int sampleLimit = eventRateLimit_ * secondsElapsed;
+
+		  samples_->erase(samples_->begin() + sampleLimit, samples_->end());
+
+		  //std::cout << "*** amplitude sorted after erasing elements to have " << sampleLimit << " elements\n";
+
+		  // time sort samples
+		  samples_->sort();
+		}
 
 		// open network connection
 		int sockfd =  open_connection ();
@@ -175,11 +190,12 @@ namespace blitzortung {
 	}
     };
 
-    Base::Base(const Creds& creds, const int sleepTime)
+    Base::Base(const Creds& creds, const int sleepTime, const double eventRateLimit)
     {
       NetworkTransfer networkTransfer(sampleQueue_, creds);
 
       networkTransfer.setSleepTime(sleepTime);
+      networkTransfer.setEventRateLimit(eventRateLimit);
 
       boost::thread thread(networkTransfer);
     }

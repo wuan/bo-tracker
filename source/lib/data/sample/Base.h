@@ -87,6 +87,14 @@ namespace blitzortung {
 	  //! getter for gps status
 	  virtual char getGpsStatus() const = 0;
 
+	  //! comparison operator <
+	  bool operator<(const Base &) const;
+
+	  //! class to compare timestamp of Strokes
+	  struct CompareAmplitude : public std::binary_function<Base, Base, bool> {
+	    bool operator()(const first_argument_type& x, const                   second_argument_type& y) const;
+	  };
+
       };
       
       std::ostream& operator << (std::ostream& os, const Base&);
