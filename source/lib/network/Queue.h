@@ -4,6 +4,7 @@
 #include <queue>
 
 #include <boost/thread/thread.hpp>
+#include <boost/thread/condition.hpp>
 
 namespace blitzortung {
   namespace network {
