@@ -6,7 +6,7 @@
 namespace blitzortung {
   namespace network {
 
-    Transfer::Transfer(Queue<bo::data::sample::Base*>& sampleQueue, const Creds& creds)
+    Transfer::Transfer(Queue<bo::data::sample::Base>& sampleQueue, const Creds& creds)
       : sampleQueue_(sampleQueue),
       creds_(creds),
       samples_(new data::sample::Base::V())
@@ -111,8 +111,7 @@ namespace blitzortung {
 
 	// get new samples from queue until it is empty
 	while (! sampleQueue_.empty()) {
-	  samples_->push_back(sampleQueue_.front());
-	  sampleQueue_.pop();
+	  samples_->push_back(sampleQueue_.pop());
 	}
 
 	pt::ptime now = pt::second_clock::universal_time();

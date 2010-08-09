@@ -10,12 +10,12 @@ namespace blitzortung {
     {
     }
 
-    template <typename T> void Queue<T>::push(const T& data) {
+    template <typename T> void Queue<T>::push(std::auto_ptr<T> data) {
       boost::mutex::scoped_lock lock(mutex_);
 
       const bool emptyBeforePush = queue_.empty();
 
-      queue_.push(data);
+      queue_.push(data.release());
 
       if (emptyBeforePush)
 	condition_.notify_one();
@@ -35,7 +35,7 @@ namespace blitzortung {
 
     template <typename T> T const& Queue<T>::front() const {
       boost::mutex::scoped_lock lock(mutex_);
-      return queue_.front();
+      return *(queue_.front());
     }
 
     template <typename T> void Queue<T>::wait() {
@@ -52,12 +52,12 @@ namespace blitzortung {
       condition_.timed_wait(lock, xtime);
     }
 
-    template <typename T> void Queue<T>::pop() {
+    template <typename T> std::auto_ptr<T> Queue<T>::pop() {
       boost::mutex::scoped_lock lock(mutex_);
+      std::auto_ptr<T> autoPtr(queue_.front());
       queue_.pop();
+      return autoPtr;
     }
 
-    //! explicit instatiation
-    template class Queue<data::sample::Base*>;
   }
 }

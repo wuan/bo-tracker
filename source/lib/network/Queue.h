@@ -13,7 +13,7 @@ namespace blitzortung {
       class Queue {
 	private:
 	  int timeout_;
-	  std::queue<T> queue_;
+	  std::queue<T*> queue_;
 	  mutable boost::mutex mutex_;
 	  boost::condition condition_;
 
@@ -21,7 +21,7 @@ namespace blitzortung {
 
 	  Queue(int timeout=0);
 
-	  void push(const T& data);
+	  void push(std::auto_ptr<T> data);
 
 	  bool empty() const;
 
@@ -33,7 +33,7 @@ namespace blitzortung {
 
 	  void timed_wait(const boost::xtime& xtime);
 
-	  void pop();
+	  std::auto_ptr<T> pop();
       };
 
   }

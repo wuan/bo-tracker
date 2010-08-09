@@ -13,7 +13,7 @@ namespace blitzortung {
     class Base : private boost::noncopyable {
 
       private:
-	Queue<bo::data::sample::Base*> sampleQueue_;
+	Queue<bo::data::sample::Base> sampleQueue_;
 
       public:
 	Base(const Creds& creds, const int sleepTime, const double eventRateLimit);

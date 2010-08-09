@@ -6,9 +6,7 @@
 namespace blitzortung {
   namespace network {
 
-
-    Base::Base(const Creds& creds, const int sleepTime, const double eventRateLimit)
-    {
+    Base::Base(const Creds& creds, const int sleepTime, const double eventRateLimit) {
       Transfer networkTransfer(sampleQueue_, creds);
 
       networkTransfer.setSleepTime(sleepTime);
@@ -21,7 +19,7 @@ namespace blitzortung {
     }
 
     void Base::put(std::auto_ptr<data::sample::Base> sample) {
-      sampleQueue_.push(sample.release());
+      sampleQueue_.push(sample);
     }
 
   }
