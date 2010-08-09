@@ -5,6 +5,8 @@
 namespace blitzortung {
   namespace util {
 
+    // TODO calcluating the sum by summing up all elemnts with a given type can cause problems with overflows occuring, this has to be circumvented in a future release
+
     template <typename T> RingBuffer<T>::RingBuffer(int size) {
       size_ = size;
 
