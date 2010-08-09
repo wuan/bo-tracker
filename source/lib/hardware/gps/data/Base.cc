@@ -5,7 +5,7 @@ namespace blitzortung {
     namespace gps {
       namespace data {
 
-	const int Base::BUFFERSIZE = 1000;
+	const int Base::BUFFERSIZE = 100;
 
       }
     }
