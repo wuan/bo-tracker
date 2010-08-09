@@ -30,7 +30,7 @@ namespace blitzortung {
     template <typename T> T& Queue<T>::front() {
       boost::mutex::scoped_lock lock(mutex_);
 
-      return queue_.front();
+      return *(queue_.front());
     }
 
     template <typename T> T const& Queue<T>::front() const {
@@ -59,5 +59,7 @@ namespace blitzortung {
       return autoPtr;
     }
 
+    //! explicit instatiation
+    template class Queue<data::sample::Base>;
   }
 }
