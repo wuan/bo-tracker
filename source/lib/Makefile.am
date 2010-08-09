@@ -24,7 +24,10 @@ libblitzortung_la_SOURCES = \
 	hardware/pcb/V6.h hardware/pcb/V6.cc \
 	\
 	namespace.h \
+	\
 	network/Base.h network/Base.cc \
+	network/Transfer.h network/Transfer.cc \
+	network/Queue.h network/Queue.cc \
 	network/Creds.h network/Creds.cc \
 	\
 	util/RingBuffer.h util/RingBuffer.cc \
