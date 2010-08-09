@@ -20,13 +20,13 @@ namespace blitzortung {
     class Transfer {
       private:
 	int sleepTime_;
-	Queue<data::sample::Base*>& sampleQueue_;
+	Queue<data::sample::Base>& sampleQueue_;
 	const Creds& creds_;
 	data::sample::Base::VP samples_;
 	double eventRateLimit_;
 
       public:
-	Transfer(Queue<bo::data::sample::Base*>& sampleQueue, const Creds& creds);
+	Transfer(Queue<bo::data::sample::Base>& sampleQueue, const Creds& creds);
 
 	virtual ~Transfer();
 
