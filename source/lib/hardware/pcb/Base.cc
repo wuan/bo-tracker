@@ -67,6 +67,7 @@ namespace blitzortung {
 	    }
 	  }
 	}
+
 	return std::auto_ptr<data::sample::Base>();
       }
 

@@ -54,6 +54,9 @@ namespace blitzortung {
 	}
 
 	pt::ptime Time::getTime(const int counter) const {
+	  if (counterTicksPerSecond_.getActualSize() == 0)
+	    return pt::not_a_date_time;
+
 	  double counterTicksPerSecond = double(counterTicksPerSecond_.getSum()) / counterTicksPerSecond_.getActualSize();
 
 	  int nanoseconds = 1e9 * getCounterDifference(counter) / counterTicksPerSecond;

@@ -1,11 +1,10 @@
-
 #include "exception/Base.h"
 #include "hardware/pcb/V6.h"
 
 namespace blitzortung {
   namespace hardware {
     namespace pcb {
-     
+
       V6::V6(SerialPort& serial, const gps::Type& gpsType) :
 	Base(serial, gpsType)
       {
@@ -29,7 +28,7 @@ namespace blitzortung {
 
 	  pt::ptime eventtime = gps_.getTime(counter);
 
-	  if (gps_.isValid()) {
+	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
 	    sample = parseData(eventtime, fields[2]);
 
 	    sample->setAntennaLongitude(gps_.getLocation().getLongitude());
