@@ -152,9 +152,9 @@ namespace blitzortung {
 
 	      //std::cout << data;
 
-	      const char* buf = data.c_str();
-	      if (send (sockfd, buf, strlen(buf), 0) == -1) {
-		throw exception::Base("network::Base::TransferThread() error sending data");
+	      if (send (sockfd, data.c_str(), data.size(), 0) == -1) {
+		std::cout << ("network::Base::Transfer(): error sending data");
+		break;
 	      }
 	    }
 
