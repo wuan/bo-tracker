@@ -1,8 +1,6 @@
 #include <log4cpp/OstreamAppender.hh>
 #include <log4cpp/BasicLayout.hh>
 
-#include <boost/thread/mutex.hpp>
-
 #include "Logger.h"
 
 namespace blitzortung {

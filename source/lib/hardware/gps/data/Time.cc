@@ -31,7 +31,8 @@ namespace blitzortung {
 	  // counter difference between calls is number of ticks per second
 	  int counterTicksElapsed = getCounterDifference(counter);
 
-	  //std::cout << "  " << second_ << " counterDiff " << counterTicksElapsed << std::endl;
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "setSecond() " << second_ << " counter difference: " << counterTicksElapsed;
 
 	  if (ignoreCounter_ <= 0) {
 	    // TODO this is a temporary fix to avoid problems introduce by bad counter values
