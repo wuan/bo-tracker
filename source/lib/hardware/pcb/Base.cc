@@ -31,8 +31,9 @@ namespace blitzortung {
       std::auto_ptr<data::sample::Base> Base::read() {
 	std::string line = communication_.receive();
 
+
 	if (logger_.isInfoEnabled())
-	  logger_.infoStream() << "from serial: " << line;
+	  logger_.infoStream() << "read() serial input: " << line;
 
 	int linelength = line.size();
 
