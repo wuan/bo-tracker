@@ -32,11 +32,9 @@ namespace blitzortung {
       eventRateLimit_ = eventRateLimit;
     }
 
-    int Transfer::open_connection ()
-    {
+    int Transfer::openConnection() {
       struct hostent *hostinfo;
       int sockfd;
-      char buf [1000];
 
       sockfd = socket (AF_INET, SOCK_STREAM, 0);
 
@@ -49,9 +47,12 @@ namespace blitzortung {
       serv_addr.sin_port = htons(creds_.getServerport());
       serv_addr.sin_addr.s_addr = inet_addr(creds_.getServername().c_str());
 
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "openConnection() host: " << creds_.getServername() << " port " << creds_.getServerport();
+
       if (serv_addr.sin_addr.s_addr == INADDR_NONE) {
 	/* host not given by IP but by name */
-	hostinfo= gethostbyname (creds_.getServername().c_str());
+	hostinfo = gethostbyname (creds_.getServername().c_str());
 	if (hostinfo == NULL) {
 	  close(sockfd);
 	  return 0;
@@ -62,12 +63,6 @@ namespace blitzortung {
       if (connect(sockfd, (sockaddr *) &serv_addr, sizeof(sockaddr)) == -1) {
 	return 0;
       }
-
-      if (recv (sockfd, buf, 1000, 0) == -1) {
-	return 0;
-      }
-      if (logger_.isDebugEnabled())
-        logger_.debugStream() << "openConnection() received: '" << buf << "'";
 
       return sockfd;
     }
@@ -130,9 +125,6 @@ namespace blitzortung {
 
 	  if (samples_->size() > 0) {
 
-	    if (logger_.isDebugEnabled())
-	      logger_.debugStream() << "() wait for data";
-
 	    double secondsElapsed = ((now - lastSent).total_milliseconds() / 1000);
 	    double eventRate = double(samples_->size()) / secondsElapsed;
 
@@ -156,10 +148,11 @@ namespace blitzortung {
 	    }
 
 	    // open network connection
-	    int sockfd =  open_connection ();
+	    int sockfd =  openConnection ();
 
 	    // loop through all current samples
 	    for (data::sample::Base::VI sample = samples_->begin(); sample != samples_->end(); sample++) {
+	      
 	      std::string data = sampleToString(*sample);
 
 	      if (logger_.isInfoEnabled())
