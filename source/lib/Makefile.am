@@ -2,7 +2,8 @@ AUTOMAKE_OPTIONS = subdir-objects
 
 AM_LDFLAGS = \
 	-lboost_regex-mt \
-	-lboost_thread-mt
+	-lboost_thread-mt \
+	-llog4cpp
 
 lib_LTLIBRARIES = libblitzortung.la
 
@@ -22,6 +23,8 @@ libblitzortung_la_SOURCES = \
 	hardware/SerialPort.h hardware/SerialPort.cc \
 	hardware/pcb/Base.h hardware/pcb/Base.cc \
 	hardware/pcb/V6.h hardware/pcb/V6.cc \
+	\
+	Logger.h Logger.cc \
 	\
 	namespace.h \
 	\

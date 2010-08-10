@@ -6,6 +6,7 @@
 
 #include "exception/Base.h"
 #include "hardware/SerialPort.h"
+#include "Logger.h"
 
 namespace blitzortung {
   namespace hardware {
@@ -15,7 +16,10 @@ namespace blitzortung {
       buffer_(""),
       isOpen_(false)
     {
-      //std::cout << "open serial port " << portName_ << std::endl;
+
+      Logger& logger = Logger::get();
+      if (logger.isInfoEnabled())
+        logger.infoStream() << "open serial port " << portName_.c_str();
 
       serialFd_ = open(portName_.c_str(), O_RDWR | O_NOCTTY);
 
