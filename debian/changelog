@@ -2,6 +2,7 @@ blitzortung-tracker (0.9) unstable; urgency=low
 
   * Initial Release.
     * Use of autoconf/automake
-    * use of boost date-time / program_options / and shared_ptr
+    * use of boost date-time / program_options / vector_ptr / tread and ipc
+    * first version of event rate limiting mechanism
 
  -- Andreas Wuerl <awuerl@gmx.net>  Mon, 5 Aug 2010 23:30:00 +0200
