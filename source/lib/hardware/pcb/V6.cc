@@ -10,12 +10,12 @@ namespace blitzortung {
 	logger_("hardware.pcb.V6")
       {
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "initialize";
+	  logger_.debugStream() << "initialized";
       }
 
       V6::~V6() {
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "delete";
+	  logger_.debugStream() << "deleted";
       }
 
       std::auto_ptr<data::sample::Base> V6::parse(const std::vector<std::string> &fields) {

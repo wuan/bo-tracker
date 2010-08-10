@@ -8,10 +8,14 @@ namespace blitzortung {
 
   //! class for Logging in different categories
   class Logger {
+
     private:
+
+      //! log4cpp logger category
       log4cpp::Category& category_;
 
     public:
+
       //! construct logger with a name
       Logger(const std::string& loggerName);
 
@@ -85,7 +89,6 @@ namespace blitzortung {
       }
 
   };
-
 }
 
 #endif

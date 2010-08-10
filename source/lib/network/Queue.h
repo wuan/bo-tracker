@@ -10,7 +10,7 @@ namespace blitzortung {
   namespace network {
 
     template <typename T>
-      class Queue {
+      class Queue : private boost::noncopyable {
 
 	private:
 	  //! wait timeout in seconds

@@ -10,14 +10,18 @@
 namespace blitzortung {
   namespace network {
 
+    //! class providing data interface of network transfer
     class Base : private boost::noncopyable {
 
       private:
+	//! queue for data transfer from measurement thread
 	Queue<bo::data::sample::Base> sampleQueue_;
 
       public:
+	//! constructor
 	Base(const Creds& creds, const int sleepTime, const double eventRateLimit);
 
+	//! destructor
 	virtual ~Base();
 
 	//! add sample to send queue

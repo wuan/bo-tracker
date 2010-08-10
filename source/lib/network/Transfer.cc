@@ -66,7 +66,8 @@ namespace blitzortung {
       if (recv (sockfd, buf, 1000, 0) == -1) {
 	return 0;
       }
-      //std::cout << "received: " << buf << std::endl;
+      if (logger_.isDebugEnabled())
+        logger_.debugStream() << "openConnection() received: '" << buf << "'";
 
       return sockfd;
     }
@@ -114,7 +115,7 @@ namespace blitzortung {
 	xt.sec += 1;
 
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "wait for data";
+	  logger_.debugStream() << "() wait for data";
 
 	sampleQueue_.timed_wait(xt);
 
@@ -129,7 +130,7 @@ namespace blitzortung {
 	  if (samples_->size() > 0) {
 
 	    if (logger_.isDebugEnabled())
-	      logger_.debugStream() << "wait for data";
+	      logger_.debugStream() << "() wait for data";
 
 	    double secondsElapsed = ((now - lastSent).total_milliseconds() / 1000);
 	    double eventRate = double(samples_->size()) / secondsElapsed;
@@ -137,17 +138,17 @@ namespace blitzortung {
 	    lastSent = now;
 
 	    if (logger_.isInfoEnabled())
-	      logger_.infoStream() << "# sending " << samples_->size() << " (rate " << eventRate << " samples/second) at " << now << "\n";
+	      logger_.infoStream() << "() sending " << samples_->size() << " samples (rate " << eventRate << " samples/second) at " << now;
 
 	    if (eventRate > eventRateLimit_) {
 	      samples_->sort(data::sample::Base::CompareAmplitude());
 
-	      logger_.infoStream() << "ratelimit: " << eventRateLimit_ << " seconds " << secondsElapsed;
+	      logger_.infoStream() << "() ratelimit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed;
 	      int sampleLimit = eventRateLimit_ * secondsElapsed;
 
 	      samples_->erase(samples_->begin() + sampleLimit, samples_->end());
 
-	      logger_.infoStream() << "erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")\n";
+	      logger_.infoStream() << "() erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")";
 
 	      // time sort samples
 	      samples_->sort();
@@ -161,10 +162,10 @@ namespace blitzortung {
 	      std::string data = sampleToString(*sample);
 
 	      if (logger_.isInfoEnabled())
-		logger_.infoStream() << data;
+		logger_.infoStream() << data.substr(0, data.size() -1);
 
 	      if (send (sockfd, data.c_str(), data.size(), 0) == -1) {
-		logger_.warnStream() << "network::Base::Transfer(): error transmitting data";
+		logger_.warnStream() << "() error transmitting data";
 		break;
 	      }
 	    }

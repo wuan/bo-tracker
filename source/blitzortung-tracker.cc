@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
     ("sleep-time,s", po::value<int>(&sleepTime)->default_value(sleepTime), "sleep time between data transmission")
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device")
+    ("pcb-version", po::value<int>(&pcbVersion)->default_value(pcbVersion), "version of PCB (4 or 6)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("verbose,v", "verbose mode")
     ("debug", "debug mode")
