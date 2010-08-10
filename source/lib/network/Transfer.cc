@@ -95,6 +95,7 @@ namespace blitzortung {
       oss.precision(6);
 
       oss << " " << sample.getAntennaLatitude() << " " << sample.getAntennaLongitude();
+      oss << " " << sample.getAntennaAltitude();
       oss << " " << creds_.getUsername() << " " << creds_.getPassword();
       oss << " " << sample.getXAmplitude(1) << " " << sample.getYAmplitude(1);
       oss << " " << sample.getGpsStatus() << " " << VERSION << std::endl;
@@ -170,7 +171,7 @@ namespace blitzortung {
 	      }
 	    }
 
-	    send (sockfd, "\n\n", 2, 0);
+	    send (sockfd, "\n", 2, 0);
 	    close (sockfd);
 
 	    // delete all samples

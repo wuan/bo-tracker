@@ -18,28 +18,24 @@ namespace blitzortung {
 	  typedef V::const_iterator CVI;
 	  typedef boost::shared_ptr<V> VP;
 
-          // time since 00:00 in ns
-	  typedef unsigned long long int TYPE_TIME;
-	  // factor time offset of peak in 3150 ns
-	  typedef unsigned short TYPE_OFFSET;
-	  // station coordinates
-	  typedef float TYPE_COORDINATE;
-	  // amplitude values at peak
-	  typedef signed char TYPE_AMPLITUDE;
-	  // simple count type
-	  typedef unsigned char TYPE_GPSNUMBEROFSATELLITES;
-	  // simple char type
-	  typedef char TYPE_GPSSTATUS;
+	private:
 
-	  static const unsigned int IDX_TIME;
-	  static const unsigned int IDX_LONGITUDE;
-	  static const unsigned int IDX_LATITUDE;
-	  static const unsigned int IDX_GPSNUMBEROFSATELLITES;
-	  static const unsigned int IDX_GPSSTATUS;
-	  static const unsigned int IDX_OFFSET1;
-	  static const unsigned int IDX_XAMP1;
-	  static const unsigned int IDX_YAMP1;
-	  static const unsigned int DATASIZE;
+	  long long int nanoseconds_;
+	  float latitude_;
+	  float longitude_;
+	  short altitude_;
+	  unsigned char gpsNumberOfSatellites_;
+	  char gpsStatus_;
+	  short peak1Offset_;
+	  float peak1A_;
+	  float peak1B_;
+
+	  // maximal absolut value for channel A and B
+	  static const int AD_MAX_VALUE;
+	  // maximal absolute millivolt for channel A and B
+	  static const int AD_MAX_VOLTAGE;
+	  // absolute threshold millivolt for channel A and B
+	  static const int AD_THRESHOLD_VOLTAGE;
 
 	public:
 
@@ -61,16 +57,16 @@ namespace blitzortung {
 	  virtual void setTime(const pt::time_duration&);
 
 	  //! setter for peak time offset
-	  virtual void setOffset(unsigned short nanoseconds, int index);
+	  virtual void setOffset(short offsetFactor, int index);
 
 	  //! getter for x peak amplitude
-	  virtual signed short getXAmplitude(int index) const;
+	  virtual float getXAmplitude(int index) const;
 	  
 	  //! getter for y peak amplitude
-	  virtual signed short getYAmplitude(int index) const;
+	  virtual float getYAmplitude(int index) const;
 
 	  //! setter for peak amplitude
-	  virtual void setAmplitude(const signed short xamp, const signed short yamp, int index);
+	  virtual void setAmplitude(const float xamp, const float yamp, int index);
 
 	  //! setter for antenna longitude value
 	  virtual void setAntennaLongitude(const float longitude);
@@ -84,6 +80,12 @@ namespace blitzortung {
 	  //! getter for antenna latitude value
 	  virtual float getAntennaLatitude() const;
 
+	  //! setter for antenna altitude value
+	  virtual void setAntennaAltitude(const short altitude);
+
+	  //! getter for antenna altitude value
+	  virtual short getAntennaAltitude() const;
+
 	  //! setter for gps satellite count
 	  virtual void setGpsNumberOfSatellites(const unsigned char satelliteCount);
 
@@ -96,8 +98,6 @@ namespace blitzortung {
 	  //! getter for gps status
 	  virtual char getGpsStatus() const;
 
-	  //! return size of current data format
-	  virtual unsigned int getDataSize() const;
       };
 
     }

@@ -22,13 +22,6 @@ namespace blitzortung {
 	  typedef V::const_iterator CVI;
 	  typedef boost::shared_ptr<V> VP;
 
-	protected:
-
-	  char* data_;
-
-	  //! return size of current data format
-	  virtual unsigned int getDataSize() const = 0;
-
 	public:
 
 	  //! constructor
@@ -49,19 +42,19 @@ namespace blitzortung {
 	  virtual void setTime(const pt::time_duration&) = 0;
 
 	  //! setter for peak time by the offset to the sample time
-	  virtual void setOffset(unsigned short offsetfactor, int index) = 0;
+	  virtual void setOffset(short offsetfactor, int index) = 0;
 
 	  //! getter for peak amplitude
-	  virtual signed short getXAmplitude(int index) const = 0;
+	  virtual float getXAmplitude(int index) const = 0;
 
 	  //! getter for peak amplitude
-	  virtual signed short getYAmplitude(int index) const = 0;
+	  virtual float getYAmplitude(int index) const = 0;
 
 	  //! getter for peak amplitude
-	  virtual double getAmplitude(int index) const;
+	  virtual float getAmplitude(int index) const;
 
 	  //! setter for peak amplitude
-	  virtual void setAmplitude(const signed short xamp, const signed short yamp, int index) = 0;
+	  virtual void setAmplitude(const float xamp, const float yamp, int index) = 0;
 
 	  //! setter for antenna longitude value
 	  virtual void setAntennaLongitude(const float longitude) = 0;
@@ -74,6 +67,12 @@ namespace blitzortung {
 
 	  //! getter for antenna latitude value
 	  virtual float getAntennaLatitude() const = 0;
+
+	  //! setter for antenna altitude value
+	  virtual void setAntennaAltitude(const short altitude) = 0;
+
+	  //! getter for antenna altitude value
+	  virtual short getAntennaAltitude() const = 0;
 
 	  //! setter for gps satellite count
 	  virtual void setGpsNumberOfSatellites(const unsigned char satelliteCount) = 0;
