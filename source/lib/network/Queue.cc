@@ -10,8 +10,7 @@ namespace blitzortung {
     {
     }
 
-    template <typename T> Queue<T>::~Queue() :
-      timeout_(timeout)
+    template <typename T> Queue<T>::~Queue()
     {
       // TODO add code to free content of queue here
     }
