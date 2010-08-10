@@ -8,7 +8,8 @@ namespace blitzortung {
 
 	Time::Time() :
 	  counterTicksPerSecond_(Base::BUFFERSIZE),
-	  ignoreCounter_(2)
+	  ignoreCounter_(2),
+	  logger_(Logger::get())
 	{
 	  pt::time_input_facet *facet = new pt::time_input_facet();
 	  facet->format("%d%m%y %H%M%S");
@@ -30,8 +31,9 @@ namespace blitzortung {
 	  if (ignoreCounter_ <= 0) {
 	    // TODO this is a temporary fix to avoid problems introduce by bad counter values
 	    if (counterTicksElapsed > 2400000 && counterTicksElapsed < 2600000) {
-	      std::cout << "hardware::gps::data::Time::setSecond() counter value " << counterTicksElapsed << " out of range\n";
 	      counterTicksPerSecond_.add(counterTicksElapsed);
+	    } else {
+	      logger_.warnStream() << "hardware::gps::data::Time::setSecond() counter value " << counterTicksElapsed << " out of range";
 	    }
 	  } else {
 	    ignoreCounter_--;

@@ -12,7 +12,8 @@ namespace blitzortung {
      
       Base::Base(SerialPort& serial, const gps::Type& gpsType) :
 	communication_(serial),
-	gps_(communication_, gpsType)
+	gps_(communication_, gpsType),
+	logger_(Logger::get())
       {
       }
 
@@ -26,7 +27,8 @@ namespace blitzortung {
       std::auto_ptr<data::sample::Base> Base::read() {
 	std::string line = communication_.receive();
 
-	//std::cout << line << std::endl;
+	if (logger_.isInfoEnabled())
+	  logger_.infoStream() << "from serial: " << line;
 
 	int linelength = line.size();
 

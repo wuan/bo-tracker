@@ -24,6 +24,9 @@ namespace hardware {
 	//! gps device object
 	gps::Base gps_;
 
+	//! logger reference
+	Logger& logger_;
+
       public:
 	Base(SerialPort&, const gps::Type&);
 	virtual ~Base();
