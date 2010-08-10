@@ -5,13 +5,17 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
 
-      V6::V6(SerialPort& serial, const gps::Type& gpsType) :
-	Base(serial, gpsType),
+      V6::V6(SerialPort& serial, const gps::Type& gpsType, const data::sample::Base::Creator& sampleCreator) :
+	Base(serial, gpsType, sampleCreator),
 	logger_("hardware.pcb.V6")
       {
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "initialize";
       }
 
       V6::~V6() {
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "delete";
       }
 
       std::auto_ptr<data::sample::Base> V6::parse(const std::vector<std::string> &fields) {
@@ -21,11 +25,7 @@ namespace blitzortung {
 	if (fields[0] == "BLSEQ") {
 
 	  // read counter value
-	  int counter;
-	  {
-	    std::istringstream iss(fields[1]);
-	    iss >> std::hex >> counter;
-	  }
+	  int counter = parseHex(fields[1]);
 
 	  pt::ptime eventtime = gps_.getTime(counter);
 
@@ -37,23 +37,14 @@ namespace blitzortung {
 	    sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
 	    sample->setGpsStatus(gps_.getStatus());
 	  } else {
-	    std::cout << "GPS not valid -> no sample\n";
+	    logger_.warnStream() << "GPS information is not yet valid -> no sample created";
 	  }
 
 	} else {
-	  throw exception::Base("blitzortung::hardware::pcb::V6.parse() wrong data to parse");
+	  logger_.errorStream() << "parse() data header '" << fields[0] << "' mismatch";
 	}
 
 	return sample;
-      }
-
-      short V6::parseHex(const std::string& hexval) {
-	short value;
-
-	std::stringstream ss;
-	ss << std::hex << hexval;
-	ss >> value;
-	return value - 128;
       }
 
       std::auto_ptr<data::sample::Base> V6::parseData(const pt::ptime& eventtime, const std::string& data) {
@@ -66,9 +57,10 @@ namespace blitzortung {
 	double maxSquare = 0.0;
 	int maxIndex = -1;
 	for (int i=0; i < numberOfSamples; i++) {
+
 	  int index = i << 2;
-	  short xval = parseHex(data.substr(index, 2));
-	  short yval = parseHex(data.substr(index + 2, 2));
+	  short xval = parseHex(data.substr(index, 2)) - 0x80;
+	  short yval = parseHex(data.substr(index + 2, 2)) - 0x80;
 
 	  //std::cout << " " << i << " " << xval << " " << yval << std::endl;
 
@@ -84,7 +76,8 @@ namespace blitzortung {
 	  yvals.push_back(yval);
 	}	    
 
-	std::auto_ptr<data::sample::Base> sample(new data::sample::Version1());
+	std::auto_ptr<data::sample::Base> sample(sampleCreator_());
+
 	sample->setTime(eventtime.time_of_day());
 	sample->setOffset(maxIndex, 1);
 	sample->setAmplitude(xvals[maxIndex], yvals[maxIndex], 1);
