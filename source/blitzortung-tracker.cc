@@ -11,7 +11,9 @@
 #include <boost/program_options.hpp>
 
 #include "namespaces.h"
+#include "hardware/pcb/V4.h"
 #include "hardware/pcb/V6.h"
+#include "data/sample/V1.h"
 #include "network/Base.h"
 #include "util/RingBuffer.h"
 #include "exception/Base.h"
@@ -24,6 +26,8 @@ int main(int argc, char **argv) {
   std::string serialPort = "/dev/ttyUSB0";
   int serialBaudEnum = 2;
   int sleepTime = 20;
+  int sampleVersion = 1;
+  int pcbVersion = 6;
   double eventRateLimit = 1.0;
   std::string gpsType = "sirf";
 
@@ -120,8 +124,37 @@ int main(int argc, char **argv) {
 
   bo::hardware::SerialPort serial(serialPort, serialBaudRate);
 
+  // create sample creator object
+  std::auto_ptr<bo::data::sample::Base::Creator> sampleCreator;
+
+  switch (sampleVersion) {
+    case 1:
+      sampleCreator = std::auto_ptr<bo::data::sample::Base::Creator>(new bo::data::sample::V1::Creator());
+      break;
+
+    default:
+      std::ostringstream oss;
+      oss << "invalid sample version: " << pcbVersion;
+      throw bo::exception::Base(oss.str());
+  }
+
   // create hardware driver object for blitzortung measurement hardware
-  std::auto_ptr<bo::hardware::pcb::Base> hardware(new bo::hardware::pcb::V6(serial, gpsTypeEnum));
+  std::auto_ptr<bo::hardware::pcb::Base> hardware;
+
+  switch (pcbVersion) {
+    case 4:
+//      hardware = std::auto_ptr<bo::hardware::pcb::Base>(new bo::hardware::pcb::V4(serial, gpsTypeEnum, *sampleCreator));
+      break;
+
+    case 6:
+      hardware = std::auto_ptr<bo::hardware::pcb::Base>(new bo::hardware::pcb::V6(serial, gpsTypeEnum, *sampleCreator));
+      break;
+
+    default:
+      std::ostringstream oss;
+      oss << "invalid pcb version: " << pcbVersion;
+      throw bo::exception::Base(oss.str());
+  }
 
   //! set credentials/parameters for network connection
   bo::network::Creds creds;

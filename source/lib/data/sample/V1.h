@@ -9,11 +9,11 @@ namespace blitzortung {
     namespace sample {
 
       //! class for sample data version 1
-      class Version1 : public Base {
+      class V1 : public Base {
 	
 	public:
 	  //! type definition for vector container
-	  typedef boost::ptr_vector<Version1> V;
+	  typedef boost::ptr_vector<V1> V;
 	  typedef V::iterator VI;
 	  typedef V::const_iterator CVI;
 	  typedef boost::shared_ptr<V> VP;
@@ -44,10 +44,10 @@ namespace blitzortung {
 	public:
 
 	  //! constructor
-	  Version1();
+	  V1();
 
 	  //! destructor
-	  virtual ~Version1();
+	  virtual ~V1();
 
 	  //! Creator
 	  struct Creator : public Base::Creator {

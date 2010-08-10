@@ -20,15 +20,21 @@ namespace hardware {
 	//! data field output
 	std::vector<std::string> fields_;
 
+	//! logger reference
+	mutable Logger logger_;
+
       protected:
 	//! gps device object
 	gps::Base gps_;
 
-	//! logger reference
-	Logger logger_;
+	//! function for parsing of hex strings
+	int parseHex(const std::string& hexString);
+
+	//! sample creator;
+        const data::sample::Base::Creator& sampleCreator_;	
 
       public:
-	Base(SerialPort&, const gps::Type&);
+	Base(SerialPort&, const gps::Type&, const data::sample::Base::Creator&);
 	virtual ~Base();
 
 	bool isOpen() const;

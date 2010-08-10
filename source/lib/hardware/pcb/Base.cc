@@ -10,10 +10,11 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
      
-      Base::Base(SerialPort& serial, const gps::Type& gpsType) :
+      Base::Base(SerialPort& serial, const gps::Type& gpsType, const data::sample::Base::Creator& sampleCreator) :
 	communication_(serial),
+	logger_("hardware.pcb.Base"),
 	gps_(communication_, gpsType),
-	logger_("hardware.pcb.Base")
+	sampleCreator_(sampleCreator)
       {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "initialized";
@@ -22,6 +23,15 @@ namespace blitzortung {
       Base::~Base() {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "destroyed";
+      }
+
+      int Base::parseHex(const std::string& hexString) {
+	int hexValue;
+
+	std::istringstream iss(hexString);
+	iss >> std::hex >> hexValue;
+
+	return hexValue;
       }
 
       bool Base::isOpen() const {

@@ -2,7 +2,7 @@
 #define BLITZORTUNG_DATA_SAMPLES_H_
 
 #include "namespaces.h"
-#include "data/sample/Version1.h"
+#include "data/sample/Base.h"
 //#include "data/SamplesFile.h"
 #include "exception/Base.h"
 
@@ -23,7 +23,7 @@ namespace blitzortung {
 
       public:
 
-	Samples(const sample::Base::Creator& creator = sample::Version1::Creator());
+	Samples(const sample::Base::Creator& sampleCreator);
 
 	//! add sample to collection
 	void add(std::auto_ptr<sample::Base>);
