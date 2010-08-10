@@ -23,7 +23,7 @@ namespace blitzortung {
 
       // set further logging  parameters
       category_.setAdditivity(false);
-      category_.setPriority(log4cpp::Priority::NOTICE);
+      //category_.setPriority(log4cpp::Priority::NOTICE);
     }
   }
 

@@ -33,9 +33,8 @@ namespace blitzortung {
 	    //! calculate counter difference
 	    int getCounterDifference(const int counter) const;
 
-	  protected:
-	    //! logger reference
-	    Logger& logger_;
+	    //! logger for class
+	    mutable Logger logger_;
 
 	  public:
 	    Time();

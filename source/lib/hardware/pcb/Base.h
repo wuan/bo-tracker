@@ -25,7 +25,7 @@ namespace hardware {
 	gps::Base gps_;
 
 	//! logger reference
-	Logger& logger_;
+	Logger logger_;
 
       public:
 	Base(SerialPort&, const gps::Type&);

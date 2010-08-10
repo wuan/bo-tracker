@@ -10,13 +10,18 @@ namespace blitzortung {
       : sampleQueue_(sampleQueue),
       creds_(creds),
       samples_(new data::sample::Base::V()),
-      logger_(Logger::get())
+      logger_("network.Transfer")
     {
       sleepTime_ = 20;
       eventRateLimit_ = 1.0;
+
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "initalized(sleep: " << sleepTime_ << ", eventRateLimit: " << eventRateLimit_ << ")";
     }
 
     Transfer::~Transfer() {
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "deleted";
     }
 
     void Transfer::setSleepTime(const int sleepTime) {
@@ -108,6 +113,9 @@ namespace blitzortung {
 	boost::xtime_get(&xt, boost::TIME_UTC);
 	xt.sec += 1;
 
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "wait for data";
+
 	sampleQueue_.timed_wait(xt);
 
 	// get new samples from queue until it is empty
@@ -118,8 +126,10 @@ namespace blitzortung {
 	pt::ptime now = pt::second_clock::universal_time();
 	if (now - lastSent >= pt::seconds(sleepTime_)) {
 
-
 	  if (samples_->size() > 0) {
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "wait for data";
 
 	    double secondsElapsed = ((now - lastSent).total_milliseconds() / 1000);
 	    double eventRate = double(samples_->size()) / secondsElapsed;
@@ -132,12 +142,12 @@ namespace blitzortung {
 	    if (eventRate > eventRateLimit_) {
 	      samples_->sort(data::sample::Base::CompareAmplitude());
 
-	      std::cout << "ratelimit: " << eventRateLimit_ << " seconds " << secondsElapsed << std::endl;
+	      logger_.infoStream() << "ratelimit: " << eventRateLimit_ << " seconds " << secondsElapsed;
 	      int sampleLimit = eventRateLimit_ * secondsElapsed;
 
 	      samples_->erase(samples_->begin() + sampleLimit, samples_->end());
 
-	      std::cout << "erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")\n";
+	      logger_.infoStream() << "erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")\n";
 
 	      // time sort samples
 	      samples_->sort();
@@ -169,6 +179,5 @@ namespace blitzortung {
 	}
       }
     }
-
   }
 }
