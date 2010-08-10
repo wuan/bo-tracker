@@ -143,7 +143,7 @@ int main(int argc, char **argv) {
 
   switch (pcbVersion) {
     case 4:
-//      hardware = std::auto_ptr<bo::hardware::pcb::Base>(new bo::hardware::pcb::V4(serial, gpsTypeEnum, *sampleCreator));
+      hardware = std::auto_ptr<bo::hardware::pcb::Base>(new bo::hardware::pcb::V4(serial, gpsTypeEnum, *sampleCreator));
       break;
 
     case 6:
