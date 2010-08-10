@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     ("server-host,h", po::value<std::string>(&servername), "blitzortung.org servername")
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
     ("sleep-time,s", po::value<int>(&sleepTime)->default_value(sleepTime), "sleep time between data transmission")
-    ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device")
+    ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (sjn, garmin or sirf)")
     ("pcb-version", po::value<int>(&pcbVersion)->default_value(pcbVersion), "version of PCB (4 or 6)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("verbose,v", "verbose mode")
@@ -115,6 +115,8 @@ int main(int argc, char **argv) {
     gpsTypeEnum = bo::hardware::gps::GARMIN;
   } else if (gpsType == "sirf") {
     gpsTypeEnum = bo::hardware::gps::SIRF;
+  } else if (gpsType == "sjn") {
+    gpsTypeEnum = bo::hardware::gps::SJN;
   } else {
     std::ostringstream oss;
     oss << "invalid value of gps-type: '" << serialBaudEnum << "'";
