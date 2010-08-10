@@ -15,7 +15,7 @@ namespace blitzortung {
   namespace hardware {
     namespace gps {
 
-      enum Type {GARMIN, SIRF};
+      enum Type {SJN, GARMIN, SIRF};
 
       class Base {
 

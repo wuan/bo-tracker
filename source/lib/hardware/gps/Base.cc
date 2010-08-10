@@ -53,10 +53,17 @@ namespace blitzortung {
 
       void Base::initWrite(const unsigned int baudRate, const unsigned int targetBaudRate) {
 
-	switch(type_) {
-	  case SIRF:
+	communication_.setBaudRate(baudRate);
 
-	    communication_.setBaudRate(baudRate);
+	switch(type_) {
+	  case SJN:
+	    if (targetBaudRate != 4800)
+	      throw exception::Base("hardware::gps::Base::initWrite() unsupported target baud rate");
+
+	    communication_.send("$PFEC,GPint,GGA01,GLL00,GSA00,GSV00,RMC01,DTM00,VTG00,ZDA00*00\r\n");
+	    break;
+
+	  case SIRF:
 
 	    // enable 1 HZ GCA message
 	    communication_.send("$PSRF103,00,00,01,01*25\r\n");
@@ -87,7 +94,42 @@ namespace blitzortung {
 	    break;
 
 	  case GARMIN:
-	    throw exception::Base("hardware::gps::Base::initWrite() no init strings for Garmin devices yet!");
+
+	    int targetBaudKey;
+	    switch(targetBaudRate) {
+	      case 4800:
+		targetBaudKey = 3;
+		break;
+
+	      case 9600:
+		targetBaudKey = 4;
+		break;
+
+	      case 19200:
+		targetBaudKey = 5;
+		break;
+
+	      default:
+		throw exception::Base("hardware::gps::Base::initWrite() unsupported target baud rate");
+	    }
+
+	    communication_.send("$PGRMO,GPGGA,1*00\r\n");
+	    communication_.send("$PGRMO,GPGSA,0*00\r\n");
+	    communication_.send("$PGRMO,GPGSV,0*00\r\n");
+	    communication_.send("$PGRMO,GPRMC,1*00\r\n");
+	    communication_.send("$PGRMO,GPVTG,0*00\r\n");
+	    communication_.send("$PGRMO,PGRMM,0*00\r\n");
+	    communication_.send("$PGRMO,PGRMT,0*00\r\n");
+	    communication_.send("$PGRMO,PGRME,0*00\r\n");
+	    communication_.send("$PGRMO,PGRMB,0*00\r\n");
+	    communication_.send("$PGRMCE*00\r\n");
+	    {
+	      std::ostringstream oss;
+	      oss << "$PGRMC,,51.5,,,,,,,," << targetBaudKey << ",,2,4,*00\r\n";
+	      communication_.send(oss.str());
+	    }
+	    break;
+
 
 	  default:
 	    throw exception::Base("hardware::gps::Base::initWrite() unhandled device type");
