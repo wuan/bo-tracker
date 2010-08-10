@@ -54,7 +54,7 @@ namespace blitzortung {
 	void setEventRateLimit(const double eventRateLimit);
 
 	//! initialize network connection to server
-	int open_connection ();
+	int openConnection ();
 
 	//! get string to be transmitted for every sample
 	std::string sampleToString(const data::sample::Base& sample);
