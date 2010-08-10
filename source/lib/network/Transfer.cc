@@ -9,7 +9,8 @@ namespace blitzortung {
     Transfer::Transfer(Queue<bo::data::sample::Base>& sampleQueue, const Creds& creds)
       : sampleQueue_(sampleQueue),
       creds_(creds),
-      samples_(new data::sample::Base::V())
+      samples_(new data::sample::Base::V()),
+      logger_(Logger::get())
     {
       sleepTime_ = 20;
       eventRateLimit_ = 1.0;
@@ -125,10 +126,10 @@ namespace blitzortung {
 
 	    lastSent = now;
 
-	    //std::cout << "# sending " << samples_->size() << " (rate " << eventRate << " samples/second) at " << now << "\n";
+	    if (logger_.isInfoEnabled())
+	      logger_.infoStream() << "# sending " << samples_->size() << " (rate " << eventRate << " samples/second) at " << now << "\n";
 
-	    if (eventRate > eventRateLimit_)
-	    {
+	    if (eventRate > eventRateLimit_) {
 	      samples_->sort(data::sample::Base::CompareAmplitude());
 
 	      std::cout << "ratelimit: " << eventRateLimit_ << " seconds " << secondsElapsed << std::endl;
@@ -149,10 +150,11 @@ namespace blitzortung {
 	    for (data::sample::Base::VI sample = samples_->begin(); sample != samples_->end(); sample++) {
 	      std::string data = sampleToString(*sample);
 
-	      //std::cout << data;
+	      if (logger_.isInfoEnabled())
+		logger_.infoStream() << data;
 
 	      if (send (sockfd, data.c_str(), data.size(), 0) == -1) {
-		std::cout << ("network::Base::Transfer(): error sending data");
+		logger_.warnStream() << "network::Base::Transfer(): error transmitting data";
 		break;
 	      }
 	    }

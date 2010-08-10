@@ -13,6 +13,7 @@
 #include "data/sample/Base.h"
 #include "network/Queue.h"
 #include "network/Creds.h"
+#include "Logger.h"
 
 namespace blitzortung {
   namespace network {
@@ -34,6 +35,10 @@ namespace blitzortung {
 
 	//! limit value of maximum events / second;
 	double eventRateLimit_;
+
+      protected:
+	//! reference to logger
+	Logger& logger_;
 
       public:
 

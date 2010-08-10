@@ -6,6 +6,7 @@
 #include "namespaces.h"
 #include "util/RingBuffer.h"
 #include "hardware/gps/data/Base.h"
+#include "Logger.h"
 
 namespace blitzortung {
   namespace hardware {
@@ -31,6 +32,10 @@ namespace blitzortung {
 
 	    //! calculate counter difference
 	    int getCounterDifference(const int counter) const;
+
+	  protected:
+	    //! logger reference
+	    Logger& logger_;
 
 	  public:
 	    Time();
