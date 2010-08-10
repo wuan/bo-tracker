@@ -15,6 +15,7 @@
 #include "network/Base.h"
 #include "util/RingBuffer.h"
 #include "exception/Base.h"
+#include "Logger.h"
 
 int main(int argc, char **argv) {
 
@@ -25,6 +26,8 @@ int main(int argc, char **argv) {
   int sleepTime = 20;
   double eventRateLimit = 1.0;
   std::string gpsType = "sirf";
+
+  bo::Logger& logger = bo::Logger::get();
 
   // programm arguments/options
   boost::program_options::options_description desc("program options");
@@ -69,6 +72,10 @@ int main(int argc, char **argv) {
   if (! vm.count("server-host")) {
     std::cerr << "'server-host' missing\n";
     return 5;
+  }
+
+  if (vm.count("verbose")) {
+    logger.setPriority(log4cpp::Priority::INFO);
   }
       
   int serialBaudRate;
