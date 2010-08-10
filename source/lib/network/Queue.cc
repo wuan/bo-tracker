@@ -10,6 +10,12 @@ namespace blitzortung {
     {
     }
 
+    template <typename T> Queue<T>::~Queue() :
+      timeout_(timeout)
+    {
+      // TODO add code to free content of queue here
+    }
+
     template <typename T> void Queue<T>::push(std::auto_ptr<T> data) {
       boost::mutex::scoped_lock lock(mutex_);
 

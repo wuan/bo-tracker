@@ -18,16 +18,29 @@ namespace blitzortung {
   namespace network {
 
     class Transfer {
+
       private:
+	//! time between successive tranfers in seconds
 	int sleepTime_;
+
+	//! reference to incoming sample data queue
 	Queue<data::sample::Base>& sampleQueue_;
+
+	//! credential and host information for network data transfer
 	const Creds& creds_;
+
+	//! vector of samples
 	data::sample::Base::VP samples_;
+
+	//! limit value of maximum events / second;
 	double eventRateLimit_;
 
       public:
+
+	//! create network transfer object
 	Transfer(Queue<bo::data::sample::Base>& sampleQueue, const Creds& creds);
 
+	//! delete nework transfer object
 	virtual ~Transfer();
 
 	//! set sleep time between data transfers in seconds
@@ -44,6 +57,7 @@ namespace blitzortung {
 
 	//! network transfer thread: wait for new samples and send them from time to time
 	void operator ()();
+
     };
   }
 }
