@@ -54,19 +54,4 @@ namespace blitzortung {
     category_.error(message);
   }
 
-
-  Logger& Logger::get() {
-    static boost::shared_ptr<Logger> instance;
-    static boost::mutex mutex;
-
-    {
-      boost::mutex::scoped_lock lock(mutex);
-
-      if (instance.get() ==0)
-	instance = boost::shared_ptr<Logger>(new Logger(""));
-    }
-
-    return *instance;
-  }
-
 }

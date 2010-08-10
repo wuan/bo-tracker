@@ -84,8 +84,6 @@ namespace blitzortung {
 	return category_.errorStream();
       }
 
-      //! globel function to get reference to logger
-      static Logger& get();
   };
 
 }

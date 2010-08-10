@@ -18,7 +18,7 @@ namespace blitzortung {
     {
 
       if (logger_.isInfoEnabled())
-        logger_.infoStream() << "open serial port " << portName_.c_str() << " with " << baudRate << "baud";
+        logger_.infoStream() << "initializing serial port " << portName_.c_str() << " with " << baudRate << " baud";
 
       serialFd_ = open(portName_.c_str(), O_RDWR | O_NOCTTY);
 

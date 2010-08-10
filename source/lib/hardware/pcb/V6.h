@@ -11,7 +11,11 @@ namespace hardware {
     class V6 : public Base {
       private:
 
+	//! logger for class
+	Logger logger_;
+
 	std::auto_ptr<data::sample::Base> parseData(const pt::ptime&, const std::string &);
+
 	short parseHex(const std::string &);
 
       public:
