@@ -131,12 +131,12 @@ namespace blitzortung {
 	    {
 	      samples_->sort(data::sample::Base::CompareAmplitude());
 
-	      //std::cout << "ratelimit: " << eventRateLimit_ << " seconds " << secondsElapsed << std::endl;
+	      std::cout << "ratelimit: " << eventRateLimit_ << " seconds " << secondsElapsed << std::endl;
 	      int sampleLimit = eventRateLimit_ * secondsElapsed;
 
 	      samples_->erase(samples_->begin() + sampleLimit, samples_->end());
 
-	      //std::cout << "*** amplitude sorted after erasing elements to have " << sampleLimit << " elements\n";
+	      std::cout << "erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")\n";
 
 	      // time sort samples
 	      samples_->sort();
