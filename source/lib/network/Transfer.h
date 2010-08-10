@@ -36,9 +36,8 @@ namespace blitzortung {
 	//! limit value of maximum events / second;
 	double eventRateLimit_;
 
-      protected:
-	//! reference to logger
-	Logger& logger_;
+	//! logger for this class
+	Logger logger_;
 
       public:
 

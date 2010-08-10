@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
   double eventRateLimit = 1.0;
   std::string gpsType = "sirf";
 
-  bo::Logger& logger = bo::Logger::get();
+  bo::Logger logger("");
 
   // programm arguments/options
   boost::program_options::options_description desc("program options");
@@ -43,6 +43,7 @@ int main(int argc, char **argv) {
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("verbose,v", "verbose mode")
+    ("debug", "debug mode")
     ;
 
   // parse command line options
@@ -74,8 +75,16 @@ int main(int argc, char **argv) {
     return 5;
   }
 
+  // logging setup
+
+  logger.setPriority(log4cpp::Priority::NOTICE);
+
   if (vm.count("verbose")) {
     logger.setPriority(log4cpp::Priority::INFO);
+  }
+
+  if (vm.count("debug")) {
+    logger.setPriority(log4cpp::Priority::DEBUG);
   }
       
   int serialBaudRate;

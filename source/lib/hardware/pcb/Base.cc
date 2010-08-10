@@ -13,11 +13,15 @@ namespace blitzortung {
       Base::Base(SerialPort& serial, const gps::Type& gpsType) :
 	communication_(serial),
 	gps_(communication_, gpsType),
-	logger_(Logger::get())
+	logger_("hardware.pcb.Base")
       {
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "initialized";
       }
 
       Base::~Base() {
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "destroyed";
       }
 
       bool Base::isOpen() const {

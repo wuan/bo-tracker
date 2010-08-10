@@ -23,9 +23,8 @@ namespace blitzortung {
 	//! serial port file descriptor
 	int serialFd_;
 
-      protected:
-	//! logger reference
-	Logger& logger_;
+	//! class logger
+	Logger logger_;
 
       public:
 	SerialPort(const std::string &port="/dev/ttyS0", const unsigned int baudRate = 19200);

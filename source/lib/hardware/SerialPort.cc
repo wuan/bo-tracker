@@ -14,11 +14,11 @@ namespace blitzortung {
       portName_(portName),
       buffer_(""),
       isOpen_(false),
-      logger_(Logger::get())
+      logger_("hardware.SerialPort")
     {
 
       if (logger_.isInfoEnabled())
-        logger_.infoStream() << "open serial port " << portName_.c_str();
+        logger_.infoStream() << "open serial port " << portName_.c_str() << " with " << baudRate << "baud";
 
       serialFd_ = open(portName_.c_str(), O_RDWR | O_NOCTTY);
 
@@ -109,7 +109,7 @@ namespace blitzortung {
     void SerialPort::send(const std::string& data) {
       int rc = write(serialFd_, data.c_str(), data.length());
       if (rc < 0)
-	throw exception::Base("hardware::SerialPort::send() write error");
+	logger_.errorStream() << "write error in send()";
     }
 
     const std::string SerialPort::receive() {
@@ -130,7 +130,7 @@ namespace blitzortung {
 	  }
 
 	} else {
-	  std::cout << "returned no characters\n";
+	  logger_.warnStream() << "returned no characters in receive()";
 	  break;
 	}
       }

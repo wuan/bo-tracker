@@ -9,14 +9,19 @@ namespace blitzortung {
 	Time::Time() :
 	  counterTicksPerSecond_(Base::BUFFERSIZE),
 	  ignoreCounter_(2),
-	  logger_(Logger::get())
+	  logger_("hardware.gps.data.Time")
 	{
 	  pt::time_input_facet *facet = new pt::time_input_facet();
 	  facet->format("%d%m%y %H%M%S");
 	  dateTimeInput_.imbue(std::locale(std::locale::classic(), facet));
+
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "initialized";
 	}
 
 	Time::~Time() {
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "deleted";
 	}
 
 	void Time::setSecond(const std::string &timeString, int counter) {
@@ -57,14 +62,18 @@ namespace blitzortung {
 	}
 
 	pt::ptime Time::getTime(const int counter) const {
-	  if (counterTicksPerSecond_.getActualSize() == 0)
+	  if (counterTicksPerSecond_.getActualSize() == 0) {
+	    if (logger_.isInfoEnabled())
+	      logger_.infoStream() << "getTime() no time available";
 	    return pt::not_a_date_time;
+	  }
 
 	  double counterTicksPerSecond = double(counterTicksPerSecond_.getSum()) / counterTicksPerSecond_.getActualSize();
 
 	  int nanoseconds = 1e9 * getCounterDifference(counter) / counterTicksPerSecond;
 
-	  //std::cout << "counter: " << counter << " diff " << getCounterDifference(counter) << " ns: " << nanoseconds << " ticks / s: " << counterTicksPerSecond << std::endl;
+	  if (logger_.isInfoEnabled())
+	    logger_.infoStream() << "getTime(): counter: " << counter << " diff " << getCounterDifference(counter) << " ns: " << nanoseconds << " ticks / s: " << counterTicksPerSecond;
 
 	  return second_ + pt::nanoseconds(nanoseconds);
 	}
