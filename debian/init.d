@@ -27,9 +27,9 @@ DESC=blitzortung-tracker
 
 test -x $DAEMON || exit 0
 
-LOGDIR=/var/log/blitzortung-tracker
+LOGFILE=/var/log/blitzortung-tracker.log
 PIDFILE=/var/run/$NAME.pid
-DODTIME=1                   # Time to wait for the server to die, in seconds
+DODTIME=5                   # Time to wait for the server to die, in seconds
                             # If this value is set too low you might not
                             # let some servers to die gracefully and
                             # 'restart' will not work
@@ -91,7 +91,7 @@ case "$1" in
   start)
         echo -n "Starting $DESC: "
         start-stop-daemon --start --background --quiet --make-pidfile --pidfile $PIDFILE \
-            --exec $DAEMON -- $DAEMON_OPTS
+            --exec $DAEMON -- $DAEMON_OPTS >> $LOGFILE 2>>$LOGFILE
 
 	sleep 5
 
@@ -146,7 +146,7 @@ case "$1" in
             /var/run/$NAME.pid --exec $DAEMON
         [ -n "$DODTIME" ] && sleep $DODTIME
         start-stop-daemon --start --background --quiet --make-pidfile --pidfile \
-            /var/run/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS
+            /var/run/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS >>$LOGFILE 2>>$LOGFILE
         echo "$NAME."
         ;;
   status)
