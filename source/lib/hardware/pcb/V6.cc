@@ -34,6 +34,7 @@ namespace blitzortung {
 
 	    sample->setAntennaLongitude(gps_.getLocation().getLongitude());
 	    sample->setAntennaLatitude(gps_.getLocation().getLatitude());
+	    sample->setAntennaAltitude(gps_.getLocation().getAltitude());
 	    sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
 	    sample->setGpsStatus(gps_.getStatus());
 	  } else {
@@ -49,6 +50,10 @@ namespace blitzortung {
 
       std::auto_ptr<data::sample::Base> V6::parseData(const pt::ptime& eventtime, const std::string& data) {
 
+	const int AD_MAX_VALUE = 128;
+	const int AD_MAX_VOLTAGE = 2500;
+	const int AD_THRESHOLD_VOLTAGE = 500;
+
 	int numberOfSamples = data.size() >> 2;
 
 	std::vector<short> xvals;
@@ -59,10 +64,8 @@ namespace blitzortung {
 	for (int i=0; i < numberOfSamples; i++) {
 
 	  int index = i << 2;
-	  short xval = parseHex(data.substr(index, 2)) - 0x80;
-	  short yval = parseHex(data.substr(index + 2, 2)) - 0x80;
-
-	  //std::cout << " " << i << " " << xval << " " << yval << std::endl;
+	  short xval = parseHex(data.substr(index, 2)) - AD_MAX_VALUE;
+	  short yval = parseHex(data.substr(index + 2, 2)) - AD_MAX_VALUE;
 
 	  double square = xval * xval + yval * yval;
 
@@ -74,13 +77,28 @@ namespace blitzortung {
 	  // store waveform data in arrays
 	  xvals.push_back(xval);
 	  yvals.push_back(yval);
-	}	    
+	}
+
+        float maxX = xvals[maxIndex];
+	float maxY = yvals[maxIndex];
+
+	// correction introduced with v 16 of the original tracker software
+	if ((abs(maxX) < AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE) &&
+	    (abs(maxY) < AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE)) {
+
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "parseData() signal below threshold " << abs(maxX) << " or " << abs(maxY) << " < " << AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE;
+	  maxX = AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE;
+	  maxY = 0.0;
+	  maxIndex = -1;
+
+	}
 
 	std::auto_ptr<data::sample::Base> sample(sampleCreator_());
 
 	sample->setTime(eventtime.time_of_day());
-	sample->setOffset(maxIndex, 1);
-	sample->setAmplitude(xvals[maxIndex], yvals[maxIndex], 1);
+	sample->setOffset(maxIndex - 1, 1);
+	sample->setAmplitude(maxX / AD_MAX_VALUE, maxY / AD_MAX_VALUE, 1);
 
 	return sample;
       }
