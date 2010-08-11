@@ -167,6 +167,9 @@ namespace blitzortung {
 	    send (sockfd, "\n", 2, 0);
 	    close (sockfd);
 
+	    if (logger_.isDebugEnabled())
+		logger_.debugStream() << "connection closed";
+
 	    // delete all samples
 	    samples_->clear();
 	  }
