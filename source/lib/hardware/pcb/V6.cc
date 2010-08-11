@@ -94,6 +94,9 @@ namespace blitzortung {
 
 	}
 
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "parseData() maxX: " << maxX << ", maxY: " << maxY << ", maxIndex: " << maxIndex;
+
 	std::auto_ptr<data::sample::Base> sample(sampleCreator_());
 
 	sample->setTime(eventtime.time_of_day());
