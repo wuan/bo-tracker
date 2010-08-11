@@ -82,6 +82,9 @@ namespace blitzortung {
         float maxX = xvals[maxIndex];
 	float maxY = yvals[maxIndex];
 
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "parseData() preliminary max X: " << maxX << " Y: " << maxY << " index: " << maxIndex; 
+
 	// correction introduced with v 16 of the original tracker software
 	if ((abs(maxX) < AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE) &&
 	    (abs(maxY) < AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE)) {
@@ -95,13 +98,16 @@ namespace blitzortung {
 	}
 
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "parseData() maxX: " << maxX << ", maxY: " << maxY << ", maxIndex: " << maxIndex;
+	  logger_.debugStream() << "parseData() final max X: " << maxX << ", Y: " << maxY << ", index: " << maxIndex;
 
 	std::auto_ptr<data::sample::Base> sample(sampleCreator_());
 
 	sample->setTime(eventtime.time_of_day());
 	sample->setOffset(maxIndex - 1, 1);
 	sample->setAmplitude(maxX / AD_MAX_VALUE, maxY / AD_MAX_VALUE, 1);
+
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "parseData() transmitted max X: " << maxX / AD_MAX_VALUE << ", Y: " << maxY / AD_MAX_VALUE << ", index: " << maxIndex - 1;
 
 	return sample;
       }
