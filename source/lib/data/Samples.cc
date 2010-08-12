@@ -14,7 +14,11 @@ namespace blitzortung {
     }
 
 
-    void Samples::add(std::auto_ptr<sample::Base>){
+    void Samples::add(std::auto_ptr<sample::Base>&) {
+    }
+
+    void Samples::add(sample::Base::V::auto_type sample) {
+      samples_->push_back(sample.release());
     }
 
     void Samples::add(Samples&) throw(exception::Base) {

@@ -29,10 +29,13 @@ namespace blitzortung {
 
       public:
 
-	Samples(const Sample::Creator& sampleCreator);
+	Samples(const Sample::Creator& sampleCreator=data::sample::Base::Creator());
 
 	//! add sample to collection
-	void add(std::auto_ptr<sample::Base>);
+	void add(std::auto_ptr<sample::Base>&);
+
+	//! add sample to collection
+	void add(sample::Base::V::auto_type);
 
 	//! add other sample collection to sample collection
 	void add(Samples&) throw(exception::Base);

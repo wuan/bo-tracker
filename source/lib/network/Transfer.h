@@ -40,6 +40,15 @@ namespace blitzortung {
 	//! logger for this class
 	Logger logger_;
 
+	//! initialize network connection to server
+	int openConnection ();
+
+	//! get string to be transmitted for every sample
+	std::string sampleToString(const data::sample::Base& sample);
+
+	//! save data to file
+	void saveData();
+
       public:
 
 	//! create network transfer object
@@ -53,12 +62,6 @@ namespace blitzortung {
 
 	//! set limit of average number of events per minute transmitted
 	void setEventRateLimit(const double eventRateLimit);
-
-	//! initialize network connection to server
-	int openConnection ();
-
-	//! get string to be transmitted for every sample
-	std::string sampleToString(const data::sample::Base& sample);
 
 	//! network transfer thread: wait for new samples and send them from time to time
 	void operator ()();
