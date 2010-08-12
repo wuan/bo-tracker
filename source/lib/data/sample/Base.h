@@ -6,6 +6,7 @@
 #include <boost/ptr_container/ptr_list.hpp>
 
 #include "namespaces.h"
+#include "exception/Base.h"
 
 namespace blitzortung {
   namespace data {
@@ -33,7 +34,9 @@ namespace blitzortung {
 
 	  //! Creator
 	  struct Creator {
-	    virtual Base* operator()() const = 0;
+	    virtual Base* operator()() const {
+	      throw exception::Base("data::sample::Base::Creator() being used!");
+	    }
 	  };
 
 	  //! getter for sample and peak time

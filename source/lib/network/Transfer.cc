@@ -91,6 +91,18 @@ namespace blitzortung {
       return oss.str();
     }
 
+    void Transfer::saveData() {
+      data::Samples samples;
+
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "saveData()";
+
+      // move all current samples to
+      for (data::sample::Base::VI sample = samples_->begin(); sample != samples_->end();) {
+	samples.add(samples_->release(sample));
+      }
+    }
+
     void Transfer::operator()() {
 
       pt::ptime lastSent = pt::second_clock::universal_time();
@@ -118,6 +130,8 @@ namespace blitzortung {
 
 	  if (samples_->size() > 0) {
 
+	    data::sample::Base::VP deletedSamples(new data::sample::Base::V());
+
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "() sample vector contains " << samples_->size() << " elements";
 
@@ -137,7 +151,8 @@ namespace blitzortung {
 
 	      int sampleLimit = eventRateLimit_ * secondsElapsed;
 
-	      samples_->erase(samples_->begin() + sampleLimit, samples_->end());
+	      //samples_->transfer(samples_->begin() + sampleLimit, samples_->end());
+	      deletedSamples->transfer(deletedSamples->end(), samples_->begin(), samples_->end(), *samples_);
 
 	      if (logger_.isInfoEnabled())
 		logger_.infoStream() << "() erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")";
@@ -167,7 +182,18 @@ namespace blitzortung {
 	    close (sockfd);
 
 	    if (logger_.isDebugEnabled())
-		logger_.debugStream() << "connection closed";
+	      logger_.debugStream() << "() connection closed";
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "() recollect samples " << samples_->size() << " + " << deletedSamples->size();
+	    samples_->transfer(samples_->end(), *deletedSamples);
+
+	    samples_->sort();
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "() recollected " << samples_->size() << " samples ";
+
+	    saveData();
 
 	    // delete all samples
 	    samples_->clear();
