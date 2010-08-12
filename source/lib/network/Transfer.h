@@ -10,7 +10,8 @@
 #include <boost/thread/xtime.hpp>
 #include <boost/thread/condition.hpp>
 
-#include "data/sample/Base.h"
+#include "data/Samples.h"
+#include "network/Base.h"
 #include "network/Queue.h"
 #include "network/Creds.h"
 #include "Logger.h"
@@ -25,7 +26,7 @@ namespace blitzortung {
 	int sleepTime_;
 
 	//! reference to incoming sample data queue
-	Queue<data::sample::Base>& sampleQueue_;
+	Queue<bo::data::sample::Base>& sampleQueue_;
 
 	//! credential and host information for network data transfer
 	const Creds& creds_;
@@ -42,7 +43,7 @@ namespace blitzortung {
       public:
 
 	//! create network transfer object
-	Transfer(Queue<bo::data::sample::Base>& sampleQueue, const Creds& creds);
+	Transfer(Queue<data::sample::Base>& sampleQueue, const Creds& creds);
 
 	//! delete nework transfer object
 	virtual ~Transfer();

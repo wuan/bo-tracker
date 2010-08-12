@@ -33,7 +33,7 @@ namespace blitzortung {
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
 	    sample = std::auto_ptr<data::sample::Base>(sampleCreator_());
 
-	    sample->setTime(eventtime.time_of_day());
+	    sample->setTime(eventtime);
 	    sample->setAmplitude(1, maxX, maxY);
 	    sample->setAntennaLongitude(gps_.getLocation().getLongitude());
 	    sample->setAntennaLatitude(gps_.getLocation().getLatitude());

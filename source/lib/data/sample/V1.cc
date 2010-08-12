@@ -16,18 +16,16 @@ namespace blitzortung {
       }
 
 
-      pt::time_duration V1::getTime(int index) const {
+      pt::ptime V1::getTime(int index) const {
 
-	static const long long int nano_factor = 1000000000;
-	int seconds = nanoseconds_ / nano_factor;
-	long long int nanoseconds = nanoseconds_ - seconds * nano_factor;
+	pt::time_duration timeOffset(pt::seconds(0));
 
 	switch (index) {
 	  case 0:
 	    break;
 
 	  case 1:
-	    nanoseconds += 3125 * peak1Offset_;
+	    timeOffset = pt::nanoseconds(3125 * peak1Offset_);
 	    break;
 
 	  default:
@@ -36,11 +34,11 @@ namespace blitzortung {
 	    throw exception::Base(oss.str());
 	}
 
-	return pt::seconds(seconds) + pt::nanoseconds(nanoseconds);
+	return time_ + timeOffset;
       }
 
-      void V1::setTime(const pt::time_duration& time) {
-	nanoseconds_ = time.total_nanoseconds();
+      void V1::setTime(const pt::ptime& time) {
+	time_ = time;
       }
 
       void V1::setOffset(short offsetfactor, int index) {

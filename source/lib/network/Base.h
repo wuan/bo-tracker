@@ -15,7 +15,7 @@ namespace blitzortung {
 
       private:
 	//! queue for data transfer from measurement thread
-	Queue<bo::data::sample::Base> sampleQueue_;
+	Queue<data::sample::Base> sampleQueue_;
 
       public:
 	//! constructor
@@ -25,7 +25,7 @@ namespace blitzortung {
 	virtual ~Base();
 
 	//! add sample to send queue
-	void put(std::auto_ptr<data::sample::Base>);
+	void put(data::sample::Base::AP&);
     };
   }
 }

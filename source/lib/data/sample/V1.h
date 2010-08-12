@@ -20,7 +20,7 @@ namespace blitzortung {
 
 	private:
 
-	  long long int nanoseconds_;
+	  pt::ptime time_;
 	  float latitude_;
 	  float longitude_;
 	  short altitude_;
@@ -51,10 +51,10 @@ namespace blitzortung {
 	  };
 		  
 	  //! getter for sample and peak time
-	  virtual pt::time_duration getTime(int index=0) const;
+	  virtual pt::ptime getTime(int index=0) const;
 
 	  //! setter for sample and peak time
-	  virtual void setTime(const pt::time_duration&);
+	  virtual void setTime(const pt::ptime&);
 
 	  //! setter for peak time offset
 	  virtual void setOffset(short offsetFactor, int index);

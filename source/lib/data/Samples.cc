@@ -3,14 +3,14 @@
 namespace blitzortung {
   namespace data {
 
-    Samples::Samples(const sample::Base::Creator& creator) :
+    Samples::Samples(const Sample::Creator& creator) :
       creator_(creator)
     {
       init();
     }
 
     void Samples::init() {
-      entries_ = sample::Base::VP(new sample::Base::V());
+      samples_ = Sample::VP(new Sample::V());
     }
 
 
@@ -28,38 +28,53 @@ namespace blitzortung {
       date_ = date;
     }
 
+    int Samples::size() const {
+      return samples_->size();
+    }
+
+    void Samples::sort() {
+      samples_->sort();
+    }
+
+    void Samples::clear() {
+      samples_->clear();
+    }
+
+    Samples::Sample::VI Samples::erase(Sample::VI start, Sample::VI end) {
+      return samples_->erase(start, end);
+    }
+
     const sample::Base& Samples::front() const {
-      return entries_->front();
+      return samples_->front();
     }
 
     sample::Base& Samples::front() {
-      return entries_->front();
+      return samples_->front();
     }
 
     const sample::Base& Samples::back() const {
-      return entries_->back();
+      return samples_->back();
     }
 
     sample::Base& Samples::back() {
-      return entries_->back();
+      return samples_->back();
     }
 
-    sample::Base::CVI Samples::begin() const {
-      return entries_->begin();
+    Samples::Sample::CVI Samples::begin() const {
+      return samples_->begin();
     }
 
-    sample::Base::VI Samples::begin() {
-      return entries_->begin();
+    Samples::Sample::VI Samples::begin() {
+      return samples_->begin();
     }
 
-    sample::Base::CVI Samples::end() const {
-      return entries_->end();
+    Samples::Sample::CVI Samples::end() const {
+      return samples_->end();
     }
 
-    sample::Base::VI Samples::end() {
-      return entries_->end();
+    Samples::Sample::VI Samples::end() {
+      return samples_->end();
     }
-
 
   }
 }
