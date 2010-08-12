@@ -6,6 +6,8 @@
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition.hpp>
 
+#include "Logger.h"
+
 namespace blitzortung {
   namespace network {
 
@@ -24,6 +26,9 @@ namespace blitzortung {
 
 	  //! condition to enable waiting on queue
 	  boost::condition condition_;
+
+	  //! logger for this class
+	  mutable Logger logger_;
 
 	public:
 

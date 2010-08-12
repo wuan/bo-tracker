@@ -171,10 +171,10 @@ int main(int argc, char **argv) {
 
   while (hardware->isOpen()) {
 
-    std::auto_ptr<bo::data::sample::Base> sample = hardware->read();
+    bo::data::sample::Base::AP sample = hardware->read();
 
     if (sample.get() != 0) {
-      network->put(sample);
+      network->push(sample);
     }
 
   }
