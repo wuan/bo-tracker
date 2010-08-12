@@ -18,8 +18,9 @@ namespace blitzortung {
 	  logger_.debugStream() << "deleted";
       }
 
-      std::auto_ptr<data::sample::Base> V6::parse(const std::vector<std::string> &fields) {
-	std::auto_ptr<data::sample::Base> sample;
+      data::sample::Base::AP V6::parse(const std::vector<std::string> &fields) {
+
+	data::sample::Base::AP sample;
 	
 	// parse lighning event information
 	if (fields[0] == "BLSEQ") {
@@ -37,6 +38,10 @@ namespace blitzortung {
 	    sample->setAntennaAltitude(gps_.getLocation().getAltitude());
 	    sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
 	    sample->setGpsStatus(gps_.getStatus());
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "parse() sample ready";
+
 	  } else {
 	    logger_.warnStream() << "GPS information is not yet valid -> no sample created";
 	  }
@@ -48,7 +53,7 @@ namespace blitzortung {
 	return sample;
       }
 
-      std::auto_ptr<data::sample::Base> V6::parseData(const pt::ptime& eventtime, const std::string& data) {
+      data::sample::Base::AP V6::parseData(const pt::ptime& eventtime, const std::string& data) {
 
 	const int AD_MAX_VALUE = 128;
 	const int AD_MAX_VOLTAGE = 2500;
@@ -100,7 +105,7 @@ namespace blitzortung {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "parseData() final max X: " << maxX << ", Y: " << maxY << ", index: " << maxIndex;
 
-	std::auto_ptr<data::sample::Base> sample(sampleCreator_());
+	data::sample::Base::AP sample(sampleCreator_());
 
 	sample->setTime(eventtime);
 	sample->setOffset(maxIndex, 1);

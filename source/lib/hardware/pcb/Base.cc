@@ -38,7 +38,7 @@ namespace blitzortung {
 	return communication_.isOpen();
       }
 
-      std::auto_ptr<data::sample::Base> Base::read() {
+      data::sample::Base::AP Base::read() {
 	std::string line = communication_.receive();
 
 

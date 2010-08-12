@@ -9,13 +9,14 @@ namespace blitzortung {
     Transfer::Transfer(Queue<data::sample::Base>& sampleQueue, const Creds& creds)
       : sampleQueue_(sampleQueue),
       creds_(creds),
+      samples_(new data::sample::Base::V()),
       logger_("network.Transfer")
     {
       sleepTime_ = 20;
       eventRateLimit_ = 1.0;
 
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "initalized(sleep: " << sleepTime_ << ", eventRateLimit: " << eventRateLimit_ << ")";
+	logger_.debugStream() << "initalized( sleep: " << sleepTime_ << ", eventRateLimit: " << eventRateLimit_ << ")";
     }
 
     Transfer::~Transfer() {
@@ -106,13 +107,19 @@ namespace blitzortung {
 
 	// get new samples from queue until it is empty
 	while (! sampleQueue_.empty()) {
-	  samples_->push_back(sampleQueue_.pop());
+	  data::sample::Base::AP sample(sampleQueue_.pop());
+
+	  samples_->push_back(sample);
 	}
 
 	pt::ptime now = pt::second_clock::universal_time();
+
 	if (now - lastSent >= pt::seconds(sleepTime_)) {
 
 	  if (samples_->size() > 0) {
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "() sample vector contains " << samples_->size() << " elements";
 
 	    double secondsElapsed = ((now - lastSent).total_milliseconds() / 1000);
 	    double eventRate = double(samples_->size()) / secondsElapsed;
@@ -125,12 +132,15 @@ namespace blitzortung {
 	    if (eventRate > eventRateLimit_) {
 	      samples_->sort(data::sample::Base::CompareAmplitude());
 
-	      logger_.infoStream() << "() ratelimit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed;
+	      if (logger_.isInfoEnabled())
+		logger_.infoStream() << "() ratelimit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed;
+
 	      int sampleLimit = eventRateLimit_ * secondsElapsed;
 
 	      samples_->erase(samples_->begin() + sampleLimit, samples_->end());
 
-	      logger_.infoStream() << "() erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")";
+	      if (logger_.isInfoEnabled())
+		logger_.infoStream() << "() erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")";
 
 	      // time sort samples
 	      samples_->sort();

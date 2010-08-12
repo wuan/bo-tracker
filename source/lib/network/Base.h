@@ -3,6 +3,7 @@
 
 
 #include "namespaces.h"
+#include "Logger.h"
 #include "network/Creds.h"
 #include "network/Queue.h"
 #include "data/sample/Base.h"
@@ -17,6 +18,9 @@ namespace blitzortung {
 	//! queue for data transfer from measurement thread
 	Queue<data::sample::Base> sampleQueue_;
 
+	//! logger for this class
+	mutable Logger logger_;
+
       public:
 	//! constructor
 	Base(const Creds& creds, const int sleepTime, const double eventRateLimit);
@@ -25,7 +29,7 @@ namespace blitzortung {
 	virtual ~Base();
 
 	//! add sample to send queue
-	void put(data::sample::Base::AP&);
+	void push(data::sample::Base::AP&);
     };
   }
 }

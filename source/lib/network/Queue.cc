@@ -6,7 +6,8 @@ namespace blitzortung {
   namespace network {
 
     template <typename T> Queue<T>::Queue(int timeout) :
-      timeout_(timeout)
+      timeout_(timeout),
+      logger_("network.Queue")
     {
     }
 
@@ -59,8 +60,10 @@ namespace blitzortung {
 
     template <typename T> std::auto_ptr<T> Queue<T>::pop() {
       boost::mutex::scoped_lock lock(mutex_);
+
       std::auto_ptr<T> autoPtr(queue_.front());
       queue_.pop();
+
       return autoPtr;
     }
 
