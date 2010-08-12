@@ -34,6 +34,9 @@ namespace blitzortung {
 
 	  //! Creator
 	  struct Creator {
+
+	    typedef boost::shared_ptr<Creator> P;
+
 	    virtual Base* operator()() const {
 	      throw exception::Base("data::sample::Base::Creator() being used!");
 	    }
@@ -89,6 +92,9 @@ namespace blitzortung {
 
 	  //! getter for gps status
 	  virtual char getGpsStatus() const = 0;
+
+	  //! getter for sample format version
+	  virtual unsigned short getVersion() const = 0;
 
 	  //! comparison operator <
 	  bool operator<(const Base &) const;
