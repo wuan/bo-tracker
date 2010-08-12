@@ -131,6 +131,10 @@ namespace blitzortung {
 	return gpsStatus_;
       }
 
+      unsigned short V1::getVersion() const {
+	return 1;
+      }
+
     }
   }
 }

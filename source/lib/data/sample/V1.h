@@ -98,6 +98,9 @@ namespace blitzortung {
 	  //! getter for gps status
 	  virtual char getGpsStatus() const;
 
+	  //! getter for format version
+	  virtual unsigned short getVersion() const;
+
       };
 
     }
