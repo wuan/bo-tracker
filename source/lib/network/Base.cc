@@ -18,8 +18,8 @@ namespace blitzortung {
     Base::~Base() {
     }
 
-    void Base::put(std::auto_ptr<data::sample::Base> sample) {
-      sampleQueue_.push(sample);
+    void Base::put(data::sample::Base::AP& data) {
+      sampleQueue_.push(data);
     }
 
   }

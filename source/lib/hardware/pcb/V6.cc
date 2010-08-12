@@ -102,7 +102,7 @@ namespace blitzortung {
 
 	std::auto_ptr<data::sample::Base> sample(sampleCreator_());
 
-	sample->setTime(eventtime.time_of_day());
+	sample->setTime(eventtime);
 	sample->setOffset(maxIndex, 1);
 	sample->setAmplitude(maxX / AD_MAX_VALUE, maxY / AD_MAX_VALUE, 1);
 

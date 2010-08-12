@@ -6,10 +6,9 @@
 namespace blitzortung {
   namespace network {
 
-    Transfer::Transfer(Queue<bo::data::sample::Base>& sampleQueue, const Creds& creds)
+    Transfer::Transfer(Queue<data::sample::Base>& sampleQueue, const Creds& creds)
       : sampleQueue_(sampleQueue),
       creds_(creds),
-      samples_(new data::sample::Base::V()),
       logger_("network.Transfer")
     {
       sleepTime_ = 20;
@@ -75,17 +74,7 @@ namespace blitzortung {
       timefacet->format("%Y-%m-%d %H:%M:%S.%f");
       std::locale oldLocale = oss.imbue(std::locale(std::locale::classic(), timefacet));
 
-      pt::ptime now = pt::second_clock::universal_time();
-
-      pt::time_duration sampleTime = sample.getTime(1);
-
-      pt::ptime sampleDateTime(now.date(), sampleTime);
-
-      // check if the sample is from the day before
-      if (sampleTime > now.time_of_day())
-	sampleDateTime -= gr::days(1);
-
-      oss << sampleDateTime;
+      oss << sample.getTime(1);
       oss.setf(std::ios::fixed);
       oss.precision(6);
 

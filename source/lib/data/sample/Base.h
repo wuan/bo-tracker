@@ -21,6 +21,7 @@ namespace blitzortung {
 	  typedef V::iterator VI;
 	  typedef V::const_iterator CVI;
 	  typedef boost::shared_ptr<V> VP;
+	  typedef std::auto_ptr<Base> AP;
 
 	public:
 
@@ -36,10 +37,10 @@ namespace blitzortung {
 	  };
 
 	  //! getter for sample and peak time
-	  virtual pt::time_duration getTime(int index=0) const = 0;
+	  virtual pt::ptime getTime(int index=0) const = 0;
 
 	  //! setter for sample and peak time
-	  virtual void setTime(const pt::time_duration&) = 0;
+	  virtual void setTime(const pt::ptime&) = 0;
 
 	  //! setter for peak time by the offset to the sample time
 	  virtual void setOffset(short offsetfactor, int index) = 0;
