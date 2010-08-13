@@ -1,6 +1,9 @@
 #ifndef BLITZORTUNG_DATA_SAMPLE_BASE_H_
 #define BLITZORTUNG_DATA_SAMPLE_BASE_H_
 
+#include <iostream>
+#include <fstream>
+
 #include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_list.hpp>
@@ -23,6 +26,14 @@ namespace blitzortung {
 	  typedef V::const_iterator CVI;
 	  typedef boost::shared_ptr<V> VP;
 	  typedef std::auto_ptr<Base> AP;
+
+	protected:
+
+	  //! template function for writing of different types to stream
+	  template< typename T>
+	    void valueToStream(std::iostream& stream, const T& value) const {
+	      stream.write((char*) &value, sizeof(value));
+	    }
 
 	public:
 
@@ -96,13 +107,19 @@ namespace blitzortung {
 	  //! getter for sample format version
 	  virtual unsigned short getVersion() const = 0;
 
+	  //! write binary object data to stream
+	  virtual void toStream(std::iostream&) const = 0;
+
 	  //! comparison operator <
 	  bool operator<(const Base &) const;
 
 	  //! class to compare timestamp of Strokes
 	  struct CompareAmplitude : public std::binary_function<Base, Base, bool> {
-	    bool operator()(const first_argument_type& x, const                   second_argument_type& y) const;
+	    bool operator()(const first_argument_type& x, const second_argument_type& y) const;
 	  };
+
+
+
 
       };
       

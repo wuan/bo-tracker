@@ -33,11 +33,11 @@ namespace blitzortung {
 	std::locale oldLocale = os.imbue(std::locale(std::locale::classic(), timefacet));
 
 	os << sample.getTime() << " " << sample.getAntennaLongitude() << " " << sample.getAntennaLatitude();
-	os << " " << (int) sample.getGpsNumberOfSatellites() << std::endl;
+	os << " " << (int) sample.getGpsNumberOfSatellites();
 
 	for (int peak=1; peak<=1; peak++) {
-	  os << "  " << peak << " " << sample.getTime(peak) << " " << sample.getAmplitude(peak);
-	  os << " (" << sample.getXAmplitude(peak) << ", " << sample.getYAmplitude(peak) << ")" << std::endl;
+	  os << " " << sample.getTime(peak).time_of_day() << " " << sample.getAmplitude(peak);
+	  os << " (" << sample.getXAmplitude(peak) << ", " << sample.getYAmplitude(peak) << ")";
 	}
 
 	// restore original locale
