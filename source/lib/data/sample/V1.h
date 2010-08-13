@@ -103,7 +103,12 @@ namespace blitzortung {
 
 	  //! write binary object data to stream
 	  virtual void toStream(std::iostream&) const;
-
+	  
+	  //! read binary object data from stream
+	  virtual void fromStream(std::iostream&, const gr::date&);
+	  	  
+	  //! get binary storage size of sample
+	  virtual unsigned int getSize() const;
       };
 
     }

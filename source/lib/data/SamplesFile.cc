@@ -51,10 +51,25 @@ namespace blitzortung {
     }
 
     sample::Base::VP SamplesFile::read() {
+      sample::Base::VP samples(new sample::Base::V());
+      
       fileHeader_.read(filename_);
+     
+      std::fstream fstream;
+
+      fstream.open(filename_.c_str(), std::ios::in | std::ios::binary);
+
+      fstream.seekg(fileHeader_.getSize(), std::ios::beg);
       
+      for(unsigned int i=0; i < fileHeader_.getNumberOfSamples(); i++) {
+	sample::Base::AP sample(fileHeader_.createSample());
+	sample->fromStream(fstream, fileHeader_.getDate());
+	samples->push_back(sample);
+      }
+
+      fstream.close();
       
+      return samples;
     }
   }
 }
-

@@ -26,6 +26,9 @@ namespace blitzortung {
 
 	//! file version
 	unsigned short fileVersion_;
+	
+	//! number of samples in file
+	unsigned int numberOfSamples_;
 
 	//! sample creator object
 	data::sample::Base::Creator::P sampleCreator_;
@@ -49,6 +52,9 @@ namespace blitzortung {
 
 	//! get file date
 	const gr::date& getDate() const;
+	
+	//! get number of samples in file
+	unsigned int getNumberOfSamples() const;
 
 	//! set file version
 	void setFileVersion(const unsigned short);
@@ -61,7 +67,7 @@ namespace blitzortung {
 	bool operator!=(const SamplesFileHeader&);
 
 	//! set creator object depending on file version number
-	sample::Base::Creator::P getCreator() const;
+	sample::Base::AP createSample() const;
 
 	std::string formatFilename(const std::string& fileformat) const;
 
@@ -73,6 +79,8 @@ namespace blitzortung {
 	
 	//! write file header
 	void write(const std::string&);
+	
+	unsigned int getSize() const;
     };
 
   }

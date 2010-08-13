@@ -36,6 +36,10 @@ namespace blitzortung {
     const unsigned short SamplesFileHeader::getFileVersion() const {
       return fileVersion_;
     }
+    
+    unsigned int SamplesFileHeader::getNumberOfSamples() const {
+      return numberOfSamples_;
+    }  
 
     void SamplesFileHeader::read(const std::string& filename) {
       std::fstream fstream;
@@ -71,11 +75,30 @@ namespace blitzortung {
       // read file version from file
       fstream.read((char*)&fileVersion_, sizeof(fileVersion_));
 
+      assert(fstream.tellg() == getSize());
+      
+      fstream.seekg(0, std::ios::end);
+      int filesize = fstream.tellg();
+      
+      fstream.close();
+      
       // set object to create sample objects 
       setCreator(fileVersion_);
 
+      sample::Base::AP dummySample = createSample();
+      
+      filesize -= getSize();
+      
+      numberOfSamples_ = filesize / dummySample->getSize();
+
+      if (numberOfSamples_ * dummySample->getSize() != filesize)
+	throw exception::Base("data::SamplesFileHeader file size mismatch");
     }
 
+    sample::Base::AP SamplesFileHeader::createSample() const {
+      return sample::Base::AP((*sampleCreator_)());
+    }
+	
     std::string SamplesFileHeader::formatFilename(const std::string& fileformat) const {
 
       if (! fileDate_.is_not_a_date()) {
@@ -116,6 +139,10 @@ namespace blitzortung {
       }
 
       fstream.write((char*) &fileVersion_, sizeof(unsigned short));
+      
+      assert(fstream.tellg() == getSize());
+      
+      fstream.close();
     }
 
     void SamplesFileHeader::setCreator(unsigned short fileVersion) {
@@ -154,7 +181,10 @@ namespace blitzortung {
       return !(*this == other);
     }
 
-
+    unsigned int SamplesFileHeader::getSize() const {
+      return 10;
+    }
+    
   }
 }
 
