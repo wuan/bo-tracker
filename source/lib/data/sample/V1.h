@@ -101,6 +101,9 @@ namespace blitzortung {
 	  //! getter for format version
 	  virtual unsigned short getVersion() const;
 
+	  //! write binary object data to stream
+	  virtual void toStream(std::iostream&) const;
+
       };
 
     }

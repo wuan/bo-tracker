@@ -135,6 +135,19 @@ namespace blitzortung {
 	return 1;
       }
 
+      void V1::toStream(std::iostream& stream) const {
+	long long int nanoseconds = getTime().time_of_day().total_nanoseconds();
+	valueToStream(stream, nanoseconds);
+	valueToStream(stream, longitude_);
+	valueToStream(stream, latitude_);
+	valueToStream(stream, altitude_);
+	valueToStream(stream, gpsNumberOfSatellites_);
+	valueToStream(stream, gpsStatus_);
+	valueToStream(stream, peak1Offset_);
+	valueToStream(stream, peak1A_);
+	valueToStream(stream, peak1B_);
+      }
+
     }
   }
 }
