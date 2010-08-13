@@ -34,6 +34,31 @@ namespace blitzortung {
 	    void valueToStream(std::iostream& stream, const T& value) const {
 	      stream.write((char*) &value, sizeof(value));
 	    }
+	    
+	  template< typename T>
+	    void valueFromStream(std::iostream& stream, T& value) const {
+	      stream.read((char*) &value, sizeof(value));
+	    }
+
+	  class Size {
+	    private:
+	      unsigned int size_;
+
+	    public:
+	      Size() :
+		size_(0)
+	    {
+	    }
+
+	      template<typename T>
+		unsigned int add(const T& value) {
+		  size_ += sizeof(value);
+		  return size_;
+		}
+	      unsigned int get() const {
+		return size_;
+	      }
+	  };
 
 	public:
 
@@ -109,6 +134,12 @@ namespace blitzortung {
 
 	  //! write binary object data to stream
 	  virtual void toStream(std::iostream&) const = 0;
+	  
+	  //! read binary object data from stream
+	  virtual void fromStream(std::iostream&, const gr::date&) = 0;
+	  
+	  //! get binary storage size of sample
+	  virtual unsigned int getSize() const = 0;
 
 	  //! comparison operator <
 	  bool operator<(const Base &) const;

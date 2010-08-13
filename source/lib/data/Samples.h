@@ -15,6 +15,7 @@ namespace blitzortung {
     class Samples : boost::noncopyable {
 
       public:
+        typedef sample::Base::VI I;
 	typedef boost::shared_ptr<Samples> P;
 	typedef sample::Base Sample;
 

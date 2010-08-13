@@ -37,6 +37,9 @@ namespace blitzortung {
 	//! limit value of maximum events / second;
 	double eventRateLimit_;
 
+	//! output file name
+	const std::string& outputFile_;
+	
 	//! logger for this class
 	Logger logger_;
 
@@ -52,7 +55,7 @@ namespace blitzortung {
       public:
 
 	//! create network transfer object
-	Transfer(Queue<data::sample::Base>& sampleQueue, const Creds& creds);
+	Transfer(Queue<data::sample::Base>& sampleQueue, const Creds& creds, const std::string&);
 
 	//! delete nework transfer object
 	virtual ~Transfer();

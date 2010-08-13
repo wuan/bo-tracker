@@ -24,6 +24,7 @@ int main(int argc, char **argv) {
   std::string username, password, servername;
   unsigned short serverport;
   std::string serialPort = "/dev/ttyUSB0";
+  std::string outputFile = "";
   int serialBaudEnum = 2;
   int sleepTime = 20;
   int sampleVersion = 1;
@@ -47,6 +48,7 @@ int main(int argc, char **argv) {
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (sjn, garmin or sirf)")
     ("pcb-version", po::value<int>(&pcbVersion)->default_value(pcbVersion), "version of PCB (4 or 6)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
+    ("output,o", po::value<std::string>(&outputFile), "output file name (e.g. Name_%Y%m%d.bos)")
     ("verbose,v", "verbose mode")
     ("debug", "debug mode")
     ;
@@ -167,7 +169,7 @@ int main(int argc, char **argv) {
   creds.setPassword(password);
 
   //! create object of network driver for sample transmission
-  std::auto_ptr<bo::network::Base> network(new bo::network::Base(creds, sleepTime, eventRateLimit));
+  std::auto_ptr<bo::network::Base> network(new bo::network::Base(creds, sleepTime, eventRateLimit, outputFile));
 
   while (hardware->isOpen()) {
 
