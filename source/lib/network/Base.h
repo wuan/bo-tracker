@@ -23,7 +23,7 @@ namespace blitzortung {
 
       public:
 	//! constructor
-	Base(const Creds& creds, const int sleepTime, const double eventRateLimit);
+	Base(const Creds& creds, const int sleepTime, const double eventRateLimit, const std::string&);
 
 	//! destructor
 	virtual ~Base();

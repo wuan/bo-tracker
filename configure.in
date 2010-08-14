@@ -20,6 +20,7 @@ AC_PROG_CXX
 
 AC_OUTPUT( \
 	Makefile \
-	source/Makefile
-	source/lib/Makefile
+	source/Makefile \
+	source/lib/Makefile \
+	tests/Makefile
     )

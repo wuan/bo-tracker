@@ -131,6 +131,55 @@ namespace blitzortung {
 	return gpsStatus_;
       }
 
+      unsigned short V1::getVersion() const {
+	return 1;
+      }
+
+      void V1::toStream(std::iostream& stream) const {
+	long long int nanoseconds = getTime().time_of_day().total_nanoseconds();
+	valueToStream(stream, nanoseconds);
+	valueToStream(stream, longitude_);
+	valueToStream(stream, latitude_);
+	valueToStream(stream, altitude_);
+	valueToStream(stream, gpsNumberOfSatellites_);
+	valueToStream(stream, gpsStatus_);
+	valueToStream(stream, peak1Offset_);
+	valueToStream(stream, peak1A_);
+	valueToStream(stream, peak1B_);
+      }
+      
+      void V1::fromStream(std::iostream& stream, const gr::date& fileDate) {
+	long long int nanoseconds;
+	valueFromStream(stream, nanoseconds);
+	time_ = pt::ptime(fileDate, pt::nanoseconds(nanoseconds));
+	valueFromStream(stream, longitude_);
+	valueFromStream(stream, latitude_);
+	valueFromStream(stream, altitude_);
+	valueFromStream(stream, gpsNumberOfSatellites_);
+	valueFromStream(stream, gpsStatus_);
+	valueFromStream(stream, peak1Offset_);
+	valueFromStream(stream, peak1A_);
+	valueFromStream(stream, peak1B_);
+      }
+
+      unsigned int V1::getSize() const {
+	Size size;
+
+	long long int nanoseconds;
+	size.add(nanoseconds);
+	size.add(longitude_);
+	size.add(latitude_);
+	size.add(altitude_);
+	size.add(gpsNumberOfSatellites_);
+	size.add(gpsStatus_);
+	size.add(peak1Offset_);
+	size.add(peak1A_);
+	size.add(peak1B_);
+
+	return size.get();
+      }
+
+
     }
   }
 }

@@ -1,10 +1,10 @@
-#include "Samples.h"
+#include "data/Samples.h"
+#include "data/SamplesFile.h"
 
 namespace blitzortung {
   namespace data {
 
-    Samples::Samples(const Sample::Creator& creator) :
-      creator_(creator)
+    Samples::Samples()
     {
       init();
     }
@@ -14,22 +14,33 @@ namespace blitzortung {
     }
 
 
-    void Samples::add(std::auto_ptr<sample::Base>&) {
+    void Samples::add(sample::Base* sample) {
+      if (samples_->size() == 0) {
+	header_.setDate(sample->getTime().date());
+      } else {
+	if (header_.getDate() != sample->getTime().date())
+	  throw exception::Base("sample date mismatch");
+      }
+      samples_->push_back(sample);
+    }
+
+    void Samples::add(std::auto_ptr<sample::Base> sample) {
+      add(sample.release());
     }
 
     void Samples::add(sample::Base::V::auto_type sample) {
-      samples_->push_back(sample.release());
+      add(sample.release());
     }
 
     void Samples::add(Samples&) throw(exception::Base) {
     }
 
     const gr::date& Samples::getDate() const {
-      return date_;
+      return header_.getDate();
     }
 
     void Samples::setDate(const gr::date& date) {
-      date_ = date;
+      header_.setDate(date);
     }
 
     int Samples::size() const {
@@ -78,6 +89,33 @@ namespace blitzortung {
 
     Samples::Sample::VI Samples::end() {
       return samples_->end();
+    }
+
+    void Samples::appendToFile(const std::string& fileName, const unsigned short fileVersion) {
+      if (samples_->size() > 0) {
+
+	if (fileVersion != 0) {
+	  // override file version if fileVersion argument is not 0
+	  header_.setFileVersion(fileVersion);
+	} else {
+	  if (header_.getFileVersion() == 0) {
+	    // use version of first sample, if no file-version is set
+	    header_.setFileVersion(samples_->front().getVersion());
+	  }
+	}
+
+	SamplesFile samplesFile(fileName, header_);
+
+	samplesFile.append(samples_);
+      }
+    }
+
+    void Samples::writeToFile(const std::string&) {
+    }
+
+    void Samples::readFromFile(const std::string& filename) {
+      SamplesFile samplesFile(filename, header_);
+      samples_ = samplesFile.read();
     }
 
   }

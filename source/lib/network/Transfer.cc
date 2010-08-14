@@ -6,10 +6,11 @@
 namespace blitzortung {
   namespace network {
 
-    Transfer::Transfer(Queue<data::sample::Base>& sampleQueue, const Creds& creds)
+    Transfer::Transfer(Queue<data::sample::Base>& sampleQueue, const Creds& creds, const std::string& outputFile)
       : sampleQueue_(sampleQueue),
       creds_(creds),
       samples_(new data::sample::Base::V()),
+      outputFile_(outputFile),
       logger_("network.Transfer")
     {
       sleepTime_ = 20;
@@ -99,7 +100,13 @@ namespace blitzortung {
 
       // move all current samples to
       for (data::sample::Base::VI sample = samples_->begin(); sample != samples_->end();) {
+
+	if (samples.getDate() != sample->getTime().date() && samples.size() != 0) {
+	  samples.appendToFile(outputFile_);
+	  samples.clear();
+	}
 	samples.add(samples_->release(sample));
+
       }
     }
 
@@ -193,7 +200,8 @@ namespace blitzortung {
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "() recollected " << samples_->size() << " samples ";
 
-	    saveData();
+	    if (outputFile_ != "")
+	      saveData();
 
 	    // delete all samples
 	    samples_->clear();
