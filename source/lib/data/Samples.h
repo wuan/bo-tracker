@@ -76,10 +76,10 @@ namespace blitzortung {
 	// file operations
 	
 	//! append current samples to given file
-	void appendToFile(const std::string&, const unsigned short fileVersion = 0);
+	std::string appendToFile(const std::string&, const unsigned short fileVersion = 0);
 
 	//! write current samples to given file
-	void writeToFile(const std::string&);
+	std::string writeToFile(const std::string&, const unsigned short fileVersion = 0);
 
 	//! read samples from given file
 	void readFromFile(const std::string&);
