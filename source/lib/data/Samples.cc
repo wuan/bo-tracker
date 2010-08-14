@@ -108,9 +108,9 @@ namespace blitzortung {
 
 	samplesFile.append(samples_);
 	
-	return header_.formatFilename(filename);
+	return header_.formatFilename(fileName);
       }
-      return ""
+      return "";
     }
 
     std::string Samples::writeToFile(const std::string& fileName, const unsigned short fileVersion) {
@@ -129,7 +129,7 @@ namespace blitzortung {
 
 	samplesFile.append(samples_);
 	
-	return header_.formatFilename(filename);
+	return header_.formatFilename(fileName);
       }
       return "";
     }
