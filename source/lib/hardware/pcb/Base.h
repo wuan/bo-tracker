@@ -12,7 +12,9 @@ namespace blitzortung {
 namespace hardware {
   namespace pcb {
    
+    //! base class for blitzortung acquisition PCB
     class Base {
+
       private:
 	//! serial port object
 	Communication communication_;
@@ -20,10 +22,11 @@ namespace hardware {
 	//! data field output
 	std::vector<std::string> fields_;
 
-	//! logger reference
+	//! logger for class
 	mutable Logger logger_;
 
       protected:
+
 	//! gps device object
 	gps::Base gps_;
 
@@ -34,9 +37,14 @@ namespace hardware {
         const data::sample::Base::Creator& sampleCreator_;	
 
       public:
+
+	//! constructor for base class
 	Base(SerialPort&, const gps::Type&, const data::sample::Base::Creator&);
+
+	//! destructor
 	virtual ~Base();
 
+	//! return
 	bool isOpen() const;
 
 	std::auto_ptr<data::sample::Base> read();
