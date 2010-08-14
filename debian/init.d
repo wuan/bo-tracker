@@ -93,7 +93,7 @@ case "$1" in
   start)
         echo -n "Starting $DESC: "
         start-stop-daemon --start --background --quiet --make-pidfile --pidfile $PIDFILE \
-            --exec $DAEMON -- $DAEMON_OPTS
+            --exec $DAEMON -- $DAEMON_OPTS || true
 
 	sleep 5
 
@@ -106,7 +106,7 @@ case "$1" in
   stop)
         echo -n "Stopping $DESC: "
         start-stop-daemon --stop --quiet --pidfile $PIDFILE \
-            --exec $DAEMON
+            --exec $DAEMON || true
         echo "$NAME."
         ;;
   force-stop)
@@ -148,7 +148,7 @@ case "$1" in
             /var/run/$NAME.pid --exec $DAEMON
         [ -n "$DODTIME" ] && sleep $DODTIME
         start-stop-daemon --start --background --quiet --make-pidfile --pidfile \
-            /var/run/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS
+            /var/run/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS || true
         echo "$NAME."
         ;;
   status)
