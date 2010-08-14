@@ -9,7 +9,7 @@ AM_LDFLAGS = \
 	$(top_srcdir)/source/lib/libblitzortung.la \
 	-lcppunit
 
-bin_PROGRAMS = test-lib \
+noinst_PROGRAMS = test-lib \
 	$(NULL)
 
 test_lib_SOURCES = \
