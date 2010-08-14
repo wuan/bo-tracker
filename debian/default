@@ -2,20 +2,28 @@
 # sourced by /etc/init.d/blitzortung-tracker
 # installed at /etc/default/blitzortung-tracker by the maintainer scripts
 
-#
-# This is a POSIX shell fragment
-#
+# enable tracker software here
+BLITZORTUNG_TRACKER=no
+
+# credentials and server name
 BLITZORTUNG_USERNAME=""
 BLITZORTUNG_PASSWORD=""
 BLITZORTUNG_SERVERHOST="rechenserver.de"
 
+# communication and hardware parameters
+# PCB Version
+BLITZORTUNG_TRACKER_PCBV=6
 # GPSTYPE (garmin or sirf)
 BLITZORTUNG_TRACKER_GPSTYPE=sirf
-
+# serial device
 BLITZORTUNG_TRACKER_DEVICE="/dev/ttyS0"
 # BAUDRATE (0=4800, 2=19200)
 BLITZORTUNG_TRACKER_BAUDRATE=2
 
+# select the user which is running the tracker (not yet in use)
 BLITZORTUNG_TRACKER_USER=root
 
-export DAEMON_OPTS="-g $BLITZORTUNG_TRACKER_GPSTYPE -b $BLITZORTUNG_TRACKER_BAUDRATE -d $BLITZORTUNG_TRACKER_DEVICE -h $BLITZORTUNG_SERVERHOST -u $BLITZORTUNG_USERNAME -p $BLITZORTUNG_PASSWORD"
+# file pattern to write data files
+#BLITZORTUNG_DATA_OUTPUT="-o /var/cache/blitzortung/raw/${BLITZORTUNG_USER}_%Y%m%d.bor"
+
+export DAEMON_OPTS="-g $BLITZORTUNG_TRACKER_GPSTYPE -b $BLITZORTUNG_TRACKER_BAUDRATE -d $BLITZORTUNG_TRACKER_DEVICE -h $BLITZORTUNG_SERVERHOST -u $BLITZORTUNG_USERNAME -p $BLITZORTUNG_PASSWORD --pcb-version $BLITZORTUNG_TRACKER_PCBV $BLITZORTUNG_DATA_OUTPUT"
