@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (sjn, garmin or sirf)")
     ("pcb-version", po::value<int>(&pcbVersion)->default_value(pcbVersion), "version of PCB (4 or 6)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
-    ("output,o", po::value<std::string>(&outputFile), "output file name (e.g. Name_%Y%m%d.bos)")
+    ("output,o", po::value<std::string>(&outputFile), "output file name (e.g. Name_%Y%m%d.bor)")
     ("verbose,v", "verbose mode")
     ("debug", "debug mode")
     ;

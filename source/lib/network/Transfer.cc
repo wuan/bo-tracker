@@ -105,8 +105,12 @@ namespace blitzortung {
 	  samples.appendToFile(outputFile_);
 	  samples.clear();
 	}
-	samples.add(samples_->release(sample));
 
+	samples.add(samples_->release(sample));
+      }
+
+      if (samples.size() > 0) {
+	samples.appendToFile(outputFile_);
       }
     }
 
@@ -199,6 +203,9 @@ namespace blitzortung {
 
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "() recollected " << samples_->size() << " samples ";
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "() output file " << outputFile_;
 
 	    if (outputFile_ != "")
 	      saveData();
