@@ -1,18 +1,12 @@
-This package was debianized by:
+Author(s):
 
-    Andreas Wuerl <awuerl@gmx.net> on Thu, 08 Aug 2010 15:59:22 +0200
-
-It was downloaded from:
-
-    http://www.blitzortung.org/
-
-Upstream Author(s):
-
+    Andreas Würl <awuerl@gmx.net>
     Egon Wanke <blitzortung@gmx.org>
 
 Copyright:
 
     Copyright (C) 2003-2010 Egon Wanke
+    Copyright (C) 2010 Andreas Würl
 
 License:
 
@@ -38,5 +32,3 @@ The Debian packaging is:
 
 and is licensed under the GPL version 3, see above.
 
-# Please also look if there are files or directories which have a
-# different copyright/license attached and list them here.
