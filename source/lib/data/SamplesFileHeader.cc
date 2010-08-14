@@ -78,7 +78,7 @@ namespace blitzortung {
       assert(fstream.tellg() == getSize());
       
       fstream.seekg(0, std::ios::end);
-      int filesize = fstream.tellg();
+      unsigned int filesize = fstream.tellg();
       
       fstream.close();
       
