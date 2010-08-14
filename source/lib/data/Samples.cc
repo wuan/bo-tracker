@@ -91,7 +91,7 @@ namespace blitzortung {
       return samples_->end();
     }
 
-    void Samples::appendToFile(const std::string& fileName, const unsigned short fileVersion) {
+    std::string Samples::appendToFile(const std::string& fileName, const unsigned short fileVersion) {
       if (samples_->size() > 0) {
 
 	if (fileVersion != 0) {
@@ -107,10 +107,31 @@ namespace blitzortung {
 	SamplesFile samplesFile(fileName, header_);
 
 	samplesFile.append(samples_);
+	
+	return header_.formatFilename(filename);
       }
+      return ""
     }
 
-    void Samples::writeToFile(const std::string&) {
+    std::string Samples::writeToFile(const std::string& fileName, const unsigned short fileVersion) {
+      if (samples_->size() > 0) {
+
+	if (fileVersion != 0) {
+	  // override file version if fileVersion argument is not 0
+	  header_.setFileVersion(fileVersion);
+	} else {
+	  if (header_.getFileVersion() == 0) {
+	    // use version of first sample, if no file-version is set
+	    header_.setFileVersion(samples_->front().getVersion());
+	  }
+	}
+	SamplesFile samplesFile(fileName, header_);
+
+	samplesFile.append(samples_);
+	
+	return header_.formatFilename(filename);
+      }
+      return "";
     }
 
     void Samples::readFromFile(const std::string& filename) {
