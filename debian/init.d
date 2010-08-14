@@ -41,6 +41,10 @@ if [ -f /etc/default/blitzortung-tracker ] ; then
     . /etc/default/blitzortung-tracker
 fi
 
+if [ x${BLITZORTUNG_TRACKER^^^} != "xYES" ] ; then
+  exit 0
+fi
+
 set -e
 
 running_pid()
