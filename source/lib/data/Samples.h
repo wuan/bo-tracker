@@ -16,6 +16,7 @@ namespace blitzortung {
 
       public:
         typedef sample::Base::VI I;
+        typedef sample::Base::CVI CI;
 	typedef boost::shared_ptr<Samples> P;
 	typedef sample::Base Sample;
 
