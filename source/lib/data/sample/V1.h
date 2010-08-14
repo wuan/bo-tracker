@@ -98,6 +98,17 @@ namespace blitzortung {
 	  //! getter for gps status
 	  virtual char getGpsStatus() const;
 
+	  //! getter for format version
+	  virtual unsigned short getVersion() const;
+
+	  //! write binary object data to stream
+	  virtual void toStream(std::iostream&) const;
+	  
+	  //! read binary object data from stream
+	  virtual void fromStream(std::iostream&, const gr::date&);
+	  	  
+	  //! get binary storage size of sample
+	  virtual unsigned int getSize() const;
       };
 
     }

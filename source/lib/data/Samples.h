@@ -5,7 +5,7 @@
 
 #include "namespaces.h"
 #include "data/sample/Base.h"
-//#include "data/SamplesFile.h"
+#include "data/SamplesFileHeader.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
@@ -15,26 +15,26 @@ namespace blitzortung {
     class Samples : boost::noncopyable {
 
       public:
+        typedef sample::Base::VI I;
 	typedef boost::shared_ptr<Samples> P;
 	typedef sample::Base Sample;
 
       protected:
-	gr::date date_;
+	SamplesFileHeader header_;
 
 	Sample::VP samples_;
 
-	const Sample::Creator& creator_;
-
 	void init();
+
+	void add(sample::Base*);
 
       public:
 
-	Samples(const Sample::Creator& sampleCreator=data::sample::Base::Creator());
+	Samples();
 
 	//! add sample to collection
-	void add(std::auto_ptr<sample::Base>&);
+	void add(sample::Base::AP);
 
-	//! add sample to collection
 	void add(sample::Base::V::auto_type);
 
 	//! add other sample collection to sample collection
@@ -57,9 +57,10 @@ namespace blitzortung {
 	  samples_->sort(comp);
 	}
 
-	//! clear or erase samples
+	//! erase all samples
 	void clear();
 
+	//! erase samples between two iterators
 	Sample::VI erase(Sample::VI, Sample::VI);
 
 	// collection iterator methods
@@ -71,6 +72,17 @@ namespace blitzortung {
 	Sample::VI begin();
 	Sample::CVI end() const;
 	Sample::VI end();
+
+	// file operations
+	
+	//! append current samples to given file
+	void appendToFile(const std::string&, const unsigned short fileVersion = 0);
+
+	//! write current samples to given file
+	void writeToFile(const std::string&);
+
+	//! read samples from given file
+	void readFromFile(const std::string&);
     };
 
   }
