@@ -15,26 +15,25 @@ namespace blitzortung {
 	return new V1();
       }
 
-
-      pt::ptime V1::getTime(int index) const {
-
-	pt::time_duration timeOffset(pt::seconds(0));
-
+      pt::time_duration V1::getOffset(int index) const {
 	switch (index) {
-	  case 0:
-	    break;
-
 	  case 1:
-	    timeOffset = pt::nanoseconds(3125 * peak1Offset_);
+	    return pt::nanoseconds(3125 * peak1Offset_);
 	    break;
 
 	  default:
 	    std::ostringstream oss;
-	    oss << "data::sample::V1::getTime() invalid index " << index << " used";
+	    oss << "data::sample::V1::getTime() invalid peak index " << index << " used";
 	    throw exception::Base(oss.str());
 	}
+      }
 
-	return time_ + timeOffset;
+      pt::ptime V1::getTime(int index) const {
+
+	if (index > 0)
+	  return time_ + getOffset(index);
+	else
+	  return time_;
       }
 
       void V1::setTime(const pt::ptime& time) {

@@ -59,6 +59,9 @@ namespace blitzortung {
 	  //! setter for peak time offset
 	  virtual void setOffset(short offsetFactor, int index);
 
+	  //! getter for sample and peak time
+	  virtual pt::time_duration getOffset(int index) const;
+
 	  //! getter for x peak amplitude
 	  virtual float getXAmplitude(int index) const;
 	  
