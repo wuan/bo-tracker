@@ -1,0 +1,18 @@
+#!/usr/bin/python
+
+import os
+import subprocess
+
+import datetime
+
+import numpy
+
+name = ""
+date = datetime.utcNow().date
+
+data = subprocess.Popen(['blitzortung-data','-i','/var/cache/blitzortung/raw/%s_%s.bor' %(name, date.strftime('%Y%m%d'))], stdout=subprocess.PIPE)
+
+(output, error) = data.communicate()
+
+for line in output.splitlines():
+  print line
