@@ -35,6 +35,7 @@ namespace blitzortung {
 	os.setf(std::ios::fixed);
 	os.precision(4);
 	os << sample.getTime() << " " << sample.getAntennaLongitude() << " " << sample.getAntennaLatitude();
+	os << " " << sample.getAntennaAltitude();
 	os << " " << (int) sample.getGpsNumberOfSatellites();
 
 	for (int peak=1; peak<=1; peak++) {
