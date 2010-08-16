@@ -10,7 +10,8 @@ namespace blitzortung {
       Base::Base(const Communication &communication, const Type& type) :
 	communication_(communication),
 	type_(type),
-	satelliteCount_(data::Base::BUFFERSIZE)
+	satelliteCount_(data::Base::BUFFERSIZE),
+	logger_("hardware.gps.Base")
       {
 	init(true);
       }
@@ -52,6 +53,9 @@ namespace blitzortung {
       }
 
       void Base::initWrite(const unsigned int baudRate, const unsigned int targetBaudRate) {
+
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "initWrite() @ " << baudRate << " set to " << targetBaudRate << " baud";
 
 	communication_.setBaudRate(baudRate);
 
@@ -141,13 +145,19 @@ namespace blitzortung {
 	const unsigned int targetBaudRate = communication_.getBaudRate();
 
 	if (force) {
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "init() force";
+
+	  // fill vector of supported baud rates
 	  std::vector<unsigned int> baudRates;
 	  baudRates.push_back(4800);
 	  baudRates.push_back(19200);
 
 	  for (std::vector<unsigned int>::const_iterator baudRate=baudRates.begin(); baudRate != baudRates.end(); baudRate++) {
-	    if (*baudRate != targetBaudRate)
+	    if (*baudRate != targetBaudRate) {
+
 	      initWrite(*baudRate, targetBaudRate);
+	    }
 	  }
 	}
 

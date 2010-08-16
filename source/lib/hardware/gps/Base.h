@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "namespaces.h"
+#include "Logger.h"
 #include "util/RingBuffer.h"
 #include "hardware/Communication.h"
 #include "hardware/gps/data/Base.h"
@@ -40,6 +41,9 @@ namespace blitzortung {
 
 	  //! ring buffer to average satellite count values
 	  util::RingBuffer<int> satelliteCount_;
+
+	  //! logger for class
+	  mutable Logger logger_;
 
 	  void initWrite(const unsigned int, const unsigned int);
 
