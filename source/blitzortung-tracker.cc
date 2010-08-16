@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
   unsigned short serverport;
   std::string serialPort = "/dev/ttyUSB0";
   std::string outputFile = "";
-  int serialBaudEnum = 2;
+  int serialBaudRate = 19200;
   int sleepTime = 20;
   int sampleVersion = 1;
   int pcbVersion = 6;
@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
   desc.add_options()
     ("help", "show program help")
     ("serial-device,d", po::value<std::string>(&serialPort)->default_value(serialPort), "path to serial device")
-    ("baud-rate,b", po::value<int>(&serialBaudEnum)->default_value(serialBaudEnum), "baud rate of serial port (0: 4800, 2: 19200)")
+    ("baud-rate,b", po::value<int>(&serialBaudRate)->default_value(serialBaudRate), "baud rate of serial port (4800, 19200)")
     ("username,u", po::value<std::string>(&username), "username of blitzortung.org")
     ("password,p", po::value<std::string>(&password), "password of blitzortung.org")
     ("server-host,h", po::value<std::string>(&servername), "blitzortung.org servername")
@@ -94,18 +94,14 @@ int main(int argc, char **argv) {
     logger.setPriority(log4cpp::Priority::DEBUG);
   }
       
-  int serialBaudRate;
 
-  switch (serialBaudEnum) {
-    case 0:
-      serialBaudRate = 4800;
-      break;
-    case 2:
-      serialBaudRate = 19200;
+  switch (serialBaudRate) {
+    case 4800:
+    case 19200:
       break;
     default:
       std::ostringstream oss;
-      oss << "invalid enum for serialBaudRate: " << serialBaudEnum;
+      oss << "invalid serial baud rate: " << serialBaudRate;
       throw bo::exception::Base(oss.str());
   }
 
@@ -121,7 +117,7 @@ int main(int argc, char **argv) {
     gpsTypeEnum = bo::hardware::gps::SJN;
   } else {
     std::ostringstream oss;
-    oss << "invalid value of gps-type: '" << serialBaudEnum << "'";
+    oss << "invalid value of gps-type: '" << gpsTypeEnum << "'";
     throw bo::exception::Base(oss.str());
   }
 
