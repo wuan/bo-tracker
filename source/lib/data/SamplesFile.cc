@@ -118,7 +118,7 @@ namespace blitzortung {
 	tmpSample->fromStream(fstream_, header_.getDate());
 
 	// return index position
-	if (tmpSample->getTime().time_of_day() > target) {
+	if (tmpSample->getTime().time_of_day() >= target) {
 	  return start;
 	} else {
 	  return end;
@@ -151,7 +151,7 @@ namespace blitzortung {
 
       unsigned int numberOfSamples = endIndex - startIndex;
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "read() read " << numberOfSamples << " samples (" << startIndex << " - " << endIndex << ")";
+	logger_.debugStream() << "read() read " << numberOfSamples << " samples (" << startIndex << " - " << endIndex - 1 << ")";
 
       for(unsigned int i=0; i < numberOfSamples; i++) {
 	sample::Base::AP sample(header_.createSample());
