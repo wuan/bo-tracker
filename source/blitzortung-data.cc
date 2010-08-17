@@ -15,19 +15,25 @@
 #include "Logger.h"
 
 pt::time_duration parseTime(const std::string& inputString) {
-  std::istringstream iss(inputString);
 
-  pt::time_facet *facet = new pt::time_facet();
+  std::string format;
 
   if (inputString.size() <= 4)
-    facet->format("%H%M");
+    format = "%H%M";
   else
-    facet->format("%H%M%S");
+    format = "%H%M%S";
+
+  pt::time_input_facet *facet = new pt::time_input_facet();
+
+  facet->time_duration_format(format.c_str());
   
+  std::istringstream iss(inputString);
   iss.imbue(std::locale(std::locale::classic(), facet));
 
   pt::time_duration time;
+
   iss >> time;
+
   return time;
 }
 
@@ -44,7 +50,7 @@ int main(int argc, char **argv) {
     ("help", "show program help")
     ("input-file,i", po::value<std::string>(&file), "file name")
     ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
-    ("endtime,e", po::value<std::string>(&startTimeString), "end time in HHMM or HHMMSS format")
+    ("endtime,e", po::value<std::string>(&endTimeString), "end time in HHMM or HHMMSS format")
     ("verbose,v", "verbose mode")
     ("debug", "debug mode")
     ;
@@ -86,10 +92,16 @@ int main(int argc, char **argv) {
   }
   std::cout << "starttime: " << startTime << std::endl;
 
+  pt::time_duration endTime(pt::not_a_date_time);
+  if (vm.count("endtime")) {
+    endTime = parseTime(endTimeString);
+  }
+  std::cout << "endtime: " << endTime << std::endl;
+
 
   bo::data::Samples samples;
 
-  samples.readFromFile(file);
+  samples.readFromFile(file, startTime, endTime);
 
   for (bo::data::Samples::CI sample = samples.begin(); sample != samples.end(); sample++) {
     std::cout << *sample << std::endl;

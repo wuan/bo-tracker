@@ -83,7 +83,7 @@ namespace blitzortung {
 	std::string writeToFile(const std::string&, const unsigned short fileVersion = 0);
 
 	//! read samples from given file
-	void readFromFile(const std::string&);
+	void readFromFile(const std::string&, const pt::time_duration& starttime = pt::time_duration(pt::not_a_date_time), const pt::time_duration& endtime = pt::time_duration(pt::not_a_date_time));
     };
 
   }
