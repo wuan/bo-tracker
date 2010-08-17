@@ -134,9 +134,9 @@ namespace blitzortung {
       return "";
     }
 
-    void Samples::readFromFile(const std::string& filename) {
+    void Samples::readFromFile(const std::string& filename, const pt::time_duration& startTime, const pt::time_duration& endTime) {
       SamplesFile samplesFile(filename, header_);
-      samples_ = samplesFile.read();
+      samples_ = samplesFile.read(startTime, endTime);
     }
 
   }

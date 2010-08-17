@@ -92,6 +92,7 @@ void SampleTest::testAdd() {
   samples.add(getSample(pt::ptime(sampleDate, pt::time_duration(11,25,00))));
   samples.add(getSample(pt::ptime(sampleDate, pt::time_duration(11,30,00))));
 
+  std::cout << "samples added\n";
 
   CPPUNIT_ASSERT_THROW(samples.add(getSample(pt::ptime(sampleDate, pt::time_duration(11,30,00)) + gr::days(1))), bo::exception::Base);
 

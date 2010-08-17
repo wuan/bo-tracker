@@ -39,12 +39,13 @@ namespace blitzortung {
 	openFile = true;
       }
 
+      const std::string filename = header_.formatFilename(name_);
       if (openFile) {
-	fstream_.open(name_.c_str(), openmode);
+	fstream_.open(filename.c_str(), openmode);
 	openmode_ = openmode;
 
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "open() open file '" << name_ << "' with mode " << openmode_;
+	  logger_.debugStream() << "open() open file '" << filename << "' with mode " << openmode_;
       }
     }
 
@@ -139,16 +140,20 @@ namespace blitzortung {
       data::sample::Base::AP tmpSample(header_.createSample());
 
       unsigned int startIndex = 0;
-      if (start.is_not_a_date_time())
+      if (! start.is_not_a_date_time())
 	startIndex = findSample(tmpSample, start, 0, header_.getNumberOfSamples());
 
-      unsigned int endIndex = 0;
-      if (end.is_not_a_date_time())
+      unsigned int endIndex = header_.getNumberOfSamples();
+      if (! end.is_not_a_date_time())
 	endIndex = findSample(tmpSample, end, startIndex, header_.getNumberOfSamples());
 
       fstream_.seekg(header_.getSize() + startIndex * header_.getSampleSize() , std::ios::beg);
-      
-      for(unsigned int i=0; i < header_.getNumberOfSamples(); i++) {
+
+      unsigned int numberOfSamples = endIndex - startIndex;
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "read() read " << numberOfSamples << " samples (" << startIndex << " - " << endIndex << ")";
+
+      for(unsigned int i=0; i < numberOfSamples; i++) {
 	sample::Base::AP sample(header_.createSample());
 
 	sample->fromStream(fstream_, header_.getDate());
