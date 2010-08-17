@@ -14,27 +14,32 @@
 #include "exception/Base.h"
 #include "Logger.h"
 
-pt::time_duration parseTime(const std::string& inputString) {
+pt::time_duration parseTime(const std::string& inputString, bool isEnd=false) {
+  std::istringstream iss(inputString);
+  pt::time_duration endOffset(pt::seconds(0));
 
   std::string format;
-
-  if (inputString.size() <= 4)
+  if (inputString.size() <= 4) {
     format = "%H%M";
-  else
+    endOffset = pt::minutes(1);
+  } else {
     format = "%H%M%S";
+    endOffset = pt::seconds(1);
+  }
 
+  // create formatting facet and set format for time_duration type
   pt::time_input_facet *facet = new pt::time_input_facet();
-
   facet->time_duration_format(format.c_str());
   
-  std::istringstream iss(inputString);
   iss.imbue(std::locale(std::locale::classic(), facet));
 
   pt::time_duration time;
-
   iss >> time;
 
-  return time;
+  if (isEnd) 
+    return time + endOffset;
+  else
+    return time;
 }
 
 int main(int argc, char **argv) {
@@ -90,14 +95,11 @@ int main(int argc, char **argv) {
   if (vm.count("starttime")) {
     startTime = parseTime(startTimeString);
   }
-  std::cout << "starttime: " << startTime << std::endl;
 
   pt::time_duration endTime(pt::not_a_date_time);
   if (vm.count("endtime")) {
-    endTime = parseTime(endTimeString);
+    endTime = parseTime(endTimeString, true);
   }
-  std::cout << "endtime: " << endTime << std::endl;
-
 
   bo::data::Samples samples;
 
