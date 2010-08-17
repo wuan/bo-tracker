@@ -14,8 +14,11 @@ namespace blitzortung {
 
     SamplesFileHeader::SamplesFileHeader(const gr::date& fileDate, const unsigned short fileVersion) :
       fileDate_(fileDate),
-      fileVersion_(fileVersion)
+      fileVersion_(fileVersion),
+      logger_("data.SamplesFileHeader")
     {
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "construct() date " << fileDate << " version " << fileVersion;
     }
 
     SamplesFileHeader::~SamplesFileHeader() {
@@ -39,6 +42,10 @@ namespace blitzortung {
     
     unsigned int SamplesFileHeader::getNumberOfSamples() const {
       return numberOfSamples_;
+    }  
+
+    unsigned int SamplesFileHeader::getSampleSize() const {
+      return sampleSize_;
     }  
 
     void SamplesFileHeader::read(const std::string& filename) {
@@ -71,10 +78,11 @@ namespace blitzortung {
 	fstream.read((char*)&fileEpochDays, sizeof(unsigned int));
 	fileDate_ = STARTOFEPOCH + gr::days(fileEpochDays);
       }
-  
+
       // read file version from file
       fstream.read((char*)&fileVersion_, sizeof(fileVersion_));
 
+  
       assert(fstream.tellg() == getSize());
       
       fstream.seekg(0, std::ios::end);
@@ -88,8 +96,13 @@ namespace blitzortung {
       sample::Base::AP dummySample = createSample();
       
       filesize -= getSize();
-      
-      numberOfSamples_ = filesize / dummySample->getSize();
+
+      sampleSize_ = dummySample->getSize();
+
+      numberOfSamples_ = filesize / sampleSize_;
+
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "read() date " << fileDate_ << " version " << fileVersion_ << " #samples " << numberOfSamples_ << " samplesize " << sampleSize_ << " filesize " << filesize;
 
       if (numberOfSamples_ * dummySample->getSize() != filesize)
 	throw exception::Base("data::SamplesFileHeader file size mismatch");
