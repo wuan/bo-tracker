@@ -14,9 +14,27 @@
 #include "exception/Base.h"
 #include "Logger.h"
 
+pt::time_duration parseTime(const std::string& inputString) {
+  std::istringstream iss(inputString);
+
+  pt::time_facet *facet = new pt::time_facet();
+
+  if (inputString.size() <= 4)
+    facet->format("%H%M");
+  else
+    facet->format("%H%M%S");
+  
+  iss.imbue(std::locale(std::locale::classic(), facet));
+
+  pt::time_duration time;
+  iss >> time;
+  return time;
+}
+
 int main(int argc, char **argv) {
 
   std::string file = "";
+  std::string startTimeString, endTimeString;
 
   bo::Logger logger("");
 
@@ -25,6 +43,8 @@ int main(int argc, char **argv) {
   desc.add_options()
     ("help", "show program help")
     ("input-file,i", po::value<std::string>(&file), "file name")
+    ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
+    ("endtime,e", po::value<std::string>(&startTimeString), "end time in HHMM or HHMMSS format")
     ("verbose,v", "verbose mode")
     ("debug", "debug mode")
     ;
@@ -59,6 +79,13 @@ int main(int argc, char **argv) {
   if (vm.count("debug")) {
     logger.setPriority(log4cpp::Priority::DEBUG);
   }
+
+  pt::time_duration startTime(pt::not_a_date_time);
+  if (vm.count("starttime")) {
+    startTime = parseTime(startTimeString);
+  }
+  std::cout << "starttime: " << startTime << std::endl;
+
 
   bo::data::Samples samples;
 

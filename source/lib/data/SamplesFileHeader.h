@@ -5,6 +5,7 @@
 #include <iomanip>
 
 #include "namespaces.h"
+#include "Logger.h"
 #include "data/sample/Base.h"
 
 namespace blitzortung {
@@ -30,8 +31,14 @@ namespace blitzortung {
 	//! number of samples in file
 	unsigned int numberOfSamples_;
 
+	//! strage size of one sample
+	unsigned int sampleSize_;
+
 	//! sample creator object
 	data::sample::Base::Creator::P sampleCreator_;
+
+	//! class logger
+	mutable Logger logger_;
 
 	//! set creator according to file version
 	void setCreator(const unsigned short);
@@ -55,6 +62,9 @@ namespace blitzortung {
 	
 	//! get number of samples in file
 	unsigned int getNumberOfSamples() const;
+
+	//! get storage size of one sample
+	unsigned int getSampleSize() const;
 
 	//! set file version
 	void setFileVersion(const unsigned short);
