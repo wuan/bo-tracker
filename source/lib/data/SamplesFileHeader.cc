@@ -12,6 +12,15 @@ namespace blitzortung {
 
     const gr::date SamplesFileHeader::STARTOFEPOCH = gr::date(1970, 1, 1);
 
+    bool file_exists(std::string filename) {
+      std::ifstream file;
+
+      file.open(filename.c_str(), std::ios::in);
+      file.close();
+
+      return ! file.fail();
+    }
+
     SamplesFileHeader::SamplesFileHeader(const gr::date& fileDate, const unsigned short fileVersion) :
       fileDate_(fileDate),
       fileVersion_(fileVersion),
@@ -49,6 +58,12 @@ namespace blitzortung {
     }  
 
     void SamplesFileHeader::read(const std::string& filename) {
+      
+      if (! file_exists(filename)) {
+	std::ostringstream oss;
+	oss << "data::SampleFileHeader::read() file '" << filename << "' does not exist";
+	throw exception::Base(oss.str());
+      }
       std::fstream fstream;
       
       fstream.open(formatFilename(filename).c_str(), std::ios::in | std::ios::binary);
@@ -173,14 +188,6 @@ namespace blitzortung {
       }
     }
 
-    bool file_exists(std::string filename) {
-      std::ifstream file;
-
-      file.open(filename.c_str(), std::ios::in);
-      file.close();
-
-      return ! file.fail();
-    }
 
     bool SamplesFileHeader::fileExists(const std::string& filename) {
       return file_exists(formatFilename(filename));
