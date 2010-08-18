@@ -6,7 +6,7 @@
 
 namespace blitzortung {
 
-  //! class for Logging in different categories
+  //! class for Logging for all classes with selectable and inherited priorities
   class Logger {
 
     private:
@@ -16,8 +16,8 @@ namespace blitzortung {
 
     public:
 
-      //! construct logger with a name
-      Logger(const std::string& loggerName);
+      //! construct logger (optional with a class name)
+      Logger(const std::string& loggerName="");
 
       //! destruct logger
       virtual ~Logger();
@@ -43,47 +43,47 @@ namespace blitzortung {
       //! write ERROR string
       void error(const std::string& message);
 
-      //! Returns whether debug is enabled.
+      //! returns whether debug is enabled.
       inline bool isInfoEnabled() const {
 	return category_.isInfoEnabled();
       }
 
-      //! Returns whether debug is enabled.
+      //! returns whether debug is enabled.
       inline bool isNoticeEnabled() const {
 	return category_.isNoticeEnabled();
       }
 
-      //! Returns whether debug is enabled.
+      //! returns whether debug is enabled.
       inline bool isDebugEnabled() const {
 	return category_.isDebugEnabled();
       }
 
-      //! Returns whether debug is enabled.
+      //! returns whether debug is enabled.
       inline bool isWarnEnabled() const {
 	return category_.isWarnEnabled();
       }
 
-      //! returns a cateogry stream for info
+      //! returns a category stream for info
       inline log4cpp::CategoryStream infoStream() {
 	return category_.infoStream();
       }
 
-      //! returns a cateogry stream for info
+      //! returns a category stream for info
       inline log4cpp::CategoryStream noticeStream() {
 	return category_.noticeStream();
       }
 
-      //! returns a cateogry stream for info
+      //! returns a category stream for info
       inline log4cpp::CategoryStream debugStream() {
 	return category_.debugStream();
       }
 
-      //! returns a cateogry stream for info
+      //! returns a category stream for info
       inline log4cpp::CategoryStream warnStream() {
 	return category_.warnStream();
       }
 
-      //! returns a cateogry stream for info
+      //! returns a category stream for info
       inline log4cpp::CategoryStream errorStream() {
 	return category_.errorStream();
       }
