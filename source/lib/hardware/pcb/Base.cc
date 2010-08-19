@@ -76,7 +76,7 @@ namespace blitzortung {
 		parseGps(fields_);
 
 		fields_.clear();
-	      } else if (fields_[0] == "BLSEQ") {
+	      } else if (fields_[0] == "BLSEQ" || fields_[0] == "BLSIG") {
 		return parse(fields_);
 	      } else {
 		std::cout << "unknown data " << fields_[0] << std::endl;
