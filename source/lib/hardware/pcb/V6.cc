@@ -19,6 +19,8 @@ namespace blitzortung {
       }
 
       data::sample::Base::AP V6::parse(const std::vector<std::string> &fields) {
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "parse() called";
 
 	data::sample::Base::AP sample;
 	

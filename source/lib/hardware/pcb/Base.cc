@@ -73,7 +73,7 @@ namespace blitzortung {
 	      util::String::split(content, fields_, ",");
 
 	      if (fields_[0] == "BLSEC") {
-		gps_.parse(fields_);
+		parseGps(fields_);
 
 		fields_.clear();
 	      } else if (fields_[0] == "BLSEQ") {
@@ -86,6 +86,10 @@ namespace blitzortung {
 	}
 
 	return std::auto_ptr<data::sample::Base>();
+      }
+
+      void Base::parseGps(const std::vector<std::string>& fields) {
+	gps_.parse(fields);
       }
 
     }

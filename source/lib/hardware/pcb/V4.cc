@@ -19,6 +19,9 @@ namespace blitzortung {
       }
 
       data::sample::Base::AP V4::parse(const std::vector<std::string> &fields) {
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "parse() called";
+
 	data::sample::Base::AP sample;
 	
 	// parse lighning event information
@@ -59,6 +62,34 @@ namespace blitzortung {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "parse() return sample " << sample.get();
 	return sample;
+      }
+
+      void V4::parseGps(const std::vector<std::string>& fields) {
+	std::vector<std::string> reorderedFields;
+
+	reorderedFields.push_back("$BLSEC");
+	reorderedFields.push_back(fields[8]);
+	reorderedFields.push_back(fields[3]);
+	reorderedFields.push_back(fields[1]);
+	reorderedFields.push_back(fields[2]);
+	reorderedFields.push_back(fields[4]);
+	reorderedFields.push_back(fields[5]);
+	reorderedFields.push_back(fields[6]);
+	reorderedFields.push_back(fields[7]);
+	reorderedFields.push_back("0");
+	reorderedFields.push_back("?");
+	reorderedFields.push_back("0");
+
+	if (logger_.isDebugEnabled()) {
+	  std::ostringstream oss;
+
+	  for (std::vector<std::string>::iterator field = reorderedFields.begin(); field != reorderedFields.end(); field++)
+	    oss << *field << ",";
+
+	  logger_.debugStream() << "parseGps() reordered gps data: '" << oss.str() << "'";
+	}
+
+	gps_.parse(reorderedFields);
       }
     }
   }
