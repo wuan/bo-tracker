@@ -18,8 +18,8 @@ namespace blitzortung {
 	  logger_.debugStream() << "deleted";
       }
 
-      std::auto_ptr<data::sample::Base> V4::parse(const std::vector<std::string> &fields) {
-	std::auto_ptr<data::sample::Base> sample;
+      data::sample::Base::AP V4::parse(const std::vector<std::string> &fields) {
+	data::sample::Base::AP sample;
 	
 	// parse lighning event information
 	if (fields[0] == "BLSIG") {
@@ -36,10 +36,11 @@ namespace blitzortung {
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "parse() create sample";
-	    sample = std::auto_ptr<data::sample::Base>(sampleCreator_());
+	    sample = data::sample::Base::AP(sampleCreator_());
 
 	    sample->setTime(eventtime);
-	    sample->setAmplitude(1, maxX, maxY);
+	    sample->setOffset(0, 1);
+	    sample->setAmplitude(maxX, maxY, 1);
 	    sample->setAntennaLongitude(gps_.getLocation().getLongitude());
 	    sample->setAntennaLatitude(gps_.getLocation().getLatitude());
 	    sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
