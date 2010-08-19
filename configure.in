@@ -22,5 +22,6 @@ AC_OUTPUT( \
 	Makefile \
 	source/Makefile \
 	source/lib/Makefile \
+	scripts/Makefile \
 	tests/Makefile
     )
