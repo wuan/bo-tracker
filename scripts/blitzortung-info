@@ -19,9 +19,9 @@ set xlabel "UTC time"
 set ylabel "# of events"
 set boxwidth 15*60
 set log y
-set yr [0.8:*]
+set yr [0.75:*]
 set format x "%H:%M"
-plot "$TMPDATA" u 1:3 not w boxes
+plot "$TMPDATA" u 1:3 not w boxes fs solid
 ***
 
 gnuplot <<***
@@ -33,7 +33,7 @@ set xlabel "UTC time"
 set ylabel "average amplitude"
 set boxwidth 15*60
 set format x "%H:%M"
-plot "$TMPDATA" u 1:4 not w boxes
+plot "$TMPDATA" u 1:4 not w boxes fs solid
 ***
 
 rm -rf $TMPDATA
