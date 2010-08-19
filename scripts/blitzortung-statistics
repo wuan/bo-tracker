@@ -3,9 +3,11 @@
 import os, sys
 import subprocess
 
-import glob
+import glob, re
 
 import datetime
+
+whitespace = re.compile('\s+')
 
 def total_seconds(time):
   if isinstance(time, datetime.datetime):
@@ -59,10 +61,20 @@ while (hour + offset) < now:
 
   # count the number of samples
   counter = 0
+  ampsum = 0.0
   for line in output.splitlines():
+    fields = whitespace.split(line)
+    ampsum += float(fields[7])
+
     counter += 1
 
 
-  print hour + offset / 2, counter
+  time = hour + offset / 2
+  
+  if counter > 0:
+    avgamp = ampsum/counter
+  else:
+    avgamp = '?'
+  print time, counter, avgamp
 
   hour += offset

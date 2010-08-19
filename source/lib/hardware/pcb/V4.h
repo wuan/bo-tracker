@@ -14,6 +14,9 @@ namespace hardware {
 	//! logger for class
 	mutable Logger logger_;
 
+	//! local modification of gps parser
+        virtual void parseGps(const std::vector<std::string>&);
+
       public:
 	V4(SerialPort&, const gps::Type&, const data::sample::Base::Creator&);
 	virtual ~V4();

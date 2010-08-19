@@ -36,6 +36,9 @@ namespace hardware {
 	//! sample creator;
         const data::sample::Base::Creator& sampleCreator_;	
 
+	//! gps parser interface, overload for modification
+        virtual void parseGps(const std::vector<std::string>&);
+
       public:
 
 	//! constructor for base class
