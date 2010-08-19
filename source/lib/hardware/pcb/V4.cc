@@ -28,9 +28,14 @@ namespace blitzortung {
 	  int maxX = (parseHex(fields[2]) >> 2) - 0x200;
 	  int maxY = (parseHex(fields[3]) >> 2) - 0x200;
 
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "parse() signal: counter " << counter << " maxX " << maxX << " maxY " << maxY;
+
 	  pt::ptime eventtime = gps_.getTime(counter);
 
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "parse() create sample";
 	    sample = std::auto_ptr<data::sample::Base>(sampleCreator_());
 
 	    sample->setTime(eventtime);
@@ -39,6 +44,9 @@ namespace blitzortung {
 	    sample->setAntennaLatitude(gps_.getLocation().getLatitude());
 	    sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
 	    sample->setGpsStatus(gps_.getStatus());
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "parse() create sample DONE";
 	  } else {
 	    logger_.warnStream() << "GPS information is not yet valid -> no sample created";
 	  }
@@ -47,6 +55,8 @@ namespace blitzortung {
 	  logger_.errorStream() << "parse() data header '" << fields[0] << "' mismatch";
 	}
 
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "parse() return sample " << sample.get();
 	return sample;
       }
     }
