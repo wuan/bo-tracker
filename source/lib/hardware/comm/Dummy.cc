@@ -8,8 +8,10 @@ namespace blitzortung {
   namespace hardware {
     namespace comm {
 
-      Dummy::Dummy()
+      Dummy::Dummy() :
+	logger_("hardware.comm.Dummy")
       {
+	readPosition_ = 0;
       }
 
       Dummy::~Dummy() {
