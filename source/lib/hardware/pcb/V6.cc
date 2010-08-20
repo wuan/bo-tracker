@@ -5,8 +5,8 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
 
-      V6::V6(SerialPort& serial, const gps::Type& gpsType, const data::sample::Base::Creator& sampleCreator) :
-	Base(serial, gpsType, sampleCreator),
+      V6::V6(comm::Base& comm, gps::Base& gps, const data::sample::Base::Creator& sampleCreator) :
+	Base(comm, gps, sampleCreator),
 	logger_("hardware.pcb.V6")
       {
 	if (logger_.isDebugEnabled())

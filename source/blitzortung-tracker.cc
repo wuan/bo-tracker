@@ -11,6 +11,11 @@
 #include <boost/program_options.hpp>
 
 #include "namespaces.h"
+#include "hardware/comm/SerialPort.h"
+#include "hardware/comm/Serial.h"
+#include "hardware/gps/Garmin.h"
+#include "hardware/gps/Sirf.h"
+#include "hardware/gps/Sjn.h"
 #include "hardware/pcb/V4.h"
 #include "hardware/pcb/V6.h"
 #include "data/sample/V1.h"
@@ -23,7 +28,7 @@ int main(int argc, char **argv) {
 
   std::string username, password, servername;
   unsigned short serverport;
-  std::string serialPort = "/dev/ttyUSB0";
+  std::string serialPortName = "/dev/ttyUSB0";
   std::string outputFile = "";
   int serialBaudRate = 19200;
   int sleepTime = 20;
@@ -38,7 +43,7 @@ int main(int argc, char **argv) {
   boost::program_options::options_description desc("program options");
   desc.add_options()
     ("help", "show program help")
-    ("serial-device,d", po::value<std::string>(&serialPort)->default_value(serialPort), "path to serial device")
+    ("serial-device,d", po::value<std::string>(&serialPortName)->default_value(serialPortName), "path to serial device")
     ("baud-rate,b", po::value<int>(&serialBaudRate)->default_value(serialBaudRate), "baud rate of serial port (4800, 19200)")
     ("username,u", po::value<std::string>(&username), "username of blitzortung.org")
     ("password,p", po::value<std::string>(&password), "password of blitzortung.org")
@@ -99,31 +104,34 @@ int main(int argc, char **argv) {
     case 4800:
     case 19200:
       break;
+
     default:
       std::ostringstream oss;
       oss << "invalid serial baud rate: " << serialBaudRate;
       throw bo::exception::Base(oss.str());
   }
 
+  // create serial port object
+
+  bo::hardware::comm::SerialPort serialPort(serialPortName, serialBaudRate);
+  bo::hardware::comm::Serial serial(serialPort);
+
   // select type of gps hardware
 
-  bo::hardware::gps::Type gpsTypeEnum;
+  bo::hardware::gps::Base::AP gps;
 
   if (gpsType == "garmin") {
-    gpsTypeEnum = bo::hardware::gps::GARMIN;
+    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Garmin(serial));
   } else if (gpsType == "sirf") {
-    gpsTypeEnum = bo::hardware::gps::SIRF;
+    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Sirf(serial));
   } else if (gpsType == "sjn") {
-    gpsTypeEnum = bo::hardware::gps::SJN;
+    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Sjn(serial));
   } else {
     std::ostringstream oss;
-    oss << "invalid value of gps-type: '" << gpsTypeEnum << "'";
+    oss << "invalid value of gps-type: '" << gpsType << "'";
     throw bo::exception::Base(oss.str());
   }
 
-  // create serial port object
-
-  bo::hardware::SerialPort serial(serialPort, serialBaudRate);
 
   // create sample creator object
   std::auto_ptr<bo::data::sample::Base::Creator> sampleCreator;
@@ -140,15 +148,15 @@ int main(int argc, char **argv) {
   }
 
   // create hardware driver object for blitzortung measurement hardware
-  std::auto_ptr<bo::hardware::pcb::Base> hardware;
+  bo::hardware::pcb::Base::AP hardware;
 
   switch (pcbVersion) {
     case 4:
-      hardware = std::auto_ptr<bo::hardware::pcb::Base>(new bo::hardware::pcb::V4(serial, gpsTypeEnum, *sampleCreator));
+      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V4(serial, *gps, *sampleCreator));
       break;
 
     case 6:
-      hardware = std::auto_ptr<bo::hardware::pcb::Base>(new bo::hardware::pcb::V6(serial, gpsTypeEnum, *sampleCreator));
+      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V6(serial, *gps, *sampleCreator));
       break;
 
     default:
@@ -165,7 +173,7 @@ int main(int argc, char **argv) {
   creds.setPassword(password);
 
   //! create object of network driver for sample transmission
-  std::auto_ptr<bo::network::Base> network(new bo::network::Base(creds, sleepTime, eventRateLimit, outputFile));
+  bo::network::Base::AP network(new bo::network::Base(creds, sleepTime, eventRateLimit, outputFile));
 
   while (hardware->isOpen()) {
 

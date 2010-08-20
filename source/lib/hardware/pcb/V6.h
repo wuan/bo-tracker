@@ -18,7 +18,7 @@ namespace hardware {
 
       public:
 
-	V6(SerialPort&, const gps::Type&, const data::sample::Base::Creator&);
+	V6(comm::Base&, gps::Base&, const data::sample::Base::Creator&);
 
 	virtual ~V6();
 

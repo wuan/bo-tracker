@@ -8,9 +8,17 @@
 #include <cppunit/TestRunner.h>
 #include <cppunit/BriefTestProgressListener.h>
 
+#include "namespaces.h"
+#include "Logger.h"
+
 int main (int argc, char* argv[])
 {
   // Informiert Test-Listener ueber Testresultate
+  bo::Logger logger;
+
+  logger.setPriority(log4cpp::Priority::DEBUG);
+
+
   CPPUNIT_NS::TestResult testResult;
 
   // Listener zum Sammeln der Testergebnisse registrieren

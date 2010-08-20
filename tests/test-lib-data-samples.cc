@@ -13,6 +13,14 @@ bo::data::sample::Base::AP SampleTest::getSample() {
 bo::data::sample::Base::AP SampleTest::getSample(const pt::ptime& time) {
   bo::data::sample::Base::AP sample = getSample();
   sample->setTime(time);
+  sample->setOffset(10, 1);
+  sample->setAmplitude(0.5, 0, 1);
+  sample->setAntennaLongitude(11.0);
+  sample->setAntennaLatitude(49.0);
+  sample->setAntennaAltitude(550);
+  sample->setGpsNumberOfSatellites(8);
+  sample->setGpsStatus('A');
+
   return sample;
 }
 

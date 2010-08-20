@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "hardware/Communication.h"
+#include "hardware/comm/Base.h"
 #include "hardware/gps/Base.h"
 #include "data/sample/Base.h"
 
@@ -15,9 +15,13 @@ namespace hardware {
     //! base class for blitzortung acquisition PCB
     class Base {
 
+      public:
+
+	  typedef std::auto_ptr<Base> AP;
+
       private:
 	//! serial port object
-	Communication communication_;
+	comm::Base& comm_;
 
 	//! data field output
 	std::vector<std::string> fields_;
@@ -28,7 +32,7 @@ namespace hardware {
       protected:
 
 	//! gps device object
-	gps::Base gps_;
+	gps::Base& gps_;
 
 	//! function for parsing of hex strings
 	int parseHex(const std::string& hexString);
@@ -42,7 +46,7 @@ namespace hardware {
       public:
 
 	//! constructor for base class
-	Base(SerialPort&, const gps::Type&, const data::sample::Base::Creator&);
+	Base(comm::Base&, gps::Base&, const data::sample::Base::Creator&);
 
 	//! destructor
 	virtual ~Base();

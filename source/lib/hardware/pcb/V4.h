@@ -18,7 +18,8 @@ namespace hardware {
         virtual void parseGps(const std::vector<std::string>&);
 
       public:
-	V4(SerialPort&, const gps::Type&, const data::sample::Base::Creator&);
+	V4(comm::Base&, gps::Base&, const data::sample::Base::Creator&);
+
 	virtual ~V4();
 
 	virtual std::auto_ptr<data::sample::Base> parse(const std::vector<std::string> &);

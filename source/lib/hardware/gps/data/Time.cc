@@ -8,7 +8,7 @@ namespace blitzortung {
 
 	Time::Time() :
 	  counterTicksPerSecond_(Base::BUFFERSIZE),
-	  ignoreCounter_(2),
+	  ignoreCounter_(1),
 	  logger_("hardware.gps.data.Time")
 	{
 	  pt::time_input_facet *facet = new pt::time_input_facet();
