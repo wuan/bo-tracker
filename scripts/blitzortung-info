@@ -7,6 +7,8 @@ if [ x$TARGETDIR == x ] ; then
 fi
 
 TMPDATA=$(mktemp $(basename $0).XXXXXX)
+STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -1day)
+ENDTIME=$(date +"%Y-%m-%d %H:%M:00")
 
 blitzortung-statistics > $TMPDATA
 
@@ -19,6 +21,7 @@ set xlabel "UTC time"
 set ylabel "# of events"
 set boxwidth 15*60
 set log y
+set xr ["$STARTTIME":"$ENDTIME"]
 set yr [0.75:*]
 set grid
 set format x "%H:%M"
@@ -34,6 +37,7 @@ set xlabel "UTC time"
 set ylabel "average amplitude"
 set boxwidth 15*60
 set grid
+set xr ["$STARTTIME":"$ENDTIME"]
 set format x "%H:%M"
 plot "$TMPDATA" u 1:4 not w boxes fs solid 0.5
 ***
