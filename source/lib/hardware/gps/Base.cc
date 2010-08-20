@@ -74,6 +74,8 @@ namespace blitzortung {
 	  }
 	}
 
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "init() @ " << targetBaudRate << " set to " << targetBaudRate << " baud";
 	communication_.setBaudRate(targetBaudRate);
 	initWrite(targetBaudRate);
 
