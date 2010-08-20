@@ -52,9 +52,6 @@ namespace blitzortung {
 
 	  std::string content = line.substr(1, linelength - 5);
 
-	  if (logger_.isInfoEnabled())
-	    logger_.infoStream() << "read() content: " << content;
-
 	  int transmittedChecksum;
 	  std::istringstream iss(line.substr(linelength - 3, linelength - 2));
 	  iss >> std::hex >> transmittedChecksum;
@@ -98,8 +95,6 @@ namespace blitzortung {
       }
 
       void Base::parseGps(const std::vector<std::string>& fields) {
-	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "parseGps() '" << fields[0] << "'";
 	gps_.parse(fields);
       }
 
