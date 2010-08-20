@@ -5,8 +5,8 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
 
-      V4::V4(SerialPort& serial, const gps::Type& gpsType, const data::sample::Base::Creator& sampleCreator) :
-	Base(serial, gpsType, sampleCreator),
+      V4::V4(comm::Base& serial, gps::Base& gps, const data::sample::Base::Creator& sampleCreator) :
+	Base(serial, gps, sampleCreator),
 	logger_("hardware.pcb.V4")
       {
 	if (logger_.isDebugEnabled())
@@ -43,9 +43,10 @@ namespace blitzortung {
 
 	    sample->setTime(eventtime);
 	    sample->setOffset(0, 1);
-	    sample->setAmplitude(maxX, maxY, 1);
+	    sample->setAmplitude(maxX/1023.0, maxY/1023.0, 1);
 	    sample->setAntennaLongitude(gps_.getLocation().getLongitude());
 	    sample->setAntennaLatitude(gps_.getLocation().getLatitude());
+	    sample->setAntennaAltitude(gps_.getLocation().getAltitude());
 	    sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
 	    sample->setGpsStatus(gps_.getStatus());
 
@@ -67,7 +68,7 @@ namespace blitzortung {
       void V4::parseGps(const std::vector<std::string>& fields) {
 	std::vector<std::string> reorderedFields;
 
-	reorderedFields.push_back("$BLSEC");
+	reorderedFields.push_back(fields[0]);
 	reorderedFields.push_back(fields[8]);
 	reorderedFields.push_back(fields[3]);
 	reorderedFields.push_back(fields[1]);

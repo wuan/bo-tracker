@@ -14,6 +14,10 @@ namespace blitzortung {
     //! class providing data interface of network transfer
     class Base : private boost::noncopyable {
 
+      public:
+
+	  typedef std::auto_ptr<Base> AP;
+
       private:
 	//! queue for data transfer from measurement thread
 	Queue<data::sample::Base> sampleQueue_;

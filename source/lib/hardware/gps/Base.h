@@ -1,5 +1,7 @@
-#ifndef BLITZORTUNG_HARDWARE_GPS_H_
-#define BLITZORTUNG_HARDWARE_GPS_H_
+#ifndef BLITZORTUNG_HARDWARE_GPS_BASE_H_
+#define BLITZORTUNG_HARDWARE_GPS_BASE_H_
+
+#include <boost/shared_ptr.hpp>
 
 #include <string>
 #include <vector>
@@ -7,7 +9,7 @@
 #include "namespaces.h"
 #include "Logger.h"
 #include "util/RingBuffer.h"
-#include "hardware/Communication.h"
+#include "hardware/comm/Base.h"
 #include "hardware/gps/data/Base.h"
 #include "hardware/gps/data/Time.h"
 #include "hardware/gps/data/Location.h"
@@ -16,16 +18,18 @@ namespace blitzortung {
   namespace hardware {
     namespace gps {
 
-      enum Type {SJN, GARMIN, SIRF};
-
       class Base {
 
-	private:
-	  //! communication object
-	  Communication communication_;
+	public:
 
-	  //! enum storing type of gps hardware
-	  const Type& type_;
+	  typedef std::auto_ptr<Base> AP;
+
+	protected:
+
+	  //! communication object
+	  comm::Base& communication_;
+
+	private:
 
 	  //! gps time data object
 	  data::Time time_;
@@ -45,12 +49,12 @@ namespace blitzortung {
 	  //! logger for class
 	  mutable Logger logger_;
 
-	  void initWrite(const unsigned int, const unsigned int);
+	  virtual void initWrite(const unsigned int) = 0;
 
 	public:
 
 	  //! constructor
-	  Base(const Communication&, const Type&);
+	  Base(comm::Base&);
 
 	  //! destructor
 	  virtual ~Base();

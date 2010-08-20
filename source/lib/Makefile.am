@@ -18,12 +18,18 @@ libblitzortung_la_SOURCES = \
 	exception/Base.h exception/Base.cc \
 	\
 	hardware/gps/Base.h hardware/gps/Base.cc \
+	hardware/gps/Sirf.h hardware/gps/Sirf.cc \
+	hardware/gps/Garmin.h hardware/gps/Garmin.cc \
+	hardware/gps/Sjn.h hardware/gps/Sjn.cc \
+	\
 	hardware/gps/data/Base.h hardware/gps/data/Base.cc \
 	hardware/gps/data/Time.h hardware/gps/data/Time.cc \
 	hardware/gps/data/Location.h hardware/gps/data/Location.cc \
 	\
-	hardware/Communication.h hardware/Communication.cc \
-	hardware/SerialPort.h hardware/SerialPort.cc \
+	hardware/comm/Base.h hardware/comm/Base.cc \
+	hardware/comm/Serial.h hardware/comm/Serial.cc \
+	hardware/comm/Dummy.h hardware/comm/Dummy.cc \
+	hardware/comm/SerialPort.h hardware/comm/SerialPort.cc \
 	\
 	hardware/pcb/Base.h hardware/pcb/Base.cc \
 	hardware/pcb/V4.h hardware/pcb/V4.cc \
