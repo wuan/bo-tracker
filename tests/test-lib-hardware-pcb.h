@@ -9,6 +9,7 @@ class HardwareTest : public CPPUNIT_NS :: TestFixture
 {
   CPPUNIT_TEST_SUITE( HardwareTest );
   CPPUNIT_TEST( testV4 );
+  CPPUNIT_TEST( testV6 );
   CPPUNIT_TEST_SUITE_END();
 
   private:
