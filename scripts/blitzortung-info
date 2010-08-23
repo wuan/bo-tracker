@@ -8,7 +8,7 @@ if [ x$TARGETDIR == x ] ; then
   TARGETDIR="."
 fi
 
-TMPDATA=$(mktemp $(basename $0).XXXXXX)
+TMPDATA=$(mktemp /tmp/$(basename $0).XXXXXX)
 STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -1day)
 ENDTIME=$(date +"%Y-%m-%d %H:%M:00")
 
