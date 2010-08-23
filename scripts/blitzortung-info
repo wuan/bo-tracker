@@ -2,6 +2,8 @@
 
 TARGETDIR=$1
 
+NICE="nice -n 19"
+
 if [ x$TARGETDIR == x ] ; then
   TARGETDIR="."
 fi
@@ -10,9 +12,9 @@ TMPDATA=$(mktemp $(basename $0).XXXXXX)
 STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -1day)
 ENDTIME=$(date +"%Y-%m-%d %H:%M:00")
 
-blitzortung-statistics > $TMPDATA
+$NICE blitzortung-statistics > $TMPDATA
 
-gnuplot <<***
+$NICE gnuplot <<***
 set term png
 set output "$TARGETDIR/timecount.png"
 set xdata time
@@ -28,7 +30,7 @@ set format x "%H:%M"
 plot "$TMPDATA" u 1:3 not w boxes fs solid 0.5
 ***
 
-gnuplot <<***
+$NICE gnuplot <<***
 set term png
 set output "$TARGETDIR/timeamp.png"
 set xdata time
