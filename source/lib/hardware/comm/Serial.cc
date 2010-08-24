@@ -84,7 +84,18 @@ namespace blitzortung {
       }
 
       void Serial::send(const std::string& data) {
-	serialPort_.send(data);
+
+	unsigned char checksum = calcChecksum(data);
+
+	std::ostringstream oss;
+	oss << std::hex << int(checksum);
+
+	std::string command = std::string("$") + data + std::string("*") + oss.str() + std::string("\n");
+
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "send() command '" << command << "'";
+	
+	serialPort_.send(command);
       }
 
     }

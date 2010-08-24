@@ -37,20 +37,20 @@ namespace blitzortung {
 	    throw exception::Base("hardware.gps.Garmin() initWrite() unsupported BaudRate");
 	}
 
-	communication_.send("$PGRMO,GPGGA,1*00\r\n");
-	communication_.send("$PGRMO,GPGSA,0*00\r\n");
-	communication_.send("$PGRMO,GPGSV,0*00\r\n");
-	communication_.send("$PGRMO,GPRMC,1*00\r\n");
-	communication_.send("$PGRMO,GPVTG,0*00\r\n");
-	communication_.send("$PGRMO,PGRMM,0*00\r\n");
-	communication_.send("$PGRMO,PGRMT,0*00\r\n");
-	communication_.send("$PGRMO,PGRME,0*00\r\n");
-	communication_.send("$PGRMO,PGRMB,0*00\r\n");
-	communication_.send("$PGRMCE*00\r\n");
+	communication_.send("PGRMO,GPGGA,1");
+	communication_.send("PGRMO,GPGSA,0");
+	communication_.send("PGRMO,GPGSV,0");
+	communication_.send("PGRMO,GPRMC,1");
+	communication_.send("PGRMO,GPVTG,0");
+	communication_.send("PGRMO,PGRMM,0");
+	communication_.send("PGRMO,PGRMT,0");
+	communication_.send("PGRMO,PGRME,0");
+	communication_.send("PGRMO,PGRMB,0");
+	communication_.send("PGRMCE");
 
 	{
 	  std::ostringstream oss;
-	  oss << "$PGRMC,,51.5,,,,,,,," << targetBaudKey << ",,2,4,*00\r\n";
+	  oss << "PGRMC,,51.5,,,,,,,," << targetBaudKey << ",,2,4,";
 	  communication_.send(oss.str());
 	}
       }

@@ -22,7 +22,7 @@ namespace blitzortung {
 	if (targetBaudRate != 4800)
 	  throw exception::Base("hardware::gps::Base::initWrite() unsupported target baud rate");
 
-	communication_.send("$PFEC,GPint,GGA01,GLL00,GSA00,GSV00,RMC01,DTM00,VTG00,ZDA00*00\r\n");
+	communication_.send("PFEC,GPint,GGA01,GLL00,GSA00,GSV00,RMC01,DTM00,VTG00,ZDA00");
 
       }
 
