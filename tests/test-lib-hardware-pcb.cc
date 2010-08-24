@@ -33,15 +33,18 @@ void HardwareTest::testV4() {
 
   bo::hardware::pcb::V4 pcb(comm, gps, bo::data::sample::V1::Creator());
 
+  int count = 0;
   while (pcb.isOpen()) {
 
     bo::data::sample::Base::AP sample = pcb.read();
 
     if (sample.get() != 0) {
-      std::cout << *sample << std::endl;
+      //std::cout << *sample << std::endl;
+      count++;
     }
 
   }
+  CPPUNIT_ASSERT_EQUAL(2, count);
 }
 
 void HardwareTest::testV6() {
@@ -63,15 +66,18 @@ void HardwareTest::testV6() {
 
   bo::hardware::pcb::V6 pcb(comm, gps, bo::data::sample::V1::Creator());
 
+  int count = 0;
   while (pcb.isOpen()) {
 
     bo::data::sample::Base::AP sample = pcb.read();
 
     if (sample.get() != 0) {
-      std::cout << *sample << std::endl;
+      //std::cout << *sample << std::endl;
+      count++;
     }
 
   }
+  CPPUNIT_ASSERT_EQUAL(2, count);
 }
 
 

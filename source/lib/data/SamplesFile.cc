@@ -59,6 +59,11 @@ namespace blitzortung {
     SamplesFile::~SamplesFile() {
     }
 
+    void SamplesFile::write(sample::Base::VP samples) {
+
+      writeSamples(name_, samples); 
+    }
+
     void SamplesFile::append(sample::Base::VP samples) {
 
       // check if file exists
@@ -80,8 +85,13 @@ namespace blitzortung {
         
 	if (header != header_)
 	  throw exception::Base("data::SamplesFile() writeSamples() header mismatch during append");
+
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "writeSamples() append";
       } else {
 	header_.write(getFilename());
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "writeSamples() write";
       }
       
       open(std::ios::out | std::ios::binary | std::ios::app);

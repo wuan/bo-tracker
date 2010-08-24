@@ -127,7 +127,7 @@ namespace blitzortung {
 	}
 	SamplesFile samplesFile(fileName, header_);
 
-	samplesFile.append(samples_);
+	samplesFile.write(samples_);
 	
 	return header_.formatFilename(fileName);
       }

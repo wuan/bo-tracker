@@ -10,10 +10,14 @@ class SampleTest : public CPPUNIT_NS :: TestFixture
 {
   CPPUNIT_TEST_SUITE( SampleTest );
   CPPUNIT_TEST( testAdd );
+  CPPUNIT_TEST( testWrite );
+  CPPUNIT_TEST( testAppend );
+  CPPUNIT_TEST( testSize );
   CPPUNIT_TEST_SUITE_END();
 
   private:
-  boost::shared_ptr<bo::data::sample::Base::Creator> sampleCreator_;
+  bo::data::sample::Base::Creator::P sampleCreator_;
+
   bo::data::Samples::P getSamples1();
   bo::data::Samples::P getSamples2();
   bo::data::sample::Base::AP getSample();
@@ -26,6 +30,12 @@ class SampleTest : public CPPUNIT_NS :: TestFixture
   //! tests
 
   void testAdd();
+
+  void testWrite();
+
+  void testAppend();
+
+  void testSize();
 };
 
 #endif

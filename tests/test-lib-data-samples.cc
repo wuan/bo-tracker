@@ -66,7 +66,13 @@ bo::data::Samples::P SampleTest::getSamples1() {
     bo::data::sample::Base::AP sample((*sampleCreator_)());
 
     sample->setTime(sampleDateTime);
-    sample->setAmplitude(1, 1.0, 0.0);
+    sample->setAmplitude(1.0, 0.5, 1);
+    sample->setOffset(0, 1);
+    sample->setAntennaLongitude(11.0);
+    sample->setAntennaLatitude(49.0);
+    sample->setAntennaAltitude(550);
+    sample->setGpsNumberOfSatellites(8);
+    sample->setGpsStatus('A');
 
     samples->add(sample);
   }
@@ -100,17 +106,68 @@ void SampleTest::testAdd() {
   samples.add(getSample(pt::ptime(sampleDate, pt::time_duration(11,25,00))));
   samples.add(getSample(pt::ptime(sampleDate, pt::time_duration(11,30,00))));
 
-  std::cout << "samples added\n";
-
   CPPUNIT_ASSERT_THROW(samples.add(getSample(pt::ptime(sampleDate, pt::time_duration(11,30,00)) + gr::days(1))), bo::exception::Base);
 
-  std::string fileName = samples.appendToFile("UserName_%Y%m%d.bos");
-
-  samples.readFromFile(fileName);
-
-  for(bo::data::Samples::I sample=samples.begin(); sample != samples.end(); sample++) {
+  /*for(bo::data::Samples::I sample=samples.begin(); sample != samples.end(); sample++) {
     std::cout << *sample << std::endl;
-  }
+  }*/
 }
 
+void SampleTest::testWrite() {
 
+  bo::data::Samples::P samples = getSamples1();
+
+  int originalSize = samples->size();
+
+  samples->writeToFile("UserName_%Y%m%d.bos");
+  std::string fileName = samples->writeToFile("UserName_%Y%m%d.bos");
+
+  samples->clear();
+
+  CPPUNIT_ASSERT_EQUAL(samples->size() , 0);
+
+  samples->readFromFile(fileName);
+
+  CPPUNIT_ASSERT_EQUAL(samples->size() , originalSize);
+
+  samples->readFromFile(fileName);
+
+  CPPUNIT_ASSERT_EQUAL(samples->size() , originalSize);
+}
+
+void SampleTest::testAppend() {
+
+  bo::data::Samples::P samples = getSamples1();
+
+  int originalSize = samples->size();
+
+  std::string fileName = samples->writeToFile("UserName_%Y%m%d.bos");
+
+  samples->readFromFile(fileName);
+
+  CPPUNIT_ASSERT_EQUAL(samples->size() , originalSize);
+
+  samples->appendToFile(fileName);
+
+  samples->readFromFile(fileName);
+
+  CPPUNIT_ASSERT_EQUAL(samples->size() , originalSize * 2);
+}
+
+void SampleTest::testSize() {
+
+  const unsigned int dataSize = 30;
+
+  gr::date sampleDate(2010,8,1);
+
+  bo::data::sample::Base::AP sample = getSample(pt::ptime(sampleDate, pt::time_duration(11,20,00)));
+
+  std::stringstream ss;
+
+  sample->toStream(ss);
+
+  CPPUNIT_ASSERT_EQUAL(sample->getSize(), dataSize);
+
+  CPPUNIT_ASSERT_EQUAL(ss.str().size(), dataSize);
+
+}
