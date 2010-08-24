@@ -2,6 +2,7 @@
 #define BLITZORTUNG_DATA_SAMPLE_VERSION1_H_
 
 #include "namespaces.h"
+#include "Logger.h"
 #include "data/sample/Base.h"
 
 namespace blitzortung {

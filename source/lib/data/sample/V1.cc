@@ -5,7 +5,8 @@ namespace blitzortung {
   namespace data {
     namespace sample {
 
-      V1::V1() {
+      V1::V1()
+      {
       }
 
       V1::~V1() {
@@ -61,7 +62,7 @@ namespace blitzortung {
 	    break;
 	  default:
 	    std::ostringstream oss;
-	    oss << "data::sample::V1::setOffset() invalid index " << index << " used";
+	    oss << "data::sample::V1::setAmplitude() invalid index " << index << " used";
 	    throw exception::Base(oss.str());
 	}
       }
@@ -150,7 +151,12 @@ namespace blitzortung {
       void V1::fromStream(std::iostream& stream, const gr::date& fileDate) {
 	long long int nanoseconds;
 	valueFromStream(stream, nanoseconds);
-	time_ = pt::ptime(fileDate, pt::nanoseconds(nanoseconds));
+
+	// fixed nanosecond to time conversion
+	int seconds = nanoseconds / 1000000000ULL;
+	nanoseconds %= 1000000000ULL;
+	time_ = pt::ptime(fileDate, pt::seconds(seconds) + pt::nanoseconds(nanoseconds));
+
 	valueFromStream(stream, longitude_);
 	valueFromStream(stream, latitude_);
 	valueFromStream(stream, altitude_);

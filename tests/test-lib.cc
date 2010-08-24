@@ -16,7 +16,8 @@ int main (int argc, char* argv[])
   // Informiert Test-Listener ueber Testresultate
   bo::Logger logger;
 
-  logger.setPriority(log4cpp::Priority::DEBUG);
+  logger.setPriority(log4cpp::Priority::NOTICE);
+  //logger.setPriority(log4cpp::Priority::DEBUG);
 
 
   CPPUNIT_NS::TestResult testResult;
