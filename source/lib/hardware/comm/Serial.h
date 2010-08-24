@@ -13,8 +13,17 @@ namespace blitzortung {
       class Serial : public Base {
 
 	private:
-	  // serial port object
+	  //! serial port object
 	  SerialPort serialPort_;
+
+	  //! logger for this class
+	  mutable Logger logger_;
+
+	  //! calculation of checksum value
+	  unsigned char calcChecksum(const std::string&);
+
+	  //! check and return line data
+	  std::string checkLine(const std::string&);
 
 	public:
 
