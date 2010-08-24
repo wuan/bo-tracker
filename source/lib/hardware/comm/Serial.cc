@@ -16,6 +16,47 @@ namespace blitzortung {
       Serial::~Serial() {
       }
 
+      unsigned char Serial::calcChecksum(const std::string& content) {
+	unsigned char checksum = (unsigned char)content[0];
+
+	for (std::string::const_iterator character = content.begin() + 1; character != content.end(); character++) {
+	  checksum ^= (unsigned char)*character;
+	}
+	return checksum;
+      }
+
+      std::string Serial::checkLine(const std::string& line) {
+
+	int linelength = line.size();
+
+	if (linelength > 3 && line[0] == '$' && line[linelength - 4] == '*') {
+	  // valid line for checksum calculation
+
+	  std::string content = line.substr(1, linelength - 5);
+
+	  int transmittedChecksum;
+	  std::istringstream iss(line.substr(linelength - 3, linelength - 2));
+	  iss >> std::hex >> transmittedChecksum;
+
+	  // calculate checksum of content
+	  if (content.length() > 1) {
+	    unsigned char checksum = calcChecksum(content);
+
+	    if (checksum == transmittedChecksum) {
+	      // checksum values are identical
+	      return content;
+	    } else {
+	      if (logger_.isDebugEnabled()) {
+		std::ostringstream oss;
+		oss << std::hex << (int)checksum;
+		logger_.debugStream() << "read() checksum mismatch: '" << line << "' vs. " << oss.str() ;
+	      }
+	    }
+	  }
+	}
+	return "";
+      }
+
       bool Serial::isOpen() const {
 	return serialPort_.isOpen();
       }
@@ -29,7 +70,17 @@ namespace blitzortung {
       }
 
       std::string Serial::receive() {
-	return serialPort_.receive();
+	std::string line;
+
+	do {
+	  line = checkLine(serialPort_.receive());
+	  
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "receive() line: '" << line << "'";
+
+	} while (line.length() == 0);
+
+	return line;
       }
 
       void Serial::send(const std::string& data) {
