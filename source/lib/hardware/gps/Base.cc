@@ -69,7 +69,9 @@ namespace blitzortung {
 	      if (logger_.isDebugEnabled())
 		logger_.debugStream() << "init() @ " << *baudRate << " set to " << targetBaudRate << " baud";
 	      communication_.setBaudRate(*baudRate);
+	      sleep(1);
 	      initWrite(targetBaudRate);
+	      sleep(1);
 	    }
 	  }
 	}
@@ -77,7 +79,9 @@ namespace blitzortung {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "init() @ " << targetBaudRate << " set to " << targetBaudRate << " baud";
 	communication_.setBaudRate(targetBaudRate);
+	sleep(1);
 	initWrite(targetBaudRate);
+	sleep(1);
 
 	dateInitialized_ = pt::second_clock::universal_time().date();
       }
