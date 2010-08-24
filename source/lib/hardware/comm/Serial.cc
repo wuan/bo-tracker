@@ -9,7 +9,8 @@ namespace blitzortung {
     namespace comm {
 
       Serial::Serial(SerialPort& port) :
-	serialPort_(port)
+	serialPort_(port),
+	logger_("hardware.comm.Serial")
       {
       }
 
@@ -74,10 +75,6 @@ namespace blitzortung {
 
 	do {
 	  line = checkLine(serialPort_.receive());
-	  
-	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "receive() line: '" << line << "'";
-
 	} while (line.length() == 0);
 
 	return line;
@@ -88,14 +85,14 @@ namespace blitzortung {
 	unsigned char checksum = calcChecksum(data);
 
 	std::ostringstream oss;
-	oss << std::hex << int(checksum);
+	oss << std::hex << std::setw(2) << std::setfill('0') << std::uppercase << int(checksum);
 
-	std::string command = std::string("$") + data + std::string("*") + oss.str() + std::string("\n");
+	std::string command = std::string("$") + data + std::string("*") + oss.str();
 
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "send() command '" << command << "'";
 	
-	serialPort_.send(command);
+	serialPort_.send(command + std::string("\n"));
       }
 
     }

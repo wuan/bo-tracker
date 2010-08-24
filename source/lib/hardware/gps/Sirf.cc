@@ -39,8 +39,10 @@ namespace blitzortung {
 
 	// disable VTG message '
 	communication_.send("PSRF103,05,00,00,01");
-	//communication_.send("PSRF103,06,00,00,01");
-	//communication_.send("PSRF103,08,00,00,01");
+
+	communication_.send("PSRF103,06,00,00,01");
+
+	communication_.send("PSRF103,08,00,00,01");
 
 	// enable NMEA protocol, baud rate, 8 data bits, 1 stop bit, no parity '
 	{
