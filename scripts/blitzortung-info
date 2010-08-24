@@ -1,18 +1,22 @@
 #!/bin/bash
 
 TARGETDIR=$1
+RAWPATH=$2
 
 NICE="nice -n 19"
 
 if [ x$TARGETDIR == x ] ; then
   TARGETDIR="."
 fi
+if [ x$RAWPATH == x ]; then
+  RAWPATH="/var/cache/blitzortung/raw"
+fi
 
 TMPDATA=$(mktemp /tmp/$(basename $0).XXXXXX)
 STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -1day)
 ENDTIME=$(date +"%Y-%m-%d %H:%M:00")
 
-$NICE blitzortung-statistics > $TMPDATA
+$NICE blitzortung-statistics --mode=histogram --time-delta=15 --data-path=$RAWPATH > $TMPDATA
 
 $NICE gnuplot <<***
 set term png
@@ -42,6 +46,19 @@ set grid
 set xr ["$STARTTIME":"$ENDTIME"]
 set format x "%H:%M"
 plot "$TMPDATA" u 1:4 not w boxes fs solid 0.5
+***
+
+$NICE blitzortung-statistics --mode=data --time-delta=60 --data-path=$RAWPATH > $TMPDATA
+
+$NICE gnuplot <<***
+set term png
+set output "$TARGETDIR/xyamp.png"
+set size square
+set xlabel "x amplitude"
+set ylabel "y amplitude"
+set xr [-1.0:1.0]
+set yr [-1.0:1.0]
+plot "$TMPDATA" u 8:9 not 
 ***
 
 rm -rf $TMPDATA

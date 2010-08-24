@@ -152,9 +152,6 @@ namespace blitzortung {
 	    bool operator()(const first_argument_type& x, const second_argument_type& y) const;
 	  };
 
-
-
-
       };
       
       std::ostream& operator << (std::ostream& os, const Base&);
