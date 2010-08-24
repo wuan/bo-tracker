@@ -27,6 +27,9 @@ namespace blitzortung {
 	  //! class logger
 	  Logger logger_;
 
+	  unsigned char calcChecksum(const std::string&);
+	  std::string checkLine(const std::string&);
+
 	public:
 	  SerialPort(const std::string &port="/dev/ttyS0", const unsigned int baudRate = 19200);
 
