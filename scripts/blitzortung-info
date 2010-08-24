@@ -57,7 +57,7 @@ $NICE gnuplot <<***
 set term png size $PICYSIZE,$PICYSIZE
 set output "$TARGETDIR/xyamp.png"
 set size square
-set title "event of last 2 hours"
+set title "last 2 hours"
 set xlabel "x amplitude"
 set ylabel "y amplitude"
 set xr [-1.0:1.0]
