@@ -41,56 +41,26 @@ namespace blitzortung {
       data::sample::Base::AP Base::read() {
 	std::string line = comm_.receive();
 
-
 	if (logger_.isInfoEnabled())
 	  logger_.infoStream() << "read() serial input: " << line;
 
-	int linelength = line.size();
 
-	if (linelength > 3 && line[0] == '$' && line[linelength - 4] == '*') {
-	  // valid line for checksum calculation
+	if (line.length() > 0) {
 
-	  std::string content = line.substr(1, linelength - 5);
+	  fields_.clear();
 
-	  int transmittedChecksum;
-	  std::istringstream iss(line.substr(linelength - 3, linelength - 2));
-	  iss >> std::hex >> transmittedChecksum;
+	  util::String::split(line, fields_, ",");
 
-	  // calculate checksum of content
-	  unsigned char checksum = 0;
-	  if (content.length() > 1) {
-	    checksum = (unsigned char)content[0];
+	  if (fields_[0] == "BLSEC") {
+	    parseGps(fields_);
 
-	    for (std::string::iterator character = content.begin() + 1; character != content.end(); character++) {
-	      checksum ^= (unsigned char)*character;
-	    }
-
-	    if (checksum == transmittedChecksum) {
-	      // checksum values are identical
-
-	      fields_.clear();
-
-	      util::String::split(content, fields_, ",");
-
-	      if (fields_[0] == "BLSEC") {
-		parseGps(fields_);
-
-		fields_.clear();
-	      } else if (fields_[0] == "BLSEQ" || fields_[0] == "BLSIG") {
-		return parse(fields_);
-	      } else {
-		std::cout << "unknown data " << fields_[0] << std::endl;
-	      }
-	    } else {
-	      if (logger_.isDebugEnabled()) {
-		std::ostringstream oss;
-		oss << std::hex << (int)checksum;
-		logger_.debugStream() << "read() checksum mismatch: '" << content << "' vs. " << oss.str() ;
-	      }
-	    }
+	    fields_.clear();
+	  } else if (fields_[0] == "BLSEQ" || fields_[0] == "BLSIG") {
+	    return parse(fields_);
+	  } else {
+	    std::cout << "unknown data " << fields_[0] << std::endl;
 	  }
 	}
-
 	return std::auto_ptr<data::sample::Base>();
       }
 

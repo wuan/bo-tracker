@@ -20,6 +20,8 @@ namespace blitzortung {
 	  virtual void setBaudRate(const unsigned int) = 0;
 	  virtual const unsigned int getBaudRate() const = 0;
 
+	  static unsigned char calcChecksum(const std::string&);
+
 	  virtual bool isOpen() const = 0;
 
 	  //! receive data from the interface
