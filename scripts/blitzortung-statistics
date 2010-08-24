@@ -1,80 +1,195 @@
 #!/usr/bin/python
 
-import os, sys
+import os, sys, math
 import subprocess
 
 import glob, re
+import optparse
 
 import datetime
 
 whitespace = re.compile('\s+')
 
-def total_seconds(time):
-  if isinstance(time, datetime.datetime):
-    return time.hour * 3600 + time.minute * 60 + time.second
-  else:
-    return time.seconds
+
+class RawFiles:
+  
+  def __init__(self, rawPath):
+    rawFileNames = glob.glob(os.path.join(rawPath, '*.bor'))
+
+    rawFileNames.sort()
+
+    self.rawFiles = {}
+
+    for rawFileName in rawFileNames:
+      date = datetime.datetime.strptime(rawFileName[-12:-4], '%Y%m%d').date()
+      if not self.rawFiles.has_key(date):
+        self.rawFiles[date] = rawFileName
+      else:
+        raise Exception("ERROR: double date! " + rawFileName + " vs. " + self.rawFiles[date])
+  
+  def get(self, date):
+    if self.rawFiles.has_key(date):
+      return self.rawFiles[date]
+    else:
+      raise "no file for date"
 
 
-rawPath = '/var/cache/blitzortung/raw'
+class TimeInterval():
+  
+  def __init__(self, endTime, deltaTime=datetime.timedelta(hours=1)):
+    self.deltaTime = deltaTime
+    self.endTime = self.roundTime(endTime)
+    
+    self.time = self.endTime - self.deltaTime
 
-rawFileNames = glob.glob(os.path.join(rawPath, '*.bor'))
+  def totalSeconds(self, time):
+    ' return the total seconds of the given time or datetime (relative to midnight) '
+    
+    if isinstance(time, datetime.datetime):
+      return time.hour * 3600 + time.minute * 60 + time.second
+    elif isinstance(time, datetime.timedelta):
+      return time.seconds + time.days * 24 * 3600
+    else:
+      raise Exception("unhandled type"+type(time))
+      
+  def roundTime(self, time):
+    deltaSeconds = self.totalSeconds(self.deltaTime)
+    
+    seconds =  self.totalSeconds(time)
+    seconds /= deltaSeconds
+    seconds *= deltaSeconds
+    
+    if isinstance(time, datetime.datetime):
+      return time.replace(hour = seconds/3600, minute= seconds / 60 % 60, second= seconds % 60, microsecond=0)
+    else:
+      return datetime.timedelta(seconds=seconds)
+    
+  def hasNext(self):
+    return False
+    
+  def next(self):
+    raise Exception(' no next interval ')
+  
+  def getStartTime(self):
+    return self.time
+  
+  def getEndTime(self):
+    return self.time + self.deltaTime
+  
+  def getCenterTime(self):
+    return self.time + self.deltaTime / 2
+  
+  def getEndMinute(self):
+    return self.getEndTime() - datetime.timedelta(minutes=1)
+    
 
-rawFileNames.sort()
+class TimeIntervals(TimeInterval):
+  
+  def __init__(self, endTime, deltaTime=datetime.timedelta(minutes=15), totalDuration=datetime.timedelta(days=1)):
+    TimeInterval.__init__(self, endTime, deltaTime)
 
-rawFiles = {}
+    self.totalDuration = self.roundTime(totalDuration)
+    
+    print "TimeInvervals ",self.deltaTime, self.endTime, self.totalDuration
+  
+    self.time = self.endTime - self.totalDuration
+  
+  def hasNext(self):
+    return self.time + self.deltaTime < self.endTime
+  
+  def next(self):
+    if self.hasNext():
+      self.time += self.deltaTime
+      return self.time
+    else:
+      raise Exception('no more time intervals')
+  
+class Data:
+  
+  def __init__(self, files, time):
+    self.files = files
+    self.time = time
+    
+  def get(self):
+    start = self.time.getStartTime()
+    starttime = start.strftime("%H%M")
+    startdate = start.strftime("%Y%m%d")
 
-for rawFileName in rawFileNames:
-  date = datetime.datetime.strptime(rawFileName[-12:-4], '%Y%m%d').date()
-  if not rawFiles.has_key(date):
-    rawFiles[date] = rawFileName
-  else:
-    print "ERROR: double date!"
-    sys.exit(1)
+    end = self.time.getEndMinute()
+    endtime = end.strftime("%H%M")
+    rawFile = files.get(start.date())
 
-if len(rawFiles) == 0:
-  print "ERROR: no data files found in folder '%s'" % rawPath
-  sys.exit(1)
+    data = subprocess.Popen(['blitzortung-data','-i', rawFile, '-s', starttime, '-e', endtime], stdout=subprocess.PIPE)
 
+    (output, error) = data.communicate()
+    
+    return output.splitlines()
+  
+  def list(self):
+    for line in self.get():
+      print line.strip()
+    
+class Histogram(Data):
+  
+  def __init__(self, files, time):
+    Data.__init__(self, files, time)
 
-# determine start time
+    while True:
+
+      # count the number of samples
+      counter = 0
+      ampsum = 0.0
+      for line in self.get():
+        fields = whitespace.split(line)
+        xamp = float(fields[7])
+        yamp = float(fields[7])
+        ampsum += math.sqrt(xamp * xamp + yamp * yamp)
+    
+        counter += 1
+    
+    
+      time = self.time.getCenterTime()
+      
+      if counter > 0:
+        avgamp = ampsum/counter
+      else:
+        avgamp = '?'
+      print time, counter, avgamp
+    
+      if not self.time.hasNext():
+        break
+      
+      self.time.next()
+      
+parser = optparse.OptionParser()
+
+parser.add_option("--mode", dest="mode", default='histogram',
+                        help="select statistics mode [histogram, data]", type="string")
+
+parser.add_option("--time-delta", dest="timedelta", default=15, 
+                  help="length of time interval in minutes", type="int")
+
+parser.add_option("--data-path", dest="datapath", default='/var/cache/blitzortung/raw', 
+                  help="path containing tracker raw files", type="string")
+
+(options, args) = parser.parse_args()
+
 now = datetime.datetime.utcnow()
 
-offset = datetime.timedelta(minutes=15)
+delta = datetime.timedelta(minutes=options.timedelta)
 
-seconds = total_seconds(now)
-seconds /= total_seconds(offset)
-seconds *= total_seconds(offset)
+files = RawFiles(options.datapath)
 
-hour = now.replace(hour = seconds/3600, minute= seconds / 60 % 60, second= seconds % 60, microsecond=0)
+if options.mode == "histogram":
 
-hour -= datetime.timedelta(days=1)
+  timeInterval = TimeIntervals(now, delta)
 
-while (hour + offset) < now:
-  starttime = hour.strftime("%H%M")
-  date = hour.strftime("%Y%m%d")
-  endtime = (hour + offset - datetime.timedelta(minutes=1)).strftime("%H%M")
-  rawFile = rawFiles[hour.date()]
-  data = subprocess.Popen(['blitzortung-data','-i', rawFile, '-s', starttime, '-e', endtime], stdout=subprocess.PIPE)
+  histogram = Histogram(files, timeInterval)
 
-  (output, error) = data.communicate()
-
-  # count the number of samples
-  counter = 0
-  ampsum = 0.0
-  for line in output.splitlines():
-    fields = whitespace.split(line)
-    ampsum += float(fields[7])
-
-    counter += 1
-
-
-  time = hour + offset / 2
+elif options.mode == "data":
+  timeInterval = TimeInterval(now, delta)
+  data = Data(files, timeInterval)
+  data.list()
   
-  if counter > 0:
-    avgamp = ampsum/counter
-  else:
-    avgamp = '?'
-  print time, counter, avgamp
-
-  hour += offset
+else:
+  raise Exception("unknown mode '%s'" %(options.mode))

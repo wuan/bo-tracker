@@ -42,8 +42,7 @@ namespace blitzortung {
 	  os.precision(3);
 	  os << " " << sample.getOffset(peak).total_nanoseconds() / 1e3;
 	  os.precision(2);
-	  os << " " << sample.getAmplitude(peak);
-	  os << " (" << sample.getXAmplitude(peak) << ", " << sample.getYAmplitude(peak) << ")";
+	  os << " " << sample.getXAmplitude(peak) << " " << sample.getYAmplitude(peak);
 	}
 
 	// restore original locale
