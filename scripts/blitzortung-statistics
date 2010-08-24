@@ -141,12 +141,11 @@ class Histogram(Data):
       ampsum = 0.0
       for line in self.get():
         fields = whitespace.split(line)
+
         xamp = float(fields[7])
-        yamp = float(fields[7])
+        yamp = float(fields[8])
         ampsum += math.sqrt(xamp * xamp + yamp * yamp)
-    
         counter += 1
-    
     
       time = self.time.getCenterTime()
       

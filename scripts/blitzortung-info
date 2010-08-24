@@ -5,6 +5,9 @@ RAWPATH=$2
 
 NICE="nice -n 19"
 
+PICXSIZE="480"
+PICYSIZE="320"
+
 if [ x$TARGETDIR == x ] ; then
   TARGETDIR="."
 fi
@@ -19,7 +22,7 @@ ENDTIME=$(date +"%Y-%m-%d %H:%M:00")
 $NICE blitzortung-statistics --mode=histogram --time-delta=15 --data-path=$RAWPATH > $TMPDATA
 
 $NICE gnuplot <<***
-set term png
+set term png size $PICXSIZE,$PICYSIZE
 set output "$TARGETDIR/timecount.png"
 set xdata time
 set timefmt "%Y-%m-%d %H:%M:%S"
@@ -35,7 +38,7 @@ plot "$TMPDATA" u 1:3 not w boxes fs solid 0.5
 ***
 
 $NICE gnuplot <<***
-set term png
+set term png size $PICXSIZE,$PICYSIZE
 set output "$TARGETDIR/timeamp.png"
 set xdata time
 set timefmt "%Y-%m-%d %H:%M:%S"
@@ -48,17 +51,18 @@ set format x "%H:%M"
 plot "$TMPDATA" u 1:4 not w boxes fs solid 0.5
 ***
 
-$NICE blitzortung-statistics --mode=data --time-delta=60 --data-path=$RAWPATH > $TMPDATA
+$NICE blitzortung-statistics --mode=data --time-delta=120 --data-path=$RAWPATH > $TMPDATA
 
 $NICE gnuplot <<***
-set term png
+set term png size $PICYSIZE,$PICYSIZE
 set output "$TARGETDIR/xyamp.png"
 set size square
+set title "event of last 2 hours"
 set xlabel "x amplitude"
 set ylabel "y amplitude"
 set xr [-1.0:1.0]
 set yr [-1.0:1.0]
-plot "$TMPDATA" u 8:9 not 
+plot "$TMPDATA" u 8:9 not
 ***
 
 rm -rf $TMPDATA
