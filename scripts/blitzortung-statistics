@@ -31,8 +31,7 @@ class RawFiles:
     if self.rawFiles.has_key(date):
       return self.rawFiles[date]
     else:
-      raise "no file for date"
-
+      raise Exception("no file for date "+date.strftime('%Y-%m-%d'))
 
 class TimeInterval():
   
