@@ -47,8 +47,10 @@ set ylabel "average amplitude"
 set boxwidth 15*60
 set grid
 set xr ["$STARTTIME":"$ENDTIME"]
+set yr [0:*]
 set format x "%H:%M"
-plot 0.2 lt -2 not, "$TMPDATA" u 1:4 not w boxes lt 1 fs solid 0.5
+set pointsize 0.8
+plot 0.2 lt -2 not, "$TMPDATA" u 1:4 not w p 1 13
 ***
 
 $NICE blitzortung-statistics --mode=data --time-delta=120 --data-path=$RAWPATH > $TMPDATA
