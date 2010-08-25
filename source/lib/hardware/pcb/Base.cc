@@ -42,8 +42,7 @@ namespace blitzortung {
 	std::string line = comm_.receive();
 
 	if (logger_.isInfoEnabled())
-	  logger_.infoStream() << "read() serial input: " << line;
-
+	  logger_.infoStream() << "read() input: " << line;
 
 	if (line.length() > 0) {
 
