@@ -69,7 +69,7 @@ plot "$TMPDATA" u 8:9 not
 ***
 
 $NICE blitzortung-statistics --mode=strokes --time-delta=5 --data-path=$RAWPATH > $TMPDATA
-STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -2hours)
+STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -115minutes)
 
 $NICE gnuplot <<***
 set term png size $PICXSIZE,$PICYSIZE
