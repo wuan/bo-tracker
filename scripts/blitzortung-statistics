@@ -3,13 +3,119 @@
 import os, sys, math
 import subprocess
 
+import urllib
+
 import glob, re
 import optparse
 
-import datetime
+import datetime, pytz
 
 whitespace = re.compile('\s+')
+timeformat = '%Y-%m-%d %H:%M:%S'
 
+class Config():
+  def __init__(self, configfilename=None):
+
+    self.config = {}
+
+    if configfilename == None:
+      configfilename = '/etc/default/blitzortung-tracker'
+
+    configfile = open(configfilename, 'r')
+    for line in configfile:
+      line = line.strip()
+
+      if len(line) > 0 and line[0] != '#':
+
+        index = line.find('=')
+
+        variable = line[0:index]
+
+        basename = 'BLITZORTUNG_'
+
+        if variable.find(' ') < 0:
+          if variable[:len(basename)] == basename:
+            self.config[variable[len(basename):].upper()] = line[index+1:].replace('"', '')
+
+
+  def get(self, key):
+    key = key.upper()
+
+    if self.config.has_key(key):
+      return self.config[key]
+
+    raise Exception("Config.get() key not found")
+
+class Stroke():
+  '''
+  classdocs
+  '''
+
+  def __init__(self, data = None):
+    if data != None:
+      ' Construct stroke from blitzortung text format data line '
+      fields = data.split(' ')
+      if len(fields) >= 8:
+        nanoseconds = int(fields[1][-9:])
+        self.time = datetime.datetime.strptime(fields[0] + ' ' + fields[1][:-10], timeformat)
+        self.time = self.time.replace(microsecond=int(round(nanoseconds / 1000.0)), tzinfo=pytz.UTC)
+
+        self.position_x = float(fields[3])
+        self.position_y = float(fields[2])
+        self.amplitude = float(fields[4][:-2])
+        self.typeVal = int(fields[5])
+        self.error2d = int(fields[6][:-1])
+        if self.error2d < 0:
+          self.error2d = 0
+        self.stationcount = int(fields[7])
+      else:
+        raise Error("not enough data fields from stroke data line '%s'" %(data))
+    self.height = 0.0
+
+  def getTime(self):
+    return self.time
+
+  def setTime(self, time):
+    self.time = time
+
+  def getPosition(self):
+    return self.position
+
+  def setPosition(self, position):
+    self.position = position
+
+  def getHeight(self):
+    return self.height
+
+  def setHeight(self, height):
+    self.height = height
+
+  def getAmplitude(self):
+    return self.amplitude
+
+  def setAmplitude(self, amplitude):
+    self.amplitude = amplitude
+
+  def getType(self):
+    return self.typeVal
+
+  def setType(self, typeVal):
+    self.typeVal = typeVal
+
+  def getError2D(self):
+    return self.error2d
+
+  def setError2D(self, error2d):
+    self.error2d = error2d
+
+  def getStationCount(self):
+    return self.stationcount
+
+  def setStationCount(self, stationcount):
+    self.stationcount = stationcount
+
+  def __str__(self):
+    return str(self.time) + ' ' + str(self.position.x) + ' ' + str(self.position.y) + ' ' + str(self.height) + ' ' + str(self.amplitude) + ' ' + str(self.typeVal) + ' ' + str(self.error2d) + ' ' + str(self.stationcount)
 
 class RawFiles:
   
@@ -165,6 +271,36 @@ class Histogram(Data):
       
       self.time.next()
  
+class Url:
+
+  def __init__(self, baseurl):
+    self.url = baseurl
+
+  def add(self, name, value):
+    self.url += '&' + str(name).strip() + '=' + str(value).strip()
+
+  def get(self):
+    return self.url
+
+  def read(self):
+    urlconnection = urllib.urlopen(self.url)
+
+    data = urlconnection.read().strip()
+
+    urlconnection.close()
+
+    return data
+
+class Strokes(Url):
+
+  def __init__(self, config):
+    Url.__init__(self, 'http://'+config.get('username')+':'+config.get('password')+'@blitzortung.tmt.de/Data/Protected/strikes.txt')
+
+class Participants(Url):
+
+  def __init__(self, config):
+    Url.__init__(self, 'http://'+config.get('username')+':'+config.get('password')+'@blitzortung.tmt.de/Data/Protected/participants.txt')
+
 
 parser = optparse.OptionParser()
 
@@ -200,6 +336,53 @@ elif options.mode == "data":
   data = Data(files, timeInterval)
 
   data.list()
-  
+ 
+elif options.mode == "strokes":
+
+  timeInterval = TimeInterval(now, delta)
+
+  config = Config()
+
+  participantSource = Participants(config)
+  lines = participantSource.read().split('\n')
+
+  totalStrokes = {}
+  participatedStrokes = {}
+
+  starttime = timeInterval.roundTime(now) + delta - datetime.timedelta(hours=2)
+
+  for line in lines:
+    fields = whitespace.split(line)
+
+    nanoseconds = int(fields[1][-9:])
+    time = datetime.datetime.strptime(fields[0] + ' ' + fields[1][:-10], timeformat)
+    time = time.replace(microsecond=int(round(nanoseconds / 1000.0)))
+
+    if time >= starttime:
+      centertime = timeInterval.roundTime(time) + delta / 2
+
+      if totalStrokes.has_key(centertime):
+	totalStrokes[centertime] += 1
+      else:
+	totalStrokes[centertime] = 1
+
+      for field in fields[2:]:
+	if field == config.get('USERNAME'):
+	  if participatedStrokes.has_key(centertime):
+	    participatedStrokes[centertime] += 1
+	  else:
+	    participatedStrokes[centertime] = 1
+	  break
+
+  times = totalStrokes.keys()
+  times.sort()
+
+  for time in times:
+    participated = '0'
+    if participatedStrokes.has_key(time):
+      participated = participatedStrokes[time]
+    print time.strftime(timeformat), totalStrokes[time], participated
+
+
 else:
   raise Exception("unknown mode '%s'" %(options.mode))
