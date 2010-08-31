@@ -29,7 +29,7 @@ namespace blitzortung {
       std::ostream& operator <<(std::ostream& os, const bo::data::sample::Base &sample) {
 
 	pt::time_facet *timefacet = new pt::time_facet();
-	timefacet->format("%Y%m%d %H:%M:%S.%f");
+	timefacet->format("%Y-%m-%d %H:%M:%S.%f");
 	std::locale oldLocale = os.imbue(std::locale(std::locale::classic(), timefacet));
 
 	os.setf(std::ios::fixed);
