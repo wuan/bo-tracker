@@ -2,7 +2,7 @@ Source: blitzortung-tracker
 Section: misc
 Priority: extra
 Maintainer: Andreas Wuerl <awuerl@gmx.net>
-Build-Depends: debhelper (>= 7), build-essential, libboost-dev (>= 1.34.1), liblog4cpp5-dev (>=1.0), libcppunit-dev (>=1.12.1)
+Build-Depends: debhelper (>= 7), build-essential, libboost-dev (>= 1.34.1), liblog4cpp5-dev (>=1.0), libcppunit-dev (>=1.12.1), liblapack-dev (>=3.1.0)
 Standards-Version: 3.8.4
 Homepage: http://launchpad.org/blitzortung-tracker
 

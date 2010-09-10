@@ -14,298 +14,298 @@ whitespace = re.compile('\s+')
 timeformat = '%Y-%m-%d %H:%M:%S'
 
 class Config():
-  def __init__(self, configfilename=None):
+    def __init__(self, configfilename=None):
 
-    self.config = {}
+        self.config = {}
 
-    if configfilename == None:
-      configfilename = '/etc/default/blitzortung-tracker'
+        if configfilename == None:
+            configfilename = '/etc/default/blitzortung-tracker'
 
-    configfile = open(configfilename, 'r')
-    for line in configfile:
-      line = line.strip()
+        configfile = open(configfilename, 'r')
+        for line in configfile:
+            line = line.strip()
 
-      if len(line) > 0 and line[0] != '#':
+            if len(line) > 0 and line[0] != '#':
 
-        index = line.find('=')
+                index = line.find('=')
 
-        variable = line[0:index]
+                variable = line[0:index]
 
-        basename = 'BLITZORTUNG_'
+                basename = 'BLITZORTUNG_'
 
-        if variable.find(' ') < 0:
-          if variable[:len(basename)] == basename:
-            self.config[variable[len(basename):].upper()] = line[index+1:].replace('"', '')
+                if variable.find(' ') < 0:
+                    if variable[:len(basename)] == basename:
+                        self.config[variable[len(basename):].upper()] = line[index+1:].replace('"', '')
 
 
-  def get(self, key):
-    key = key.upper()
+    def get(self, key):
+        key = key.upper()
 
-    if self.config.has_key(key):
-      return self.config[key]
+        if self.config.has_key(key):
+            return self.config[key]
 
-    raise Exception("Config.get() key not found")
+        raise Exception("Config.get() key not found")
 
 class Stroke():
-  '''
-  classdocs
-  '''
+    '''
+    classdocs
+    '''
 
-  def __init__(self, data = None):
-    if data != None:
-      ' Construct stroke from blitzortung text format data line '
-      fields = data.split(' ')
-      if len(fields) >= 8:
-        nanoseconds = int(fields[1][-9:])
-        self.time = datetime.datetime.strptime(fields[0] + ' ' + fields[1][:-10], timeformat)
-        self.time = self.time.replace(microsecond=int(round(nanoseconds / 1000.0)), tzinfo=pytz.UTC)
+    def __init__(self, data = None):
+        if data != None:
+            ' Construct stroke from blitzortung text format data line '
+            fields = data.split(' ')
+            if len(fields) >= 8:
+                nanoseconds = int(fields[1][-9:])
+                self.time = datetime.datetime.strptime(fields[0] + ' ' + fields[1][:-10], timeformat)
+                self.time = self.time.replace(microsecond=int(round(nanoseconds / 1000.0)), tzinfo=pytz.UTC)
 
-        self.position_x = float(fields[3])
-        self.position_y = float(fields[2])
-        self.amplitude = float(fields[4][:-2])
-        self.typeVal = int(fields[5])
-        self.error2d = int(fields[6][:-1])
-        if self.error2d < 0:
-          self.error2d = 0
-        self.stationcount = int(fields[7])
-      else:
-        raise Error("not enough data fields from stroke data line '%s'" %(data))
-    self.height = 0.0
+                self.position_x = float(fields[3])
+                self.position_y = float(fields[2])
+                self.amplitude = float(fields[4][:-2])
+                self.typeVal = int(fields[5])
+                self.error2d = int(fields[6][:-1])
+                if self.error2d < 0:
+                    self.error2d = 0
+                self.stationcount = int(fields[7])
+            else:
+                raise Error("not enough data fields from stroke data line '%s'" %(data))
+        self.height = 0.0
 
-  def getTime(self):
-    return self.time
+    def getTime(self):
+        return self.time
 
-  def setTime(self, time):
-    self.time = time
+    def setTime(self, time):
+        self.time = time
 
-  def getPosition(self):
-    return self.position
+    def getPosition(self):
+        return self.position
 
-  def setPosition(self, position):
-    self.position = position
+    def setPosition(self, position):
+        self.position = position
 
-  def getHeight(self):
-    return self.height
+    def getHeight(self):
+        return self.height
 
-  def setHeight(self, height):
-    self.height = height
+    def setHeight(self, height):
+        self.height = height
 
-  def getAmplitude(self):
-    return self.amplitude
+    def getAmplitude(self):
+        return self.amplitude
 
-  def setAmplitude(self, amplitude):
-    self.amplitude = amplitude
+    def setAmplitude(self, amplitude):
+        self.amplitude = amplitude
 
-  def getType(self):
-    return self.typeVal
+    def getType(self):
+        return self.typeVal
 
-  def setType(self, typeVal):
-    self.typeVal = typeVal
+    def setType(self, typeVal):
+        self.typeVal = typeVal
 
-  def getError2D(self):
-    return self.error2d
+    def getError2D(self):
+        return self.error2d
 
-  def setError2D(self, error2d):
-    self.error2d = error2d
+    def setError2D(self, error2d):
+        self.error2d = error2d
 
-  def getStationCount(self):
-    return self.stationcount
+    def getStationCount(self):
+        return self.stationcount
 
-  def setStationCount(self, stationcount):
-    self.stationcount = stationcount
+    def setStationCount(self, stationcount):
+        self.stationcount = stationcount
 
-  def __str__(self):
-    return str(self.time) + ' ' + str(self.position.x) + ' ' + str(self.position.y) + ' ' + str(self.height) + ' ' + str(self.amplitude) + ' ' + str(self.typeVal) + ' ' + str(self.error2d) + ' ' + str(self.stationcount)
+    def __str__(self):
+        return str(self.time) + ' ' + str(self.position.x) + ' ' + str(self.position.y) + ' ' + str(self.height) + ' ' + str(self.amplitude) + ' ' + str(self.typeVal) + ' ' + str(self.error2d) + ' ' + str(self.stationcount)
 
 class RawFiles:
-  
-  def __init__(self, rawPath):
-    rawFileNames = glob.glob(os.path.join(rawPath, '*.bor'))
 
-    rawFileNames.sort()
+    def __init__(self, rawPath):
+        rawFileNames = glob.glob(os.path.join(rawPath, '*.bor'))
 
-    self.rawFiles = {}
+        rawFileNames.sort()
 
-    for rawFileName in rawFileNames:
-      date = datetime.datetime.strptime(rawFileName[-12:-4], '%Y%m%d').date()
-      if not self.rawFiles.has_key(date):
-        self.rawFiles[date] = rawFileName
-      else:
-        raise Exception("ERROR: double date! " + rawFileName + " vs. " + self.rawFiles[date])
-  
-  def get(self, date):
-    if self.rawFiles.has_key(date):
-      return self.rawFiles[date]
-    else:
-      raise Exception("no file for date "+date.strftime('%Y-%m-%d'))
+        self.rawFiles = {}
+
+        for rawFileName in rawFileNames:
+            date = datetime.datetime.strptime(rawFileName[-12:-4], '%Y%m%d').date()
+            if not self.rawFiles.has_key(date):
+                self.rawFiles[date] = rawFileName
+            else:
+                raise Exception("ERROR: double date! " + rawFileName + " vs. " + self.rawFiles[date])
+
+    def get(self, date):
+        if self.rawFiles.has_key(date):
+            return self.rawFiles[date]
+        else:
+            raise Exception("no file for date "+date.strftime('%Y-%m-%d'))
 
 class TimeInterval():
-  
-  def __init__(self, endTime, deltaTime=datetime.timedelta(hours=1)):
-    self.deltaTime = deltaTime
-    self.endTime = self.roundTime(endTime)
-    
-    self.time = self.endTime - self.deltaTime
 
-  def totalSeconds(self, time):
-    ' return the total seconds of the given time or datetime (relative to midnight) '
-    
-    if isinstance(time, datetime.datetime):
-      return time.hour * 3600 + time.minute * 60 + time.second
-    elif isinstance(time, datetime.timedelta):
-      return time.seconds + time.days * 24 * 3600
-    else:
-      raise Exception("unhandled type"+type(time))
-      
-  def roundTime(self, time):
-    deltaSeconds = self.totalSeconds(self.deltaTime)
-    
-    seconds =  self.totalSeconds(time)
-    seconds /= deltaSeconds
-    seconds *= deltaSeconds
-    
-    if isinstance(time, datetime.datetime):
-      return time.replace(hour = seconds/3600, minute= seconds / 60 % 60, second= seconds % 60, microsecond=0)
-    else:
-      return datetime.timedelta(seconds=seconds)
-    
-  def hasNext(self):
-    return False
-    
-  def next(self):
-    raise Exception(' no next interval ')
-  
-  def getStartTime(self):
-    return self.time
-  
-  def getEndTime(self):
-    return self.time + self.deltaTime
-  
-  def getCenterTime(self):
-    return self.time + self.deltaTime / 2
-  
-  def getEndMinute(self):
-    return self.getEndTime() - datetime.timedelta(minutes=1)
-    
+    def __init__(self, endTime, deltaTime=datetime.timedelta(hours=1)):
+        self.deltaTime = deltaTime
+        self.endTime = self.roundTime(endTime)
+
+        self.time = self.endTime - self.deltaTime
+
+    def totalSeconds(self, time):
+        ' return the total seconds of the given time or datetime (relative to midnight) '
+
+        if isinstance(time, datetime.datetime):
+            return time.hour * 3600 + time.minute * 60 + time.second
+        elif isinstance(time, datetime.timedelta):
+            return time.seconds + time.days * 24 * 3600
+        else:
+            raise Exception("unhandled type"+type(time))
+
+    def roundTime(self, time):
+        deltaSeconds = self.totalSeconds(self.deltaTime)
+
+        seconds =  self.totalSeconds(time)
+        seconds /= deltaSeconds
+        seconds *= deltaSeconds
+
+        if isinstance(time, datetime.datetime):
+            return time.replace(hour = seconds/3600, minute= seconds / 60 % 60, second= seconds % 60, microsecond=0)
+        else:
+            return datetime.timedelta(seconds=seconds)
+
+    def hasNext(self):
+        return False
+
+    def next(self):
+        raise Exception(' no next interval ')
+
+    def getStartTime(self):
+        return self.time
+
+    def getEndTime(self):
+        return self.time + self.deltaTime
+
+    def getCenterTime(self):
+        return self.time + self.deltaTime / 2
+
+    def getEndMinute(self):
+        return self.getEndTime() - datetime.timedelta(minutes=1)
+
 
 class TimeIntervals(TimeInterval):
-  
-  def __init__(self, endTime, deltaTime=datetime.timedelta(minutes=15), totalDuration=datetime.timedelta(days=1)):
-    TimeInterval.__init__(self, endTime, deltaTime)
 
-    self.totalDuration = self.roundTime(totalDuration)
-    
-    print "TimeInvervals ",self.deltaTime, self.endTime, self.totalDuration
-  
-    self.time = self.endTime - self.totalDuration
-  
-  def hasNext(self):
-    return self.time + self.deltaTime < self.endTime
-  
-  def next(self):
-    if self.hasNext():
-      self.time += self.deltaTime
-      return self.time
-    else:
-      raise Exception('no more time intervals')
-  
+    def __init__(self, endTime, deltaTime=datetime.timedelta(minutes=15), totalDuration=datetime.timedelta(days=1)):
+        TimeInterval.__init__(self, endTime, deltaTime)
+
+        self.totalDuration = self.roundTime(totalDuration)
+
+        print "TimeInvervals ",self.deltaTime, self.endTime, self.totalDuration
+
+        self.time = self.endTime - self.totalDuration
+
+    def hasNext(self):
+        return self.time + self.deltaTime < self.endTime
+
+    def next(self):
+        if self.hasNext():
+            self.time += self.deltaTime
+            return self.time
+        else:
+            raise Exception('no more time intervals')
+
 class Data:
-  
-  def __init__(self, files, time):
-    self.files = files
-    self.time = time
-    
-  def get(self):
-    start = self.time.getStartTime()
-    starttime = start.strftime("%H%M")
-    startdate = start.strftime("%Y%m%d")
 
-    end = self.time.getEndMinute()
-    endtime = end.strftime("%H%M")
-    
-    try:
-      rawFile = files.get(start.date())
+    def __init__(self, files, time):
+        self.files = files
+        self.time = time
 
-      data = subprocess.Popen(['blitzortung-data','-i', rawFile, '-s', starttime, '-e', endtime], stdout=subprocess.PIPE)
+    def get(self):
+        start = self.time.getStartTime()
+        starttime = start.strftime("%H%M")
+        startdate = start.strftime("%Y%m%d")
 
-      (output, error) = data.communicate()
-    except:
-      pass
-      output = ""
-      print "ignore errors"
-    
-    return output.splitlines()
-  
-  def list(self):
-    for line in self.get():
-      print line.strip()
-    
+        end = self.time.getEndMinute()
+        endtime = end.strftime("%H%M")
+
+        try:
+            rawFile = files.get(start.date())
+
+            data = subprocess.Popen(['blitzortung-data','-i', rawFile, '-s', starttime, '-e', endtime], stdout=subprocess.PIPE)
+
+            (output, error) = data.communicate()
+        except:
+            pass
+            output = ""
+            print "ignore errors"
+
+        return output.splitlines()
+
+    def list(self):
+        for line in self.get():
+            print line.strip()
+
 class Histogram(Data):
-  
-  def __init__(self, files, time):
-    Data.__init__(self, files, time)
 
-    while True:
+    def __init__(self, files, time):
+        Data.__init__(self, files, time)
 
-      # count the number of samples
-      counter = 0
-      ampsum = 0.0
-      for line in self.get():
-        fields = whitespace.split(line)
+        while True:
 
-        xamp = float(fields[7])
-        yamp = float(fields[8])
-        ampsum += math.sqrt(xamp * xamp + yamp * yamp)
-        counter += 1
-    
-      time = self.time.getCenterTime()
-      
-      if counter > 0:
-        avgamp = ampsum/counter
-      else:
-        avgamp = '?'
-      print time, counter, avgamp
-    
-      if not self.time.hasNext():
-        break
-      
-      self.time.next()
- 
+            # count the number of samples
+            counter = 0
+            ampsum = 0.0
+            for line in self.get():
+                fields = whitespace.split(line)
+
+                xamp = float(fields[7])
+                yamp = float(fields[8])
+                ampsum += math.sqrt(xamp * xamp + yamp * yamp)
+                counter += 1
+
+            time = self.time.getCenterTime()
+
+            if counter > 0:
+                avgamp = ampsum/counter
+            else:
+                avgamp = '?'
+            print time, counter, avgamp
+
+            if not self.time.hasNext():
+                break
+
+            self.time.next()
+
 class Url:
 
-  def __init__(self, baseurl):
-    self.url = baseurl
+    def __init__(self, baseurl):
+        self.url = baseurl
 
-  def add(self, name, value):
-    self.url += '&' + str(name).strip() + '=' + str(value).strip()
+    def add(self, name, value):
+        self.url += '&' + str(name).strip() + '=' + str(value).strip()
 
-  def get(self):
-    return self.url
+    def get(self):
+        return self.url
 
-  def read(self):
-    urlconnection = urllib.urlopen(self.url)
+    def read(self):
+        urlconnection = urllib.urlopen(self.url)
 
-    data = urlconnection.read().strip()
+        data = urlconnection.read().strip()
 
-    urlconnection.close()
+        urlconnection.close()
 
-    return data
+        return data
 
 class Strokes(Url):
 
-  def __init__(self, config):
-    Url.__init__(self, 'http://'+config.get('username')+':'+config.get('password')+'@blitzortung.tmt.de/Data/Protected/strikes.txt')
+    def __init__(self, config):
+        Url.__init__(self, 'http://'+config.get('username')+':'+config.get('password')+'@blitzortung.tmt.de/Data/Protected/strikes.txt')
 
 class Participants(Url):
 
-  def __init__(self, config):
-    Url.__init__(self, 'http://'+config.get('username')+':'+config.get('password')+'@blitzortung.tmt.de/Data/Protected/participants.txt')
+    def __init__(self, config):
+        Url.__init__(self, 'http://'+config.get('username')+':'+config.get('password')+'@blitzortung.tmt.de/Data/Protected/participants.txt')
 
 
 parser = optparse.OptionParser()
 
 parser.add_option("--mode", dest="mode", default='histogram',
-                        help="select statistics mode [histogram, data, strokes]", type="string")
+                  help="select statistics mode [histogram, data, strokes]", type="string")
 
 parser.add_option("--time-delta", dest="timedelta", default=15, 
                   help="length of time interval in minutes", type="int")
@@ -315,7 +315,7 @@ parser.add_option("--data-path", dest="datapath", default='/var/cache/blitzortun
 
 (options, args) = parser.parse_args()
 
-  
+
 now = datetime.datetime.utcnow()
 
 delta = datetime.timedelta(minutes=options.timedelta)
@@ -325,64 +325,64 @@ files = RawFiles(options.datapath)
 
 if options.mode == "histogram":
 
-  timeInterval = TimeIntervals(now, delta)
+    timeInterval = TimeIntervals(now, delta)
 
-  histogram = Histogram(files, timeInterval)
+    histogram = Histogram(files, timeInterval)
 
 elif options.mode == "data":
 
-  timeInterval = TimeInterval(now, delta)
+    timeInterval = TimeInterval(now, delta)
 
-  data = Data(files, timeInterval)
+    data = Data(files, timeInterval)
 
-  data.list()
- 
+    data.list()
+
 elif options.mode == "strokes":
 
-  timeInterval = TimeInterval(now, delta)
+    timeInterval = TimeInterval(now, delta)
 
-  config = Config()
+    config = Config()
 
-  participantSource = Participants(config)
-  lines = participantSource.read().split('\n')
+    participantSource = Participants(config)
+    lines = participantSource.read().split('\n')
 
-  totalStrokes = {}
-  participatedStrokes = {}
+    totalStrokes = {}
+    participatedStrokes = {}
 
-  starttime = timeInterval.roundTime(now) + delta - datetime.timedelta(hours=2)
+    starttime = timeInterval.roundTime(now) + delta - datetime.timedelta(hours=2)
 
-  for line in lines:
-    fields = whitespace.split(line)
+    for line in lines:
+        fields = whitespace.split(line)
 
-    nanoseconds = int(fields[1][-9:])
-    time = datetime.datetime.strptime(fields[0] + ' ' + fields[1][:-10], timeformat)
-    time = time.replace(microsecond=int(round(nanoseconds / 1000.0)))
+        nanoseconds = int(fields[1][-9:])
+        time = datetime.datetime.strptime(fields[0] + ' ' + fields[1][:-10], timeformat)
+        time = time.replace(microsecond=int(round(nanoseconds / 1000.0)))
 
-    if time >= starttime:
-      centertime = timeInterval.roundTime(time) + delta / 2
+        if time >= starttime:
+            centertime = timeInterval.roundTime(time) + delta / 2
 
-      if totalStrokes.has_key(centertime):
-	totalStrokes[centertime] += 1
-      else:
-	totalStrokes[centertime] = 1
+            if totalStrokes.has_key(centertime):
+                totalStrokes[centertime] += 1
+            else:
+                totalStrokes[centertime] = 1
 
-      for field in fields[2:]:
-	if field == config.get('USERNAME'):
-	  if participatedStrokes.has_key(centertime):
-	    participatedStrokes[centertime] += 1
-	  else:
-	    participatedStrokes[centertime] = 1
-	  break
+            for field in fields[2:]:
+                if field == config.get('USERNAME'):
+                    if participatedStrokes.has_key(centertime):
+                        participatedStrokes[centertime] += 1
+                    else:
+                        participatedStrokes[centertime] = 1
+                    break
 
-  times = totalStrokes.keys()
-  times.sort()
+    times = totalStrokes.keys()
+    times.sort()
 
-  for time in times:
-    participated = '0'
-    if participatedStrokes.has_key(time):
-      participated = participatedStrokes[time]
-    print time.strftime(timeformat), totalStrokes[time], participated
+    for time in times:
+        participated = '0'
+        if participatedStrokes.has_key(time):
+            participated = participatedStrokes[time]
+        print time.strftime(timeformat), totalStrokes[time], participated
 
 
 else:
-  raise Exception("unknown mode '%s'" %(options.mode))
+    raise Exception("unknown mode '%s'" %(options.mode))
