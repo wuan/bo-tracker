@@ -305,7 +305,7 @@ class Participants(Url):
 parser = optparse.OptionParser()
 
 parser.add_option("--mode", dest="mode", default='histogram',
-                        help="select statistics mode [histogram, data]", type="string")
+                        help="select statistics mode [histogram, data, strokes]", type="string")
 
 parser.add_option("--time-delta", dest="timedelta", default=15, 
                   help="length of time interval in minutes", type="int")
