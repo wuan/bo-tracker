@@ -1,5 +1,6 @@
 #include "exception/Base.h"
 #include "hardware/pcb/V6.h"
+#include "data/Waveform.h"
 
 namespace blitzortung {
   namespace hardware {
@@ -62,19 +63,24 @@ namespace blitzortung {
 	const int AD_THRESHOLD_VOLTAGE = 500;
 
 	int numberOfSamples = data.size() >> 2;
+       
+	data::Waveform<short> wfm(eventtime);
 
-	std::vector<short> xvals;
-	std::vector<short> yvals;
+	//std::vector<short> xvals;
+	//std::vector<short> yvals;
 
-	double maxSquare = 0.0;
-	int maxIndex = -1;
+	//double maxSquare = 0.0;
+	//int maxIndex = -1;
+	
 	for (int i=0; i < numberOfSamples; i++) {
 
 	  int index = i << 2;
 	  short xval = parseHex(data.substr(index, 2)) - AD_MAX_VALUE;
 	  short yval = parseHex(data.substr(index + 2, 2)) - AD_MAX_VALUE;
 
-	  double square = xval * xval + yval * yval;
+	  wfm.add(xval, yval);
+
+	  /*double square = xval * xval + yval * yval;
 
 	  if (square > maxSquare) {
 	    maxSquare = square;
@@ -83,11 +89,12 @@ namespace blitzortung {
 
 	  // store waveform data in arrays
 	  xvals.push_back(xval);
-	  yvals.push_back(yval);
+	  yvals.push_back(yval);*/
 	}
 
-        float maxX = xvals[maxIndex];
-	float maxY = yvals[maxIndex];
+        float maxX = wfm.getMaxX();
+	float maxY = wfm.getMaxY();
+	int maxIndex = wfm.getMaxIndex();
 
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "parseData() preliminary max X: " << maxX << " Y: " << maxY << " index: " << maxIndex; 

@@ -64,10 +64,12 @@ namespace blitzortung {
     //! explicit instatiation of functions to be linked afterwards
     template class RingBuffer<double>;
     template class RingBuffer<float>;
-    template class RingBuffer<long int>;
-    template class RingBuffer<long unsigned int>;
+    template class RingBuffer<long long int>;
+    template class RingBuffer<unsigned long long int>;
     template class RingBuffer<int>;
     template class RingBuffer<unsigned int>;
+    template class RingBuffer<short>;
+    template class RingBuffer<unsigned short>;
     template class RingBuffer<char>;
     template class RingBuffer<unsigned char>;
 
