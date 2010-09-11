@@ -66,30 +66,14 @@ namespace blitzortung {
        
 	data::Waveform<short> wfm(eventtime);
 
-	//std::vector<short> xvals;
-	//std::vector<short> yvals;
-
-	//double maxSquare = 0.0;
-	//int maxIndex = -1;
-	
 	for (int i=0; i < numberOfSamples; i++) {
 
 	  int index = i << 2;
+
 	  short xval = parseHex(data.substr(index, 2)) - AD_MAX_VALUE;
 	  short yval = parseHex(data.substr(index + 2, 2)) - AD_MAX_VALUE;
 
 	  wfm.add(xval, yval);
-
-	  /*double square = xval * xval + yval * yval;
-
-	  if (square > maxSquare) {
-	    maxSquare = square;
-	    maxIndex = i;
-	  }
-
-	  // store waveform data in arrays
-	  xvals.push_back(xval);
-	  yvals.push_back(yval);*/
 	}
 
         float maxX = wfm.getMaxX();
