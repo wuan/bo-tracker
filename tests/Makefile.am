@@ -7,6 +7,7 @@ AM_CPPFLAGS = \
 
 AM_LDFLAGS = \
 	$(top_srcdir)/source/lib/libblitzortung.la \
+	-lboost_program_options \
 	-lcppunit
 
 noinst_PROGRAMS = test-lib \
