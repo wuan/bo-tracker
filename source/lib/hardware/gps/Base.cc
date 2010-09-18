@@ -55,6 +55,7 @@ namespace blitzortung {
 	const unsigned int targetBaudRate = communication_.getBaudRate();
 
 	if (force) {
+	  
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "init() force";
 
@@ -63,14 +64,21 @@ namespace blitzortung {
 	  baudRates.push_back(4800);
 	  baudRates.push_back(19200);
 
+	  // send initialization for every supported baud rate except the target baud rate
 	  for (std::vector<unsigned int>::const_iterator baudRate=baudRates.begin(); baudRate != baudRates.end(); baudRate++) {
 	    if (*baudRate != targetBaudRate) {
 
 	      if (logger_.isDebugEnabled())
 		logger_.debugStream() << "init() @ " << *baudRate << " set to " << targetBaudRate << " baud";
+		
+	      // switch to baud rate
 	      communication_.setBaudRate(*baudRate);
+	      
 	      sleep(1);
+
+	      // send initialization
 	      initWrite(targetBaudRate);
+	      
 	      sleep(1);
 	    }
 	  }
@@ -78,9 +86,15 @@ namespace blitzortung {
 
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "init() @ " << targetBaudRate << " set to " << targetBaudRate << " baud";
+	  
+	// switch the interface to the target baud rate
 	communication_.setBaudRate(targetBaudRate);
+	
 	sleep(1);
+	
+	// send initalization with the target baud rate at the end
 	initWrite(targetBaudRate);
+
 	sleep(1);
 
 	dateInitialized_ = pt::second_clock::universal_time().date();
@@ -108,13 +122,14 @@ namespace blitzortung {
 	  // set GPS PPS time
 	  time_.setSecond(fields[4] + " " + fields[3], counter);
 
-	  //std::cout << time_.getSecond() << "\r" << std::flush;
-
+	  // exctract actual location and altitude information
 	  location_.addLongitude(fields[7], fields[8][0]);
 	  location_.addLatitude(fields[5], fields[6][0]);
 	  location_.addAltitude(fields[9]);
 
 	  // use of value in fields[10] ???
+	  
+	  // add actual satellite count to ringbuffer
 	  addSatelliteCount(fields[11]);
 	  
 	} else {

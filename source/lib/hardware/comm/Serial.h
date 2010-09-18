@@ -33,13 +33,19 @@ namespace blitzortung {
 	  //! Destructor
 	  virtual ~Serial();
 
+  	  //! set baud rate
 	  void setBaudRate(const unsigned int);
+	  
+	  //! returns the actual baud rate
 	  const unsigned int getBaudRate() const;
 
+	  //! returns true if the communication is active
 	  bool isOpen() const;
 
+	  //! returns valid lines received at the interface
 	  std::string receive();
 
+	  //! send string via the interface
 	  void send(const std::string&);
       };
 

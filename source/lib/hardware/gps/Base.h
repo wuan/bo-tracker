@@ -18,10 +18,12 @@ namespace blitzortung {
   namespace hardware {
     namespace gps {
 
+      //! base class for gps hardware objects      
       class Base {
 
 	public:
 
+	  //! typedef of auto pointer to class objects
 	  typedef std::auto_ptr<Base> AP;
 
 	protected:
@@ -49,6 +51,7 @@ namespace blitzortung {
 	  //! logger for class
 	  mutable Logger logger_;
 
+          //! hardware specific method for device initialization to be overloaded	  
 	  virtual void initWrite(const unsigned int) = 0;
 
 	public:
