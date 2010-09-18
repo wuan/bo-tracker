@@ -4,15 +4,10 @@
 namespace blitzortung {
   namespace data {
 
-    Samples::Samples()
+    Samples::Samples() :
+      samples_(new Sample::V())
     {
-      init();
     }
-
-    void Samples::init() {
-      samples_ = Sample::VP(new Sample::V());
-    }
-
 
     void Samples::add(sample::Base* sample) {
       if (samples_->size() == 0) {
