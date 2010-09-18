@@ -17,12 +17,15 @@ namespace blitzortung {
   namespace hardware {
     namespace gps {
 
+      //! class for access to sirf gps devices      
       class Sirf : public Base {
 
 	private:
-	  //! logger for class
+	
+	  //! logger for objects of this class
 	  mutable Logger logger_;
 
+	  //! hardware specific method for device initialization	  
 	  void initWrite(const unsigned int);
 
 	public:
