@@ -21,12 +21,13 @@ namespace blitzortung {
 	typedef sample::Base Sample;
 
       protected:
+        //! header for samples
 	SamplesHeader header_;
 
+	//! storage for samples
 	Sample::VP samples_;
 
-	void init();
-
+	//! add sample reference by pointer to collection
 	void add(sample::Base*);
 
       public:
@@ -36,6 +37,7 @@ namespace blitzortung {
 	//! add sample to collection
 	void add(sample::Base::AP);
 
+	//! add sample to collection
 	void add(sample::Base::V::auto_type);
 
 	//! add other sample collection to sample collection
@@ -53,6 +55,7 @@ namespace blitzortung {
 	//! sort samples
 	void sort();
 
+	//! set sample sort behaviour
         template< class Compare >
         void sort( Compare comp ) {
 	  samples_->sort(comp);
@@ -64,17 +67,33 @@ namespace blitzortung {
 	//! erase samples between two iterators
 	Sample::VI erase(Sample::VI, Sample::VI);
 
-	// collection iterator methods
+	//! get const front of collection
 	const sample::Base& front() const;
+	
+	//! get front of collection
 	sample::Base& front();
+	
+	//! get const back of collection
 	const sample::Base& back() const;
+	
+	//! get back of collection
 	sample::Base& back();
+	
+	//! get const iterator to begin of collection
 	Sample::CVI begin() const;
+	
+	//! get iterator to begin of collection
 	Sample::VI begin();
+	
+	//! get const iterator to end of collection
 	Sample::CVI end() const;
+	
+	//! get iterator to end of collection
 	Sample::VI end();
 
+	//
 	// file operations
+	//
 	
 	//! append current samples to given file
 	std::string appendToFile(const std::string&, const unsigned short fileVersion = 0);
