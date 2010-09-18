@@ -10,7 +10,7 @@ lib_LTLIBRARIES = libblitzortung.la
 libblitzortung_la_SOURCES = \
 	data/Samples.h data/Samples.cc \
 	data/SamplesFile.h data/SamplesFile.cc \
-	data/SamplesFileHeader.h data/SamplesFileHeader.cc \
+	data/SamplesHeader.h data/SamplesHeader.cc \
 	data/Waveform.h data/Waveform.cc \
 	\
 	data/sample/Base.h data/sample/Base.cc \
