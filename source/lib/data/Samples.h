@@ -5,7 +5,7 @@
 
 #include "namespaces.h"
 #include "data/sample/Base.h"
-#include "data/SamplesFileHeader.h"
+#include "data/SamplesHeader.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
@@ -21,7 +21,7 @@ namespace blitzortung {
 	typedef sample::Base Sample;
 
       protected:
-	SamplesFileHeader header_;
+	SamplesHeader header_;
 
 	Sample::VP samples_;
 

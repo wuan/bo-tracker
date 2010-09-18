@@ -96,11 +96,11 @@ namespace blitzortung {
 
 	if (fileVersion != 0) {
 	  // override file version if fileVersion argument is not 0
-	  header_.setFileVersion(fileVersion);
+	  header_.setVersion(fileVersion);
 	} else {
-	  if (header_.getFileVersion() == 0) {
+	  if (header_.getVersion() == 0) {
 	    // use version of first sample, if no file-version is set
-	    header_.setFileVersion(samples_->front().getVersion());
+	    header_.setVersion(samples_->front().getVersion());
 	  }
 	}
 
@@ -118,11 +118,11 @@ namespace blitzortung {
 
 	if (fileVersion != 0) {
 	  // override file version if fileVersion argument is not 0
-	  header_.setFileVersion(fileVersion);
+	  header_.setVersion(fileVersion);
 	} else {
-	  if (header_.getFileVersion() == 0) {
+	  if (header_.getVersion() == 0) {
 	    // use version of first sample, if no file-version is set
-	    header_.setFileVersion(samples_->front().getVersion());
+	    header_.setVersion(samples_->front().getVersion());
 	  }
 	}
 	SamplesFile samplesFile(fileName, header_);

@@ -8,7 +8,7 @@
 #include "namespaces.h"
 #include "Logger.h"
 #include "data/Samples.h"
-#include "data/SamplesFileHeader.h"
+#include "data/SamplesHeader.h"
 #include "data/sample/Base.h"
 
 namespace blitzortung {
@@ -29,7 +29,7 @@ namespace blitzortung {
 	std::string name_;
 
 	//! header information
-	SamplesFileHeader header_;
+	SamplesHeader header_;
 
 	//! logger for class
 	mutable Logger logger_;
@@ -55,7 +55,7 @@ namespace blitzortung {
       public:
 
 	//! constructor
-	SamplesFile(const std::string&, const SamplesFileHeader&);
+	SamplesFile(const std::string&, const SamplesHeader&);
 
 	//! destructor
 	~SamplesFile();

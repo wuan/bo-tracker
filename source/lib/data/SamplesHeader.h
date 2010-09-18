@@ -1,5 +1,5 @@
-#ifndef BLITZORTUNG_DATA_SAMPLESFILEHEADER_H_
-#define BLITZORTUNG_DATA_SAMPLESFILEHEADER_H_
+#ifndef BLITZORTUNG_DATA_SAMPLESHEADER_H_
+#define BLITZORTUNG_DATA_SAMPLESHEADER_H_
 
 #include <fstream>
 #include <iomanip>
@@ -12,21 +12,21 @@ namespace blitzortung {
   namespace data {
 
     //! file io helper class for data::Samples
-    class SamplesFileHeader {
+    class SamplesHeader {
 
       private:
 	
 	//! static constant for file id
-	static const char *FILEID;
+	static const char *ID;
 
 	//! static constant for date which marks the start of the epoch
 	static const gr::date STARTOFEPOCH;
 
 	//! file date
-	gr::date fileDate_;
+	gr::date date_;
 
 	//! file version
-	unsigned short fileVersion_;
+	unsigned short version_;
 	
 	//! number of samples in file
 	unsigned int numberOfSamples_;
@@ -41,23 +41,23 @@ namespace blitzortung {
 	mutable Logger logger_;
 
 	//! set creator according to file version
-	void setCreator(const unsigned short);
+	void setCreator();
 
       public:
 
 	//! constructor
-	SamplesFileHeader(const gr::date& fileDate = gr::date(gr::not_a_date_time), const unsigned short fileVersion = 0);
+	SamplesHeader(const gr::date& date = gr::date(gr::not_a_date_time), const unsigned short version = 0);
 
 	//! destructor
-	~SamplesFileHeader();
+	~SamplesHeader();
 
-	//! read header from file
+	//! read header from stream
 	void read(std::ifstream&);
 
-	//! set file date
+	//! set header date
 	void setDate(const gr::date&);
 
-	//! get file date
+	//! get header date
 	const gr::date& getDate() const;
 	
 	//! get number of samples in file
@@ -66,15 +66,15 @@ namespace blitzortung {
 	//! get storage size of one sample
 	unsigned int getSampleSize() const;
 
-	//! set file version
-	void setFileVersion(const unsigned short);
+	//! set header version
+	void setVersion(const unsigned short);
 
-	//! get file version
-	const unsigned short getFileVersion() const;
+	//! get header version
+	const unsigned short getVersion() const;
 
-	bool operator==(const SamplesFileHeader&);
+	bool operator==(const SamplesHeader&);
 	
-	bool operator!=(const SamplesFileHeader&);
+	bool operator!=(const SamplesHeader&);
 
 	//! set creator object depending on file version number
 	sample::Base::AP createSample() const;

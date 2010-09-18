@@ -7,7 +7,7 @@
 namespace blitzortung {
   namespace data {
 
-    SamplesFile::SamplesFile(const std::string& name, const SamplesFileHeader& header) :
+    SamplesFile::SamplesFile(const std::string& name, const SamplesHeader& header) :
       name_(name),
       header_(header),
       logger_("data.SamplesFile")
@@ -80,7 +80,7 @@ namespace blitzortung {
       setFilename(name);
 
       if (append) {
-	SamplesFileHeader header;
+	SamplesHeader header;
 	header.read(getFilename());
         
 	if (header != header_)
