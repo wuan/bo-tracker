@@ -76,7 +76,7 @@ STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -115minutes)
 
 TOTALSTROKES=$(cat $TMPDATA | awk 'BEGIN {sum=0} {sum += $3} END {print sum}')
 TOTALPARTICIPATEDSTROKES=$(cat $TMPDATA | awk 'BEGIN {sum=0} {sum += $4} END {print sum}')
-PARTICIPATEDPERCENT=$(echo $TOTALPARTICIPATEDSTROKES $TOTALSTROKES | awk '{printf "%.1f", $1/$2}')
+PARTICIPATEDPERCENT=$(echo $TOTALPARTICIPATEDSTROKES $TOTALSTROKES | awk '{printf "%.1f", 100.0*$1/$2}')
 
 $NICE gnuplot <<***
 set term png size $PICXSIZE,$PICYSIZE
