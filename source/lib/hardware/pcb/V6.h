@@ -11,18 +11,22 @@ namespace hardware {
     class V6 : public Base {
       private:
 
-	//! logger for class
+	//! logger for objects of this class
 	mutable Logger logger_;
 
-	std::auto_ptr<data::sample::Base> parseData(const pt::ptime&, const std::string &);
+	//! returns a sample with the given reference time and the waveform data in the string
+	data::sample::Base::AP parseData(const pt::ptime&, const std::string&);
 
       public:
 
+        //! create V6 hardware object
 	V6(comm::Base&, gps::Base&, const data::sample::Base::Creator&);
 
+	//! delete V6 hardware object
 	virtual ~V6();
 
-	virtual std::auto_ptr<data::sample::Base> parse(const std::vector<std::string> &);
+	//! returns a sample from the given splitted line returned from the measurement device
+	virtual data::sample::Base::AP parse(const std::vector<std::string>&);
     };
 
   }

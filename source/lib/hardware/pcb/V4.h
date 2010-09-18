@@ -11,17 +11,21 @@ namespace hardware {
     class V4 : public Base {
       private:
 
-	//! logger for class
+	//! logger for objects of this class
 	mutable Logger logger_;
 
-	//! local modification of gps parser
+	//! overloading method for local modification of gps parser
         virtual void parseGps(const std::vector<std::string>&);
 
       public:
+      
+        //! create V4 hardware object
 	V4(comm::Base&, gps::Base&, const data::sample::Base::Creator&);
 
+	//! delete V4 hardware object	
 	virtual ~V4();
 
+	//! returns a sample from the given splitted line returned from the measurement device
 	virtual std::auto_ptr<data::sample::Base> parse(const std::vector<std::string> &);
     };
 
