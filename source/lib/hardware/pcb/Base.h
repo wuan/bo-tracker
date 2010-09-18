@@ -17,24 +17,24 @@ namespace hardware {
 
       public:
 
-	  typedef std::auto_ptr<Base> AP;
+	typedef std::auto_ptr<Base> AP;
 
       private:
-	//! serial port object
+	//! reference to communication object
 	comm::Base& comm_;
 
-	//! data field output
+	//! vector for data fields
 	std::vector<std::string> fields_;
 
-	//! logger for class
+	//! logger for objects of this class
 	mutable Logger logger_;
 
       protected:
 
-	//! gps device object
+	//! reference to gps device object
 	gps::Base& gps_;
 
-	//! function for parsing of hex strings
+	//! returnes int value of given hex string
 	int parseHex(const std::string& hexString);
 
 	//! sample creator;
@@ -51,12 +51,17 @@ namespace hardware {
 	//! destructor
 	virtual ~Base();
 
-	//! return
+	//! returns if pcb object's connection is opened
 	bool isOpen() const;
 
+	//! returns a sample read from the hardware
 	std::auto_ptr<data::sample::Base> read();
 
-	virtual std::auto_ptr<data::sample::Base> parse(const std::vector<std::string> &) =0;
+	//! returns a sample parsed from the given string vector
+	/*!
+	this function needs to be declared in any of the derived classes
+	*/
+	virtual std::auto_ptr<data::sample::Base> parse(const std::vector<std::string> &) = 0;
     };
 
   }
