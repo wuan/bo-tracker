@@ -1,4 +1,4 @@
-#define VERSION                 "DebianTracker&nbsp;Ver.&nbsp;0.9"
+#define VERSION                 "DebianTracker&nbsp;Ver.&nbsp;0.9.1"
 
 #include "exception/Base.h"
 #include "network/Transfer.h"
