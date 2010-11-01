@@ -1,6 +1,6 @@
 blitzortung-tracker (1.0) stable; urgency=low
 
-  * Initial Release.
+  * adapted baudrate setting for new pcb versions
  
  -- Andreas Wuerl <awuerl@gmx.net>  Wed, 18 Sep 2010 12:13:40 +0200
 

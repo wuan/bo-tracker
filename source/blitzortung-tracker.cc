@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
   desc.add_options()
     ("help", "show program help")
     ("serial-device,d", po::value<std::string>(&serialPortName)->default_value(serialPortName), "path to serial device")
-    ("baud-rate,b", po::value<int>(&serialBaudRate)->default_value(serialBaudRate), "baud rate of serial port (4800, 19200)")
+    ("baud-rate,b", po::value<int>(&serialBaudRate)->default_value(serialBaudRate), "baud rate of serial port (4800, 9600, 19200, 38400)")
     ("username,u", po::value<std::string>(&username), "username of blitzortung.org")
     ("password,p", po::value<std::string>(&password), "password of blitzortung.org")
     ("server-host,h", po::value<std::string>(&servername), "blitzortung.org servername")
@@ -102,7 +102,9 @@ int main(int argc, char **argv) {
 
   switch (serialBaudRate) {
     case 4800:
+    case 9600:
     case 19200:
+    case 38400:
       break;
 
     default:
