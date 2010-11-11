@@ -1,6 +1,6 @@
 #include "network/Base.h"
 #include "exception/Base.h"
-#include "network/Transfer.h"
+#include "network/transfer/Tcp.h"
 
 
 namespace blitzortung {
@@ -9,7 +9,7 @@ namespace blitzortung {
     Base::Base(const Creds& creds, const int sleepTime, const double eventRateLimit, const std::string& outputFile) :
       logger_("network.Base")
     {
-      Transfer networkTransfer(sampleQueue_, creds, outputFile);
+      transfer::Tcp networkTransfer(sampleQueue_, creds, outputFile);
 
       networkTransfer.setSleepTime(sleepTime);
       networkTransfer.setEventRateLimit(eventRateLimit);

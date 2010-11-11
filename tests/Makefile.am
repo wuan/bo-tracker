@@ -6,7 +6,7 @@ AM_CPPFLAGS = \
 	$(DEBUG_CPPFLAGS) 
 
 AM_LDFLAGS = \
-	$(top_srcdir)/source/lib/libblitzortung.la \
+	$(top_srcdir)/source/lib/libblitzortung-tracker.la \
 	-lboost_program_options \
 	-lcppunit
 
