@@ -5,9 +5,9 @@ AM_LDFLAGS = \
 	-lboost_thread-mt \
 	-llog4cpp
 
-lib_LTLIBRARIES = libblitzortung.la
+lib_LTLIBRARIES = libblitzortung-tracker.la
 
-libblitzortung_la_SOURCES = \
+libblitzortung_tracker_la_SOURCES = \
 	data/Samples.h data/Samples.cc \
 	data/SamplesFile.h data/SamplesFile.cc \
 	data/SamplesHeader.h data/SamplesHeader.cc \
@@ -41,9 +41,10 @@ libblitzortung_la_SOURCES = \
 	namespace.h \
 	\
 	network/Base.h network/Base.cc \
-	network/Transfer.h network/Transfer.cc \
 	network/Queue.h network/Queue.cc \
 	network/Creds.h network/Creds.cc \
+	network/transfer/Base.h network/transfer/Base.cc \
+	network/transfer/Tcp.h network/transfer/Tcp.cc \
 	\
 	util/RingBuffer.h util/RingBuffer.cc \
 	util/String.h util/String.cc
