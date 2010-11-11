@@ -145,7 +145,7 @@ int main(int argc, char **argv) {
 
     default:
       std::ostringstream oss;
-      oss << "invalid sample version: " << pcbVersion;
+      oss << "invalid sample version: " << sampleVersion;
       throw bo::exception::Base(oss.str());
   }
 
