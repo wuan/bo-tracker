@@ -1,7 +1,8 @@
 all:
-	aclocal
-	autoheader
-	autoconf
-	libtoolize
+	if [ ${CWD+x} ]; then cd $(CWD); fi; \
+	aclocal; \
+	autoheader; \
+	autoconf; \
+	libtoolize; \
 	automake -a
 
