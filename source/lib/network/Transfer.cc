@@ -39,7 +39,7 @@ namespace blitzortung {
       sock_id = socket (AF_INET, SOCK_DGRAM, 0);
 
       if (sock_id == -1) {
-	logger_.warnStream << "could not open socket";
+	logger_.warnStream() << "could not open socket";
 	
 	return;
       }
@@ -58,16 +58,13 @@ namespace blitzortung {
 	
 	if (hostinfo == NULL) {
 	  close(sock_id);
-	  logger_.warnStream << "could not get host information for '" << creds_.getServername() << "'";
+	  logger_.warnStream() << "could not get host information for '" << creds_.getServername() << "'";
 	  
 	  return;
 	}
 	memcpy((char*) &serv_addr.sin_addr.s_addr, hostinfo->h_addr, hostinfo->h_length);
       }
 
-      // open network connection
-      int sock_id =  getConnection();
-      
       // loop through all current samples
       for (data::sample::Base::VI sample = samples_->begin(); sample != samples_->end(); sample++) {
       
