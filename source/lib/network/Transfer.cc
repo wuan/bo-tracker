@@ -33,14 +33,15 @@ namespace blitzortung {
       eventRateLimit_ = eventRateLimit;
     }
 
-    int Transfer::openConnection() {
-      struct hostent *hostinfo;
-      int sockfd;
+    void Transfer::sendData() {
+      int sock_id;
 
-      sockfd = socket (AF_INET, SOCK_STREAM, 0);
+      sock_id = socket (AF_INET, SOCK_DGRAM, 0);
 
-      if (sockfd == -1) {
-	return 0;
+      if (sock_id == -1) {
+	logger_.warnStream << "could not open socket";
+	
+	return;
       }
 
       sockaddr_in serv_addr;
@@ -53,19 +54,38 @@ namespace blitzortung {
 
       if (serv_addr.sin_addr.s_addr == INADDR_NONE) {
 	/* host not given by IP but by name */
-	hostinfo = gethostbyname (creds_.getServername().c_str());
+	hostent *hostinfo = gethostbyname (creds_.getServername().c_str());
+	
 	if (hostinfo == NULL) {
-	  close(sockfd);
-	  return 0;
+	  close(sock_id);
+	  logger_.warnStream << "could not get host information for '" << creds_.getServername() << "'";
+	  
+	  return;
 	}
 	memcpy((char*) &serv_addr.sin_addr.s_addr, hostinfo->h_addr, hostinfo->h_length);
       }
 
-      if (connect(sockfd, (sockaddr *) &serv_addr, sizeof(sockaddr)) == -1) {
-	return 0;
-      }
+      // open network connection
+      int sock_id =  getConnection();
+      
+      // loop through all current samples
+      for (data::sample::Base::VI sample = samples_->begin(); sample != samples_->end(); sample++) {
+      
+	std::string data = sampleToString(*sample);
 
-      return sockfd;
+	if (logger_.isInfoEnabled())
+	  logger_.infoStream() << data.substr(0, data.size() -1);
+
+	if (sendto(sock_id, data.c_str(), data.size(), 0, (sockaddr*) &serv_addr, sizeof(sockaddr)) == -1) {
+	  logger_.warnStream() << "() error transmitting data";
+	  break;
+	}
+      }
+      
+      close (sock_id);
+      
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "() connection closed";
     }
 
     std::string Transfer::sampleToString(const data::sample::Base& sample) {
@@ -172,28 +192,8 @@ namespace blitzortung {
 	      samples_->sort();
 	    }
 
-	    // open network connection
-	    int sockfd =  openConnection ();
-
-	    // loop through all current samples
-	    for (data::sample::Base::VI sample = samples_->begin(); sample != samples_->end(); sample++) {
-	      
-	      std::string data = sampleToString(*sample);
-
-	      if (logger_.isInfoEnabled())
-		logger_.infoStream() << data.substr(0, data.size() -1);
-
-	      if (send (sockfd, data.c_str(), data.size(), 0) == -1) {
-		logger_.warnStream() << "() error transmitting data";
-		break;
-	      }
-	    }
-
-	    send (sockfd, "\n", 2, 0);
-	    close (sockfd);
-
-	    if (logger_.isDebugEnabled())
-	      logger_.debugStream() << "() connection closed";
+	    // transmit data
+	    sendData();
 
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "() recollect samples " << samples_->size() << " + " << deletedSamples->size();
