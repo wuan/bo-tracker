@@ -44,7 +44,7 @@ namespace blitzortung {
 	Logger logger_;
 
 	//! send data to server
-	int sendData ();
+	void sendData ();
 
 	//! get string to be transmitted for every sample
 	std::string sampleToString(const data::sample::Base& sample);
