@@ -47,7 +47,7 @@ namespace blitzortung {
 	void sendData ();
 	
 	//! prepare data for transmission
-	data::sample::Base::VP Transfer::prepareData();
+	data::sample::Base::VP prepareData();
 	
 	//! get string to be transmitted for every sample
 	std::string sampleToString(const data::sample::Base& sample);
