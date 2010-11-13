@@ -43,8 +43,8 @@ namespace blitzortung {
 	//! logger for this class
 	Logger logger_;
 
-	//! initialize network connection to server
-	int openConnection ();
+	//! send data to server
+	int sendData ();
 
 	//! get string to be transmitted for every sample
 	std::string sampleToString(const data::sample::Base& sample);

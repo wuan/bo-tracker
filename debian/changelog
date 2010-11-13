@@ -1,8 +1,9 @@
 blitzortung-tracker (0.9.1) unstable; urgency=low
 
   * adapted baudrate setting for new pcb versions
+  * sending data via UDP instead of TCP
 
- -- Andreas Wuerl <awuerl@gmx.net>  Wed, 27 Aug 2010 21:14:45 +0200
+ -- Andreas Wuerl <awuerl@gmx.net>  Wed, 14 Nov 2010 21:14:45 +0200
 
 blitzortung-tracker (0.9) unstable; urgency=low
 
