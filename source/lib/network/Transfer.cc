@@ -32,6 +32,41 @@ namespace blitzortung {
     void Transfer::setEventRateLimit(const double eventRateLimit) {
       eventRateLimit_ = eventRateLimit;
     }
+    
+    data::sample::Base::VP Transfer::prepareData() {
+      data::sample::Base::VP deletedSamples(new data::sample::Base::V());
+
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "() sample vector contains " << samples_->size() << " elements";
+
+      double secondsElapsed = ((now - lastSent).total_milliseconds() / 1000);
+      double eventRate = double(samples_->size()) / secondsElapsed;
+
+      lastSent = now;
+
+      if (logger_.isInfoEnabled())
+	logger_.infoStream() << "() sending " << samples_->size() << " samples (rate " << eventRate << " samples/second) at " << now;
+
+      if (eventRate > eventRateLimit_) {
+	samples_->sort(data::sample::Base::CompareAmplitude());
+
+	if (logger_.isInfoEnabled())
+	  logger_.infoStream() << "() ratelimit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed;
+
+	int sampleLimit = eventRateLimit_ * secondsElapsed;
+
+	//samples_->transfer(samples_->begin() + sampleLimit, samples_->end());
+	deletedSamples->transfer(deletedSamples->end(), samples_->begin(), samples_->end(), *samples_);
+
+	if (logger_.isInfoEnabled())
+	  logger_.infoStream() << "() erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")";
+
+	// time sort samples
+	samples_->sort();
+      }
+      
+      return deletedSamples;
+    }
 
     void Transfer::sendData() {
       int sock_id;
@@ -158,36 +193,8 @@ namespace blitzortung {
 
 	  if (samples_->size() > 0) {
 
-	    data::sample::Base::VP deletedSamples(new data::sample::Base::V());
-
-	    if (logger_.isDebugEnabled())
-	      logger_.debugStream() << "() sample vector contains " << samples_->size() << " elements";
-
-	    double secondsElapsed = ((now - lastSent).total_milliseconds() / 1000);
-	    double eventRate = double(samples_->size()) / secondsElapsed;
-
-	    lastSent = now;
-
-	    if (logger_.isInfoEnabled())
-	      logger_.infoStream() << "() sending " << samples_->size() << " samples (rate " << eventRate << " samples/second) at " << now;
-
-	    if (eventRate > eventRateLimit_) {
-	      samples_->sort(data::sample::Base::CompareAmplitude());
-
-	      if (logger_.isInfoEnabled())
-		logger_.infoStream() << "() ratelimit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed;
-
-	      int sampleLimit = eventRateLimit_ * secondsElapsed;
-
-	      //samples_->transfer(samples_->begin() + sampleLimit, samples_->end());
-	      deletedSamples->transfer(deletedSamples->end(), samples_->begin(), samples_->end(), *samples_);
-
-	      if (logger_.isInfoEnabled())
-		logger_.infoStream() << "() erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")";
-
-	      // time sort samples
-	      samples_->sort();
-	    }
+	    // prepare data for transmission
+	    data::sample::Base::VP deletedSamples = prepareData();
 
 	    // transmit data
 	    sendData();

@@ -45,10 +45,13 @@ namespace blitzortung {
 
 	//! send data to server
 	void sendData ();
-
+	
+	//! prepare data for transmission
+	data::sample::Base::VP Transfer::prepareData();
+	
 	//! get string to be transmitted for every sample
 	std::string sampleToString(const data::sample::Base& sample);
-
+	
 	//! save data to file
 	void saveData();
 
