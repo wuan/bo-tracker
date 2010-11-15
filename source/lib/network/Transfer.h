@@ -43,11 +43,11 @@ namespace blitzortung {
 	//! logger for this class
 	Logger logger_;
 
+	//! prepare data for transmission
+	data::sample::Base::VP prepareData(pt::ptime&, pt::ptime&);
+	
 	//! send data to server
 	void sendData ();
-	
-	//! prepare data for transmission
-	data::sample::Base::VP prepareData();
 	
 	//! get string to be transmitted for every sample
 	std::string sampleToString(const data::sample::Base& sample);
