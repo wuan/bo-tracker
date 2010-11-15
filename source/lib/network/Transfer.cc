@@ -33,7 +33,7 @@ namespace blitzortung {
       eventRateLimit_ = eventRateLimit;
     }
     
-    data::sample::Base::VP Transfer::prepareData() {
+    data::sample::Base::VP Transfer::prepareData(pt::ptime& now, pt::ptime& lastSent) {
       data::sample::Base::VP deletedSamples(new data::sample::Base::V());
 
       if (logger_.isDebugEnabled())
@@ -100,6 +100,9 @@ namespace blitzortung {
 	memcpy((char*) &serv_addr.sin_addr.s_addr, hostinfo->h_addr, hostinfo->h_length);
       }
 
+      if (logger_.isInfoEnabled())
+	logger_.infoStream() << "send data to '" << creds_.getServername() << "' port " << creds_.getServerport();
+
       // loop through all current samples
       for (data::sample::Base::VI sample = samples_->begin(); sample != samples_->end(); sample++) {
       
@@ -114,7 +117,7 @@ namespace blitzortung {
 	}
       }
       
-      close (sock_id);
+      close(sock_id);
       
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "() connection closed";
@@ -194,7 +197,7 @@ namespace blitzortung {
 	  if (samples_->size() > 0) {
 
 	    // prepare data for transmission
-	    data::sample::Base::VP deletedSamples = prepareData();
+	    data::sample::Base::VP deletedSamples = prepareData(now, lastSent);
 
 	    // transmit data
 	    sendData();
