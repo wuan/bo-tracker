@@ -6,10 +6,10 @@
 namespace blitzortung {
   namespace network {
 
-    Base::Base(const Creds& creds, const int sleepTime, const double eventRateLimit, const std::string& outputFile) :
+    Base::Base(const Creds& creds, const int sleepTime, const double eventRateLimit, output::Base& output) :
       logger_("network.Base")
     {
-      Transfer networkTransfer(sampleQueue_, creds, outputFile);
+      Transfer networkTransfer(sampleQueue_, creds, output);
 
       networkTransfer.setSleepTime(sleepTime);
       networkTransfer.setEventRateLimit(eventRateLimit);
@@ -20,7 +20,7 @@ namespace blitzortung {
     Base::~Base() {
     }
 
-    void Base::push(data::sample::Base::AP& data) {
+    void Base::push(data::Sample::AP& data) {
       sampleQueue_.push(data);
     }
 

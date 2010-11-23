@@ -1,5 +1,5 @@
-#ifndef BLITZORTUNG_DATA_SAMPLE_VERSION1_H_
-#define BLITZORTUNG_DATA_SAMPLE_VERSION1_H_
+#ifndef BLITZORTUNG_DATA_SAMPLE_VERSION2_H_
+#define BLITZORTUNG_DATA_SAMPLE_VERSION2_H_
 
 #include "namespaces.h"
 #include "Logger.h"
@@ -9,31 +9,31 @@ namespace blitzortung {
   namespace data {
     namespace sample {
 
-      //! class V1 for sample data version 1
-      class V1 : public Base {
+      //! class V2 for sample data version 2
+      class V2 : public Base {
 	
 	public:
 	  //! type definition for vector container
-	  typedef boost::ptr_vector<V1> V;
+	  typedef boost::ptr_vector<V2> V;
 	  typedef V::iterator VI;
 	  typedef V::const_iterator CVI;
 	  typedef boost::shared_ptr<V> VP;
 
 	  //! constructor
-	  V1();
+	  V2();
 
 	  //! destructor
-	  virtual ~V1();
+	  virtual ~V2();
 
 	  //! Creator
 	  struct Creator : public Base::Creator {
 	    virtual Base* operator()() const;
 	  };
-	  
+
 	  //! getter for format version
 	  virtual unsigned short getVersion() const;
-	  
-      	  //! getter for number of samples in waveform
+
+	  //! getter for number of samples in waveform
 	  unsigned short getNumberOfSamples() const;
       };
 

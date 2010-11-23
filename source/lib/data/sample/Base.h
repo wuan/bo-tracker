@@ -10,6 +10,8 @@
 
 #include "namespaces.h"
 #include "exception/Base.h"
+#include "data/Sample.h"
+#include "util/Stream.h"
 
 namespace blitzortung {
   namespace data {
@@ -29,17 +31,7 @@ namespace blitzortung {
 
 	protected:
 
-	  //! template function for writing of different types to stream
-	  template< typename T>
-	    void valueToStream(std::iostream& stream, const T& value) const {
-	      stream.write((char*) &value, sizeof(value));
-	    }
-	    
-	  template< typename T>
-	    void valueFromStream(std::iostream& stream, T& value) const {
-	      stream.read((char*) &value, sizeof(value));
-	    }
-
+	  //! class Size to determine sizes of binary structures
 	  class Size {
 	    private:
 	      unsigned int size_;
@@ -59,7 +51,25 @@ namespace blitzortung {
 		return size_;
 	      }
 	  };
+	  
+	  //! sample waveform
+	  Sample::Waveform::AP waveform_;
 
+	  //! gps latitude
+	  float latitude_;
+
+	  //! gps longitude
+	  float longitude_;
+
+	  //! gps altitude
+	  short altitude_;
+
+	  //! number of sattelites used by gps
+	  unsigned char gpsNumberOfSatellites_;
+
+	  //! gps status character
+	  char gpsStatus_;
+	  
 	public:
 
 	  //! constructor
@@ -72,77 +82,51 @@ namespace blitzortung {
 	  struct Creator {
 
 	    typedef boost::shared_ptr<Creator> P;
+	    typedef std::auto_ptr<Creator> AP;
 
 	    virtual Base* operator()() const {
 	      throw exception::Base("data::sample::Base::Creator() being used!");
 	    }
 	  };
 
-	  //! getter for sample and peak time
-	  virtual pt::ptime getTime(int index=0) const = 0;
+	  //! setter for sample waveform
+	  void set(data::Sample::AP);
 
-	  //! setter for sample and peak time
-	  virtual void setTime(const pt::ptime&) = 0;
+	  //! getter for sample waveform
+	  virtual const data::Sample::Waveform& getWaveform() const;
 
-	  //! setter for peak time by the offset to the sample time
-	  virtual void setOffset(short offsetfactor, int index) = 0;
-
-	  //! getter for sample and peak time
-	  virtual pt::time_duration getOffset(int index) const = 0;
-
-	  //! getter for peak amplitude
-	  virtual float getXAmplitude(int index) const = 0;
-
-	  //! getter for peak amplitude
-	  virtual float getYAmplitude(int index) const = 0;
-
-	  //! getter for peak amplitude
-	  virtual float getAmplitude(int index) const;
-
-	  //! setter for peak amplitude
-	  virtual void setAmplitude(const float xamp, const float yamp, int index) = 0;
-
-	  //! setter for antenna longitude value
-	  virtual void setAntennaLongitude(const float longitude) = 0;
+	  //! getter for sample waveform timestamp
+	  virtual const pt::ptime& getTime() const;
 
 	  //! getter for antenna longitude value
-	  virtual float getAntennaLongitude() const = 0;
-
-	  //! setter for antenna latitude value
-	  virtual void setAntennaLatitude(const float latitude) = 0;
+	  virtual float getAntennaLongitude() const;
 
 	  //! getter for antenna latitude value
-	  virtual float getAntennaLatitude() const = 0;
-
-	  //! setter for antenna altitude value
-	  virtual void setAntennaAltitude(const short altitude) = 0;
+	  virtual float getAntennaLatitude() const;
 
 	  //! getter for antenna altitude value
-	  virtual short getAntennaAltitude() const = 0;
-
-	  //! setter for gps satellite count
-	  virtual void setGpsNumberOfSatellites(const unsigned char satelliteCount) = 0;
+	  virtual short getAntennaAltitude() const;
 
 	  //! getter for gps satelllite count
-	  virtual unsigned char getGpsNumberOfSatellites() const = 0;
-
-	  //! setter for gps status
-	  virtual void setGpsStatus(const char gpsStatus) = 0;
+	  virtual unsigned char getGpsNumberOfSatellites() const;
 
 	  //! getter for gps status
-	  virtual char getGpsStatus() const = 0;
+	  virtual char getGpsStatus() const;
 
 	  //! getter for sample format version
 	  virtual unsigned short getVersion() const = 0;
+	  
+	  //! getter for amount of samples in waveform
+	  virtual unsigned short getNumberOfSamples() const = 0;
 
 	  //! write binary object data to stream
-	  virtual void toStream(std::iostream&) const = 0;
+	  virtual void toStream(std::iostream&) const;
 	  
 	  //! read binary object data from stream
-	  virtual void fromStream(std::iostream&, const gr::date&) = 0;
+	  virtual void fromStream(std::iostream&, const gr::date&);
 	  
 	  //! get binary storage size of sample
-	  virtual unsigned int getSize() const = 0;
+	  virtual unsigned int getSize() const;
 
 	  //! comparison operator <
 	  bool operator<(const Base &) const;

@@ -136,6 +136,12 @@ namespace blitzortung {
 	  throw exception::Base("blitzortung::hardware::gps::Base.parse() wrong data to parse");
 	}
       }
+
+      bo::data::GpsInfo::AP Base::getInfo() const {
+	bo::data::GpsInfo::AP gpsInfo(new bo::data::GpsInfo(*this));
+
+	return gpsInfo;
+      }
     }
   }
 }

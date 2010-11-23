@@ -11,9 +11,9 @@ namespace blitzortung {
 
     void Samples::add(sample::Base* sample) {
       if (samples_->size() == 0) {
-	header_.setDate(sample->getTime().date());
+	header_.setDate(sample->getWaveform().getTime().date());
       } else {
-	if (header_.getDate() != sample->getTime().date())
+	if (header_.getDate() != sample->getWaveform().getTime().date())
 	  throw exception::Base("sample date mismatch");
       }
       samples_->push_back(sample);

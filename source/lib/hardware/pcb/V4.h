@@ -20,13 +20,13 @@ namespace hardware {
       public:
       
         //! create V4 hardware object
-	V4(comm::Base&, gps::Base&, const data::sample::Base::Creator&);
+	V4(comm::Base&, gps::Base&);
 
 	//! delete V4 hardware object	
 	virtual ~V4();
 
 	//! returns a sample from the given splitted line returned from the measurement device
-	virtual std::auto_ptr<data::sample::Base> parse(const std::vector<std::string> &);
+	virtual data::Sample::AP parse(const std::vector<std::string> &);
     };
 
   }

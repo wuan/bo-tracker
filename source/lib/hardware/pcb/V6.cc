@@ -6,8 +6,10 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
 
-      V6::V6(comm::Base& comm, gps::Base& gps, const data::sample::Base::Creator& sampleCreator) :
-	Base(comm, gps, sampleCreator),
+      const pt::time_duration V6::SAMPLE_RATE = pt::nanoseconds(3125);
+
+      V6::V6(comm::Base& comm, gps::Base& gps) :
+	Base(comm, gps),
 	logger_("hardware.pcb.V6")
       {
 	if (logger_.isDebugEnabled())
@@ -19,11 +21,11 @@ namespace blitzortung {
 	  logger_.debugStream() << "deleted";
       }
 
-      data::sample::Base::AP V6::parse(const std::vector<std::string> &fields) {
+      data::Sample::AP V6::parse(const std::vector<std::string> &fields) {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "parse() called";
 
-	data::sample::Base::AP sample;
+	data::Sample::AP sample;
 	
 	// parse lighning event information
 	if (fields[0] == "BLSEQ") {
@@ -35,12 +37,6 @@ namespace blitzortung {
 
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
 	    sample = parseData(eventtime, fields[2]);
-
-	    sample->setAntennaLongitude(gps_.getLocation().getLongitude());
-	    sample->setAntennaLatitude(gps_.getLocation().getLatitude());
-	    sample->setAntennaAltitude(gps_.getLocation().getAltitude());
-	    sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
-	    sample->setGpsStatus(gps_.getStatus());
 
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "parse() sample ready";
@@ -56,15 +52,13 @@ namespace blitzortung {
 	return sample;
       }
 
-      data::sample::Base::AP V6::parseData(const pt::ptime& eventtime, const std::string& data) {
+      data::Sample::AP V6::parseData(const pt::ptime& eventtime, const std::string& data) {
 
 	const int AD_MAX_VALUE = 128;
-	const int AD_MAX_VOLTAGE = 2500;
-	const int AD_THRESHOLD_VOLTAGE = 500;
 
 	int numberOfSamples = data.size() >> 2;
        
-	data::Waveform<short> wfm(eventtime);
+	data::Sample::Waveform::AP wfm(new data::Sample::Waveform(eventtime, SAMPLE_RATE));
 
 	for (int i=0; i < numberOfSamples; i++) {
 
@@ -73,39 +67,13 @@ namespace blitzortung {
 	  short xval = parseHex(data.substr(index, 2)) - AD_MAX_VALUE;
 	  short yval = parseHex(data.substr(index + 2, 2)) - AD_MAX_VALUE;
 
-	  wfm.add(xval, yval);
+	  wfm->add(xval, yval);
 	}
 
-        float maxX = wfm.getMaxX();
-	float maxY = wfm.getMaxY();
-	int maxIndex = wfm.getMaxIndex();
+	data::Sample::AP sample(new data::Sample(wfm, gps_.getInfo()));
 
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "parseData() preliminary max X: " << maxX << " Y: " << maxY << " index: " << maxIndex; 
-
-	// correction introduced with v 16 of the original tracker software
-	if ((abs(maxX) < AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE) &&
-	    (abs(maxY) < AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE)) {
-
-	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "parseData() signal below threshold " << abs(maxX) << " or " << abs(maxY) << " < " << AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE;
-	  maxX = AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE;
-	  maxY = 0.0;
-	  maxIndex = -1;
-
-	}
-
-	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "parseData() final max X: " << maxX << ", Y: " << maxY << ", index: " << maxIndex;
-
-	data::sample::Base::AP sample(sampleCreator_());
-
-	sample->setTime(eventtime);
-	sample->setOffset(maxIndex, 1);
-	sample->setAmplitude(maxX / AD_MAX_VALUE, maxY / AD_MAX_VALUE, 1);
-
-	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "parseData() transmitted max X: " << maxX / AD_MAX_VALUE << ", Y: " << maxY / AD_MAX_VALUE << ", index: " << maxIndex - 1;
+	  logger_.debugStream() << "parseData() done";
 
 	return sample;
       }

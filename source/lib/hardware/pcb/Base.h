@@ -6,7 +6,7 @@
 
 #include "hardware/comm/Base.h"
 #include "hardware/gps/Base.h"
-#include "data/sample/Base.h"
+#include "data/Sample.h"
 
 namespace blitzortung {
 namespace hardware {
@@ -37,16 +37,13 @@ namespace hardware {
 	//! returnes int value of given hex string
 	int parseHex(const std::string& hexString);
 
-	//! sample creator;
-        const data::sample::Base::Creator& sampleCreator_;	
-
 	//! gps parser interface, overload for modification
         virtual void parseGps(const std::vector<std::string>&);
 
       public:
 
 	//! constructor for base class
-	Base(comm::Base&, gps::Base&, const data::sample::Base::Creator&);
+	Base(comm::Base&, gps::Base&);
 
 	//! destructor
 	virtual ~Base();
@@ -55,13 +52,13 @@ namespace hardware {
 	bool isOpen() const;
 
 	//! returns a sample read from the hardware
-	std::auto_ptr<data::sample::Base> read();
+	data::Sample::AP read();
 
 	//! returns a sample parsed from the given string vector
 	/*!
 	this function needs to be declared in any of the derived classes
 	*/
-	virtual std::auto_ptr<data::sample::Base> parse(const std::vector<std::string> &) = 0;
+	virtual data::Sample::AP parse(const std::vector<std::string> &) = 0;
     };
 
   }
