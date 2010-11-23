@@ -112,7 +112,7 @@ namespace blitzortung {
       tmpSample->fromStream(fstream_, header_.getDate());
 
       // recursive btree search
-      if (tmpSample->getTime().time_of_day() > target) {
+      if (tmpSample->getWaveform().getTime().time_of_day() > target) {
 	// lower interval
 	end = middle;
       } else {
@@ -128,7 +128,7 @@ namespace blitzortung {
 	tmpSample->fromStream(fstream_, header_.getDate());
 
 	// return index position
-	if (tmpSample->getTime().time_of_day() >= target) {
+	if (tmpSample->getWaveform().getTime().time_of_day() >= target) {
 	  return start;
 	} else {
 	  return end;

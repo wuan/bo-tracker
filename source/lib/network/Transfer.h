@@ -14,6 +14,7 @@
 #include "network/Base.h"
 #include "network/Queue.h"
 #include "network/Creds.h"
+#include "output/File.h"
 #include "Logger.h"
 
 namespace blitzortung {
@@ -26,39 +27,36 @@ namespace blitzortung {
 	int sleepTime_;
 
 	//! reference to incoming sample data queue
-	Queue<bo::data::sample::Base>& sampleQueue_;
+	Queue<bo::data::Sample>& sampleQueue_;
 
 	//! credential and host information for network data transfer
 	const Creds& creds_;
 
 	//! vector of samples
-	data::sample::Base::VP samples_;
+	data::Sample::VP samples_;
 
 	//! limit value of maximum events / second;
 	double eventRateLimit_;
 
 	//! output file name
-	const std::string& outputFile_;
+	output::Base& output_;
 	
 	//! logger for this class
-	Logger logger_;
+	mutable Logger logger_;
 
 	//! prepare data for transmission
-	data::sample::Base::VP prepareData(pt::ptime&, pt::ptime&);
+	data::Sample::VP prepareData(pt::ptime&, pt::ptime&);
 	
 	//! send data to server
-	void sendData ();
+	void sendData();
 	
 	//! get string to be transmitted for every sample
-	std::string sampleToString(const data::sample::Base& sample);
+	std::string sampleToString(const data::Sample& sample);
 	
-	//! save data to file
-	void saveData();
-
       public:
 
 	//! create network transfer object
-	Transfer(Queue<data::sample::Base>& sampleQueue, const Creds& creds, const std::string&);
+	Transfer(Queue<data::Sample>& sampleQueue, const Creds& creds, output::Base&);
 
 	//! delete nework transfer object
 	virtual ~Transfer();

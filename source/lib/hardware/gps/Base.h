@@ -8,6 +8,7 @@
 
 #include "namespaces.h"
 #include "Logger.h"
+#include "data/GpsInfo.h"
 #include "util/RingBuffer.h"
 #include "hardware/comm/Base.h"
 #include "hardware/gps/data/Base.h"
@@ -88,6 +89,9 @@ namespace blitzortung {
 
 	  //! initialize GPS hardware
 	  void init(bool force=false);
+
+	  //! get actual gps information
+	  blitzortung::data::GpsInfo::AP getInfo() const;
       };
 
     }

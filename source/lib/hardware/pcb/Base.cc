@@ -10,11 +10,10 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
      
-      Base::Base(comm::Base& comm, gps::Base& gps, const data::sample::Base::Creator& sampleCreator) :
+      Base::Base(comm::Base& comm, gps::Base& gps) :
 	comm_(comm),
 	logger_("hardware.pcb.Base"),
-	gps_(gps),
-	sampleCreator_(sampleCreator)
+	gps_(gps)
       {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "initialized";
@@ -38,7 +37,7 @@ namespace blitzortung {
 	return comm_.isOpen();
       }
 
-      data::sample::Base::AP Base::read() {
+      data::Sample::AP Base::read() {
 	std::string line = comm_.receive();
 
 	if (logger_.isInfoEnabled())
@@ -60,7 +59,7 @@ namespace blitzortung {
 	    std::cout << "unknown data " << fields_[0] << std::endl;
 	  }
 	}
-	return std::auto_ptr<data::sample::Base>();
+	return data::Sample::AP();
       }
 
       void Base::parseGps(const std::vector<std::string>& fields) {

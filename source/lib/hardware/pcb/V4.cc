@@ -1,12 +1,12 @@
-#include "exception/Base.h"
 #include "hardware/pcb/V4.h"
+#include "exception/Base.h"
 
 namespace blitzortung {
   namespace hardware {
     namespace pcb {
 
-      V4::V4(comm::Base& serial, gps::Base& gps, const data::sample::Base::Creator& sampleCreator) :
-	Base(serial, gps, sampleCreator),
+      V4::V4(comm::Base& serial, gps::Base& gps) :
+	Base(serial, gps),
 	logger_("hardware.pcb.V4")
       {
 	if (logger_.isDebugEnabled())
@@ -18,11 +18,11 @@ namespace blitzortung {
 	  logger_.debugStream() << "deleted";
       }
 
-      data::sample::Base::AP V4::parse(const std::vector<std::string> &fields) {
+      data::Sample::AP V4::parse(const std::vector<std::string> &fields) {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "parse() called";
 
-	data::sample::Base::AP sample;
+	data::Sample::AP sample;
 	
 	// parse lighning event information
 	if (fields[0] == "BLSIG") {
@@ -37,17 +37,12 @@ namespace blitzortung {
 	  pt::ptime eventtime = gps_.getTime(counter);
 
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
-	    sample = data::sample::Base::AP(sampleCreator_());
+	    data::GpsInfo::AP gpsInfo(new data::GpsInfo(gps_));
 
-	    sample->setTime(eventtime);
-	    sample->setOffset(0, 1);
-	    sample->setAmplitude(maxX/1023.0, maxY/1023.0, 1);
-	    sample->setAntennaLongitude(gps_.getLocation().getLongitude());
-	    sample->setAntennaLatitude(gps_.getLocation().getLatitude());
-	    sample->setAntennaAltitude(gps_.getLocation().getAltitude());
-	    sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
-	    sample->setGpsStatus(gps_.getStatus());
+	    data::Sample::Waveform::AP waveform(new data::Sample::Waveform(eventtime));
+	    waveform->add(maxX/1023.0, maxY/1023.0);
 
+	    sample = data::Sample::AP(new data::Sample(waveform, gpsInfo));
 	  } else {
 	    logger_.warnStream() << "GPS information is not yet valid -> no sample created";
 	  }

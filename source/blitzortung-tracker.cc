@@ -20,12 +20,17 @@
 #include "hardware/pcb/V6.h"
 #include "data/sample/V1.h"
 #include "network/Base.h"
+#include "output/File.h"
+#include "output/None.h"
 #include "util/RingBuffer.h"
 #include "exception/Base.h"
 #include "Logger.h"
 
+//#include "ui/ui_blitzortung-tracker.h"
+
 int main(int argc, char **argv) {
 
+//  QMainWindow mainWindow;
   std::string username, password, servername;
   unsigned short serverport;
   std::string serialPortName = "/dev/ttyUSB0";
@@ -134,13 +139,12 @@ int main(int argc, char **argv) {
     throw bo::exception::Base(oss.str());
   }
 
-
   // create sample creator object
-  std::auto_ptr<bo::data::sample::Base::Creator> sampleCreator;
+  bo::data::sample::Base::Creator::AP sampleCreator;
 
   switch (sampleVersion) {
     case 1:
-      sampleCreator = std::auto_ptr<bo::data::sample::Base::Creator>(new bo::data::sample::V1::Creator());
+      sampleCreator = bo::data::sample::Base::Creator::AP(new bo::data::sample::V1::Creator());
       break;
 
     default:
@@ -154,11 +158,11 @@ int main(int argc, char **argv) {
 
   switch (pcbVersion) {
     case 4:
-      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V4(serial, *gps, *sampleCreator));
+      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V4(serial, *gps));
       break;
 
     case 6:
-      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V6(serial, *gps, *sampleCreator));
+      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V6(serial, *gps));
       break;
 
     default:
@@ -174,12 +178,20 @@ int main(int argc, char **argv) {
   creds.setUsername(username);
   creds.setPassword(password);
 
+  bo::output::Base::AP output;
+
+  if (outputFile != "") {
+    output = bo::output::Base::AP(new bo::output::File(outputFile, *sampleCreator));
+  } else {
+    output = bo::output::Base::AP(new bo::output::None());
+  }
+
   //! create object of network driver for sample transmission
-  bo::network::Base::AP network(new bo::network::Base(creds, sleepTime, eventRateLimit, outputFile));
+  bo::network::Base::AP network(new bo::network::Base(creds, sleepTime, eventRateLimit, *output));
 
   while (hardware->isOpen()) {
 
-    bo::data::sample::Base::AP sample = hardware->read();
+    bo::data::Sample::AP sample = hardware->read();
 
     if (sample.get() != 0) {
       network->push(sample);

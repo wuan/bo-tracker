@@ -1,20 +1,23 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
 AM_LDFLAGS = \
-	-lboost_regex-mt \
-	-lboost_thread-mt \
+	-lboost_regex \
+	-lboost_thread \
 	-llog4cpp
 
 lib_LTLIBRARIES = libblitzortung.la
 
 libblitzortung_la_SOURCES = \
+	data/Sample.h data/Sample.cc \
 	data/Samples.h data/Samples.cc \
 	data/SamplesFile.h data/SamplesFile.cc \
 	data/SamplesHeader.h data/SamplesHeader.cc \
 	data/Waveform.h data/Waveform.cc \
+	data/GpsInfo.h data/GpsInfo.cc \
 	\
 	data/sample/Base.h data/sample/Base.cc \
 	data/sample/V1.h data/sample/V1.cc \
+	data/sample/V2.h data/sample/V2.cc \
 	\
 	exception/Base.h exception/Base.cc \
 	\
@@ -45,6 +48,12 @@ libblitzortung_la_SOURCES = \
 	network/Queue.h network/Queue.cc \
 	network/Creds.h network/Creds.cc \
 	\
+	output/Base.h \
+	output/None.h output/None.cc \
+	output/File.h output/File.cc \
+	\
 	util/RingBuffer.h util/RingBuffer.cc \
-	util/String.h util/String.cc
+	util/String.h util/String.cc \
+	util/Stream.h \
+	$(NULL)
 

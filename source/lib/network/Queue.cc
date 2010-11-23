@@ -68,6 +68,6 @@ namespace blitzortung {
     }
 
     //! explicit instatiation
-    template class Queue<data::sample::Base>;
+    template class Queue<data::Sample>;
   }
 }

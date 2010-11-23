@@ -11,10 +11,11 @@ bo::data::sample::Base::AP SampleTest::getSample() {
 }
 
 bo::data::sample::Base::AP SampleTest::getSample(const pt::ptime& time) {
+
+  bo::data::Waveform<short>::AP wfm(new bo::data::Waveform<short>(time + pt::nanoseconds(3125) * 10));
+
   bo::data::sample::Base::AP sample = getSample();
-  sample->setTime(time);
-  sample->setOffset(10, 1);
-  sample->setAmplitude(0.5, 0, 1);
+  sample->setWaveform(wfm);
   sample->setAntennaLongitude(11.0);
   sample->setAntennaLatitude(49.0);
   sample->setAntennaAltitude(550);
@@ -65,9 +66,11 @@ bo::data::Samples::P SampleTest::getSamples1() {
     pt::ptime sampleDateTime(sampleDate, *sampleTime);
     bo::data::sample::Base::AP sample((*sampleCreator_)());
 
-    sample->setTime(sampleDateTime);
-    sample->setAmplitude(1.0, 0.5, 1);
-    sample->setOffset(0, 1);
+    bo::data::WfmS::AP wfm(new bo::data::WfmS(sampleDateTime));
+    //sample->setTime(sampleDateTime);
+    //sample->setAmplitude(1.0, 0.5, 1);
+    //sample->setOffset(0, 1);
+    sample->setWaveform(wfm);
     sample->setAntennaLongitude(11.0);
     sample->setAntennaLatitude(49.0);
     sample->setAntennaAltitude(550);
