@@ -5,12 +5,18 @@
 #include "data/sample/V1.h"
 #include "test-lib-data-samples.h"
 
-CPPUNIT_TEST_SUITE_REGISTRATION( SampleTest );
+//CPPUNIT_TEST_SUITE_REGISTRATION( SampleTest );
 
 bo::data::sample::Base::AP SampleTest::getSample(const pt::ptime& time) {
+  // create new sample
+  bo::data::sample::Base::AP sample((*sampleCreator_)());
+
   // create waveform
   bo::data::Sample::Waveform::AP wfm(new bo::data::Sample::Waveform(time + pt::nanoseconds(3125) * 10, pt::nanoseconds(3125)));
-  wfm->add(100,0);
+
+  for (unsigned int i=0; i <sample->getNumberOfSamples(); i++) {
+    wfm->add(100 - i, -50 + i);
+  }
 
   // create GpsInfo
   bo::data::GpsInfo::AP gpsInfo(new bo::data::GpsInfo());
@@ -18,8 +24,6 @@ bo::data::sample::Base::AP SampleTest::getSample(const pt::ptime& time) {
   // create internal sample
   bo::data::Sample::AP internalSample(new bo::data::Sample(wfm, gpsInfo));
   
-  // create new sample and set information from internal sample
-  bo::data::sample::Base::AP sample((*sampleCreator_)());
   sample->set(internalSample);
 
   return sample;
@@ -76,10 +80,6 @@ bo::data::Samples::P SampleTest::getSamples2() {
   bo::data::Samples::P samples(new bo::data::Samples());
 
   return samples;
-}
-
-void SampleTest::setUp() {
-  sampleCreator_ = boost::shared_ptr<bo::data::sample::Base::Creator>(new bo::data::sample::V1::Creator());
 }
 
 void SampleTest::tearDown() {
@@ -148,7 +148,7 @@ void SampleTest::testAppend() {
 
 void SampleTest::testSize() {
 
-  const unsigned int dataSize = 22;
+  const unsigned int dataSize = getDataSize();
 
   gr::date sampleDate(2010,8,1);
 

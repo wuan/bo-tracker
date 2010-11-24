@@ -19,6 +19,7 @@
 #include "hardware/pcb/V4.h"
 #include "hardware/pcb/V6.h"
 #include "data/sample/V1.h"
+#include "data/sample/V2.h"
 #include "network/Base.h"
 #include "output/File.h"
 #include "output/None.h"
@@ -35,10 +36,10 @@ int main(int argc, char **argv) {
   unsigned short serverport;
   std::string serialPortName = "/dev/ttyUSB0";
   std::string outputFile = "";
-  int serialBaudRate = 19200;
-  int sleepTime = 20;
-  int sampleVersion = 1;
-  int pcbVersion = 6;
+  unsigned short serialBaudRate = 19200;
+  unsigned short sleepTime = 20;
+  unsigned short sampleVersion = 2;
+  unsigned char pcbVersion = 6;
   double eventRateLimit = 1.0;
   std::string gpsType = "sirf";
 
@@ -49,16 +50,17 @@ int main(int argc, char **argv) {
   desc.add_options()
     ("help", "show program help")
     ("serial-device,d", po::value<std::string>(&serialPortName)->default_value(serialPortName), "path to serial device")
-    ("baud-rate,b", po::value<int>(&serialBaudRate)->default_value(serialBaudRate), "baud rate of serial port (4800, 9600, 19200, 38400)")
+    ("baud-rate,b", po::value<unsigned short>(&serialBaudRate)->default_value(serialBaudRate), "baud rate of serial port (4800, 9600, 19200, 38400)")
     ("username,u", po::value<std::string>(&username), "username of blitzortung.org")
     ("password,p", po::value<std::string>(&password), "password of blitzortung.org")
     ("server-host,h", po::value<std::string>(&servername), "blitzortung.org servername")
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
-    ("sleep-time,s", po::value<int>(&sleepTime)->default_value(sleepTime), "sleep time between data transmission")
+    ("sleep-time,s", po::value<unsigned short>(&sleepTime)->default_value(sleepTime), "sleep time between data transmission")
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (sjn, garmin or sirf)")
-    ("pcb-version", po::value<int>(&pcbVersion)->default_value(pcbVersion), "version of PCB (4 or 6)")
+    ("pcb-version", po::value<unsigned char>(&pcbVersion)->default_value(pcbVersion), "version of PCB (4 or 6)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("output,o", po::value<std::string>(&outputFile), "output file name (e.g. Name_%Y%m%d.bor)")
+    ("output-format", po::value<unsigned short>(&sampleVersion)->default_value(sampleVersion), "output file format version")
     ("verbose,v", "verbose mode")
     ("debug", "debug mode")
     ;
@@ -145,6 +147,10 @@ int main(int argc, char **argv) {
   switch (sampleVersion) {
     case 1:
       sampleCreator = bo::data::sample::Base::Creator::AP(new bo::data::sample::V1::Creator());
+      break;
+
+    case 2:
+      sampleCreator = bo::data::sample::Base::Creator::AP(new bo::data::sample::V2::Creator());
       break;
 
     default:

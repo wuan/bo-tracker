@@ -1,6 +1,9 @@
 #ifndef TESTS_TEST_LIB_DATA_SAMPLES_H_
 #define TESTS_TEST_LIB_DATA_SAMPLES_H_
 
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+
 #include <boost/shared_ptr.hpp>
  
 #include "namespaces.h"
@@ -8,23 +11,26 @@
  
 class SampleTest : public CPPUNIT_NS :: TestFixture
 {
-  CPPUNIT_TEST_SUITE( SampleTest );
-  CPPUNIT_TEST( testAdd );
-  CPPUNIT_TEST( testWrite );
-  CPPUNIT_TEST( testAppend );
-  CPPUNIT_TEST( testSize );
-  CPPUNIT_TEST_SUITE_END();
+//  CPPUNIT_TEST_SUITE( SampleTest );
+//  CPPUNIT_TEST( testAdd );
+//  CPPUNIT_TEST( testWrite );
+//  CPPUNIT_TEST( testAppend );
+//  CPPUNIT_TEST( testSize );
+//  CPPUNIT_TEST_SUITE_END();
 
   private:
-  bo::data::sample::Base::Creator::P sampleCreator_;
 
   bo::data::Samples::P getSamples1();
   bo::data::Samples::P getSamples2();
   bo::data::sample::Base::AP getSample(const pt::ptime&);
 
+  protected:
+  bo::data::sample::Base::Creator::P sampleCreator_;
+  virtual unsigned int getDataSize() const = 0;
+
   public:
-  void setUp();
-  void tearDown();
+  virtual void setUp() = 0;
+  virtual void tearDown();
 
   //! tests
 
@@ -38,3 +44,4 @@ class SampleTest : public CPPUNIT_NS :: TestFixture
 };
 
 #endif
+

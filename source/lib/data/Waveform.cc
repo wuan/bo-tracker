@@ -69,6 +69,11 @@ namespace blitzortung {
       }
 
     template <typename T>
+      const pt::time_duration& Waveform<T>::getTimeDelta() const {
+	return dt_;
+      }
+      
+    template <typename T>
     T Waveform<T>::getX(unsigned int index) const {
       if (index < xdata_.size()) {
 	return xdata_[index];

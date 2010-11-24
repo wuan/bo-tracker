@@ -77,11 +77,14 @@ namespace blitzortung {
 	//! returns y-value at maximum
 	T getMaxY() const;
 
-	//! return time of waveform or of sample with given index
+	//! return timestamp of waveform
 	const pt::ptime& getTime() const;
 
-	//! return time of waveform or of sample with given index
+	//! return time of sample with given index
 	pt::ptime getTime(unsigned int index) const;
+
+	//! return delta time of waveform
+	const pt::time_duration& getTimeDelta() const;
 
 	//! write to stream
 	void write(std::iostream&, unsigned int elementCount);
