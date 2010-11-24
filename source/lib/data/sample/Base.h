@@ -78,6 +78,9 @@ namespace blitzortung {
 	  //! getter for sample waveform timestamp
 	  virtual const pt::ptime& getTime() const;
 
+	  //! getter for sample waveform timedelta
+	  virtual const pt::time_duration& getTimeDelta() const;
+
 	  //! getter for antenna longitude value
 	  virtual float getAntennaLongitude() const;
 

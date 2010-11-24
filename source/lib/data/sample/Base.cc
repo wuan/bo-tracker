@@ -31,13 +31,14 @@ namespace blitzortung {
 	os << sample.getTime() << " " << sample.getAntennaLongitude() << " " << sample.getAntennaLatitude();
 	os << " " << sample.getAntennaAltitude();
 	os << " " << (int) sample.getGpsNumberOfSatellites();
+	os << " " << sample.getTimeDelta().total_nanoseconds();
 
 	for (unsigned int i=0; i < sample.getNumberOfSamples(); i++) {
 	  const Sample::Waveform& wfm = sample.getWaveform();
 	  //os.precision(3);
 	  //os << " " << wfm.getTime(peak).time_of_day().total_nanoseconds() / 1e3;
 	  os.precision(2);
-	  os << " " << wfm.getX(i) << " " << wfm.getY(i);
+	  os << " " << int(wfm.getX(i)) << " " << int(wfm.getY(i));
 	}
 
 	// restore original locale
@@ -87,6 +88,11 @@ namespace blitzortung {
 	return waveform_->getTime();
       }
 
+      const pt::time_duration& Base::getTimeDelta() const {
+	return waveform_->getTimeDelta();
+      }
+
+
       void Base::toStream(std::iostream& stream) const {
 
 	// write waveform to stream
@@ -122,6 +128,8 @@ namespace blitzortung {
 	size.add(gpsStatus_);
 	
 	unsigned int waveformSize = Sample::Waveform::GetSize(getNumberOfSamples());
+
+	//std::cout << "getSize() : gps: " << size.get() << " wfm: " << waveformSize << " , # of samples: " << getNumberOfSamples() << std::endl;
 	
 	return size.get() + waveformSize;
       }

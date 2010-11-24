@@ -3,6 +3,7 @@
 #include "data/SamplesHeader.h"
 #include "data/sample/Base.h"
 #include "data/sample/V1.h"
+#include "data/sample/V2.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
@@ -178,6 +179,10 @@ namespace blitzortung {
       switch (version_) {
 	case 1:
 	  sampleCreator_ = sample::Base::Creator::P(new sample::V1::Creator());
+	  break;
+
+	case 2:
+	  sampleCreator_ = sample::Base::Creator::P(new sample::V2::Creator());
 	  break;
 
 	default:
