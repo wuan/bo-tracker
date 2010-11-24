@@ -18,6 +18,16 @@ namespace blitzortung {
       status_ = gps.getStatus();
     }
 
+    GpsInfo::GpsInfo()
+    {
+      longitude_ = 11.2;
+      latitude_ = 48.1;
+      altitude_ = 535;
+      
+      satelliteCount_ = 6;
+      status_ = 'A';
+    }
+
     GpsInfo::~GpsInfo()
     {
     }
