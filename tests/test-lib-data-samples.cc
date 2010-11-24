@@ -1,26 +1,25 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include "data/Sample.h"
 #include "data/sample/V1.h"
 #include "test-lib-data-samples.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION( SampleTest );
 
-bo::data::sample::Base::AP SampleTest::getSample() {
-  return bo::data::sample::Base::AP((*sampleCreator_)());
-}
-
 bo::data::sample::Base::AP SampleTest::getSample(const pt::ptime& time) {
+  // create waveform
+  bo::data::Waveform<short>::AP wfm(new bo::data::Waveform<short>(time + pt::nanoseconds(3125) * 10, pt::nanoseconds(3125)));
 
-  bo::data::Waveform<short>::AP wfm(new bo::data::Waveform<short>(time + pt::nanoseconds(3125) * 10));
+  // create GpsInfo
+  bo::data::GpsInfo::AP gpsInfo(new bo::data::GpsInfo());
 
-  bo::data::sample::Base::AP sample = getSample();
-  sample->setWaveform(wfm);
-  sample->setAntennaLongitude(11.0);
-  sample->setAntennaLatitude(49.0);
-  sample->setAntennaAltitude(550);
-  sample->setGpsNumberOfSatellites(8);
-  sample->setGpsStatus('A');
+  // create internal sample
+  bo::data::Sample::AP internalSample(new bo::data::Sample(wfm, gpsInfo));
+  
+  // create new sample and set information from internal sample
+  bo::data::sample::Base::AP sample((*sampleCreator_)());
+  sample->set(internalSample);
 
   return sample;
 }
@@ -64,18 +63,7 @@ bo::data::Samples::P SampleTest::getSamples1() {
 
   for (std::vector<pt::time_duration>::iterator sampleTime = sampleTimes.begin(); sampleTime != sampleTimes.end(); sampleTime++) {
     pt::ptime sampleDateTime(sampleDate, *sampleTime);
-    bo::data::sample::Base::AP sample((*sampleCreator_)());
-
-    bo::data::WfmS::AP wfm(new bo::data::WfmS(sampleDateTime));
-    //sample->setTime(sampleDateTime);
-    //sample->setAmplitude(1.0, 0.5, 1);
-    //sample->setOffset(0, 1);
-    sample->setWaveform(wfm);
-    sample->setAntennaLongitude(11.0);
-    sample->setAntennaLatitude(49.0);
-    sample->setAntennaAltitude(550);
-    sample->setGpsNumberOfSatellites(8);
-    sample->setGpsStatus('A');
+    bo::data::sample::Base::AP sample = getSample(sampleDateTime);
 
     samples->add(sample);
   }

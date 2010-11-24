@@ -45,6 +45,8 @@ namespace blitzortung {
 	\param gps const reference to gps hardware
 	*/
 	GpsInfo(const hardware::gps::Base& gps);
+	
+	GpsInfo();
 
 	typedef std::auto_ptr<GpsInfo> AP;
 

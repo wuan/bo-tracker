@@ -31,12 +31,12 @@ void HardwareTest::testV4() {
 
   bo::hardware::gps::Sirf gps(comm);
 
-  bo::hardware::pcb::V4 pcb(comm, gps, bo::data::sample::V1::Creator());
+  bo::hardware::pcb::V4 pcb(comm, gps);
 
   int count = 0;
   while (pcb.isOpen()) {
 
-    bo::data::sample::Base::AP sample = pcb.read();
+    bo::data::Sample::AP sample = pcb.read();
 
     if (sample.get() != 0) {
       //std::cout << *sample << std::endl;
@@ -64,12 +64,12 @@ void HardwareTest::testV6() {
 
   bo::hardware::gps::Sirf gps(comm);
 
-  bo::hardware::pcb::V6 pcb(comm, gps, bo::data::sample::V1::Creator());
+  bo::hardware::pcb::V6 pcb(comm, gps);
 
   int count = 0;
   while (pcb.isOpen()) {
 
-    bo::data::sample::Base::AP sample = pcb.read();
+    bo::data::Sample::AP sample = pcb.read();
 
     if (sample.get() != 0) {
       //std::cout << *sample << std::endl;

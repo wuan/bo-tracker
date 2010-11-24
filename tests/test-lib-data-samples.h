@@ -20,7 +20,6 @@ class SampleTest : public CPPUNIT_NS :: TestFixture
 
   bo::data::Samples::P getSamples1();
   bo::data::Samples::P getSamples2();
-  bo::data::sample::Base::AP getSample();
   bo::data::sample::Base::AP getSample(const pt::ptime&);
 
   public:
