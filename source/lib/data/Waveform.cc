@@ -1,5 +1,6 @@
 #include "data/Waveform.h"
 #include "util/Stream.h"
+#include "util/Size.h"
 
 namespace blitzortung {
   namespace data {
@@ -13,13 +14,30 @@ namespace blitzortung {
 
     template <typename T>
     Waveform<T>::Waveform(std::iostream& stream, gr::date date, const unsigned int elements) {
-      long long int nanoseconds;
-      util::Stream::ReadValue(stream, nanoseconds);
+      {
+	unsigned long long int nanoseconds;
+	util::Stream::ReadValue(stream, nanoseconds);
 
-      // fixed nanosecond to time conversion
-      int seconds = nanoseconds / 1000000000ULL;
-      nanoseconds %= 1000000000ULL;
-      pt::ptime time = pt::ptime(date, pt::seconds(seconds) + pt::nanoseconds(nanoseconds));
+	// fixed nanosecond to time conversion
+	int seconds = nanoseconds / 1000000000ULL;
+	nanoseconds %= 1000000000ULL;
+
+	t0_ = pt::ptime(date, pt::seconds(seconds) + pt::nanoseconds(nanoseconds));
+      }
+
+      unsigned short deltaNanoseconds = 0;
+      if (elements > 1) {
+	util::Stream::ReadValue(stream, deltaNanoseconds);
+      }
+      dt_ = pt::nanoseconds(deltaNanoseconds);
+
+      for (unsigned int i=0; i < elements; i++) {
+	T xvalue, yvalue;
+	util::Stream::ReadValue(stream, xvalue);
+	util::Stream::ReadValue(stream, yvalue);
+	add(xvalue, yvalue);
+      }
+
     }
 
     template <typename T>
@@ -101,11 +119,46 @@ namespace blitzortung {
     }
 
     template <typename T>
-    void Waveform<T>::write(std::iostream& stream) {
-      long long int nanoseconds = t0_.time_of_day().total_nanoseconds();
+    void Waveform<T>::write(std::iostream& stream, unsigned int elementCount) {
+
+      unsigned long long int nanoseconds = t0_.time_of_day().total_nanoseconds();
       util::Stream::WriteValue(stream, nanoseconds);
-      util::Stream::WriteValue(stream, dt_);
+
+      unsigned int elements = xdata_.size();
+      if (elements != elementCount)
+	throw exception::Base("data::Waveform::write() element count mismatch");
+
+      if (elements > 1) {
+	unsigned short deltaNanoseconds = dt_.total_nanoseconds();
+	util::Stream::WriteValue(stream, deltaNanoseconds);
+      }
+
+      for (unsigned int i=0; i < elements; i++) {
+	util::Stream::WriteValue(stream, xdata_[i]);
+	util::Stream::WriteValue(stream, ydata_[i]);
+      }
     }
+
+    template <typename T>
+      unsigned int Waveform<T>::GetSize(unsigned int elements) {
+	util::Size size;
+
+	long long int nanoseconds;
+	size.add(nanoseconds);
+
+	if (elements > 1) {
+	  unsigned short deltaNanoseconds;
+	  size.add(deltaNanoseconds);
+	}
+
+	util::Size elementSize;
+
+	T element;
+	elementSize.add(element);
+
+	// gps data size + two times the size of an element (for x and y value)
+	return size.get() + elementSize.get() * 2 * elements;
+      }
 
     //! explicit instatiation of functions to be linked afterwards
     template class Waveform<double>;

@@ -25,7 +25,7 @@ namespace blitzortung {
 	typedef std::auto_ptr<Sample> AP;
 
 	//! type definition for waveform used in samples
-	typedef data::Waveform<short> Waveform;
+	typedef data::Waveform<char> Waveform;
 
       private:
 

@@ -1,4 +1,5 @@
 #include "data/sample/Base.h"
+#include "util/Size.h"
 
 namespace blitzortung {
   namespace data {
@@ -31,12 +32,12 @@ namespace blitzortung {
 	os << " " << sample.getAntennaAltitude();
 	os << " " << (int) sample.getGpsNumberOfSatellites();
 
-	for (int peak=0; peak<=0; peak++) {
+	for (unsigned int i=0; i < sample.getNumberOfSamples(); i++) {
 	  const Sample::Waveform& wfm = sample.getWaveform();
-	  os.precision(3);
-	  os << " " << wfm.getTime(peak).time_of_day().total_nanoseconds() / 1e3;
+	  //os.precision(3);
+	  //os << " " << wfm.getTime(peak).time_of_day().total_nanoseconds() / 1e3;
 	  os.precision(2);
-	  os << " " << wfm.getX(peak) << " " << wfm.getY(peak);
+	  os << " " << wfm.getX(i) << " " << wfm.getY(i);
 	}
 
 	// restore original locale
@@ -87,7 +88,11 @@ namespace blitzortung {
       }
 
       void Base::toStream(std::iostream& stream) const {
-	waveform_->write(stream);
+
+	// write waveform to stream
+	waveform_->write(stream, getNumberOfSamples());
+
+	// write gps information to stream
 	util::Stream::WriteValue(stream, longitude_);
 	util::Stream::WriteValue(stream, latitude_);
 	util::Stream::WriteValue(stream, altitude_);
@@ -96,7 +101,10 @@ namespace blitzortung {
       }
       
       void Base::fromStream(std::iostream& stream, const gr::date& date) {
+	// read waveform from stream
 	waveform_ = Sample::Waveform::AP(new Sample::Waveform(stream, date, getNumberOfSamples()));
+
+	// read gps information from stream
 	util::Stream::ReadValue(stream, longitude_);
 	util::Stream::ReadValue(stream, latitude_);
 	util::Stream::ReadValue(stream, altitude_);
@@ -106,15 +114,16 @@ namespace blitzortung {
       
       //! get binary storage size of sample
       unsigned int Base::getSize() const {
-	Size size;
+	util::Size size;
 	size.add(longitude_);
 	size.add(latitude_);
 	size.add(altitude_);
 	size.add(gpsNumberOfSatellites_);
 	size.add(gpsStatus_);
 	
-	// TODO add size of waveform
-	return size.get();
+	unsigned int waveformSize = Sample::Waveform::GetSize(getNumberOfSamples());
+	
+	return size.get() + waveformSize;
       }
 	    
       

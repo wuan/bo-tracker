@@ -22,7 +22,7 @@ namespace blitzortung {
       }
 
       unsigned short V1::getNumberOfSamples() const {
-        return 128;
+        return 1;
       }
 
     }
