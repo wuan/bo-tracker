@@ -53,6 +53,7 @@ libblitzortung_la_SOURCES = \
 	output/File.h output/File.cc \
 	\
 	util/RingBuffer.h util/RingBuffer.cc \
+	util/Size.h \
 	util/String.h util/String.cc \
 	util/Stream.h \
 	$(NULL)

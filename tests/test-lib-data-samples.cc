@@ -9,7 +9,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION( SampleTest );
 
 bo::data::sample::Base::AP SampleTest::getSample(const pt::ptime& time) {
   // create waveform
-  bo::data::Waveform<short>::AP wfm(new bo::data::Waveform<short>(time + pt::nanoseconds(3125) * 10, pt::nanoseconds(3125)));
+  bo::data::Sample::Waveform::AP wfm(new bo::data::Sample::Waveform(time + pt::nanoseconds(3125) * 10, pt::nanoseconds(3125)));
+  wfm->add(100,0);
 
   // create GpsInfo
   bo::data::GpsInfo::AP gpsInfo(new bo::data::GpsInfo());
@@ -147,7 +148,7 @@ void SampleTest::testAppend() {
 
 void SampleTest::testSize() {
 
-  const unsigned int dataSize = 30;
+  const unsigned int dataSize = 22;
 
   gr::date sampleDate(2010,8,1);
 
@@ -157,8 +158,8 @@ void SampleTest::testSize() {
 
   sample->toStream(ss);
 
-  CPPUNIT_ASSERT_EQUAL(sample->getSize(), dataSize);
+  CPPUNIT_ASSERT_EQUAL(dataSize, sample->getSize());
 
-  CPPUNIT_ASSERT_EQUAL(ss.str().size(), dataSize);
+  CPPUNIT_ASSERT_EQUAL(dataSize, ss.str().size());
 
 }

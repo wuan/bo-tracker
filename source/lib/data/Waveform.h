@@ -16,10 +16,10 @@ namespace blitzortung {
       private:
 
 	//! reference time
-	const pt::ptime t0_;
+	pt::ptime t0_;
 
 	//! time difference between samples in nanoseconds
-	const pt::time_duration dt_;
+	pt::time_duration dt_;
 	
 	//! maximum absolute value of signal
 	float maxVal_;
@@ -84,9 +84,12 @@ namespace blitzortung {
 	pt::ptime getTime(unsigned int index) const;
 
 	//! write to stream
-	void write(std::iostream&);
+	void write(std::iostream&, unsigned int elementCount);
 
-      typedef std::auto_ptr<Waveform<T> >AP;
+	//! static function to determine size of a particular waveform structure
+	static unsigned int GetSize(unsigned int elements);
+
+	typedef std::auto_ptr<Waveform<T> >AP;
     };
 
   }

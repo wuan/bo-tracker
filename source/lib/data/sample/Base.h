@@ -31,26 +31,6 @@ namespace blitzortung {
 
 	protected:
 
-	  //! class Size to determine sizes of binary structures
-	  class Size {
-	    private:
-	      unsigned int size_;
-
-	    public:
-	      Size() :
-		size_(0)
-	    {
-	    }
-
-	      template<typename T>
-		unsigned int add(const T& value) {
-		  size_ += sizeof(value);
-		  return size_;
-		}
-	      unsigned int get() const {
-		return size_;
-	      }
-	  };
 	  
 	  //! sample waveform
 	  Sample::Waveform::AP waveform_;
