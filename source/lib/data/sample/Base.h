@@ -35,21 +35,9 @@ namespace blitzortung {
 	  //! sample waveform
 	  Sample::Waveform::AP waveform_;
 
-	  //! gps latitude
-	  float latitude_;
+	  //! sample gpsInfo
+	  GpsInfo::AP gpsInfo_;
 
-	  //! gps longitude
-	  float longitude_;
-
-	  //! gps altitude
-	  short altitude_;
-
-	  //! number of sattelites used by gps
-	  unsigned char gpsNumberOfSatellites_;
-
-	  //! gps status character
-	  char gpsStatus_;
-	  
 	public:
 
 	  //! constructor
@@ -69,11 +57,14 @@ namespace blitzortung {
 	    }
 	  };
 
-	  //! setter for sample waveform
+	  //! setter for sample
 	  void set(data::Sample::AP);
 
 	  //! getter for sample waveform
 	  virtual const data::Sample::Waveform& getWaveform() const;
+
+	  //! getter for sample gpsInfo
+	  virtual const data::GpsInfo& getGpsInfo() const;
 
 	  //! getter for sample waveform timestamp
 	  virtual const pt::ptime& getTime() const;

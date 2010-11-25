@@ -2,6 +2,7 @@
 #include "hardware/gps/Base.h"
 #include "hardware/gps/data/Location.h"
 #include "util/Stream.h"
+#include "util/Size.h"
 
 namespace blitzortung {
   namespace data {
@@ -14,8 +15,16 @@ namespace blitzortung {
       latitude_ = location.getLatitude();
       altitude_ = location.getAltitude();
       
-      satelliteCount_ = gps.getSatelliteCount();
+      numberOfSatellites_ = gps.getSatelliteCount();
       status_ = gps.getStatus();
+    }
+
+    GpsInfo::GpsInfo(std::iostream& stream) {
+	util::Stream::ReadValue(stream, longitude_);
+	util::Stream::ReadValue(stream, latitude_);
+	util::Stream::ReadValue(stream, altitude_);
+	util::Stream::ReadValue(stream, numberOfSatellites_);
+	util::Stream::ReadValue(stream, status_);
     }
 
     GpsInfo::GpsInfo()
@@ -24,7 +33,7 @@ namespace blitzortung {
       latitude_ = 48.1;
       altitude_ = 535;
       
-      satelliteCount_ = 6;
+      numberOfSatellites_ = 6;
       status_ = 'A';
     }
 
@@ -40,16 +49,43 @@ namespace blitzortung {
       return latitude_;
     }
 
-    float GpsInfo::getAltitude() const {
+    short GpsInfo::getAltitude() const {
       return altitude_;
     }
 
-    unsigned char GpsInfo::getSatelliteCount() const {
-      return satelliteCount_;
+    unsigned char GpsInfo::getNumberOfSatellites() const {
+      return numberOfSatellites_;
     }
 
     char GpsInfo::getStatus() const {
       return status_;
+    }
+
+    void GpsInfo::write(std::iostream& stream) {
+      // write gps information to stream
+      util::Stream::WriteValue(stream, longitude_);
+      util::Stream::WriteValue(stream, latitude_);
+      util::Stream::WriteValue(stream, altitude_);
+      util::Stream::WriteValue(stream, numberOfSatellites_);
+      util::Stream::WriteValue(stream, status_);
+    }
+
+    unsigned int GpsInfo::getSize() {
+
+      util::Size size;
+      size.add(longitude_);
+      size.add(latitude_);
+      size.add(altitude_);
+      size.add(numberOfSatellites_);
+      size.add(status_);
+
+      return size.get();
+    }
+
+    unsigned int GpsInfo::GetSize() {
+      static GpsInfo gpsInfo;
+
+      return gpsInfo.getSize();
     }
 
   }

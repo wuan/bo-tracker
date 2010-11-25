@@ -86,6 +86,9 @@ namespace blitzortung {
 	//! return delta time of waveform
 	const pt::time_duration& getTimeDelta() const;
 
+	//! return actual size of waveform
+	unsigned int getNumberOfSamples() const;
+
 	//! write to stream
 	void write(std::iostream&, unsigned int elementCount);
 
