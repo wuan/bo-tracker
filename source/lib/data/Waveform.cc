@@ -124,6 +124,11 @@ namespace blitzortung {
     }
 
     template <typename T>
+    unsigned int Waveform<T>::getNumberOfSamples() const {
+      return xdata_.size();
+    }
+
+    template <typename T>
     void Waveform<T>::write(std::iostream& stream, unsigned int elementCount) {
 
       unsigned long long int nanoseconds = t0_.time_of_day().total_nanoseconds();

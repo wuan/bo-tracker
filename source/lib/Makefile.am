@@ -7,7 +7,17 @@ AM_LDFLAGS = \
 
 lib_LTLIBRARIES = libblitzortung.la
 
+libblitzortung_la_LDFLAGS = \
+	-lboost_thread \
+	-lboost_regex \
+	-llog4cpp \
+	-release ${VERSION} \
+	-version_info ${LIBRARY_VERSION} \
+	-no undefined
+
 libblitzortung_la_SOURCES = \
+	DataThread.h DataThread.cc \
+	\
 	data/Sample.h data/Sample.cc \
 	data/Samples.h data/Samples.cc \
 	data/SamplesFile.h data/SamplesFile.cc \
@@ -43,14 +53,19 @@ libblitzortung_la_SOURCES = \
 	\
 	namespace.h \
 	\
-	network/Base.h network/Base.cc \
-	network/Transfer.h network/Transfer.cc \
-	network/Queue.h network/Queue.cc \
 	network/Creds.h network/Creds.cc \
+	network/transfer/Base.h network/transfer/Base.cc \
+	network/transfer/Tcp.h network/transfer/Tcp.cc \
+	network/transfer/Udp.h network/transfer/Udp.cc \
+	network/transfer/None.h network/transfer/None.cc \
 	\
 	output/Base.h \
 	output/None.h output/None.cc \
 	output/File.h output/File.cc \
+	\
+	Process.h Process.cc \
+	\
+	Queue.h Queue.cc \
 	\
 	util/RingBuffer.h util/RingBuffer.cc \
 	util/Size.h \

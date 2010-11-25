@@ -35,7 +35,6 @@ namespace blitzortung {
 	//! corresponding gps information
 	GpsInfo::AP gpsInfo_;
 
-
       public:
 
         //! create a Sample object
@@ -68,6 +67,8 @@ namespace blitzortung {
 	};
 
     };
+
+    std::ostream& operator << (std::ostream& os, const Sample&);
 
   }
 }

@@ -20,7 +20,8 @@
 #include "hardware/pcb/V6.h"
 #include "data/sample/V1.h"
 #include "data/sample/V2.h"
-#include "network/Base.h"
+#include "Process.h"
+#include "network/transfer/Udp.h"
 #include "output/File.h"
 #include "output/None.h"
 #include "util/RingBuffer.h"
@@ -184,6 +185,10 @@ int main(int argc, char **argv) {
   creds.setUsername(username);
   creds.setPassword(password);
 
+  bo::network::transfer::Base::AP transfer;
+
+  transfer = bo::network::transfer::Base::AP(new bo::network::transfer::Udp(creds));
+
   bo::output::Base::AP output;
 
   if (outputFile != "") {
@@ -193,14 +198,14 @@ int main(int argc, char **argv) {
   }
 
   //! create object of network driver for sample transmission
-  bo::network::Base::AP network(new bo::network::Base(creds, sleepTime, eventRateLimit, *output));
+  bo::Process process(*transfer, pt::seconds(sleepTime), eventRateLimit, *output);
 
   while (hardware->isOpen()) {
 
     bo::data::Sample::AP sample = hardware->read();
 
     if (sample.get() != 0) {
-      network->push(sample);
+      process.push(sample);
     }
 
   }
