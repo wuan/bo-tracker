@@ -9,7 +9,7 @@
 #include "Logger.h"
 #include "data/Samples.h"
 #include "data/SamplesHeader.h"
-#include "data/sample/Base.h"
+#include "data/Sample.h"
 
 namespace blitzortung {
   namespace data {
@@ -35,10 +35,10 @@ namespace blitzortung {
 	mutable Logger logger_;
 
 	//! read a single sample
-	sample::Base::AP readSample();
+	Sample::AP readSample();
 
 	//! append/write samples to file with given filename
-	void writeSamples(const std::string&, sample::Base::VP, bool append=false);
+	void writeSamples(const std::string&, const Samples&, bool append=false);
 
 	//! open the fstream
 	void open(std::ios_base::openmode);
@@ -50,12 +50,12 @@ namespace blitzortung {
 	void close();
 
         //! do btree search for sample position
-	unsigned int findSample(const data::sample::Base::AP&, const pt::time_duration& target, unsigned int start, unsigned int end);
+	unsigned int findSample(const pt::time_duration& target, unsigned int start, unsigned int end);
 
       public:
 
 	//! constructor
-	SamplesFile(const std::string&, const SamplesHeader&);
+	SamplesFile(const std::string&);
 
 	//! destructor
 	~SamplesFile();
@@ -66,14 +66,17 @@ namespace blitzortung {
 	//! get Filename
 	const std::string getFilename() const;
 
+	//! get Header
+	const SamplesHeader& getHeader() const;
+
 	//! append or create a new file
-	void append(sample::Base::VP);
+	void append(const Samples&);
 	
 	//! overwrite or create a new file
-	void write(sample::Base::VP);
+	void write(const Samples&);
 	
 	//! read time range from file
-	sample::Base::VP read(const pt::time_duration& start = pt::time_duration(pt::not_a_date_time), const pt::time_duration& end = pt::time_duration(pt::not_a_date_time));
+	Sample::VP read(const pt::time_duration& start = pt::time_duration(pt::not_a_date_time), const pt::time_duration& end = pt::time_duration(pt::not_a_date_time));
     };
 
   }

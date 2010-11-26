@@ -3,38 +3,30 @@
 
 #include "namespaces.h"
 #include "Logger.h"
-#include "data/sample/Base.h"
+#include "data/Sample.h"
 
 namespace blitzortung {
   namespace data {
     namespace sample {
 
       //! class V2 for sample data version 2
-      class V2 : public Base {
+      class V2 : public Sample {
 	
 	public:
-	  //! type definition for vector container
-	  typedef boost::ptr_vector<V2> V;
-	  typedef V::iterator VI;
-	  typedef V::const_iterator CVI;
-	  typedef boost::shared_ptr<V> VP;
 
-	  //! constructor
-	  V2();
+	  V2(Sample::Waveform::AP, GpsInfo::AP);
 
-	  //! destructor
-	  virtual ~V2();
-
-	  //! Creator
-	  struct Creator : public Base::Creator {
-	    virtual Base* operator()() const;
-	  };
+	  V2(std::iostream& stream, const gr::date& date);
 
 	  //! getter for format version
 	  virtual unsigned short getVersion() const;
 
 	  //! getter for number of samples in waveform
 	  unsigned short getNumberOfSamples() const;
+
+	  //! perform special processing befor saving data
+	  Sample::Waveform::AP processWaveform() const;
+
       };
 
     }

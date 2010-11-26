@@ -4,7 +4,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "namespaces.h"
-#include "data/sample/Base.h"
+#include "data/Sample.h"
 #include "data/SamplesHeader.h"
 #include "exception/Base.h"
 
@@ -15,30 +15,30 @@ namespace blitzortung {
     class Samples : boost::noncopyable {
 
       public:
-        typedef sample::Base::VI I;
-        typedef sample::Base::CVI CI;
+        typedef Sample::VI I;
+        typedef Sample::CVI CI;
 	typedef boost::shared_ptr<Samples> P;
-	typedef sample::Base Sample;
+	//typedef sample::Base Sample;
 
       protected:
-        //! header for samples
-	SamplesHeader header_;
+        //! date of samples
+	gr::date date_;
 
 	//! storage for samples
 	Sample::VP samples_;
 
 	//! add sample reference by pointer to collection
-	void add(sample::Base*);
+	void add(Sample*);
 
       public:
 
 	Samples();
 
 	//! add sample to collection
-	void add(sample::Base::AP);
+	void add(Sample::AP);
 
 	//! add sample to collection
-	void add(sample::Base::V::auto_type);
+	void add(Sample::V::auto_type);
 
 	//! add other sample collection to sample collection
 	void add(Samples&) throw(exception::Base);
@@ -68,16 +68,16 @@ namespace blitzortung {
 	Sample::VI erase(Sample::VI, Sample::VI);
 
 	//! get const front of collection
-	const sample::Base& front() const;
+	const Sample& front() const;
 	
 	//! get front of collection
-	sample::Base& front();
+	Sample& front();
 	
 	//! get const back of collection
-	const sample::Base& back() const;
+	const Sample& back() const;
 	
 	//! get back of collection
-	sample::Base& back();
+	Sample& back();
 	
 	//! get const iterator to begin of collection
 	Sample::CVI begin() const;

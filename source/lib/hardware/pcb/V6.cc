@@ -8,8 +8,8 @@ namespace blitzortung {
 
       const pt::time_duration V6::SAMPLE_RATE = pt::nanoseconds(3125);
 
-      V6::V6(comm::Base& comm, gps::Base& gps) :
-	Base(comm, gps),
+      V6::V6(comm::Base& comm, gps::Base& gps, const data::SampleFactory& sampleFactory) :
+	Base(comm, gps, sampleFactory),
 	logger_("hardware.pcb.V6")
       {
 	if (logger_.isDebugEnabled())
@@ -70,7 +70,7 @@ namespace blitzortung {
 	  wfm->add(xval, yval);
 	}
 
-	data::Sample::AP sample(new data::Sample(wfm, gps_.getInfo()));
+	data::Sample::AP sample = sampleFactory_.createSample(wfm, gps_.getInfo());
 
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "parseData() done";

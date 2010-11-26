@@ -6,7 +6,10 @@
 
 #include "namespaces.h"
 #include "Logger.h"
-#include "data/sample/Base.h"
+#include "data/Sample.h"
+#include "data/SampleFactory.h"
+#include "data/sample/V1Factory.h"
+#include "data/sample/V2Factory.h"
 
 namespace blitzortung {
   namespace data {
@@ -34,14 +37,14 @@ namespace blitzortung {
 	//! strage size of one sample
 	unsigned int sampleSize_;
 
-	//! sample creator object
-	data::sample::Base::Creator::P sampleCreator_;
+	//! sample creator
+	SampleFactory::AP sampleFactory_;
 
 	//! class logger
 	mutable Logger logger_;
 
 	//! set creator according to file version
-	void setCreator();
+	void setFactory();
 
       public:
 
@@ -77,18 +80,18 @@ namespace blitzortung {
 	bool operator!=(const SamplesHeader&);
 
 	//! set creator object depending on file version number
-	sample::Base::AP createSample() const;
+	Sample::AP createSample(std::iostream& stream) const;
 
 	std::string formatFilename(const std::string& fileformat) const;
 
 	// check, if a file with given filename exists
-	bool fileExists(const std::string&);
+	bool fileExists(const std::string&) const;
 
 	//! read file header
 	void read(const std::string&);
 	
 	//! write file header
-	void write(const std::string&);
+	void write(const std::string&) const;
 	
 	unsigned int getSize() const;
     };

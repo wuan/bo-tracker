@@ -5,8 +5,8 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
 
-      V4::V4(comm::Base& serial, gps::Base& gps) :
-	Base(serial, gps),
+      V4::V4(comm::Base& serial, gps::Base& gps, const data::SampleFactory& sampleFactory) :
+	Base(serial, gps, sampleFactory),
 	logger_("hardware.pcb.V4")
       {
 	if (logger_.isDebugEnabled())
@@ -42,7 +42,7 @@ namespace blitzortung {
 	    data::Sample::Waveform::AP waveform(new data::Sample::Waveform(eventtime));
 	    waveform->add(maxX/1023.0, maxY/1023.0);
 
-	    sample = data::Sample::AP(new data::Sample(waveform, gpsInfo));
+	    sample = sampleFactory_.createSample(waveform, gpsInfo);
 	  } else {
 	    logger_.warnStream() << "GPS information is not yet valid -> no sample created";
 	  }

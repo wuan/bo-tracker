@@ -8,6 +8,7 @@
 #include "hardware/comm/Dummy.h"
 #include "hardware/gps/Sirf.h"
 #include "data/sample/V1.h"
+#include "data/sample/V1Factory.h"
 
 #include "test-lib-hardware-pcb.h"
 
@@ -31,7 +32,9 @@ void HardwareTest::testV4() {
 
   bo::hardware::gps::Sirf gps(comm);
 
-  bo::hardware::pcb::V4 pcb(comm, gps);
+  bo::data::sample::V1Factory sampleFactory;
+
+  bo::hardware::pcb::V4 pcb(comm, gps, sampleFactory);
 
   int count = 0;
   while (pcb.isOpen()) {
@@ -64,7 +67,9 @@ void HardwareTest::testV6() {
 
   bo::hardware::gps::Sirf gps(comm);
 
-  bo::hardware::pcb::V6 pcb(comm, gps);
+  bo::data::sample::V1Factory sampleFactory;
+
+  bo::hardware::pcb::V6 pcb(comm, gps, sampleFactory);
 
   int count = 0;
   while (pcb.isOpen()) {

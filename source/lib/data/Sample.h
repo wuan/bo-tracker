@@ -35,16 +35,13 @@ namespace blitzortung {
 	//! corresponding gps information
 	GpsInfo::AP gpsInfo_;
 
+      protected:
+
+	Sample(Sample::Waveform::AP, GpsInfo::AP);
+
+	Sample(std::iostream& stream, const gr::date& date, unsigned int size);
+
       public:
-
-        //! create a Sample object
-	/*!
-	\param gps const reference to gps hardware
-	*/
-	Sample(Waveform::AP, GpsInfo::AP);
-
-	//! destroy a waveform object
-	virtual ~Sample();
 
 	//! get reference to waveform
 	const Waveform& getWaveform() const;
@@ -65,6 +62,24 @@ namespace blitzortung {
 	struct CompareAmplitude : public std::binary_function<Sample, Sample, bool> {
 	  bool operator()(const first_argument_type& x, const second_argument_type& y) const;
 	};
+	
+	//! getter for sample format version
+	virtual unsigned short getVersion() const = 0;
+
+	//! getter for amount of samples in waveform
+	virtual unsigned short getNumberOfSamples() const = 0;
+
+	//! process sample to data save format
+	virtual Sample::Waveform::AP processWaveform() const = 0;
+
+	//! write binary object data to stream
+	void toStream(std::iostream&) const;
+
+	//! read binary object data from stream
+	void fromStream(std::iostream&, const gr::date&);
+
+	//! get binary storage size of sample
+	unsigned int getSize() const;
 
     };
 

@@ -7,6 +7,7 @@
 #include "hardware/comm/Base.h"
 #include "hardware/gps/Base.h"
 #include "data/Sample.h"
+#include "data/SampleFactory.h"
 
 namespace blitzortung {
 namespace hardware {
@@ -26,13 +27,13 @@ namespace hardware {
 	//! vector for data fields
 	std::vector<std::string> fields_;
 
-	//! logger for objects of this class
-	mutable Logger logger_;
-
       protected:
 
 	//! reference to gps device object
 	gps::Base& gps_;
+
+	//! reference to sample factory
+	const data::SampleFactory& sampleFactory_;
 
 	//! returnes int value of given hex string
 	int parseHex(const std::string& hexString);
@@ -40,10 +41,15 @@ namespace hardware {
 	//! gps parser interface, overload for modification
         virtual void parseGps(const std::vector<std::string>&);
 
+      private:
+
+	//! logger for objects of this class
+	mutable Logger logger_;
+
       public:
 
 	//! constructor for base class
-	Base(comm::Base&, gps::Base&);
+	Base(comm::Base&, gps::Base&, const data::SampleFactory&);
 
 	//! destructor
 	virtual ~Base();

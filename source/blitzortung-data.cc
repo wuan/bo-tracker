@@ -42,6 +42,10 @@ pt::time_duration parseTime(const std::string& inputString, bool isEnd=false) {
     return time;
 }
 
+void printSample(const bo::data::Sample& sample) {
+    std::cout << sample << std::endl;
+}
+
 int main(int argc, char **argv) {
 
   std::string file = "";
@@ -56,6 +60,7 @@ int main(int argc, char **argv) {
     ("input-file,i", po::value<std::string>(&file), "file name")
     ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
     ("endtime,e", po::value<std::string>(&endTimeString), "end time in HHMM or HHMMSS format")
+    ("time-series,t", "output timeseries of single data points")
     ("verbose,v", "verbose mode")
     ("debug", "debug mode")
     ;
@@ -105,8 +110,12 @@ int main(int argc, char **argv) {
 
   samples.readFromFile(file, startTime, endTime);
 
+  void (*sampleOperation)(const bo::data::Sample&);
+
+  sampleOperation = &printSample;
+
   for (bo::data::Samples::CI sample = samples.begin(); sample != samples.end(); sample++) {
-    std::cout << *sample << std::endl;
+    (*sampleOperation)(*sample);
   }
       
 }

@@ -19,15 +19,17 @@ libblitzortung_la_SOURCES = \
 	DataThread.h DataThread.cc \
 	\
 	data/Sample.h data/Sample.cc \
+	data/SampleFactory.h \
 	data/Samples.h data/Samples.cc \
 	data/SamplesFile.h data/SamplesFile.cc \
 	data/SamplesHeader.h data/SamplesHeader.cc \
 	data/Waveform.h data/Waveform.cc \
 	data/GpsInfo.h data/GpsInfo.cc \
 	\
-	data/sample/Base.h data/sample/Base.cc \
 	data/sample/V1.h data/sample/V1.cc \
 	data/sample/V2.h data/sample/V2.cc \
+	data/sample/V1Factory.h data/sample/V1Factory.cc \
+	data/sample/V2Factory.h data/sample/V2Factory.cc \
 	\
 	exception/Base.h exception/Base.cc \
 	\
