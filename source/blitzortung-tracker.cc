@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
   unsigned short serialBaudRate = 19200;
   unsigned short sleepTime = 20;
   unsigned short sampleVersion = 2;
-  unsigned char pcbVersion = 6;
+  unsigned short pcbVersion = 6;
   double eventRateLimit = 1.0;
   std::string gpsType = "sirf";
 
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
     ("sleep-time,s", po::value<unsigned short>(&sleepTime)->default_value(sleepTime), "sleep time between data transmission")
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (sjn, garmin or sirf)")
-    ("pcb-version", po::value<unsigned char>(&pcbVersion)->default_value(pcbVersion), "version of PCB (4 or 6)")
+    ("pcb-version", po::value<unsigned short>(&pcbVersion)->default_value(pcbVersion), "version of PCB (4 or 6)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("output,o", po::value<std::string>(&outputFile), "output file name (e.g. Name_%Y%m%d.bor)")
     ("output-format", po::value<unsigned short>(&sampleVersion)->default_value(sampleVersion), "output file format version")
@@ -156,7 +156,7 @@ int main(int argc, char **argv) {
 
     default:
       std::ostringstream oss;
-      oss << "invalid sample version: " << pcbVersion;
+      oss << "invalid sample version: " << sampleVersion;
       throw bo::exception::Base(oss.str());
   }
 
@@ -191,7 +191,7 @@ int main(int argc, char **argv) {
 
   bo::output::Base::AP output;
 
-  if (outputFile != "") {
+  if (vm.count("output")) {
     output = bo::output::Base::AP(new bo::output::File(outputFile));
   } else {
     output = bo::output::Base::AP(new bo::output::None());

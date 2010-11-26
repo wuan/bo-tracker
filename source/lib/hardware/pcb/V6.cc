@@ -36,6 +36,9 @@ namespace blitzortung {
 	  pt::ptime eventtime = gps_.getTime(counter);
 
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
+	    if (logger_.isInfoEnabled())
+	      logger_.infoStream() << "ѕtring data size: " << fields[2].size();
+
 	    sample = parseData(eventtime, fields[2]);
 
 	    if (logger_.isDebugEnabled())
@@ -57,6 +60,9 @@ namespace blitzortung {
 	const int AD_MAX_VALUE = 128;
 
 	int numberOfSamples = data.size() >> 2;
+
+	if (logger_.isInfoEnabled())
+	  logger_.infoStream() << "parseData() " << numberOfSamples;
        
 	data::Sample::Waveform::AP wfm(new data::Sample::Waveform(eventtime, SAMPLE_RATE));
 
@@ -64,8 +70,8 @@ namespace blitzortung {
 
 	  int index = i << 2;
 
-	  short xval = parseHex(data.substr(index, 2)) - AD_MAX_VALUE;
-	  short yval = parseHex(data.substr(index + 2, 2)) - AD_MAX_VALUE;
+	  uns xval = parseHex(data.substr(index, 2));
+	  short yval = parseHex(data.substr(index + 2, 2));
 
 	  wfm->add(xval, yval);
 	}

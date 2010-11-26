@@ -35,8 +35,13 @@ namespace blitzortung {
 	oss << " " << gpsInfo.getLatitude() << " " << gpsInfo.getLongitude();
 	oss << " " << gpsInfo.getAltitude();
 	oss << " " << creds_.getUsername() << " " << creds_.getPassword();
-	oss << " " << wfm.getMaxX() << " " << wfm.getMaxY();
-	oss << " " << gpsInfo.getStatus() << " " << VERSION << std::endl;
+	oss << " " << gpsInfo.getStatus() << " " << 2 << " " << 64 << " " << 8;
+	oss << " " << wfm.getTimeDelta().total_nanoseconds() << " ";
+	oss << std::hex << std::uppercase << std::setw(2) << std::setfill('0');
+	for (int i = 0; i < wfm.getNumberOfSamples(); i++) {
+	  oss << int(wfm.getX(i))+(1 << 7) << int(wfm.getY(i))+ (1 <<7);
+	}
+	oss << std::nouppercase << " " << VERSION << std::endl;
 
 	// restore original locale
 	oss.imbue(oldLocale);

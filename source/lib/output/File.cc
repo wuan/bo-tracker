@@ -26,7 +26,7 @@ namespace blitzortung {
       data::Samples outputSamples;
 
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "saveData()";
+	logger_.debugStream() << "output()" << samples->size() << "samples";
 
       // move all current samples to
       for (data::Sample::VI sample = samples->begin(); sample != samples->end();) {
