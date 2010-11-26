@@ -1,7 +1,7 @@
 #include <fstream>
 
 #include "data/SamplesHeader.h"
-#include "data/sample/Base.h"
+#include "data/Sample.h"
 #include "data/sample/V1.h"
 #include "data/sample/V2.h"
 #include "exception/Base.h"
@@ -98,34 +98,33 @@ namespace blitzortung {
       // read file version from file
       fstream.read((char*)&version_, sizeof(version_));
 
-  
+      // check if read position corresponds to header size
       assert(fstream.tellg() == getSize());
+
+      // set object to create sample objects 
+      setFactory();
+
+      data::Sample::AP firstSample = sampleFactory_->createSample(fstream, date_);
+      sampleSize_ = firstSample->getSize();
       
       fstream.seekg(0, std::ios::end);
       unsigned int filesize = fstream.tellg();
       
       fstream.close();
       
-      // set object to create sample objects 
-      setCreator();
-
-      sample::Base::AP dummySample = createSample();
-      
       filesize -= getSize();
-
-      sampleSize_ = dummySample->getSize();
 
       numberOfSamples_ = filesize / sampleSize_;
 
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "read() date " << date_ << " version " << version_ << " #samples " << numberOfSamples_ << " samplesize " << sampleSize_ << " filesize " << filesize;
 
-      if (numberOfSamples_ * dummySample->getSize() != filesize)
+      if (numberOfSamples_ * sampleSize_ != filesize)
 	throw exception::Base("data::SamplesHeader file size mismatch");
     }
 
-    sample::Base::AP SamplesHeader::createSample() const {
-      return sample::Base::AP((*sampleCreator_)());
+    Sample::AP SamplesHeader::createSample(std::iostream& stream) const {
+      return sampleFactory_->createSample(stream, date_);
     }
 	
     std::string SamplesHeader::formatFilename(const std::string& fileformat) const {
@@ -146,7 +145,7 @@ namespace blitzortung {
       }
     }
 
-    void SamplesHeader::write(const std::string& filename) {
+    void SamplesHeader::write(const std::string& filename) const {
 
       if (version_ == 0)
 	throw exception::Base("data::SamplesHeader writeHeader() invalid file version");
@@ -174,27 +173,27 @@ namespace blitzortung {
       fstream.close();
     }
 
-    void SamplesHeader::setCreator() {
+    void SamplesHeader::setFactory() {
 
       switch (version_) {
 	case 1:
-	  sampleCreator_ = sample::Base::Creator::P(new sample::V1::Creator());
+	  sampleFactory_ = SampleFactory::AP(new sample::V1Factory());
 	  break;
 
 	case 2:
-	  sampleCreator_ = sample::Base::Creator::P(new sample::V2::Creator());
+	  sampleFactory_ = SampleFactory::AP(new sample::V2Factory());
 	  break;
 
 	default:
 	  std::ostringstream oss;
-	  oss << "data::SamplesHeader setCreator() unknown file version " << version_;
+	  oss << "data::SamplesHeader setFactory() unknown file version " << version_;
 	  throw exception::Base(oss.str().c_str());
 	  break;
       }
     }
 
 
-    bool SamplesHeader::fileExists(const std::string& filename) {
+    bool SamplesHeader::fileExists(const std::string& filename) const {
       return file_exists(formatFilename(filename));
     }
     

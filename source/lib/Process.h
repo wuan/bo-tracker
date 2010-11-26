@@ -8,7 +8,7 @@
 #include "output/Base.h"
 #include "network/transfer/Base.h"
 
-#include "data/sample/Base.h"
+#include "data/Sample.h"
 
 namespace blitzortung {
 

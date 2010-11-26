@@ -2,7 +2,7 @@
 #define BLITZORTUNG_HARDWARE_PCB_V4_H_
 
 #include "hardware/pcb/Base.h"
-#include "data/sample/Base.h"
+#include "data/Sample.h"
 
 namespace blitzortung {
 namespace hardware {
@@ -20,7 +20,7 @@ namespace hardware {
       public:
       
         //! create V4 hardware object
-	V4(comm::Base&, gps::Base&);
+	V4(comm::Base&, gps::Base&, const data::SampleFactory&);
 
 	//! delete V4 hardware object	
 	virtual ~V4();

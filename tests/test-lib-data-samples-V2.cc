@@ -9,6 +9,6 @@ unsigned int SampleV2Test::getDataSize() const {
 }
 
 void SampleV2Test::setUp() {
-  sampleCreator_ = bo::data::sample::Base::Creator::P(new bo::data::sample::V2::Creator());
+  sampleFactory_ = bo::data::SampleFactory::AP(new bo::data::sample::V2Factory());
 }
 

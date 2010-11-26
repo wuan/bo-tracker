@@ -8,6 +8,7 @@
  
 #include "namespaces.h"
 #include "data/Samples.h"
+#include "data/SampleFactory.h"
  
 class SampleTest : public CPPUNIT_NS :: TestFixture
 {
@@ -22,10 +23,10 @@ class SampleTest : public CPPUNIT_NS :: TestFixture
 
   bo::data::Samples::P getSamples1();
   bo::data::Samples::P getSamples2();
-  bo::data::sample::Base::AP getSample(const pt::ptime&);
+  bo::data::Sample::AP getSample(const pt::ptime&);
 
   protected:
-  bo::data::sample::Base::Creator::P sampleCreator_;
+  bo::data::SampleFactory::AP sampleFactory_;
   virtual unsigned int getDataSize() const = 0;
 
   public:

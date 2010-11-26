@@ -143,15 +143,15 @@ int main(int argc, char **argv) {
   }
 
   // create sample creator object
-  bo::data::sample::Base::Creator::AP sampleCreator;
+  bo::data::SampleFactory::AP sampleFactory;
 
   switch (sampleVersion) {
     case 1:
-      sampleCreator = bo::data::sample::Base::Creator::AP(new bo::data::sample::V1::Creator());
+      sampleFactory = bo::data::SampleFactory::AP(new bo::data::sample::V1Factory());
       break;
 
     case 2:
-      sampleCreator = bo::data::sample::Base::Creator::AP(new bo::data::sample::V2::Creator());
+      sampleFactory = bo::data::SampleFactory::AP(new bo::data::sample::V2Factory());
       break;
 
     default:
@@ -165,11 +165,11 @@ int main(int argc, char **argv) {
 
   switch (pcbVersion) {
     case 4:
-      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V4(serial, *gps));
+      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V4(serial, *gps, *sampleFactory));
       break;
 
     case 6:
-      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V6(serial, *gps));
+      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V6(serial, *gps, *sampleFactory));
       break;
 
     default:
@@ -192,7 +192,7 @@ int main(int argc, char **argv) {
   bo::output::Base::AP output;
 
   if (outputFile != "") {
-    output = bo::output::Base::AP(new bo::output::File(outputFile, *sampleCreator));
+    output = bo::output::Base::AP(new bo::output::File(outputFile));
   } else {
     output = bo::output::Base::AP(new bo::output::None());
   }

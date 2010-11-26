@@ -3,14 +3,15 @@
 namespace blitzortung {
   namespace data {
 
-    Sample::Sample(Waveform::AP waveform, data::GpsInfo::AP gpsInfo) :
+    Sample::Sample(Sample::Waveform::AP waveform, GpsInfo::AP gpsInfo) :
       waveform_(waveform),
       gpsInfo_(gpsInfo)
     {
     }
 
-    Sample::~Sample()
-    {
+    Sample::Sample(std::iostream& stream, const gr::date& date, unsigned int size) {
+      waveform_ = Sample::Waveform::AP(new Sample::Waveform(stream, date, size));
+      gpsInfo_ = GpsInfo::AP(new GpsInfo(stream));
     }
 
     const Sample::Waveform& Sample::getWaveform() const {
@@ -63,6 +64,42 @@ namespace blitzortung {
       os.imbue(oldLocale);
 
       return os;
+    }
+
+    void Sample::toStream(std::iostream& stream) const {
+
+      Sample::Waveform::AP wfm = processWaveform();
+
+      if (wfm.get() != 0) {
+	// write processed waveform to stream
+	wfm->write(stream, getNumberOfSamples());
+      } else {
+	// write waveform to stream
+	waveform_->write(stream, getNumberOfSamples());
+      }
+
+      // write gps information to stream
+      gpsInfo_->write(stream);
+    }
+
+    void Sample::fromStream(std::iostream& stream, const gr::date& date) {
+      // read waveform from stream
+      waveform_ = Sample::Waveform::AP(new Sample::Waveform(stream, date, getNumberOfSamples()));
+
+      // read gps information from stream
+      gpsInfo_ = GpsInfo::AP(new GpsInfo(stream));
+
+    }
+
+    //! get binary storage size of sample
+    unsigned int Sample::getSize() const {
+      unsigned int gpsSize = GpsInfo::GetSize();
+
+      unsigned int waveformSize = Sample::Waveform::GetSize(getNumberOfSamples());
+
+      //std::cout << "getSize() : gps: " << gpsSize << " wfm: " << waveformSize << " , # of samples: " << getNumberOfSamples() << std::endl;
+
+      return gpsSize + waveformSize;
     }
 
 

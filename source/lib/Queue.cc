@@ -1,5 +1,5 @@
 
-#include "data/sample/Base.h"
+#include "data/Sample.h"
 #include "Queue.h"
 
 namespace blitzortung {

@@ -10,10 +10,11 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
      
-      Base::Base(comm::Base& comm, gps::Base& gps) :
+      Base::Base(comm::Base& comm, gps::Base& gps, const data::SampleFactory& sampleFactory) :
 	comm_(comm),
-	logger_("hardware.pcb.Base"),
-	gps_(gps)
+	gps_(gps),
+	sampleFactory_(sampleFactory),
+	logger_("hardware.pcb.Base")
       {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "initialized";

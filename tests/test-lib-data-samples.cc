@@ -7,26 +7,19 @@
 
 //CPPUNIT_TEST_SUITE_REGISTRATION( SampleTest );
 
-bo::data::sample::Base::AP SampleTest::getSample(const pt::ptime& time) {
-  // create new sample
-  bo::data::sample::Base::AP sample((*sampleCreator_)());
+bo::data::Sample::AP SampleTest::getSample(const pt::ptime& time) {
 
   // create waveform
   bo::data::Sample::Waveform::AP wfm(new bo::data::Sample::Waveform(time + pt::nanoseconds(3125) * 10, pt::nanoseconds(3125)));
 
-  for (unsigned int i=0; i <sample->getNumberOfSamples(); i++) {
+  for (unsigned int i=0; i < 128; i++) {
     wfm->add(100 - i, -50 + i);
   }
 
   // create GpsInfo
   bo::data::GpsInfo::AP gpsInfo(new bo::data::GpsInfo());
 
-  // create internal sample
-  bo::data::Sample::AP internalSample(new bo::data::Sample(wfm, gpsInfo));
-  
-  sample->set(internalSample);
-
-  return sample;
+  return sampleFactory_->createSample(wfm, gpsInfo);
 }
 
 bo::data::Samples::P SampleTest::getSamples1() {
@@ -68,7 +61,7 @@ bo::data::Samples::P SampleTest::getSamples1() {
 
   for (std::vector<pt::time_duration>::iterator sampleTime = sampleTimes.begin(); sampleTime != sampleTimes.end(); sampleTime++) {
     pt::ptime sampleDateTime(sampleDate, *sampleTime);
-    bo::data::sample::Base::AP sample = getSample(sampleDateTime);
+    bo::data::Sample::AP sample = getSample(sampleDateTime);
 
     samples->add(sample);
   }
@@ -152,7 +145,7 @@ void SampleTest::testSize() {
 
   gr::date sampleDate(2010,8,1);
 
-  bo::data::sample::Base::AP sample = getSample(pt::ptime(sampleDate, pt::time_duration(11,20,00)));
+  bo::data::Sample::AP sample = getSample(pt::ptime(sampleDate, pt::time_duration(11,20,00)));
 
   std::stringstream ss;
 

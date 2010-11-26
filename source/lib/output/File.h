@@ -12,19 +12,13 @@ namespace blitzortung {
 	//! output file name
 	const std::string& outputFile_;
 
-	//! sample creator
-	const data::sample::Base::Creator& sampleCreator_;
-
-	//! vector of samples
-	data::sample::Base::VP samples_;
-	
 	//! logger for this class
 	mutable Logger logger_;
 
       public:
 
 	//! create network transfer object
-	File(const std::string&, const data::sample::Base::Creator&);
+	File(const std::string&);
 
 	//! delete nework transfer object
 	virtual ~File();
