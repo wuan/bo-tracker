@@ -57,8 +57,6 @@ namespace blitzortung {
 
       data::Sample::AP V6::parseData(const pt::ptime& eventtime, const std::string& data) {
 
-	const int AD_MAX_VALUE = 128;
-
 	int numberOfSamples = data.size() >> 2;
 
 	if (logger_.isInfoEnabled())
@@ -70,8 +68,8 @@ namespace blitzortung {
 
 	  int index = i << 2;
 
-	  uns xval = parseHex(data.substr(index, 2));
-	  short yval = parseHex(data.substr(index + 2, 2));
+	  unsigned short xval = parseHex(data.substr(index, 2));
+	  unsigned short yval = parseHex(data.substr(index + 2, 2));
 
 	  wfm->add(xval, yval);
 	}
