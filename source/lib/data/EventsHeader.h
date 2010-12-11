@@ -6,16 +6,16 @@
 
 #include "namespaces.h"
 #include "Logger.h"
-#include "data/Sample.h"
-#include "data/SampleFactory.h"
-#include "data/sample/V1Factory.h"
-#include "data/sample/V2Factory.h"
+#include "data/Event.h"
+#include "data/EventFactory.h"
+#include "data/event/V1Factory.h"
+#include "data/event/V2Factory.h"
 
 namespace blitzortung {
   namespace data {
 
-    //! file io helper class for data::Samples
-    class SamplesHeader {
+    //! file io helper class for data::Events
+    class EventsHeader {
 
       private:
 	
@@ -25,20 +25,30 @@ namespace blitzortung {
 	//! static constant for date which marks the start of the epoch
 	static const gr::date STARTOFEPOCH;
 
+	//***********************************
+	
 	//! file date
 	gr::date date_;
 
-	//! file version
-	unsigned short version_;
+	//! events per entry
+	unsigned short events_;
+
+	//! number of channels
+	unsigned char channels_;
+
+	//! number of bits per event
+	unsigned char bits_;
 	
-	//! number of samples in file
-	unsigned int numberOfSamples_;
+	//***********************************
 
-	//! strage size of one sample
-	unsigned int sampleSize_;
+	//! number of events in file
+	unsigned int numberOfEntries_;
 
-	//! sample creator
-	SampleFactory::AP sampleFactory_;
+	//! strage size of one event
+	unsigned int eventSize_;
+
+	//! event creator
+	EventFactory::AP eventFactory_;
 
 	//! class logger
 	mutable Logger logger_;
@@ -49,10 +59,10 @@ namespace blitzortung {
       public:
 
 	//! constructor
-	SamplesHeader(const gr::date& date = gr::date(gr::not_a_date_time), const unsigned short version = 0);
+	EventsHeader(const gr::date& date = gr::date(gr::not_a_date_time), const unsigned short version = 0);
 
 	//! destructor
-	~SamplesHeader();
+	~EventsHeader();
 
 	//! read header from stream
 	void read(std::ifstream&);
@@ -63,11 +73,11 @@ namespace blitzortung {
 	//! get header date
 	const gr::date& getDate() const;
 	
-	//! get number of samples in file
-	unsigned int getNumberOfSamples() const;
+	//! get number of events in file
+	unsigned int getNumberOfEvents() const;
 
-	//! get storage size of one sample
-	unsigned int getSampleSize() const;
+	//! get storage size of one event
+	unsigned int getEventSize() const;
 
 	//! set header version
 	void setVersion(const unsigned short);
@@ -75,12 +85,12 @@ namespace blitzortung {
 	//! get header version
 	const unsigned short getVersion() const;
 
-	bool operator==(const SamplesHeader&);
+	bool operator==(const EventsHeader&);
 	
-	bool operator!=(const SamplesHeader&);
+	bool operator!=(const EventsHeader&);
 
 	//! set creator object depending on file version number
-	Sample::AP createSample(std::iostream& stream) const;
+	Event::AP createEvent(std::iostream& stream) const;
 
 	std::string formatFilename(const std::string& fileformat) const;
 

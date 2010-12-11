@@ -14,18 +14,15 @@ namespace blitzortung {
   namespace data {
 
     //! class for gps information
-    class Sample : boost::noncopyable {
+    class Event : boost::noncopyable {
 
       public:
 
-	typedef boost::ptr_vector<Sample> V;
+	typedef boost::ptr_vector<Event> V;
 	typedef V::iterator VI;
 	typedef V::const_iterator CVI;
 	typedef boost::shared_ptr<V> VP;
-	typedef std::auto_ptr<Sample> AP;
-
-	//! type definition for waveform used in samples
-	typedef data::Waveform<char> Waveform;
+	typedef std::auto_ptr<Event> AP;
 
       private:
 
@@ -37,9 +34,9 @@ namespace blitzortung {
 
       protected:
 
-	Sample(Sample::Waveform::AP, GpsInfo::AP);
+	Event(Waveform::AP, GpsInfo::AP);
 
-	Sample(std::iostream& stream, const gr::date& date, unsigned int size);
+	Event(std::iostream& stream, const gr::date& date, unsigned int size);
 
       public:
 
@@ -56,10 +53,10 @@ namespace blitzortung {
 	GpsInfo::AP releaseGpsInfo();
 
 	//! comparison operator <
-	bool operator<(const Sample &) const;
+	bool operator<(const Event &) const;
 
 	//! class to compare timestamp of Strokes
-	struct CompareAmplitude : public std::binary_function<Sample, Sample, bool> {
+	struct CompareAmplitude : public std::binary_function<Event, Event, bool> {
 	  bool operator()(const first_argument_type& x, const second_argument_type& y) const;
 	};
 	
@@ -67,10 +64,10 @@ namespace blitzortung {
 	virtual unsigned short getVersion() const = 0;
 
 	//! getter for amount of samples in waveform
-	virtual unsigned short getNumberOfSamples() const = 0;
+	virtual unsigned short getNumberOfEvents() const = 0;
 
 	//! process sample to data save format
-	virtual Sample::Waveform::AP processWaveform() const = 0;
+	virtual Waveform::AP processWaveform() const = 0;
 
 	//! write binary object data to stream
 	void toStream(std::iostream&) const;
@@ -83,7 +80,7 @@ namespace blitzortung {
 
     };
 
-    std::ostream& operator << (std::ostream& os, const Sample&);
+    std::ostream& operator << (std::ostream& os, const Event&);
 
   }
 }

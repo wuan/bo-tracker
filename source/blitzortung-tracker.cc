@@ -39,7 +39,6 @@ int main(int argc, char **argv) {
   std::string outputFile = "";
   unsigned short serialBaudRate = 19200;
   unsigned short sleepTime = 20;
-  unsigned short sampleVersion = 2;
   unsigned short pcbVersion = 6;
   double eventRateLimit = 1.0;
   std::string gpsType = "sirf";
@@ -61,7 +60,6 @@ int main(int argc, char **argv) {
     ("pcb-version", po::value<unsigned short>(&pcbVersion)->default_value(pcbVersion), "version of PCB (4 or 6)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("output,o", po::value<std::string>(&outputFile), "output file name (e.g. Name_%Y%m%d.bor)")
-    ("output-format", po::value<unsigned short>(&sampleVersion)->default_value(sampleVersion), "output file format version")
     ("verbose,v", "verbose mode")
     ("debug", "debug mode")
     ;
@@ -142,33 +140,25 @@ int main(int argc, char **argv) {
     throw bo::exception::Base(oss.str());
   }
 
+  // waveform format description
+  bo::data::Format::AP wfmFormat;
+
   // create sample creator object
   bo::data::SampleFactory::AP sampleFactory;
-
-  switch (sampleVersion) {
-    case 1:
-      sampleFactory = bo::data::SampleFactory::AP(new bo::data::sample::V1Factory());
-      break;
-
-    case 2:
-      sampleFactory = bo::data::SampleFactory::AP(new bo::data::sample::V2Factory());
-      break;
-
-    default:
-      std::ostringstream oss;
-      oss << "invalid sample version: " << sampleVersion;
-      throw bo::exception::Base(oss.str());
-  }
 
   // create hardware driver object for blitzortung measurement hardware
   bo::hardware::pcb::Base::AP hardware;
 
   switch (pcbVersion) {
     case 4:
+      wfmFormat = bo::data::Format::AP(new bo::data::Format(10, 2, 1));
+      sampleFactory = bo::data::SampleFactory::AP(new bo::data::sample::V1Factory());
       hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V4(serial, *gps, *sampleFactory));
       break;
 
     case 6:
+      wfmFormat = bo::data::Format::AP(new bo::data::Format(8, 2, 64));
+      sampleFactory = bo::data::SampleFactory::AP(new bo::data::sample::V2Factory());
       hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V6(serial, *gps, *sampleFactory));
       break;
 

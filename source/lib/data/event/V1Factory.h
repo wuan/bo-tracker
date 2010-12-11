@@ -4,20 +4,20 @@
 #include <boost/shared_ptr.hpp>
 
 #include "namespaces.h"
-#include "data/SampleFactory.h"
+#include "data/EventFactory.h"
 
 namespace blitzortung {
   namespace data {
     namespace sample {
 
       //! class for gps information
-      class V1Factory : public SampleFactory {
+      class V1Factory : public EventFactory {
 
 	public:
 
-	  virtual Sample::AP createSample(Sample::Waveform::AP wfm, GpsInfo::AP gpsInfo) const;
+	  virtual Event::AP createEvent(Waveform::AP wfm, GpsInfo::AP gpsInfo) const;
 
-	  virtual Sample::AP createSample(std::iostream& stream, const gr::date& date) const;
+	  virtual Event::AP createEvent(std::iostream& stream, const gr::date& date) const;
 
       };
 

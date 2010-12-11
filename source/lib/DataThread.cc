@@ -4,10 +4,10 @@
 
 namespace blitzortung {
 
-  DataThread::DataThread(Queue<data::Sample>& sampleQueue, const network::transfer::Base& transfer, output::Base& output)
+  DataThread::DataThread(Queue<data::Event>& sampleQueue, const network::transfer::Base& transfer, output::Base& output)
     : sampleQueue_(sampleQueue),
     transfer_(transfer),
-    samples_(new data::Sample::V()),
+    samples_(new data::Event::V()),
     output_(output),
     logger_("DataThread")
   {
@@ -31,8 +31,8 @@ namespace blitzortung {
     eventRateLimit_ = eventRateLimit;
   }
 
-  data::Sample::VP DataThread::prepareData(pt::ptime& now, pt::ptime& lastSent) {
-    data::Sample::VP deletedSamples(new data::Sample::V());
+  data::Event::VP DataThread::prepareData(pt::ptime& now, pt::ptime& lastSent) {
+    data::Event::VP deletedEvents(new data::Event::V());
 
     if (logger_.isDebugEnabled())
       logger_.debugStream() << "() sample vector contains " << samples_->size() << " elements";
@@ -46,7 +46,7 @@ namespace blitzortung {
       logger_.infoStream() << "() sending " << samples_->size() << " samples (rate " << eventRate << " samples/second) at " << now;
 
     if (eventRate > eventRateLimit_) {
-      samples_->sort(data::Sample::CompareAmplitude());
+      samples_->sort(data::Event::CompareAmplitude());
 
       if (logger_.isInfoEnabled())
 	logger_.infoStream() << "() ratelimit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed;
@@ -54,7 +54,7 @@ namespace blitzortung {
       int sampleLimit = eventRateLimit_ * secondsElapsed;
 
       //samples_->transfer(samples_->begin() + sampleLimit, samples_->end());
-      deletedSamples->transfer(deletedSamples->end(), samples_->begin(), samples_->end(), *samples_);
+      deletedEvents->transfer(deletedEvents->end(), samples_->begin(), samples_->end(), *samples_);
 
       if (logger_.isInfoEnabled())
 	logger_.infoStream() << "() erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")";
@@ -63,7 +63,7 @@ namespace blitzortung {
       samples_->sort();
     }
 
-    return deletedSamples;
+    return deletedEvents;
   }
 
 
@@ -84,7 +84,7 @@ namespace blitzortung {
 
       // get new samples from queue until it is empty
       while (! sampleQueue_.empty()) {
-	data::Sample::AP sample(sampleQueue_.pop());
+	data::Event::AP sample(sampleQueue_.pop());
 
 	samples_->push_back(sample);
       }
@@ -96,14 +96,14 @@ namespace blitzortung {
 	if (samples_->size() > 0) {
 
 	  // prepare data for transmission
-	  data::Sample::VP deletedSamples = prepareData(now, lastSent);
+	  data::Event::VP deletedEvents = prepareData(now, lastSent);
 
 	  // transmit data
 	  transfer_.send(samples_);
 
 	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "() recollect samples " << samples_->size() << " + " << deletedSamples->size();
-	  samples_->transfer(samples_->end(), *deletedSamples);
+	    logger_.debugStream() << "() recollect samples " << samples_->size() << " + " << deletedEvents->size();
+	  samples_->transfer(samples_->end(), *deletedEvents);
 
 	  samples_->sort();
 

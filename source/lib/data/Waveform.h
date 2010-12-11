@@ -1,17 +1,23 @@
 #ifndef BLITZORTUNG_DATA_WAVEFORM_H_
 #define BLITZORTUNG_DATA_WAVEFORM_H_
 
+#include <iostream>
+
 #include <boost/shared_ptr.hpp>
 
 #include "namespaces.h"
+#include "Array.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
   namespace data {
 
     //! class for waveforms
-    template <typename T>
     class Waveform : boost::noncopyable {
+
+      public:
+
+	typedef std::auto_ptr<Waveform> AP;
 
       private:
 
@@ -26,18 +32,15 @@ namespace blitzortung {
 	
 	//! index of maximum absolute value of signal
 	int maxIndex_;
-	
-	//! vector for x channel data
-	std::vector<T> xdata_;
-	
-	//! vector for y channel data
-	std::vector<T> ydata_;
+
+	Array::AP array_;
 
       public:
 
         //! create a waveform object
 	/*!
 	\param t0 reference time of waveform
+	\param dt time between consecutive data
 	*/
 	Waveform(const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
 
@@ -45,7 +48,7 @@ namespace blitzortung {
 	/*!
 	\param stream from which the waveform object should be read
 	\param date of the stream 
-	\param number of elements to read
+	\param elements number of elements to read
 	*/
 	Waveform(std::iostream& stream, gr::date date, const unsigned int elements);
 
@@ -55,15 +58,11 @@ namespace blitzortung {
 	//! add sample to collection
 	/*!
 	\param x x-value of sample
-	\param y y-value of sample
 	*/
-	void add(T x, T y);
+	void add(unsigned char x);
 
-	//! returns x-value at index
-	T getX(unsigned int index) const;
-
-	//! returns y-value at index
-	T getY(unsigned int index) const;
+	//! returns value at index
+	unsigned char get(unsigned int index) const;
 
 	//! returns amplitude at index
 	float getAmplitude(unsigned int index) const;
@@ -72,10 +71,10 @@ namespace blitzortung {
 	unsigned int getMaxIndex() const;
 
 	//! returns x-value at maximum
-	T getMaxX() const;
+	short getMaxX() const;
 
 	//! returns y-value at maximum
-	T getMaxY() const;
+	short getMaxY() const;
 
 	//! return timestamp of waveform
 	const pt::ptime& getTime() const;
@@ -89,14 +88,26 @@ namespace blitzortung {
 	//! return actual size of waveform
 	unsigned int getNumberOfSamples() const;
 
+	const Array& getArray() const {
+	  return *array_;
+	}
+
 	//! write to stream
 	void write(std::iostream&, unsigned int elementCount);
 
 	//! static function to determine size of a particular waveform structure
 	static unsigned int GetSize(unsigned int elements);
 
-	typedef std::auto_ptr<Waveform<T> >AP;
+
     };
+
+    std::ostream& operator <<(std::ostream& os, const bo::data::Waveform& wfm) {
+
+      os << wfm.getArray();
+
+      return os;
+    }
+
 
   }
 }

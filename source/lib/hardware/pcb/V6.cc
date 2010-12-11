@@ -61,7 +61,7 @@ namespace blitzortung {
 
 	if (logger_.isInfoEnabled())
 	  logger_.infoStream() << "parseData() " << numberOfSamples;
-       
+      
 	data::Sample::Waveform::AP wfm(new data::Sample::Waveform(eventtime, SAMPLE_RATE));
 
 	for (int i=0; i < numberOfSamples; i++) {
