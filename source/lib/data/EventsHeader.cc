@@ -1,17 +1,17 @@
 #include <fstream>
 
-#include "data/SamplesHeader.h"
-#include "data/Sample.h"
-#include "data/sample/V1.h"
-#include "data/sample/V2.h"
+#include "data/EventsHeader.h"
+#include "data/Event.h"
+#include "data/event/V1.h"
+#include "data/event/V2.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
   namespace data {
 
-    const char* SamplesHeader::ID = "BOSF";
+    const char* EventsHeader::ID = "BOSF";
 
-    const gr::date SamplesHeader::STARTOFEPOCH = gr::date(1970, 1, 1);
+    const gr::date EventsHeader::STARTOFEPOCH = gr::date(1970, 1, 1);
 
     bool file_exists(std::string filename) {
       std::ifstream file;
@@ -22,47 +22,47 @@ namespace blitzortung {
       return ! file.fail();
     }
 
-    SamplesHeader::SamplesHeader(const gr::date& date, const unsigned short version) :
+    EventsHeader::EventsHeader(const gr::date& date, const unsigned short version) :
       date_(date),
       version_(version),
-      logger_("data.SamplesHeader")
+      logger_("data.EventsHeader")
     {
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "construct() date " << date << " version " << version;
     }
 
-    SamplesHeader::~SamplesHeader() {
+    EventsHeader::~EventsHeader() {
     }
 
-    const gr::date& SamplesHeader::getDate() const {
+    const gr::date& EventsHeader::getDate() const {
       return date_;
     }
 
-    void SamplesHeader::setDate(const gr::date& date) {
+    void EventsHeader::setDate(const gr::date& date) {
       date_ = date;
     }
 
-    void SamplesHeader::setVersion(const unsigned short version) {
+    void EventsHeader::setVersion(const unsigned short version) {
       version_ = version;
     }
 
-    const unsigned short SamplesHeader::getVersion() const {
+    const unsigned short EventsHeader::getVersion() const {
       return version_;
     }
     
-    unsigned int SamplesHeader::getNumberOfSamples() const {
-      return numberOfSamples_;
+    unsigned int EventsHeader::getNumberOfEvents() const {
+      return numberOfEvents_;
     }  
 
-    unsigned int SamplesHeader::getSampleSize() const {
-      return sampleSize_;
+    unsigned int EventsHeader::getEventSize() const {
+      return eventSize_;
     }  
 
-    void SamplesHeader::read(const std::string& filename) {
+    void EventsHeader::read(const std::string& filename) {
       
       if (! file_exists(filename)) {
 	std::ostringstream oss;
-	oss << "data::SampleHeader::read() file '" << filename << "' does not exist";
+	oss << "data::EventHeader::read() file '" << filename << "' does not exist";
 	throw exception::Base(oss.str());
       }
       std::fstream fstream;
@@ -82,7 +82,7 @@ namespace blitzortung {
 
 	if (std::string(tempId) != ID) {
 	  std::ostringstream oss;
-	  oss << "data::SamplesHeader bad file header '" << tempId << "' vs '" << ID << "'";
+	  oss << "data::EventsHeader bad file header '" << tempId << "' vs '" << ID << "'";
 	  throw exception::Base(oss.str());
 	}
       }
@@ -101,11 +101,11 @@ namespace blitzortung {
       // check if read position corresponds to header size
       assert(fstream.tellg() == getSize());
 
-      // set object to create sample objects 
+      // set object to create event objects 
       setFactory();
 
-      data::Sample::AP firstSample = sampleFactory_->createSample(fstream, date_);
-      sampleSize_ = firstSample->getSize();
+      data::Event::AP firstEvent = eventFactory_->createEvent(fstream, date_);
+      eventSize_ = firstEvent->getSize();
       
       fstream.seekg(0, std::ios::end);
       unsigned int filesize = fstream.tellg();
@@ -114,20 +114,20 @@ namespace blitzortung {
       
       filesize -= getSize();
 
-      numberOfSamples_ = filesize / sampleSize_;
+      numberOfEvents_ = filesize / eventSize_;
 
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "read() date " << date_ << " version " << version_ << " #samples " << numberOfSamples_ << " samplesize " << sampleSize_ << " filesize " << filesize;
+	logger_.debugStream() << "read() date " << date_ << " version " << version_ << " #events " << numberOfEvents_ << " eventsize " << eventSize_ << " filesize " << filesize;
 
-      if (numberOfSamples_ * sampleSize_ != filesize)
-	throw exception::Base("data::SamplesHeader file size mismatch");
+      if (numberOfEvents_ * eventSize_ != filesize)
+	throw exception::Base("data::EventsHeader file size mismatch");
     }
 
-    Sample::AP SamplesHeader::createSample(std::iostream& stream) const {
-      return sampleFactory_->createSample(stream, date_);
+    Event::AP EventsHeader::createEvent(std::iostream& stream) const {
+      return eventFactory_->createEvent(stream, date_);
     }
 	
-    std::string SamplesHeader::formatFilename(const std::string& fileformat) const {
+    std::string EventsHeader::formatFilename(const std::string& fileformat) const {
 
       if (! date_.is_not_a_date()) {
 
@@ -141,17 +141,17 @@ namespace blitzortung {
         return filenamestream.str();
       } else {
 	return fileformat;
-	throw exception::Base("data::SamplesHeader formatFilename() ERROR: no file date");
+	throw exception::Base("data::EventsHeader formatFilename() ERROR: no file date");
       }
     }
 
-    void SamplesHeader::write(const std::string& filename) const {
+    void EventsHeader::write(const std::string& filename) const {
 
       if (version_ == 0)
-	throw exception::Base("data::SamplesHeader writeHeader() invalid file version");
+	throw exception::Base("data::EventsHeader writeHeader() invalid file version");
 
       if (date_ == gr::date(pt::not_a_date_time))
-	throw exception::Base("data::SamplesHeader writeHeader() invalid file date");
+	throw exception::Base("data::EventsHeader writeHeader() invalid file date");
 
       std::fstream fstream;
       
@@ -173,39 +173,39 @@ namespace blitzortung {
       fstream.close();
     }
 
-    void SamplesHeader::setFactory() {
+    void EventsHeader::setFactory() {
 
       switch (version_) {
 	case 1:
-	  sampleFactory_ = SampleFactory::AP(new sample::V1Factory());
+	  eventFactory_ = EventFactory::AP(new event::V1Factory());
 	  break;
 
 	case 2:
-	  sampleFactory_ = SampleFactory::AP(new sample::V2Factory());
+	  eventFactory_ = EventFactory::AP(new event::V2Factory());
 	  break;
 
 	default:
 	  std::ostringstream oss;
-	  oss << "data::SamplesHeader setFactory() unknown file version " << version_;
+	  oss << "data::EventsHeader setFactory() unknown file version " << version_;
 	  throw exception::Base(oss.str().c_str());
 	  break;
       }
     }
 
 
-    bool SamplesHeader::fileExists(const std::string& filename) const {
+    bool EventsHeader::fileExists(const std::string& filename) const {
       return file_exists(formatFilename(filename));
     }
     
-    bool SamplesHeader::operator==(const SamplesHeader& other) {
+    bool EventsHeader::operator==(const EventsHeader& other) {
       return date_ == other.date_ && version_ == other.version_;
     }
 	
-    bool SamplesHeader::operator!=(const SamplesHeader& other) {
+    bool EventsHeader::operator!=(const EventsHeader& other) {
       return !(*this == other);
     }
 
-    unsigned int SamplesHeader::getSize() const {
+    unsigned int EventsHeader::getSize() const {
       return 10;
     }
     

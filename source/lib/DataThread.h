@@ -5,7 +5,7 @@
 #include <boost/thread/xtime.hpp>
 #include <boost/thread/condition.hpp>
 
-#include "data/Samples.h"
+#include "data/Events.h"
 #include "Queue.h"
 #include "network/transfer/Base.h"
 #include "output/Base.h"
@@ -20,13 +20,13 @@ namespace blitzortung {
       pt::time_duration sleepTime_;
 
       //! reference to incoming sample data queue
-      Queue<bo::data::Sample>& sampleQueue_;
+      Queue<bo::data::Event>& sampleQueue_;
 
       //! network data transfer object
       const network::transfer::Base& transfer_;
 
       //! vector of samples
-      data::Sample::VP samples_;
+      data::Event::VP samples_;
 
       //! limit value of maximum events / second;
       double eventRateLimit_;
@@ -38,15 +38,15 @@ namespace blitzortung {
       mutable Logger logger_;
 
       //! prepare data for transmission
-      data::Sample::VP prepareData(pt::ptime&, pt::ptime&);
+      data::Event::VP prepareData(pt::ptime&, pt::ptime&);
 
       //! get string to be transmitted for every sample
-      std::string sampleToString(const data::Sample& sample);
+      std::string sampleToString(const data::Event& sample);
 
     public:
 
       //! create network transfer object
-      DataThread(Queue<data::Sample>& sampleQueue, const network::transfer::Base& transfer, output::Base&);
+      DataThread(Queue<data::Event>& sampleQueue, const network::transfer::Base& transfer, output::Base&);
 
       //! delete nework transfer object
       virtual ~DataThread();

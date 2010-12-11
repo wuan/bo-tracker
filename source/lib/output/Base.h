@@ -1,7 +1,7 @@
 #ifndef BLITZORTUNG_OUTPUT_BASE_H_
 #define BLITZORTUNG_OUTPUT_BASE_H_
 
-#include "data/Samples.h"
+#include "data/Events.h"
 #include "Logger.h"
 
 namespace blitzortung {
@@ -14,7 +14,7 @@ namespace blitzortung {
 	typedef std::auto_ptr<Base> AP;
 
 	//! output data to file
-	virtual void output(data::Sample::VP& samples) = 0;
+	virtual void output(data::Event::VP& samples) = 0;
 
     };
   }

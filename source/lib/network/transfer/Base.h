@@ -10,7 +10,7 @@
 #include <boost/thread/xtime.hpp>
 #include <boost/thread/condition.hpp>
 
-#include "data/Sample.h"
+#include "data/Event.h"
 #include "network/Creds.h"
 #include "Logger.h"
 
@@ -42,10 +42,10 @@ namespace blitzortung {
 	  virtual ~Base();
 
 	  //! create data string from sample
-	  virtual std::string sampleToString(const data::Sample& sample) const = 0;
+	  virtual std::string sampleToString(const data::Event& sample) const = 0;
 
 	  //! send data to server
-	  virtual void send(const data::Sample::VP& samples) const = 0;
+	  virtual void send(const data::Event::VP& samples) const = 0;
 
       };
 

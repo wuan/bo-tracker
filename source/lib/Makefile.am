@@ -18,11 +18,13 @@ libblitzortung_la_LDFLAGS = \
 libblitzortung_la_SOURCES = \
 	DataThread.h DataThread.cc \
 	\
-	data/Sample.h data/Sample.cc \
-	data/SampleFactory.h \
-	data/Samples.h data/Samples.cc \
-	data/SamplesFile.h data/SamplesFile.cc \
-	data/SamplesHeader.h data/SamplesHeader.cc \
+	data/Array.h \
+	data/Format.h \
+	data/Event.h data/Event.cc \
+	data/EventFactory.h \
+	data/Events.h data/Events.cc \
+	data/EventsFile.h data/EventsFile.cc \
+	data/EventsHeader.h data/EventsHeader.cc \
 	data/Waveform.h data/Waveform.cc \
 	data/GpsInfo.h data/GpsInfo.cc \
 	\

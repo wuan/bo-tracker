@@ -38,7 +38,7 @@ namespace blitzortung {
 	oss << " " << gpsInfo.getStatus() << " " << 2 << " " << 64 << " " << 8;
 	oss << " " << wfm.getTimeDelta().total_nanoseconds() << " ";
 	oss << std::hex << std::uppercase << std::setw(2) << std::setfill('0');
-	for (int i = 0; i < wfm.getNumberOfSamples(); i++) {
+	for (unsigned int i = 0; i < wfm.getNumberOfSamples(); i++) {
 	  oss << int(wfm.getX(i))+(1 << 7) << int(wfm.getY(i))+ (1 <<7);
 	}
 	oss << std::nouppercase << " " << VERSION << std::endl;

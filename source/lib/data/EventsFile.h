@@ -7,15 +7,15 @@
 
 #include "namespaces.h"
 #include "Logger.h"
-#include "data/Samples.h"
-#include "data/SamplesHeader.h"
-#include "data/Sample.h"
+#include "data/Events.h"
+#include "data/EventsHeader.h"
+#include "data/Event.h"
 
 namespace blitzortung {
   namespace data {
 
-    //! file io helper class for data::Samples
-    class SamplesFile {
+    //! file io helper class for data::Events
+    class EventsFile {
 
       private:
 	
@@ -29,16 +29,16 @@ namespace blitzortung {
 	std::string name_;
 
 	//! header information
-	SamplesHeader header_;
+	EventsHeader header_;
 
 	//! logger for class
 	mutable Logger logger_;
 
-	//! read a single sample
-	Sample::AP readSample();
+	//! read a single event
+	Event::AP readEvent();
 
-	//! append/write samples to file with given filename
-	void writeSamples(const std::string&, const Samples&, bool append=false);
+	//! append/write events to file with given filename
+	void writeEvents(const std::string&, const Events&, bool append=false);
 
 	//! open the fstream
 	void open(std::ios_base::openmode);
@@ -49,16 +49,16 @@ namespace blitzortung {
 	//! close the fstream
 	void close();
 
-        //! do btree search for sample position
-	unsigned int findSample(const pt::time_duration& target, unsigned int start, unsigned int end);
+        //! do btree search for event position
+	unsigned int findEvent(const pt::time_duration& target, unsigned int start, unsigned int end);
 
       public:
 
 	//! constructor
-	SamplesFile(const std::string&);
+	EventsFile(const std::string&);
 
 	//! destructor
-	~SamplesFile();
+	~EventsFile();
 
 	//! set Filename
 	void setFilename(const std::string&);
@@ -67,16 +67,16 @@ namespace blitzortung {
 	const std::string getFilename() const;
 
 	//! get Header
-	const SamplesHeader& getHeader() const;
+	const EventsHeader& getHeader() const;
 
 	//! append or create a new file
-	void append(const Samples&);
+	void append(const Events&);
 	
 	//! overwrite or create a new file
-	void write(const Samples&);
+	void write(const Events&);
 	
 	//! read time range from file
-	Sample::VP read(const pt::time_duration& start = pt::time_duration(pt::not_a_date_time), const pt::time_duration& end = pt::time_duration(pt::not_a_date_time));
+	Event::VP read(const pt::time_duration& start = pt::time_duration(pt::not_a_date_time), const pt::time_duration& end = pt::time_duration(pt::not_a_date_time));
     };
 
   }

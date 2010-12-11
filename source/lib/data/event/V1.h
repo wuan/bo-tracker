@@ -3,29 +3,29 @@
 
 #include "namespaces.h"
 #include "Logger.h"
-#include "data/Sample.h"
+#include "data/Event.h"
 
 namespace blitzortung {
   namespace data {
-    namespace sample {
+    namespace event {
 
-      //! class V1 for sample data version 1
-      class V1 : public Sample {
+      //! class V1 for event data version 1
+      class V1 : public Event {
 	
 	public:
 
-	  V1(Sample::Waveform::AP, GpsInfo::AP);
+	  V1(Waveform::AP, GpsInfo::AP);
 
 	  V1(std::iostream& stream, const gr::date& date);
 
 	  //! getter for format version
 	  virtual unsigned short getVersion() const;
 	  
-      	  //! getter for number of samples in waveform
-	  unsigned short getNumberOfSamples() const;
+      	  //! getter for number of events in waveform
+	  unsigned short getNumberOfEvents() const;
 
 	  //! perform special processing befor saving data
-	  Sample::Waveform::AP processWaveform() const;
+	  Waveform::AP processWaveform() const;
 
       };
 
