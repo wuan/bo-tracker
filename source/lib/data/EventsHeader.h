@@ -8,6 +8,7 @@
 #include "Logger.h"
 #include "data/Event.h"
 #include "data/EventFactory.h"
+#include "data/Format.h"
 #include "data/event/V1Factory.h"
 #include "data/event/V2Factory.h"
 
@@ -31,23 +32,14 @@ namespace blitzortung {
 	gr::date date_;
 
 	//! events per entry
-	unsigned short events_;
+	unsigned short numberOfEvents_;
 
-	//! number of channels
-	unsigned char channels_;
-
-	//! number of bits per event
-	unsigned char bits_;
+	//! data format
+	data::Format dataFormat_;
 	
 	//***********************************
 
-	//! number of events in file
-	unsigned int numberOfEntries_;
-
-	//! strage size of one event
-	unsigned int eventSize_;
-
-	//! event creator
+	//! event factory
 	EventFactory::AP eventFactory_;
 
 	//! class logger

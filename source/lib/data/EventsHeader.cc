@@ -24,7 +24,6 @@ namespace blitzortung {
 
     EventsHeader::EventsHeader(const gr::date& date, const unsigned short version) :
       date_(date),
-      version_(version),
       logger_("data.EventsHeader")
     {
       if (logger_.isDebugEnabled())
@@ -42,14 +41,6 @@ namespace blitzortung {
       date_ = date;
     }
 
-    void EventsHeader::setVersion(const unsigned short version) {
-      version_ = version;
-    }
-
-    const unsigned short EventsHeader::getVersion() const {
-      return version_;
-    }
-    
     unsigned int EventsHeader::getNumberOfEvents() const {
       return numberOfEvents_;
     }  
@@ -95,9 +86,6 @@ namespace blitzortung {
 	date_ = STARTOFEPOCH + gr::days(fileEpochDays);
       }
 
-      // read file version from file
-      fstream.read((char*)&version_, sizeof(version_));
-
       // check if read position corresponds to header size
       assert(fstream.tellg() == getSize());
 
@@ -117,7 +105,7 @@ namespace blitzortung {
       numberOfEvents_ = filesize / eventSize_;
 
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "read() date " << date_ << " version " << version_ << " #events " << numberOfEvents_ << " eventsize " << eventSize_ << " filesize " << filesize;
+	logger_.debugStream() << "read() date " << date_ << " #events " << numberOfEvents_ << " eventsize " << eventSize_ << " filesize " << filesize;
 
       if (numberOfEvents_ * eventSize_ != filesize)
 	throw exception::Base("data::EventsHeader file size mismatch");
@@ -147,9 +135,6 @@ namespace blitzortung {
 
     void EventsHeader::write(const std::string& filename) const {
 
-      if (version_ == 0)
-	throw exception::Base("data::EventsHeader writeHeader() invalid file version");
-
       if (date_ == gr::date(pt::not_a_date_time))
 	throw exception::Base("data::EventsHeader writeHeader() invalid file date");
 
@@ -166,8 +151,6 @@ namespace blitzortung {
 	fstream.write((char*) &fileEpochDays, sizeof(unsigned int));
       }
 
-      fstream.write((char*) &version_, sizeof(unsigned short));
-      
       assert(fstream.tellg() == getSize());
       
       fstream.close();
