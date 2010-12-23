@@ -5,16 +5,16 @@
 namespace blitzortung {
   namespace data {
 
-    Waveform::Waveform(const pt::ptime& t0, const pt::time_duration& dt) :
+    Waveform::Waveform(const Format& dataFormat, const pt::ptime& t0, const pt::time_duration& dt) :
       t0_(t0),
       dt_(dt),
-      channels_(2),
-      bits_(8),
-      samples_(64)
+      array_(data::Array::AP(new data::Array(dataFormat)))
     {
     }
 
-    Waveform::Waveform(std::iostream& stream, gr::date date, const unsigned int elements) {
+    Waveform::Waveform(const Format& dataFormat, gr::date date, std::iostream& stream) :
+      array_(data::Array::AP(new data::Array(dataFormat)))
+    {
 
       {
 	unsigned long long int nanoseconds;
@@ -28,34 +28,17 @@ namespace blitzortung {
       }
 
       unsigned short deltaNanoseconds = 0;
-      if (elements > 1) {
+      if (dataFormat.getNumberOfSamples() > 1) {
 	util::Stream::ReadValue(stream, deltaNanoseconds);
       }
       dt_ = pt::nanoseconds(deltaNanoseconds);
 
-      for (unsigned int i=0; i < elements; i++) {
-	T xvalue, yvalue;
-	util::Stream::ReadValue(stream, xvalue);
-	util::Stream::ReadValue(stream, yvalue);
-	add(xvalue, yvalue);
-      }
+      array_->fromStream(stream);
 
     }
 
     Waveform::~Waveform()
     {
-    }
-
-    void Waveform::add(T xval, T yval) {
-      float val = xval * xval + yval * yval;
-
-      if (xdata_.size() == 0 || val > maxVal_) {
-	maxVal_ = val;
-	maxIndex_ = xdata_.size();
-      }
-
-      xdata_.push_back(xval);
-      ydata_.push_back(yval);
     }
 
     const pt::ptime& Waveform::getTime() const {
@@ -70,93 +53,60 @@ namespace blitzortung {
       return dt_;
     }
 
-    T Waveform::getX(unsigned int index) const {
-      if (index < xdata_.size()) {
-	return xdata_[index];
-      } else {
-	throw exception::Base("Waveform::getX() index out of range");
-      }
+    int Waveform::get(unsigned int index, unsigned short channel) const {
+      return array_->get(index, channel);
     }
 
-    template <typename T>
-      T Waveform::getY(unsigned int index) const {
-	if (index < ydata_.size()) {
-	  return ydata_[index];
-	} else {
-	  throw exception::Base("Waveform::getY() index out of range");
-	}
-      }
-
     float Waveform::getAmplitude(unsigned int index) const {
-      float xamp = getX(index);
-      float yamp = getY(index);
+      double sum = 0.0;
+      unsigned short channels = array_->getNumberOfChannels();
 
-      return sqrt(xamp * xamp + yamp * yamp);
+      if (channels > 1) {
+	for (int channel = 0; channel < channels; channel++) {
+	  float amp = get(index, channel);
+	  sum += amp * amp;
+	}
+
+	return sqrt(sum);
+      } else {
+	return get(index, 0);
+      }
     }
 
     unsigned int Waveform::getMaxIndex() const {
-      if (xdata_.size() ==0)
-	throw exception::Base("data::Waveform::getMaxIndex() data arrays empty");
-
       return maxIndex_;
     }
 
-    T Waveform::getMaxX() const {
-      if (xdata_.size() ==0)
-	throw exception::Base("data::Waveform::getMaxX() data arrays empty");
-
-      return xdata_[maxIndex_];
-    }
-
-    T Waveform::getMaxY() const {
-      if (ydata_.size() ==0)
-	throw exception::Base("data::Waveform::getMaxY() data arrays empty");
-
-      return ydata_[maxIndex_];
-    }
-
     unsigned int Waveform::getNumberOfSamples() const {
-      return xdata_.size();
+      return array_->getNumberOfSamples();
     }
 
-    void Waveform::write(std::iostream& stream, unsigned int elementCount) {
+    void Waveform::toStream(std::iostream& stream) {
 
       unsigned long long int nanoseconds = t0_.time_of_day().total_nanoseconds();
       util::Stream::WriteValue(stream, nanoseconds);
 
-      unsigned int elements = xdata_.size();
-      if (elements != elementCount)
-	throw exception::Base("data::Waveform::write() element count mismatch");
-
-      if (elements > 1) {
+      if (array_->getNumberOfSamples() > 1) {
 	unsigned short deltaNanoseconds = dt_.total_nanoseconds();
 	util::Stream::WriteValue(stream, deltaNanoseconds);
       }
 
-      for (unsigned int i=0; i < elements; i++) {
-	util::Stream::WriteValue(stream, xdata_[i]);
-	util::Stream::WriteValue(stream, ydata_[i]);
-      }
+      array_->toStream(stream);
     }
 
-    unsigned int Waveform::GetSize(unsigned int elements) {
+    unsigned int Waveform::GetSize(const data::Format& dataFormat) {
       util::Size size;
 
       long long int nanoseconds;
       size.add(nanoseconds);
 
-      if (elements > 1) {
+      if (dataFormat.getNumberOfSamples() > 1) {
 	unsigned short deltaNanoseconds;
 	size.add(deltaNanoseconds);
       }
 
-      util::Size elementSize;
-
-      T element;
-      elementSize.add(element);
-
       // gps data size + two times the size of an element (for x and y value)
-      return size.get() + elementSize.get() * 2 * elements;
+      return size.get() + dataFormat.getDataSize();
     }
 
   }
