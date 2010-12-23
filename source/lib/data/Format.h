@@ -24,6 +24,12 @@ namespace blitzortung {
 
 	unsigned short numberOfSamples_;
 
+	unsigned char sampleByteSize_;
+
+	unsigned char dataByteSize_;
+
+	void updateSizes();
+
       public:
 
         //! create a waveform format object
@@ -32,7 +38,7 @@ namespace blitzortung {
 	\param channels number of channels per measurement
 	\param numberOfSamples number of measurements per waveform
 	*/
-	Format(unsigned short numberOfBits, unsigned short numberOfChannels, unsigned int numberOfSamples);
+	Format(unsigned char numberOfBits, unsigned char numberOfChannels, unsigned short numberOfSamples);
 
 	//! create an invalid format
 	Format();
@@ -49,8 +55,14 @@ namespace blitzortung {
 	//! returns the number of measurements per waveform
 	unsigned short getNumberOfSamples() const;
 
+	//! returns the number of bytes per single sample
+	unsigned short getBytesPerSample() const;
+
 	//! returns the total size of the data according to the format
 	unsigned int getDataSize() const;
+
+	//! returns the index position of the data value
+	unsigned int getIndex(unsigned short index, unsigned char channel) const;
 
 	//! read the format parameters from stream
 	void fromStream(std::iostream&);

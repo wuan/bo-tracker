@@ -75,7 +75,7 @@ namespace blitzortung {
 	char getStatus() const;
 
 	//! write to stream
-	void write(std::iostream&);
+	void toStream(std::iostream&);
 
 	unsigned int getSize();
 

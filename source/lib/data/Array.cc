@@ -6,9 +6,11 @@ namespace blitzortung {
     Array::Array(const Format& format) :
       format_(format)
     {
+      data_ = new char[format_.getDataSize()];
     }
 
     Array::~Array() {
+      delete data_;
     }
 
     unsigned int Array::getNumberOfSamples() const {
@@ -26,10 +28,12 @@ namespace blitzortung {
       return 0;
     }
 
-    void Array::toStream(std::iostream&) const {
+    void Array::toStream(std::iostream& stream) const {
+      stream.write(data_, format_.getDataSize());
     }
 
-    void Array::fromStream(std::iostream&) {
+    void Array::fromStream(std::iostream& stream) {
+      stream.read(data_, format_.getDataSize());
     }
 
     const data::Format& Array::getFormat() const {
