@@ -5,8 +5,8 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
 
-      V4::V4(comm::Base& serial, gps::Base& gps, const data::EventFactory& eventFactory) :
-	Base(serial, gps, eventFactory),
+      V4::V4(comm::Base& serial, gps::Base& gps) :
+	Base(serial, gps),
 	logger_("hardware.pcb.V4")
       {
 	if (logger_.isDebugEnabled())
@@ -39,10 +39,13 @@ namespace blitzortung {
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
 	    data::GpsInfo::AP gpsInfo(new data::GpsInfo(gps_));
 
-	    data::Waveform::AP waveform(new data::Event::Waveform(eventtime));
-	    waveform->add(maxX/1023.0, maxY/1023.0);
+	    data::Array::AP array(new data::Array(*dataFormat_));
+	    array->set(maxX, 0, 0);
+	    array->set(maxY, 0, 1);
 
-	    event = eventFactory_.createEvent(waveform, gpsInfo);
+	    data::Waveform::AP waveform(new data::Waveform(array, eventtime));
+
+	    event = data::Event::AP(new data::Event(waveform, gpsInfo));
 	  } else {
 	    logger_.warnStream() << "GPS information is not yet valid -> no event created";
 	  }

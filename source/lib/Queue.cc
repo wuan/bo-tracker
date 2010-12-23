@@ -1,5 +1,5 @@
 
-#include "data/Sample.h"
+#include "data/Event.h"
 #include "Queue.h"
 
 namespace blitzortung {
@@ -67,5 +67,5 @@ namespace blitzortung {
   }
 
   //! explicit instatiation
-  template class Queue<data::Sample>;
+  template class Queue<data::Event>;
 }

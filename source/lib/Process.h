@@ -8,7 +8,7 @@
 #include "output/Base.h"
 #include "network/transfer/Base.h"
 
-#include "data/Sample.h"
+#include "data/Event.h"
 
 namespace blitzortung {
 
@@ -21,7 +21,7 @@ namespace blitzortung {
 
     private:
       //! queue for data transfer from measurement thread
-      Queue<data::Sample> sampleQueue_;
+      Queue<data::Event> eventQueue_;
 
       //! logger for this class
       mutable Logger logger_;
@@ -33,8 +33,8 @@ namespace blitzortung {
       //! destructor
       virtual ~Process();
 
-      //! add sample to send queue
-      void push(data::Sample::AP&);
+      //! add event to send queue
+      void push(data::Event::AP&);
   };
 }
 

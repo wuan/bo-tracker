@@ -41,11 +41,11 @@ namespace blitzortung {
 	  //! destroy object
 	  virtual ~Base();
 
-	  //! create data string from sample
-	  virtual std::string sampleToString(const data::Event& sample) const = 0;
+	  //! create data string from event
+	  virtual std::string eventToString(const data::Event& event) const = 0;
 
 	  //! send data to server
-	  virtual void send(const data::Event::VP& samples) const = 0;
+	  virtual void send(const data::Event::VP& events) const = 0;
 
       };
 

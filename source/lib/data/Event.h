@@ -32,13 +32,13 @@ namespace blitzortung {
 	//! corresponding gps information
 	GpsInfo::AP gpsInfo_;
 
-      protected:
+      public:
 
 	Event(Waveform::AP, GpsInfo::AP);
 
 	Event(const data::Format& dataFormat, const gr::date& date, std::iostream& stream);
 
-      public:
+	virtual ~Event();
 
 	//! get reference to waveform
 	const Waveform& getWaveform() const;
@@ -60,14 +60,8 @@ namespace blitzortung {
 	  bool operator()(const first_argument_type& x, const second_argument_type& y) const;
 	};
 	
-	//! getter for sample format version
-	virtual unsigned short getVersion() const = 0;
-
 	//! getter for amount of samples in waveform
-	virtual unsigned short getNumberOfEvents() const = 0;
-
-	//! process sample to data save format
-	virtual Waveform::AP processWaveform() const = 0;
+	virtual unsigned short getNumberOfSamples() const;
 
 	//! write binary object data to stream
 	void toStream(std::iostream&) const;

@@ -12,13 +12,17 @@ namespace blitzortung {
     //! class for waveforms
     class Format : boost::noncopyable {
 
+      public:
+
+	typedef std::auto_ptr<Format> AP;
+
       private:
 
-	unsigned short samples_;
+	unsigned char numberOfBits_;
 
-	unsigned char channels_;
+	unsigned char numberOfChannels_;
 
-	unsigned char bits_;
+	unsigned short numberOfSamples_;
 
       public:
 
@@ -28,7 +32,7 @@ namespace blitzortung {
 	\param channels number of channels per measurement
 	\param numberOfSamples number of measurements per waveform
 	*/
-	Format(unsigned short bits, unsigned short channels, unsigned int numberOfSamples);
+	Format(unsigned short numberOfBits, unsigned short numberOfChannels, unsigned int numberOfSamples);
 
 	//! create an invalid format
 	Format();
@@ -57,14 +61,11 @@ namespace blitzortung {
 	//! comparison operator for data format
 	bool operator==(const Format& other) const;
 
+	//! stream output operator
+	std::ostream& operator<<(std::ostream& os) const;
+
     };
 
-    std::ostream& operator <<(std::ostream& os, const bo::data::Format &format) {
-      os << format.getNumberOfBitsPerSample() << " ";
-      os << format.getNumberOfSamples() << " ";
-      os << format.getNumberOfChannels();
-      return os;
-    }
 
   }
 }

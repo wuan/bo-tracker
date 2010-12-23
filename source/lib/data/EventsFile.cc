@@ -1,7 +1,6 @@
 
 #include "data/EventsFile.h"
 #include "data/Event.h"
-#include "data/event/V1.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
@@ -82,7 +81,6 @@ namespace blitzortung {
       if (events.size() > 0) {
 
 	header_.setDate(events.front().getWaveform().getTime().date());
-	header_.setVersion(events.front().getVersion());
 
 	setFilename(name);
 
@@ -98,7 +96,7 @@ namespace blitzortung {
 	} else {
 	  header_.write(getFilename());
 	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "writeEvents() write header " << header_.getDate() << " v" << header_.getVersion();
+	    logger_.debugStream() << "writeEvents() write header " << header_.getDate() << " ";
 	}
 
 	open(std::ios::out | std::ios::binary | std::ios::app);

@@ -18,21 +18,21 @@ namespace blitzortung {
 
       }
 
-      std::string None::sampleToString(blitzortung::data::Sample const& sample) const {
+      std::string None::eventToString(blitzortung::data::Event const& event) const {
 	std::ostringstream oss;
 
-	oss << sample;
+	oss << event;
 
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "sampleToString() : " << oss.str();
+	  logger_.debugStream() << "eventToString() : " << oss.str();
 
 	return oss.str();
       }
 
 
-      void None::send(const data::Sample::VP& samples) {
+      void None::send(const data::Event::VP& events) {
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "send() : " << samples->size() << "samples";
+	  logger_.debugStream() << "send() : " << events->size() << "events";
       }
 
     }

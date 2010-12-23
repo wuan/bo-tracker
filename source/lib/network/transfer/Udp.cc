@@ -18,9 +18,9 @@ namespace blitzortung {
 	  logger_.debugStream() << "deleted";
       }
 
-      std::string Udp::sampleToString(const data::Sample& sample) const {
-	const data::Sample::Waveform& wfm = sample.getWaveform();
-	const data::GpsInfo& gpsInfo = sample.getGpsInfo();
+      std::string Udp::eventToString(const data::Event& event) const {
+	const data::Waveform& wfm = event.getWaveform();
+	const data::GpsInfo& gpsInfo = event.getGpsInfo();
 
 	std::ostringstream oss;
 
@@ -38,9 +38,11 @@ namespace blitzortung {
 	oss << " " << gpsInfo.getStatus() << " " << 2 << " " << 64 << " " << 8;
 	oss << " " << wfm.getTimeDelta().total_nanoseconds() << " ";
 	oss << std::hex << std::uppercase << std::setw(2) << std::setfill('0');
+
 	for (unsigned int i = 0; i < wfm.getNumberOfSamples(); i++) {
-	  oss << int(wfm.getX(i))+(1 << 7) << int(wfm.getY(i))+ (1 <<7);
+	  oss << int(wfm.get(i, 0)) + (1 << 7) << int(wfm.get(i, 1)) + (1 <<7);
 	}
+
 	oss << std::nouppercase << " " << VERSION << std::endl;
 
 	// restore original locale
@@ -49,7 +51,7 @@ namespace blitzortung {
 	return oss.str();
       }
 
-      void Udp::send(const data::Sample::VP& samples) const {
+      void Udp::send(const data::Event::VP& events) const {
 	int sock_id;
 
 	sock_id = socket (AF_INET, SOCK_DGRAM, 0);
@@ -84,10 +86,10 @@ namespace blitzortung {
 	if (logger_.isInfoEnabled())
 	  logger_.infoStream() << "send data to '" << creds_.getServername() << "' port " << creds_.getServerport();
 
-	// loop through all current samples
-	for (data::Sample::CVI sample = samples->begin(); sample != samples->end(); sample++) {
+	// loop through all current events
+	for (data::Event::CVI event = events->begin(); event != events->end(); event++) {
 
-	  std::string data = sampleToString(*sample);
+	  std::string data = eventToString(*event);
 
 	  if (logger_.isInfoEnabled())
 	    logger_.infoStream() << data.substr(0, data.size() -1);

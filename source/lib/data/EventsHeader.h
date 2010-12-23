@@ -7,10 +7,7 @@
 #include "namespaces.h"
 #include "Logger.h"
 #include "data/Event.h"
-#include "data/EventFactory.h"
 #include "data/Format.h"
-#include "data/event/V1Factory.h"
-#include "data/event/V2Factory.h"
 
 namespace blitzortung {
   namespace data {
@@ -39,16 +36,13 @@ namespace blitzortung {
 	
 	//***********************************
 
-	//! event factory
-	EventFactory::AP eventFactory_;
-
 	//! class logger
 	mutable Logger logger_;
 
       public:
 
 	//! constructor
-	EventsHeader(const gr::date& date = gr::date(gr::not_a_date_time), const unsigned short version = 0);
+	EventsHeader(const gr::date& date = gr::date(gr::not_a_date_time));
 
 	//! destructor
 	~EventsHeader();
@@ -68,17 +62,11 @@ namespace blitzortung {
 	//! get storage size of one event
 	unsigned int getEventSize() const;
 
-	//! set header version
-	void setVersion(const unsigned short);
-
-	//! get header version
-	const unsigned short getVersion() const;
-
 	bool operator==(const EventsHeader&);
 	
 	bool operator!=(const EventsHeader&);
 
-	//! set creator object depending on file version number
+	//! create event from stream
 	Event::AP createEvent(std::iostream& stream) const;
 
 	std::string formatFilename(const std::string& fileformat) const;

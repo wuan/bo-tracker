@@ -5,10 +5,10 @@
 namespace blitzortung {
   namespace data {
 
-    Waveform::Waveform(const Format& dataFormat, const pt::ptime& t0, const pt::time_duration& dt) :
+    Waveform::Waveform(data::Array::AP array, const pt::ptime& t0, const pt::time_duration& dt) :
       t0_(t0),
       dt_(dt),
-      array_(data::Array::AP(new data::Array(dataFormat)))
+      array_(array)
     {
     }
 
@@ -107,6 +107,13 @@ namespace blitzortung {
 
       // gps data size + two times the size of an element (for x and y value)
       return size.get() + dataFormat.getDataSize();
+    }
+
+    std::ostream& operator <<(std::ostream& os, const bo::data::Waveform& wfm) {
+
+      os << wfm.getArray();
+
+      return os;
     }
 
   }

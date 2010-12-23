@@ -15,9 +15,9 @@ noinst_PROGRAMS = test-lib \
 
 test_lib_SOURCES = \
 	test-lib.cc \
-	test-lib-data-samples.cc test-lib-data-samples.h \
-	test-lib-data-samples-V1.cc test-lib-data-samples-V1.h \
-	test-lib-data-samples-V2.cc test-lib-data-samples-V2.h \
+	test-lib-data-events.cc test-lib-data-events.h \
+	test-lib-data-events-V1.cc test-lib-data-events-V1.h \
+	test-lib-data-events-V2.cc test-lib-data-events-V2.h \
 	test-lib-data-waveform.cc test-lib-data-waveform.h \
 	test-lib-hardware-pcb.cc test-lib-hardware-pcb.h \
 	$(NULL)

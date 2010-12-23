@@ -7,7 +7,7 @@
 #include "hardware/comm/Base.h"
 #include "hardware/gps/Base.h"
 #include "data/Event.h"
-#include "data/EventFactory.h"
+#include "data/Format.h"
 
 namespace blitzortung {
 namespace hardware {
@@ -32,8 +32,8 @@ namespace hardware {
 	//! reference to gps device object
 	gps::Base& gps_;
 
-	//! reference to sample factory
-	const data::EventFactory& sampleFactory_;
+	//! data format object
+	data::Format::AP dataFormat_;
 
 	//! returnes int value of given hex string
 	int parseHex(const std::string& hexString);
@@ -49,7 +49,7 @@ namespace hardware {
       public:
 
 	//! constructor for base class
-	Base(comm::Base&, gps::Base&, const data::EventFactory&);
+	Base(comm::Base&, gps::Base&);
 
 	//! destructor
 	virtual ~Base();

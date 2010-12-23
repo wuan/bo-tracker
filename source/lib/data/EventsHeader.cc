@@ -2,8 +2,6 @@
 
 #include "data/EventsHeader.h"
 #include "data/Event.h"
-#include "data/event/V1.h"
-#include "data/event/V2.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
@@ -22,12 +20,12 @@ namespace blitzortung {
       return ! file.fail();
     }
 
-    EventsHeader::EventsHeader(const gr::date& date, const unsigned short version) :
+    EventsHeader::EventsHeader(const gr::date& date) :
       date_(date),
       logger_("data.EventsHeader")
     {
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "construct() date " << date << " version " << version;
+	logger_.debugStream() << "construct() date " << date;
     }
 
     EventsHeader::~EventsHeader() {
@@ -108,7 +106,7 @@ namespace blitzortung {
     }
 
     Event::AP EventsHeader::createEvent(std::iostream& stream) const {
-      return eventFactory_->createEvent(stream, date_);
+      return Event::AP(new Event(dataFormat_, date_, stream));
     }
 	
     std::string EventsHeader::formatFilename(const std::string& fileformat) const {

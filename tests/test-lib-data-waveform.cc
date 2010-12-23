@@ -1,7 +1,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "data/Sample.h"
+#include "data/Event.h"
 
 #include "test-lib-data-waveform.h"
 
@@ -14,8 +14,12 @@ void WaveformTest::tearDown() {
 }
 
 void WaveformTest::testCreate() {
+  bo::data::Format format(8,2,64);
+
+  bo::data::Array::AP array(new bo::data::Array(format));
+
   pt::ptime now;
-  bo::data::Sample::Waveform wfm(now, pt::nanoseconds(3125));
+  bo::data::Waveform wfm(array, now, pt::nanoseconds(3125));
 
 }
 

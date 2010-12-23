@@ -20,7 +20,7 @@ namespace hardware {
       public:
       
         //! create V4 hardware object
-	V4(comm::Base&, gps::Base&, const data::EventFactory&);
+	V4(comm::Base&, gps::Base&);
 
 	//! delete V4 hardware object	
 	virtual ~V4();
