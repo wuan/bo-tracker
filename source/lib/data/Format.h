@@ -30,17 +30,20 @@ namespace blitzortung {
 	*/
 	Format(unsigned short bits, unsigned short channels, unsigned int numberOfSamples);
 
+	//! create an invalid format
+	Format();
+
 	//! delete waveform object
 	virtual ~Format();
 
 	//! returns the number of bits
-	unsigned short getNumberOfBitsPerSample() const;
+	unsigned char getNumberOfBitsPerSample() const;
 
 	//! returns the number of channels per measurement
-	unsigned short getNumberOfChannels() const;
+	unsigned char getNumberOfChannels() const;
 
 	//! returns the number of measurements per waveform
-	unsigned int getNumberOfSamples() const;
+	unsigned short getNumberOfSamples() const;
 
     };
 
