@@ -2,7 +2,7 @@
 #define BLITZORTUNG_HARDWARE_PCB_V4_H_
 
 #include "hardware/pcb/Base.h"
-#include "data/Sample.h"
+#include "data/Event.h"
 
 namespace blitzortung {
 namespace hardware {
@@ -20,13 +20,13 @@ namespace hardware {
       public:
       
         //! create V4 hardware object
-	V4(comm::Base&, gps::Base&, const data::SampleFactory&);
+	V4(comm::Base&, gps::Base&, const data::EventFactory&);
 
 	//! delete V4 hardware object	
 	virtual ~V4();
 
 	//! returns a sample from the given splitted line returned from the measurement device
-	virtual data::Sample::AP parse(const std::vector<std::string> &);
+	virtual data::Event::AP parse(const std::vector<std::string> &);
     };
 
   }

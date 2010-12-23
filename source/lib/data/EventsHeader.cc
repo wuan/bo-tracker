@@ -46,7 +46,7 @@ namespace blitzortung {
     }  
 
     unsigned int EventsHeader::getEventSize() const {
-      return eventSize_;
+      return dataFormat_.getDataSize();
     }  
 
     void EventsHeader::read(const std::string& filename) {
@@ -86,15 +86,11 @@ namespace blitzortung {
 	date_ = STARTOFEPOCH + gr::days(fileEpochDays);
       }
 
+      dataFormat_.fromStream(fstream);
+
       // check if read position corresponds to header size
       assert(fstream.tellg() == getSize());
 
-      // set object to create event objects 
-      setFactory();
-
-      data::Event::AP firstEvent = eventFactory_->createEvent(fstream, date_);
-      eventSize_ = firstEvent->getSize();
-      
       fstream.seekg(0, std::ios::end);
       unsigned int filesize = fstream.tellg();
       
@@ -102,12 +98,12 @@ namespace blitzortung {
       
       filesize -= getSize();
 
-      numberOfEvents_ = filesize / eventSize_;
+      numberOfEvents_ = filesize / getEventSize();
 
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "read() date " << date_ << " #events " << numberOfEvents_ << " eventsize " << eventSize_ << " filesize " << filesize;
+	logger_.debugStream() << "read() date " << date_ << " #events " << numberOfEvents_ << " eventsize " << getEventSize() << " filesize " << filesize;
 
-      if (numberOfEvents_ * eventSize_ != filesize)
+      if (numberOfEvents_ * getEventSize() != filesize)
 	throw exception::Base("data::EventsHeader file size mismatch");
     }
 
@@ -151,37 +147,19 @@ namespace blitzortung {
 	fstream.write((char*) &fileEpochDays, sizeof(unsigned int));
       }
 
+      dataFormat_.toStream(fstream);
+
       assert(fstream.tellg() == getSize());
       
       fstream.close();
     }
-
-    void EventsHeader::setFactory() {
-
-      switch (version_) {
-	case 1:
-	  eventFactory_ = EventFactory::AP(new event::V1Factory());
-	  break;
-
-	case 2:
-	  eventFactory_ = EventFactory::AP(new event::V2Factory());
-	  break;
-
-	default:
-	  std::ostringstream oss;
-	  oss << "data::EventsHeader setFactory() unknown file version " << version_;
-	  throw exception::Base(oss.str().c_str());
-	  break;
-      }
-    }
-
 
     bool EventsHeader::fileExists(const std::string& filename) const {
       return file_exists(formatFilename(filename));
     }
     
     bool EventsHeader::operator==(const EventsHeader& other) {
-      return date_ == other.date_ && version_ == other.version_;
+      return date_ == other.date_ && dataFormat_ == other.dataFormat_;
     }
 	
     bool EventsHeader::operator!=(const EventsHeader& other) {

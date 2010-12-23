@@ -45,9 +45,6 @@ namespace blitzortung {
 	//! class logger
 	mutable Logger logger_;
 
-	//! set creator according to file version
-	void setFactory();
-
       public:
 
 	//! constructor

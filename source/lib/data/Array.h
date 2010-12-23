@@ -10,7 +10,7 @@
 namespace blitzortung {
   namespace data {
 
-    //! class for waveforms
+    //! class for waveform arrays
     class Array : boost::noncopyable {
 
       public:
@@ -36,7 +36,20 @@ namespace blitzortung {
 	//! delete waveform object
 	virtual ~Array();
 
-	unsigned int getIndex(unsigned int sample, unsigned short channel=0);
+	unsigned int getNumberOfSamples() const;
+
+	unsigned short getNumberOfChannels() const;
+
+	int get(unsigned int sample, unsigned short channel=0) const;
+
+	//! write binary object data to stream
+	void toStream(std::iostream&) const;
+
+	//! read binary object data from stream
+	void fromStream(std::iostream&);
+
+	const data::Format& getFormat() const;
+
     };
 
     std::ostream& operator <<(std::ostream& os, const bo::data::Array& array) {

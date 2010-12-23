@@ -5,8 +5,8 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
 
-      V4::V4(comm::Base& serial, gps::Base& gps, const data::SampleFactory& sampleFactory) :
-	Base(serial, gps, sampleFactory),
+      V4::V4(comm::Base& serial, gps::Base& gps, const data::EventFactory& eventFactory) :
+	Base(serial, gps, eventFactory),
 	logger_("hardware.pcb.V4")
       {
 	if (logger_.isDebugEnabled())
@@ -18,11 +18,11 @@ namespace blitzortung {
 	  logger_.debugStream() << "deleted";
       }
 
-      data::Sample::AP V4::parse(const std::vector<std::string> &fields) {
+      data::Event::AP V4::parse(const std::vector<std::string> &fields) {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "parse() called";
 
-	data::Sample::AP sample;
+	data::Event::AP event;
 	
 	// parse lighning event information
 	if (fields[0] == "BLSIG") {
@@ -39,19 +39,19 @@ namespace blitzortung {
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
 	    data::GpsInfo::AP gpsInfo(new data::GpsInfo(gps_));
 
-	    data::Sample::Waveform::AP waveform(new data::Sample::Waveform(eventtime));
+	    data::Waveform::AP waveform(new data::Event::Waveform(eventtime));
 	    waveform->add(maxX/1023.0, maxY/1023.0);
 
-	    sample = sampleFactory_.createSample(waveform, gpsInfo);
+	    event = eventFactory_.createEvent(waveform, gpsInfo);
 	  } else {
-	    logger_.warnStream() << "GPS information is not yet valid -> no sample created";
+	    logger_.warnStream() << "GPS information is not yet valid -> no event created";
 	  }
 
 	} else {
 	  logger_.errorStream() << "parse() data header '" << fields[0] << "' mismatch";
 	}
 
-	return sample;
+	return event;
       }
 
       void V4::parseGps(const std::vector<std::string>& fields) {

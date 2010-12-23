@@ -45,6 +45,18 @@ namespace blitzortung {
 	//! returns the number of measurements per waveform
 	unsigned short getNumberOfSamples() const;
 
+	//! returns the total size of the data according to the format
+	unsigned int getDataSize() const;
+
+	//! read the format parameters from stream
+	void fromStream(std::iostream&);
+
+	//! write format parameters to stream
+	void toStream(std::iostream&) const;
+
+	//! comparison operator for data format
+	bool operator==(const Format& other) const;
+
     };
 
     std::ostream& operator <<(std::ostream& os, const bo::data::Format &format) {

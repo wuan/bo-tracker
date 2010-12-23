@@ -42,7 +42,7 @@ namespace blitzortung {
 	\param t0 reference time of waveform
 	\param dt time between consecutive data
 	*/
-	Waveform(const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
+	Waveform(const data::Format& dataFormat, const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
 
         //! create a waveform object from a stream
 	/*!
@@ -50,7 +50,7 @@ namespace blitzortung {
 	\param date of the stream 
 	\param elements number of elements to read
 	*/
-	Waveform(std::iostream& stream, gr::date date, const unsigned int elements);
+	Waveform(const data::Format& dataFormat, gr::date date, std::iostream& stream);
 
 	//! delete waveform object
 	virtual ~Waveform();
@@ -62,19 +62,13 @@ namespace blitzortung {
 	void add(unsigned char x);
 
 	//! returns value at index
-	unsigned char get(unsigned int index) const;
+	int get(unsigned int index, unsigned short channel=0) const;
 
 	//! returns amplitude at index
 	float getAmplitude(unsigned int index) const;
 
 	//! returns index of maximum value
 	unsigned int getMaxIndex() const;
-
-	//! returns x-value at maximum
-	short getMaxX() const;
-
-	//! returns y-value at maximum
-	short getMaxY() const;
 
 	//! return timestamp of waveform
 	const pt::ptime& getTime() const;
@@ -93,10 +87,10 @@ namespace blitzortung {
 	}
 
 	//! write to stream
-	void write(std::iostream&, unsigned int elementCount);
+	void toStream(std::iostream&);
 
 	//! static function to determine size of a particular waveform structure
-	static unsigned int GetSize(unsigned int elements);
+	static unsigned int GetSize(const data::Format& dataFormat);
 
 
     };

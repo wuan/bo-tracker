@@ -9,8 +9,8 @@ namespace blitzortung {
     {
     }
 
-    Event::Event(std::iostream& stream, const gr::date& date, unsigned int size) {
-      waveform_ = Waveform::AP(new Waveform(stream, date, size));
+    Event::Event(const data::Format& format, const gr::date& date, std::iostream& stream) {
+      waveform_ = Waveform::AP(new Waveform(format, date, stream));
       gpsInfo_ = GpsInfo::AP(new GpsInfo(stream));
     }
 
@@ -68,19 +68,19 @@ namespace blitzortung {
 
       if (wfm.get() != 0) {
 	// write processed waveform to stream
-	wfm->write(stream, getNumberOfEvents());
+	wfm->toStream(stream);
       } else {
 	// write waveform to stream
-	waveform_->write(stream, getNumberOfEvents());
+	waveform_->toStream(stream);
       }
 
       // write gps information to stream
       gpsInfo_->write(stream);
     }
 
-    void Event::fromStream(std::iostream& stream, const gr::date& date) {
+    void Event::fromStream(const data::Format& dataFormat, const gr::date& date, std::iostream& stream) {
       // read waveform from stream
-      waveform_ = Waveform::AP(new Waveform(stream, date, getNumberOfEvents()));
+      waveform_ = Waveform::AP(new Waveform(dataFormat, date, stream));
 
       // read gps information from stream
       gpsInfo_ = GpsInfo::AP(new GpsInfo(stream));
@@ -91,7 +91,7 @@ namespace blitzortung {
     unsigned int Event::getSize() const {
       unsigned int gpsSize = GpsInfo::GetSize();
 
-      unsigned int waveformSize = Waveform::GetSize(getNumberOfEvents());
+      unsigned int waveformSize = Waveform::GetSize(waveform_->getArray().getFormat());
 
       //std::cout << "getSize() : gps: " << gpsSize << " wfm: " << waveformSize << " , # of samples: " << getNumberOfEvents() << std::endl;
 

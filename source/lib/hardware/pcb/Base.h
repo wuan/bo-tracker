@@ -6,8 +6,8 @@
 
 #include "hardware/comm/Base.h"
 #include "hardware/gps/Base.h"
-#include "data/Sample.h"
-#include "data/SampleFactory.h"
+#include "data/Event.h"
+#include "data/EventFactory.h"
 
 namespace blitzortung {
 namespace hardware {
@@ -33,7 +33,7 @@ namespace hardware {
 	gps::Base& gps_;
 
 	//! reference to sample factory
-	const data::SampleFactory& sampleFactory_;
+	const data::EventFactory& sampleFactory_;
 
 	//! returnes int value of given hex string
 	int parseHex(const std::string& hexString);
@@ -49,7 +49,7 @@ namespace hardware {
       public:
 
 	//! constructor for base class
-	Base(comm::Base&, gps::Base&, const data::SampleFactory&);
+	Base(comm::Base&, gps::Base&, const data::EventFactory&);
 
 	//! destructor
 	virtual ~Base();
@@ -58,13 +58,13 @@ namespace hardware {
 	bool isOpen() const;
 
 	//! returns a sample read from the hardware
-	data::Sample::AP read();
+	data::Event::AP read();
 
 	//! returns a sample parsed from the given string vector
 	/*!
 	this function needs to be declared in any of the derived classes
 	*/
-	virtual data::Sample::AP parse(const std::vector<std::string> &) = 0;
+	virtual data::Event::AP parse(const std::vector<std::string> &) = 0;
     };
 
   }
