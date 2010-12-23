@@ -147,6 +147,8 @@ namespace blitzortung {
 
       dataFormat_.toStream(fstream);
 
+      //std::cout << " header size: " << fstream.tellg() << " should be " << getSize();
+
       assert(fstream.tellg() == getSize());
       
       fstream.close();
@@ -165,7 +167,7 @@ namespace blitzortung {
     }
 
     unsigned int EventsHeader::getSize() const {
-      return 10;
+      return 12;
     }
     
   }
