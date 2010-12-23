@@ -14,6 +14,9 @@ namespace blitzortung {
       gpsInfo_ = GpsInfo::AP(new GpsInfo(stream));
     }
 
+    Event::~Event() {
+    }
+
     const Waveform& Event::getWaveform() const {
       return *waveform_;
     }
@@ -62,17 +65,14 @@ namespace blitzortung {
       return os;
     }
 
+    unsigned short Event::getNumberOfSamples() const {
+      return waveform_->getNumberOfSamples();
+    }
+
     void Event::toStream(std::iostream& stream) const {
 
-      Waveform::AP wfm = processWaveform();
-
-      if (wfm.get() != 0) {
-	// write processed waveform to stream
-	wfm->toStream(stream);
-      } else {
-	// write waveform to stream
-	waveform_->toStream(stream);
-      }
+      // write waveform to stream
+      waveform_->toStream(stream);
 
       // write gps information to stream
       gpsInfo_->write(stream);

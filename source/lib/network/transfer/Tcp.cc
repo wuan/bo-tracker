@@ -18,17 +18,17 @@ namespace blitzortung {
 	  logger_.debugStream() << "deleted";
       }
 
-      std::string Tcp::sampleToString(const data::Sample& sample) const {
-	const data::Sample::Waveform& wfm = sample.getWaveform();
-	const data::GpsInfo& gpsInfo = sample.getGpsInfo();
+      std::string Tcp::eventToString(const data::Event& event) const {
+	const data::Waveform& wfm = event.getWaveform();
+	const data::GpsInfo& gpsInfo = event.getGpsInfo();
 
 	const int AD_MAX_VALUE = 128;
 	const int AD_MAX_VOLTAGE = 2500;
 	const int AD_THRESHOLD_VOLTAGE = 500;
 
-        float maxX = wfm.getMaxX();
-	float maxY = wfm.getMaxY();
 	int maxIndex = wfm.getMaxIndex();
+        float maxX = wfm.get(maxIndex, 0);
+	float maxY = wfm.get(maxIndex, 1);
 
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "parseData() preliminary max X: " << maxX << " Y: " << maxY << " index: " << maxIndex; 
@@ -68,7 +68,7 @@ namespace blitzortung {
 	return oss.str();
       }
 
-      void Tcp::send(const data::Sample::VP& samples) const {
+      void Tcp::send(const data::Event::VP& events) const {
 	int sock_id;
 
 	sock_id = socket (AF_INET, SOCK_DGRAM, 0);
@@ -103,10 +103,10 @@ namespace blitzortung {
 	if (logger_.isInfoEnabled())
 	  logger_.infoStream() << "send data to '" << creds_.getServername() << "' port " << creds_.getServerport();
 
-	// loop through all current samples
-	for (data::Sample::CVI sample = samples->begin(); sample != samples->end(); sample++) {
+	// loop through all current events
+	for (data::Event::CVI event = events->begin(); event != events->end(); event++) {
 
-	  std::string data = sampleToString(*sample);
+	  std::string data = eventToString(*event);
 
 	  if (logger_.isInfoEnabled())
 	    logger_.infoStream() << data.substr(0, data.size() -1);

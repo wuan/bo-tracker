@@ -21,28 +21,28 @@ namespace blitzortung {
     }
 
 
-    void File::output(data::Sample::VP& samples) {
+    void File::output(data::Event::VP& events) {
 
-      data::Samples outputSamples;
+      data::Events outputEvents;
 
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "output()" << samples->size() << "samples";
+	logger_.debugStream() << "output()" << events->size() << "events";
 
-      // move all current samples to
-      for (data::Sample::VI sample = samples->begin(); sample != samples->end();) {
+      // move all current events to
+      for (data::Event::VI event = events->begin(); event != events->end();) {
 
-	if (outputSamples.size() != 0 &&
-	    outputSamples.getDate() != sample->getWaveform().getTime().date()) {
-	  outputSamples.appendToFile(outputFile_);
-	  outputSamples.clear();
+	if (outputEvents.size() != 0 &&
+	    outputEvents.getDate() != event->getWaveform().getTime().date()) {
+	  outputEvents.appendToFile(outputFile_);
+	  outputEvents.clear();
 	}
 
 
-	outputSamples.add(samples->release(sample));
+	outputEvents.add(events->release(event));
       }
 
-      if (outputSamples.size() > 0) {
-	outputSamples.appendToFile(outputFile_);
+      if (outputEvents.size() > 0) {
+	outputEvents.appendToFile(outputFile_);
       }
     }
 

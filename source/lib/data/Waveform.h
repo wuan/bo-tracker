@@ -42,7 +42,7 @@ namespace blitzortung {
 	\param t0 reference time of waveform
 	\param dt time between consecutive data
 	*/
-	Waveform(const data::Format& dataFormat, const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
+	Waveform(data::Array::AP array, const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
 
         //! create a waveform object from a stream
 	/*!
@@ -91,17 +91,9 @@ namespace blitzortung {
 
 	//! static function to determine size of a particular waveform structure
 	static unsigned int GetSize(const data::Format& dataFormat);
-
-
     };
 
-    std::ostream& operator <<(std::ostream& os, const bo::data::Waveform& wfm) {
-
-      os << wfm.getArray();
-
-      return os;
-    }
-
+    std::ostream& operator <<(std::ostream& os, const bo::data::Waveform& wfm);
 
   }
 }

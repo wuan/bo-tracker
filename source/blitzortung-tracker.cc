@@ -18,8 +18,6 @@
 #include "hardware/gps/Sjn.h"
 #include "hardware/pcb/V4.h"
 #include "hardware/pcb/V6.h"
-#include "data/sample/V1.h"
-#include "data/sample/V2.h"
 #include "Process.h"
 #include "network/transfer/Udp.h"
 #include "output/File.h"
@@ -143,23 +141,17 @@ int main(int argc, char **argv) {
   // waveform format description
   bo::data::Format::AP wfmFormat;
 
-  // create sample creator object
-  bo::data::SampleFactory::AP sampleFactory;
 
   // create hardware driver object for blitzortung measurement hardware
   bo::hardware::pcb::Base::AP hardware;
 
   switch (pcbVersion) {
     case 4:
-      wfmFormat = bo::data::Format::AP(new bo::data::Format(10, 2, 1));
-      sampleFactory = bo::data::SampleFactory::AP(new bo::data::sample::V1Factory());
-      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V4(serial, *gps, *sampleFactory));
+      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V4(serial, *gps));
       break;
 
     case 6:
-      wfmFormat = bo::data::Format::AP(new bo::data::Format(8, 2, 64));
-      sampleFactory = bo::data::SampleFactory::AP(new bo::data::sample::V2Factory());
-      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V6(serial, *gps, *sampleFactory));
+      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V6(serial, *gps));
       break;
 
     default:
@@ -187,15 +179,15 @@ int main(int argc, char **argv) {
     output = bo::output::Base::AP(new bo::output::None());
   }
 
-  //! create object of network driver for sample transmission
+  //! create object of network driver for event transmission
   bo::Process process(*transfer, pt::seconds(sleepTime), eventRateLimit, *output);
 
   while (hardware->isOpen()) {
 
-    bo::data::Sample::AP sample = hardware->read();
+    bo::data::Event::AP event = hardware->read();
 
-    if (sample.get() != 0) {
-      process.push(sample);
+    if (event.get() != 0) {
+      process.push(event);
     }
 
   }

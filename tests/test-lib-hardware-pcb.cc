@@ -7,8 +7,6 @@
 
 #include "hardware/comm/Dummy.h"
 #include "hardware/gps/Sirf.h"
-#include "data/sample/V1.h"
-#include "data/sample/V1Factory.h"
 
 #include "test-lib-hardware-pcb.h"
 
@@ -32,17 +30,15 @@ void HardwareTest::testV4() {
 
   bo::hardware::gps::Sirf gps(comm);
 
-  bo::data::sample::V1Factory sampleFactory;
-
-  bo::hardware::pcb::V4 pcb(comm, gps, sampleFactory);
+  bo::hardware::pcb::V4 pcb(comm, gps);
 
   int count = 0;
   while (pcb.isOpen()) {
 
-    bo::data::Sample::AP sample = pcb.read();
+    bo::data::Event::AP event = pcb.read();
 
-    if (sample.get() != 0) {
-      //std::cout << *sample << std::endl;
+    if (event.get() != 0) {
+      //std::cout << *event << std::endl;
       count++;
     }
 
@@ -67,17 +63,15 @@ void HardwareTest::testV6() {
 
   bo::hardware::gps::Sirf gps(comm);
 
-  bo::data::sample::V1Factory sampleFactory;
-
-  bo::hardware::pcb::V6 pcb(comm, gps, sampleFactory);
+  bo::hardware::pcb::V6 pcb(comm, gps);
 
   int count = 0;
   while (pcb.isOpen()) {
 
-    bo::data::Sample::AP sample = pcb.read();
+    bo::data::Event::AP event = pcb.read();
 
-    if (sample.get() != 0) {
-      //std::cout << *sample << std::endl;
+    if (event.get() != 0) {
+      //std::cout << *event << std::endl;
       count++;
     }
 

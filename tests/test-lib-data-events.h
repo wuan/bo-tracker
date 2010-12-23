@@ -7,12 +7,11 @@
 #include <boost/shared_ptr.hpp>
  
 #include "namespaces.h"
-#include "data/Samples.h"
-#include "data/SampleFactory.h"
+#include "data/Events.h"
  
-class SampleTest : public CPPUNIT_NS :: TestFixture
+class EventTest : public CPPUNIT_NS :: TestFixture
 {
-//  CPPUNIT_TEST_SUITE( SampleTest );
+//  CPPUNIT_TEST_SUITE( EventTest );
 //  CPPUNIT_TEST( testAdd );
 //  CPPUNIT_TEST( testWrite );
 //  CPPUNIT_TEST( testAppend );
@@ -21,12 +20,14 @@ class SampleTest : public CPPUNIT_NS :: TestFixture
 
   private:
 
-  bo::data::Samples::P getSamples1();
-  bo::data::Samples::P getSamples2();
-  bo::data::Sample::AP getSample(const pt::ptime&);
+  bo::data::Events::P getEvents1();
+  bo::data::Events::P getEvents2();
+  bo::data::Event::AP getEvent(const pt::ptime&);
 
   protected:
-  bo::data::SampleFactory::AP sampleFactory_;
+
+  bo::data::Format::AP dataFormat_;
+
   virtual unsigned int getDataSize() const = 0;
 
   public:

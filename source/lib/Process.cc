@@ -8,7 +8,7 @@ namespace blitzortung {
   Process::Process(network::transfer::Base& transfer, const pt::time_duration& sleepTime, const double eventRateLimit, output::Base& output) :
     logger_("Process")
   {
-    DataThread dataThread(sampleQueue_, transfer, output);
+    DataThread dataThread(eventQueue_, transfer, output);
 
     dataThread.setSleepTime(sleepTime);
     dataThread.setEventRateLimit(eventRateLimit);
@@ -19,8 +19,8 @@ namespace blitzortung {
   Process::~Process() {
   }
 
-  void Process::push(data::Sample::AP& data) {
-    sampleQueue_.push(data);
+  void Process::push(data::Event::AP& data) {
+    eventQueue_.push(data);
   }
 
 }

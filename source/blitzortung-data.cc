@@ -10,7 +10,7 @@
 #include <boost/program_options.hpp>
 
 #include "namespaces.h"
-#include "data/Samples.h"
+#include "data/Events.h"
 #include "exception/Base.h"
 #include "Logger.h"
 
@@ -42,8 +42,8 @@ pt::time_duration parseTime(const std::string& inputString, bool isEnd=false) {
     return time;
 }
 
-void printSample(const bo::data::Sample& sample) {
-    std::cout << sample << std::endl;
+void printEvent(const bo::data::Event& event) {
+    std::cout << event << std::endl;
 }
 
 int main(int argc, char **argv) {
@@ -106,16 +106,16 @@ int main(int argc, char **argv) {
     endTime = parseTime(endTimeString, true);
   }
 
-  bo::data::Samples samples;
+  bo::data::Events events;
 
-  samples.readFromFile(file, startTime, endTime);
+  events.readFromFile(file, startTime, endTime);
 
-  void (*sampleOperation)(const bo::data::Sample&);
+  void (*eventOperation)(const bo::data::Event&);
 
-  sampleOperation = &printSample;
+  eventOperation = &printEvent;
 
-  for (bo::data::Samples::CI sample = samples.begin(); sample != samples.end(); sample++) {
-    (*sampleOperation)(*sample);
+  for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
+    (*eventOperation)(*event);
   }
       
 }

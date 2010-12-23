@@ -40,6 +40,8 @@ namespace blitzortung {
 
 	unsigned short getNumberOfChannels() const;
 
+	void set(int value, unsigned int sample, unsigned short channel=0);
+
 	int get(unsigned int sample, unsigned short channel=0) const;
 
 	//! write binary object data to stream
@@ -52,9 +54,7 @@ namespace blitzortung {
 
     };
 
-    std::ostream& operator <<(std::ostream& os, const bo::data::Array& array) {
-      return os;
-    }
+    std::ostream& operator <<(std::ostream& os, const Array&);
 
   }
 }
