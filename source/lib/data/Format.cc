@@ -1,13 +1,15 @@
 #include "data/Format.h"
+#include "util/Stream.h"
 
 namespace blitzortung {
   namespace data {
 
-    Format::Format(unsigned short numberOfBits, unsigned short numberOfChannels, unsigned int numberOfSamples) :
+    Format::Format(unsigned char numberOfBits, unsigned char numberOfChannels, unsigned short numberOfSamples) :
       numberOfBits_(numberOfBits),
       numberOfChannels_(numberOfChannels),
       numberOfSamples_(numberOfSamples)
     {
+      updateSizes();
     }
 
     Format::Format() :
@@ -15,6 +17,7 @@ namespace blitzortung {
       numberOfChannels_(0),
       numberOfSamples_(0)
     {
+      updateSizes();
     }
 
     Format::~Format() {
@@ -32,17 +35,37 @@ namespace blitzortung {
       return numberOfSamples_;
     }
 
-    unsigned int Format::getDataSize() const {
-      int bitBytes = numberOfBits_ + 7;
+    void Format::updateSizes() {
+      unsigned short bitBytes = numberOfBits_ + 7;
       bitBytes /= 8;
+      sampleByteSize_ = bitBytes;
 
-      return bitBytes * numberOfChannels_ * numberOfSamples_;
+      dataByteSize_ = sampleByteSize_ * numberOfChannels_ * numberOfSamples_;
     }
 
-    void Format::fromStream(std::iostream&) {
+    unsigned short Format::getBytesPerSample() const {
+      return sampleByteSize_;
     }
 
-    void Format::toStream(std::iostream&) const {
+    unsigned int Format::getDataSize() const {
+      return dataByteSize_;
+    }
+
+    unsigned int Format::getIndex(unsigned short index, unsigned char channel) const {
+      return (index * numberOfChannels_ + channel) * sampleByteSize_;
+    }
+
+    void Format::fromStream(std::iostream& stream) {
+      util::Stream::ReadValue(stream, numberOfSamples_);
+      util::Stream::ReadValue(stream, numberOfChannels_);
+      util::Stream::ReadValue(stream, numberOfBits_);
+      updateSizes();
+    }
+
+    void Format::toStream(std::iostream& stream) const {
+      util::Stream::WriteValue(stream, numberOfSamples_);
+      util::Stream::WriteValue(stream, numberOfChannels_);
+      util::Stream::WriteValue(stream, numberOfBits_);
     }
 
     bool Format::operator==(const Format& other) const {
@@ -54,7 +77,8 @@ namespace blitzortung {
     std::ostream& operator<<(std::ostream& os, const Format& format) {
       os << format.getNumberOfBitsPerSample() << " ";
       os << format.getNumberOfSamples() << " ";
-      os << format.getNumberOfChannels();
+      os << format.getNumberOfChannels() << " ";
+      os << format.getBytesPerSample();
 
       return os;
     }

@@ -61,7 +61,7 @@ namespace blitzortung {
       return status_;
     }
 
-    void GpsInfo::write(std::iostream& stream) {
+    void GpsInfo::toStream(std::iostream& stream) {
       // write gps information to stream
       util::Stream::WriteValue(stream, longitude_);
       util::Stream::WriteValue(stream, latitude_);
