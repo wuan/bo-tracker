@@ -20,8 +20,9 @@ namespace blitzortung {
       return ! file.fail();
     }
 
-    EventsHeader::EventsHeader(const gr::date& date) :
+    EventsHeader::EventsHeader(const Format& dataFormat, const gr::date& date) :
       date_(date),
+      dataFormat_(dataFormat),
       logger_("data.EventsHeader")
     {
       if (logger_.isDebugEnabled())
@@ -31,12 +32,17 @@ namespace blitzortung {
     EventsHeader::~EventsHeader() {
     }
 
+    void EventsHeader::set(const Events& events) {
+      date_ = events.getDate();
+      dataFormat_ = events.getDataFormat();
+    }
+
     const gr::date& EventsHeader::getDate() const {
       return date_;
     }
 
-    void EventsHeader::setDate(const gr::date& date) {
-      date_ = date;
+    const Format& EventsHeader::getDataFormat() const {
+      return dataFormat_;
     }
 
     unsigned int EventsHeader::getNumberOfEvents() const {
@@ -65,6 +71,10 @@ namespace blitzortung {
 
 	// check for correct file ID
 	fstream.read(tempId, 4);
+	tempId[4] = 0;
+
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "read() ID: '" << tempId << "'";
 	
 	std::string fileId(tempId);
 	tempId[sizeof(tempId)-1] = 0;
@@ -82,9 +92,17 @@ namespace blitzortung {
 	// read file version from file
 	fstream.read((char*)&fileEpochDays, sizeof(unsigned int));
 	date_ = STARTOFEPOCH + gr::days(fileEpochDays);
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "read() epoch: " << fileEpochDays << " = " << date_;
       }
 
       dataFormat_.fromStream(fstream);
+      std::cout << "read data format\n";
+      std::cout << "bytes " << dataFormat_.getBytesPerSample() << std::endl;
+      std::cout << "df: " << dataFormat_ << std::endl;
+
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "read() data format: " << dataFormat_;
 
       // check if read position corresponds to header size
       assert(fstream.tellg() == getSize());

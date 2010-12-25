@@ -6,6 +6,7 @@
 #include "namespaces.h"
 #include "data/Event.h"
 #include "data/EventsHeader.h"
+#include "Logger.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
@@ -20,12 +21,18 @@ namespace blitzortung {
 	typedef boost::shared_ptr<Events> P;
 	//typedef event::Base Event;
 
-      protected:
+      private:
         //! date of events
 	gr::date date_;
 
+	//! data format
+	Format dataFormat_;
+
 	//! storage for events
 	Event::VP events_;
+
+	//! logger for this class
+	mutable Logger logger_;
 
 	//! add event reference by pointer to collection
 	void add(Event*);
@@ -45,6 +52,9 @@ namespace blitzortung {
 
 	//! get date of event collection
 	const gr::date& getDate() const;
+
+	//! get dataFormat
+	const Format& getDataFormat() const;
 
 	//! set date of event collection
 	void setDate(const gr::date&);
@@ -96,10 +106,10 @@ namespace blitzortung {
 	//
 	
 	//! append current events to given file
-	std::string appendToFile(const std::string&, const unsigned short fileVersion = 0);
+	std::string appendToFile(const std::string&);
 
 	//! write current events to given file
-	std::string writeToFile(const std::string&, const unsigned short fileVersion = 0);
+	std::string writeToFile(const std::string&);
 
 	//! read events from given file
 	void readFromFile(const std::string&, const pt::time_duration& starttime = pt::time_duration(pt::not_a_date_time), const pt::time_duration& endtime = pt::time_duration(pt::not_a_date_time));

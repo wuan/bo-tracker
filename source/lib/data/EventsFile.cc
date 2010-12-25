@@ -80,7 +80,7 @@ namespace blitzortung {
 
       if (events.size() > 0) {
 
-	header_.setDate(events.front().getWaveform().getTime().date());
+	header_.set(events);
 
 	setFilename(name);
 

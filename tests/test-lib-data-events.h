@@ -5,44 +5,46 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <boost/shared_ptr.hpp>
- 
+
 #include "namespaces.h"
 #include "data/Events.h"
- 
+#include "Logger.h"
+
 class EventTest : public CPPUNIT_NS :: TestFixture
 {
-//  CPPUNIT_TEST_SUITE( EventTest );
-//  CPPUNIT_TEST( testAdd );
-//  CPPUNIT_TEST( testWrite );
-//  CPPUNIT_TEST( testAppend );
-//  CPPUNIT_TEST( testSize );
-//  CPPUNIT_TEST_SUITE_END();
+  //  CPPUNIT_TEST_SUITE( EventTest );
+  //  CPPUNIT_TEST( testAdd );
+  //  CPPUNIT_TEST( testWrite );
+  //  CPPUNIT_TEST( testAppend );
+  //  CPPUNIT_TEST( testSize );
+  //  CPPUNIT_TEST_SUITE_END();
 
   private:
 
-  bo::data::Events::P getEvents1();
-  bo::data::Events::P getEvents2();
-  bo::data::Event::AP getEvent(const pt::ptime&);
+    bo::data::Events::P getEvents1();
+    bo::data::Events::P getEvents2();
+    bo::data::Event::AP getEvent(const pt::ptime&);
 
   protected:
 
-  bo::data::Format::AP dataFormat_;
+    bo::data::Format::AP dataFormat_;
 
-  virtual unsigned int getDataSize() const = 0;
+    virtual unsigned int getDataSize() const = 0;
 
   public:
-  virtual void setUp() = 0;
-  virtual void tearDown();
 
-  //! tests
+    virtual void setUp() = 0;
+    virtual void tearDown();
 
-  void testAdd();
+    //! tests
 
-  void testWrite();
+    void testAdd();
 
-  void testAppend();
+    void testWrite();
 
-  void testSize();
+    void testAppend();
+
+    void testSize();
 };
 
 #endif
