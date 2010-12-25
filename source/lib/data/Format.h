@@ -10,7 +10,7 @@ namespace blitzortung {
   namespace data {
 
     //! class for waveforms
-    class Format : boost::noncopyable {
+    class Format {
 
       public:
 
@@ -26,7 +26,7 @@ namespace blitzortung {
 
 	unsigned char sampleByteSize_;
 
-	unsigned char dataByteSize_;
+	unsigned int dataByteSize_;
 
 	void updateSizes();
 

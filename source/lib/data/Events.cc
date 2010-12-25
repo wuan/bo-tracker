@@ -5,18 +5,25 @@ namespace blitzortung {
   namespace data {
 
     Events::Events() :
-      events_(new Event::V())
+      events_(new Event::V()),
+      logger_("data.Events")
     {
     }
 
     void Events::add(Event* event) {
       if (events_->size() == 0) {
 	date_ = event->getWaveform().getTime().date();
+	dataFormat_ = event->getWaveform().getArray().getFormat();
       } else {
 	if (date_ != event->getWaveform().getTime().date())
 	  throw exception::Base("event date mismatch");
       }
-      events_->push_back(event);
+      if (date_ == event->getWaveform().getTime().date() &&
+	  dataFormat_ == event->getWaveform().getArray().getFormat()) {
+	events_->push_back(event);
+      } else {
+	throw exception::Base("data.Events.add() mismatch");
+      }
     }
 
     void Events::add(Event::AP event) {
@@ -40,6 +47,10 @@ namespace blitzortung {
       } else {
 	throw exception::Base("data::Events::setDate() setting of date not allowed");
       }
+    }
+
+    const Format& Events::getDataFormat() const {
+      return dataFormat_;
     }
 
     int Events::size() const {
@@ -90,8 +101,12 @@ namespace blitzortung {
       return events_->end();
     }
 
-    std::string Events::appendToFile(const std::string& fileName, const unsigned short fileVersion) {
+    std::string Events::appendToFile(const std::string& fileName) {
       if (events_->size() > 0) {
+
+	if (logger_.isDebugEnabled()) {
+	  logger_.debugStream() << "appendToFile() " << fileName << " (" << events_->size() << " events)";
+	}
 
 	EventsFile eventsFile(fileName);
 
@@ -102,8 +117,12 @@ namespace blitzortung {
       return "";
     }
 
-    std::string Events::writeToFile(const std::string& fileName, const unsigned short fileVersion) {
+    std::string Events::writeToFile(const std::string& fileName) {
       if (events_->size() > 0) {
+
+	if (logger_.isDebugEnabled()) {
+	  logger_.debugStream() << "appendToFile() " << fileName << " (" << events_->size() << " events)";
+	}
 
 	EventsFile eventsFile(fileName);
 
@@ -114,9 +133,13 @@ namespace blitzortung {
       return "";
     }
 
-    void Events::readFromFile(const std::string& filename, const pt::time_duration& startTime, const pt::time_duration& endTime) {
+    void Events::readFromFile(const std::string& fileName, const pt::time_duration& startTime, const pt::time_duration& endTime) {
 
-      EventsFile eventsFile(filename);
+      if (logger_.isDebugEnabled()) {
+	logger_.debugStream() << "readFromFile() " << fileName << " (from " << startTime << " to " << endTime <<")";
+      }
+
+      EventsFile eventsFile(fileName);
       events_ = eventsFile.read(startTime, endTime);
       date_ = eventsFile.getHeader().getDate();
     }

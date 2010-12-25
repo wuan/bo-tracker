@@ -7,10 +7,13 @@
 #include "namespaces.h"
 #include "Logger.h"
 #include "data/Event.h"
+#include "data/Events.h"
 #include "data/Format.h"
 
 namespace blitzortung {
   namespace data {
+
+    class Events;
 
     //! file io helper class for data::Events
     class EventsHeader {
@@ -42,7 +45,7 @@ namespace blitzortung {
       public:
 
 	//! constructor
-	EventsHeader(const gr::date& date = gr::date(gr::not_a_date_time));
+	EventsHeader(const Format& dataFormat=Format(0,0,0), const gr::date& date = gr::date(gr::not_a_date_time));
 
 	//! destructor
 	~EventsHeader();
@@ -51,10 +54,13 @@ namespace blitzortung {
 	void read(std::ifstream&);
 
 	//! set header date
-	void setDate(const gr::date&);
+	void set(const Events&);
 
 	//! get header date
 	const gr::date& getDate() const;
+
+	//! get data format
+	const Format& getDataFormat() const;
 	
 	//! get number of events in file
 	unsigned int getNumberOfEvents() const;
