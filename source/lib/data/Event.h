@@ -72,6 +72,9 @@ namespace blitzortung {
 	//! get binary storage size of sample
 	unsigned int getSize() const;
 
+	//! get binary storage size of sample
+	static unsigned int GetSize(const Format& dataFormat);
+
     };
 
     std::ostream& operator << (std::ostream& os, const Event&);

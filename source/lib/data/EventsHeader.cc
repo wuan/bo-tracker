@@ -50,7 +50,7 @@ namespace blitzortung {
     }  
 
     unsigned int EventsHeader::getEventSize() const {
-      return dataFormat_.getDataSize();
+      return Event::GetSize(dataFormat_);
     }  
 
     void EventsHeader::read(const std::string& filename) {
@@ -97,9 +97,6 @@ namespace blitzortung {
       }
 
       dataFormat_.fromStream(fstream);
-      std::cout << "read data format\n";
-      std::cout << "bytes " << dataFormat_.getBytesPerSample() << std::endl;
-      std::cout << "df: " << dataFormat_ << std::endl;
 
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "read() data format: " << dataFormat_;
@@ -109,6 +106,7 @@ namespace blitzortung {
 
       fstream.seekg(0, std::ios::end);
       unsigned int filesize = fstream.tellg();
+
       
       fstream.close();
       
