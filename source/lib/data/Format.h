@@ -73,10 +73,10 @@ namespace blitzortung {
 	//! comparison operator for data format
 	bool operator==(const Format& other) const;
 
-	//! stream output operator
-	std::ostream& operator<<(std::ostream& os) const;
-
     };
+
+    //! stream output operator
+    std::ostream& operator<<(std::ostream& os, const Format& format);
 
 
   }

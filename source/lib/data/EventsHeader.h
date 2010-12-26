@@ -31,12 +31,12 @@ namespace blitzortung {
 	//! file date
 	gr::date date_;
 
-	//! events per entry
-	unsigned short numberOfEvents_;
-
 	//! data format
 	data::Format dataFormat_;
 	
+	//! events per entry
+	unsigned short numberOfEvents_;
+
 	//***********************************
 
 	//! class logger

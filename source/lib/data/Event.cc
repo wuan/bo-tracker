@@ -89,9 +89,14 @@ namespace blitzortung {
 
     //! get binary storage size of sample
     unsigned int Event::getSize() const {
+      return GetSize(waveform_->getArray().getFormat());
+    }
+
+    //! get binary storage size of sample
+    unsigned int Event::GetSize(const Format& dataFormat) {
       unsigned int gpsSize = GpsInfo::GetSize();
 
-      unsigned int waveformSize = Waveform::GetSize(waveform_->getArray().getFormat());
+      unsigned int waveformSize = Waveform::GetSize(dataFormat);
 
       //std::cout << "getSize() : gps: " << gpsSize << " wfm: " << waveformSize << " , # of samples: " << getNumberOfEvents() << std::endl;
 

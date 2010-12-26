@@ -96,16 +96,23 @@ namespace blitzortung {
 	} else {
 	  header_.write(getFilename());
 	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "writeEvents() write header " << header_.getDate() << " ";
+	    logger_.debugStream() << "writeEvents() write header " << header_.getDate() << " " << header_.getDataFormat() << " ";
 	}
 
 	open(std::ios::out | std::ios::binary | std::ios::app);
 
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "writeEvents() write " << events.size() << " events";
+	  logger_.debugStream() << "writeEvents() write " << events.size() << " events (" << events.front().getSize() << " bytes per event)";
+
+	unsigned int position = fstream_.tellg();
 
 	for (Event::CVI event = events.begin(); event != events.end(); event++) {
 	  event->toStream(fstream_);
+	  if (logger_.isDebugEnabled()) {
+	    logger_.debugStream() << "writeEvents()   position " << fstream_.tellg() << " delta " << (int(fstream_.tellg()) - position);
+	    position = fstream_.tellg();
+	  }
+
 	}
 
 	close();
@@ -149,6 +156,8 @@ namespace blitzortung {
     }
 		
     Event::VP EventsFile::read(const pt::time_duration& start, const pt::time_duration& end) {
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "read()";
 
       Event::VP events(new Event::V());
       
@@ -168,6 +177,7 @@ namespace blitzortung {
       fstream_.seekg(header_.getSize() + startIndex * header_.getEventSize() , std::ios::beg);
 
       unsigned int numberOfEvents = endIndex - startIndex;
+
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "read() read " << numberOfEvents << " events (" << startIndex << " - " << endIndex - 1 << ")";
 

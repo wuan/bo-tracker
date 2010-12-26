@@ -108,13 +108,9 @@ void EventTest::testWrite() {
   events->writeToFile("UserName_%Y%m%d.bos");
   std::string fileName = events->writeToFile("UserName_%Y%m%d.bos");
 
-  std::cout << "file written\n";
-
   events->clear();
 
   CPPUNIT_ASSERT_EQUAL(events->size() , 0);
-
-  std::cout << "events cleared\n";
 
   events->readFromFile(fileName);
 
