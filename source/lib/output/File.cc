@@ -21,15 +21,14 @@ namespace blitzortung {
     }
 
 
-    void File::output(data::Event::VP& events) {
-
-      data::Events outputEvents;
+    void File::output(data::Events& events) {
+      data::Events outputEvents(events.getDate(), events.getDataFormat());
 
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "output()" << events->size() << "events";
+	logger_.debugStream() << "output()" << events.size() << "events";
 
       // move all current events to
-      for (data::Event::VI event = events->begin(); event != events->end();) {
+      for (data::Event::VI event = events.begin(); event != events.end();) {
 
 	if (outputEvents.size() != 0 &&
 	    outputEvents.getDate() != event->getWaveform().getTime().date()) {
@@ -37,8 +36,7 @@ namespace blitzortung {
 	  outputEvents.clear();
 	}
 
-
-	outputEvents.add(events->release(event));
+	outputEvents.add(events.release(event));
       }
 
       if (outputEvents.size() > 0) {

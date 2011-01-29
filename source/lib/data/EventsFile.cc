@@ -155,12 +155,11 @@ namespace blitzortung {
       }
     }
 		
-    Event::VP EventsFile::read(const pt::time_duration& start, const pt::time_duration& end) {
+    Events::AP EventsFile::read(const pt::time_duration& start, const pt::time_duration& end) {
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "read()";
 
-      Event::VP events(new Event::V());
-      
+
       header_.read(name_);
      
       open(std::ios::in | std::ios::binary);
@@ -181,10 +180,12 @@ namespace blitzortung {
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "read() read " << numberOfEvents << " events (" << startIndex << " - " << endIndex - 1 << ")";
 
+      Events::AP events(new Events(header_));
+      
       for(unsigned int i=0; i < numberOfEvents; i++) {
 	Event::AP event(header_.createEvent(fstream_));
 
-	events->push_back(event);
+	events->add(event);
       }
 
       close();

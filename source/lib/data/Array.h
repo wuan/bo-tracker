@@ -20,7 +20,7 @@ namespace blitzortung {
       private:
 
 	//! reference to data format object
-	const Format& format_;
+	Format::CP format_;
 
 	//! vector for x channel data
 	char* data_;
@@ -31,7 +31,10 @@ namespace blitzortung {
 	/*!
 	\param format reference to array format definition
 	*/
-	Array(const Format& format);
+	Array(Format::CP format);
+
+	//! create a waveform array object from an existing one and replace the format
+	Array(Array& array, Format::CP format);
 
 	//! delete waveform object
 	virtual ~Array();
@@ -50,7 +53,7 @@ namespace blitzortung {
 	//! read binary object data from stream
 	void fromStream(std::iostream&);
 
-	const data::Format& getFormat() const;
+	const Format::CP& getFormat() const;
 
     };
 

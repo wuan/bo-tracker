@@ -76,7 +76,7 @@ namespace blitzortung {
 	void write(const Events&);
 	
 	//! read time range from file
-	Event::VP read(const pt::time_duration& start = pt::time_duration(pt::not_a_date_time), const pt::time_duration& end = pt::time_duration(pt::not_a_date_time));
+	Events::AP read(const pt::time_duration& start = pt::time_duration(pt::not_a_date_time), const pt::time_duration& end = pt::time_duration(pt::not_a_date_time));
     };
 
   }

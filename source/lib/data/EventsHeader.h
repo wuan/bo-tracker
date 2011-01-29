@@ -32,7 +32,7 @@ namespace blitzortung {
 	gr::date date_;
 
 	//! data format
-	data::Format dataFormat_;
+	Format::CP dataFormat_;
 	
 	//! events per entry
 	unsigned short numberOfEvents_;
@@ -45,7 +45,7 @@ namespace blitzortung {
       public:
 
 	//! constructor
-	EventsHeader(const Format& dataFormat=Format(0,0,0), const gr::date& date = gr::date(gr::not_a_date_time));
+	EventsHeader(Format::CP dataFormat=Format::CP(new Format(0,0,0)), const gr::date& date = gr::date(gr::not_a_date_time));
 
 	//! destructor
 	~EventsHeader();
@@ -60,7 +60,7 @@ namespace blitzortung {
 	const gr::date& getDate() const;
 
 	//! get data format
-	const Format& getDataFormat() const;
+	const Format::CP& getDataFormat() const;
 	
 	//! get number of events in file
 	unsigned int getNumberOfEvents() const;
@@ -71,9 +71,6 @@ namespace blitzortung {
 	bool operator==(const EventsHeader&);
 	
 	bool operator!=(const EventsHeader&);
-
-	//! create event from stream
-	Event::AP createEvent(std::iostream& stream) const;
 
 	std::string formatFilename(const std::string& fileformat) const;
 
@@ -86,6 +83,10 @@ namespace blitzortung {
 	//! write file header
 	void write(const std::string&) const;
 	
+	//! create event from stream
+	Event::AP createEvent(std::iostream& stream) const;
+
+	//! return size of header in bytes
 	unsigned int getSize() const;
     };
 

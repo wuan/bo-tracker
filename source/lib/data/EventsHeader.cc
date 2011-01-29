@@ -20,7 +20,7 @@ namespace blitzortung {
       return ! file.fail();
     }
 
-    EventsHeader::EventsHeader(const Format& dataFormat, const gr::date& date) :
+    EventsHeader::EventsHeader(Format::CP dataFormat, const gr::date& date) :
       date_(date),
       dataFormat_(dataFormat),
       logger_("data.EventsHeader")
@@ -41,7 +41,7 @@ namespace blitzortung {
       return date_;
     }
 
-    const Format& EventsHeader::getDataFormat() const {
+    const Format::CP& EventsHeader::getDataFormat() const {
       return dataFormat_;
     }
 
@@ -96,7 +96,7 @@ namespace blitzortung {
 	  logger_.debugStream() << "read() epoch: " << fileEpochDays << " = " << date_;
       }
 
-      dataFormat_.fromStream(fstream);
+      dataFormat_ = Format::CP(new Format(fstream));
 
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "read() data format: " << dataFormat_;
@@ -121,10 +121,6 @@ namespace blitzortung {
 	throw exception::Base("data::EventsHeader file size mismatch");
     }
 
-    Event::AP EventsHeader::createEvent(std::iostream& stream) const {
-      return Event::AP(new Event(dataFormat_, date_, stream));
-    }
-	
     std::string EventsHeader::formatFilename(const std::string& fileformat) const {
 
       if (! date_.is_not_a_date()) {
@@ -161,7 +157,7 @@ namespace blitzortung {
 	fstream.write((char*) &fileEpochDays, sizeof(unsigned int));
       }
 
-      dataFormat_.toStream(fstream);
+      dataFormat_->toStream(fstream);
 
       //std::cout << " header size: " << fstream.tellg() << " should be " << getSize();
 
@@ -182,6 +178,10 @@ namespace blitzortung {
       return !(*this == other);
     }
 
+    Event::AP EventsHeader::createEvent(std::iostream& stream) const {
+      return Event::AP(new Event(dataFormat_, date_, stream));
+    }
+	
     unsigned int EventsHeader::getSize() const {
       return 12;
     }

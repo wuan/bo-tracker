@@ -15,6 +15,8 @@ namespace blitzortung {
       public:
 
 	typedef std::auto_ptr<Format> AP;
+	typedef boost::shared_ptr<Format> P;
+	typedef boost::shared_ptr<const Format> CP;
 
       private:
 
@@ -43,6 +45,10 @@ namespace blitzortung {
 	//! create an invalid format
 	Format();
 
+	//! construct from stream
+	Format(std::iostream&);
+
+
 	//! delete waveform object
 	virtual ~Format();
 
@@ -63,9 +69,6 @@ namespace blitzortung {
 
 	//! returns the index position of the data value
 	unsigned int getIndex(unsigned short index, unsigned char channel) const;
-
-	//! read the format parameters from stream
-	void fromStream(std::iostream&);
 
 	//! write format parameters to stream
 	void toStream(std::iostream&) const;

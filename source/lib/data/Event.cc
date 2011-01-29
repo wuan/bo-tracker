@@ -9,7 +9,7 @@ namespace blitzortung {
     {
     }
 
-    Event::Event(const data::Format& format, const gr::date& date, std::iostream& stream) {
+    Event::Event(data::Format::CP format, const gr::date& date, std::iostream& stream) {
       waveform_ = Waveform::AP(new Waveform(format, date, stream));
       gpsInfo_ = GpsInfo::AP(new GpsInfo(stream));
     }
@@ -78,7 +78,7 @@ namespace blitzortung {
       gpsInfo_->toStream(stream);
     }
 
-    void Event::fromStream(const data::Format& dataFormat, const gr::date& date, std::iostream& stream) {
+    void Event::fromStream(data::Format::P& dataFormat, const gr::date& date, std::iostream& stream) {
       // read waveform from stream
       waveform_ = Waveform::AP(new Waveform(dataFormat, date, stream));
 
@@ -93,10 +93,10 @@ namespace blitzortung {
     }
 
     //! get binary storage size of sample
-    unsigned int Event::GetSize(const Format& dataFormat) {
+    unsigned int Event::GetSize(const Format::CP& dataFormat) {
       unsigned int gpsSize = GpsInfo::GetSize();
 
-      unsigned int waveformSize = Waveform::GetSize(dataFormat);
+      unsigned int waveformSize = Waveform::GetSize(*dataFormat);
 
       //std::cout << "getSize() : gps: " << gpsSize << " wfm: " << waveformSize << " , # of samples: " << getNumberOfEvents() << std::endl;
 

@@ -55,7 +55,7 @@ namespace blitzortung {
       return (index * numberOfChannels_ + channel) * sampleByteSize_;
     }
 
-    void Format::fromStream(std::iostream& stream) {
+    Format::Format(std::iostream& stream) {
       util::Stream::ReadValue(stream, numberOfSamples_);
       util::Stream::ReadValue(stream, numberOfChannels_);
       util::Stream::ReadValue(stream, numberOfBits_);
