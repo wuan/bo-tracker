@@ -26,7 +26,7 @@ namespace blitzortung {
       const network::transfer::Base& transfer_;
 
       //! vector of samples
-      data::Event::VP samples_;
+      data::Events::P events_;
 
       //! limit value of maximum events / second;
       double eventRateLimit_;
@@ -38,7 +38,7 @@ namespace blitzortung {
       mutable Logger logger_;
 
       //! prepare data for transmission
-      data::Event::VP prepareData(pt::ptime&, pt::ptime&);
+      data::Events::AP prepareData(pt::ptime&, pt::ptime&);
 
       //! get string to be transmitted for every sample
       std::string sampleToString(const data::Event& sample);

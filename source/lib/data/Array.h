@@ -20,7 +20,7 @@ namespace blitzortung {
       private:
 
 	//! reference to data format object
-	Format::CP format_;
+	const Format::CP format_;
 
 	//! vector for x channel data
 	char* data_;
@@ -31,7 +31,7 @@ namespace blitzortung {
 	/*!
 	\param format reference to array format definition
 	*/
-	Array(Format::CP format);
+	Array(const Format::CP& format);
 
 	//! create a waveform array object from an existing one and replace the format
 	Array(Array& array, Format::CP format);

@@ -88,5 +88,17 @@ namespace blitzortung {
       return gpsInfo.getSize();
     }
 
+    std::ostream& operator <<(std::ostream& os, const bo::data::GpsInfo &gpsInfo) {
+      os.setf(std::ios::fixed);
+      os.precision(4);
+
+      os << gpsInfo.getLongitude() << " " << gpsInfo.getLatitude();
+      os << " " << gpsInfo.getAltitude();
+      os << " " << (int) gpsInfo.getNumberOfSatellites();
+
+      return os;
+    }
+
+
   }
 }

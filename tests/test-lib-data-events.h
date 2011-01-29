@@ -27,7 +27,7 @@ class EventTest : public CPPUNIT_NS :: TestFixture
 
   protected:
 
-    bo::data::Format::AP dataFormat_;
+    bo::data::Format::CP dataFormat_;
 
     virtual unsigned int getDataSize() const = 0;
 

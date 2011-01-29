@@ -8,7 +8,7 @@
 
 bo::data::Event::AP EventTest::getEvent(const pt::ptime& time) {
 
-  bo::data::Array::AP array(new bo::data::Array(*dataFormat_));
+  bo::data::Array::AP array(new bo::data::Array(dataFormat_));
 
   for (unsigned int i=0; i < 128; i++) {
     array->set(100 - i, i, 0);
@@ -155,5 +155,4 @@ void EventTest::testSize() {
   CPPUNIT_ASSERT_EQUAL(dataSize, event->getSize());
 
   CPPUNIT_ASSERT_EQUAL(dataSize, ss.str().size());
-
 }

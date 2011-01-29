@@ -68,7 +68,7 @@ namespace blitzortung {
 	return oss.str();
       }
 
-      void Tcp::send(const data::Event::VP& events) const {
+      void Tcp::send(const data::Events& events) const {
 	int sock_id;
 
 	sock_id = socket (AF_INET, SOCK_DGRAM, 0);
@@ -104,7 +104,7 @@ namespace blitzortung {
 	  logger_.infoStream() << "send data to '" << creds_.getServername() << "' port " << creds_.getServerport();
 
 	// loop through all current events
-	for (data::Event::CVI event = events->begin(); event != events->end(); event++) {
+	for (data::Event::CVI event = events.begin(); event != events.end(); event++) {
 
 	  std::string data = eventToString(*event);
 

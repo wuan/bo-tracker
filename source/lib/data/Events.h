@@ -32,7 +32,7 @@ namespace blitzortung {
 	Format::CP dataFormat_;
 
 	//! storage for events
-	Event::VP events_;
+	Event::V events_;
 
 	//! logger for this class
 	mutable Logger logger_;
@@ -41,10 +41,13 @@ namespace blitzortung {
 	void add(Event*);
 
 	//! replace events by events of given structure
-	void replace(const Events&);
+	void replace(Events&);
 
       public:
 
+	//! create empty Events
+	Events();
+	
 	//! create Events from header
 	Events(const EventsHeader& header);
 
@@ -61,7 +64,7 @@ namespace blitzortung {
 	void add(Events&) throw(exception::Base);
 
 	//! release event from events
-	Event::AP release(Event::VI&);
+	Event::AP release(Event::VI);
 
 	//! get date of event collection
 	const gr::date& getDate() const;
@@ -81,7 +84,7 @@ namespace blitzortung {
 	//! set event sort behaviour
         template< class Compare >
         void sort( Compare comp ) {
-	  events_->sort(comp);
+	  events_.sort(comp);
 	}
 
 	//! erase all events
@@ -113,6 +116,10 @@ namespace blitzortung {
 	
 	//! get iterator to end of collection
 	Event::VI end();
+
+	void transfer(Event::VI, Event::VI, Event::VI, Events&);
+
+	void transfer(Event::VI, Events&);
 
 	//
 	// file operations

@@ -14,7 +14,7 @@ void WaveformTest::tearDown() {
 }
 
 void WaveformTest::testCreate() {
-  bo::data::Format format(8,2,64);
+  bo::data::Format::CP format(new bo::data::Format(8,2,64));
 
   bo::data::Array::AP array(new bo::data::Array(format));
 

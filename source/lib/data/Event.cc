@@ -41,30 +41,6 @@ namespace blitzortung {
       return x.getWaveform().getAmplitude(0) < y.getWaveform().getAmplitude(0);
     } 
 
-    std::ostream& operator <<(std::ostream& os, const bo::data::Event &sample) {
-      const data::Waveform& wfm = sample.getWaveform();
-      const data::GpsInfo& gpsInfo = sample.getGpsInfo();
-
-      pt::time_facet *timefacet = new pt::time_facet();
-      timefacet->format("%Y-%m-%d %H:%M:%S.%f");
-      std::locale oldLocale = os.imbue(std::locale(std::locale::classic(), timefacet));
-
-      os.setf(std::ios::fixed);
-      os.precision(4);
-      os << wfm.getTime() << " " << gpsInfo.getLongitude() << " " << gpsInfo.getLatitude();
-      os << " " << gpsInfo.getAltitude();
-      os << " " << (int) gpsInfo.getNumberOfSatellites();
-      os << " " << wfm.getTimeDelta().total_nanoseconds();
-
-	os.precision(2);
-	  os << " " << wfm;
-
-      // restore original locale
-      os.imbue(oldLocale);
-
-      return os;
-    }
-
     unsigned short Event::getNumberOfSamples() const {
       return waveform_->getNumberOfSamples();
     }
@@ -101,6 +77,28 @@ namespace blitzortung {
       //std::cout << "getSize() : gps: " << gpsSize << " wfm: " << waveformSize << " , # of samples: " << getNumberOfEvents() << std::endl;
 
       return gpsSize + waveformSize;
+    }
+
+    std::ostream& operator <<(std::ostream& os, const bo::data::Event &sample) {
+      const data::Waveform& wfm = sample.getWaveform();
+      const data::GpsInfo& gpsInfo = sample.getGpsInfo();
+
+      pt::time_facet *timefacet = new pt::time_facet();
+      timefacet->format("%Y-%m-%d %H:%M:%S.%f");
+      std::locale oldLocale = os.imbue(std::locale(std::locale::classic(), timefacet));
+
+      os.setf(std::ios::fixed);
+      os.precision(4);
+      os << wfm.getTime() << " " << gpsInfo;
+      os << " " << wfm.getTimeDelta().total_nanoseconds();
+
+      os.precision(2);
+      os << " " << wfm;
+
+      // restore original locale
+      os.imbue(oldLocale);
+
+      return os;
     }
 
 

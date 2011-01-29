@@ -84,6 +84,9 @@ namespace blitzortung {
 
     };
 
+    
+    std::ostream& operator << (std::ostream& os, const GpsInfo&);
+
   }
 }
 #endif
