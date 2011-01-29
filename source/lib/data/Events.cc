@@ -4,10 +4,12 @@
 namespace blitzortung {
   namespace data {
 
-    Events::Events() :
+    Events::Events(const EventsHeader& header) :
       events_(new Event::V()),
       logger_("data.Events")
     {
+      dataFormat_ = header.getDataFormat();
+      date_ = header.getDate();
     }
 
     void Events::add(Event* event) {
@@ -49,9 +51,10 @@ namespace blitzortung {
       }
     }
 
-    const Format& Events::getDataFormat() const {
+    const Format::CP& Events::getDataFormat() const {
       return dataFormat_;
     }
+
 
     int Events::size() const {
       return events_->size();
@@ -140,8 +143,7 @@ namespace blitzortung {
       }
 
       EventsFile eventsFile(fileName);
-      events_ = eventsFile.read(startTime, endTime);
-      date_ = eventsFile.getHeader().getDate();
+      replace(*(eventsFile.read(startTime, endTime)));
     }
 
   }

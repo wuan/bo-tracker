@@ -50,7 +50,7 @@ namespace blitzortung {
 	\param date of the stream 
 	\param elements number of elements to read
 	*/
-	Waveform(const data::Format& dataFormat, gr::date date, std::iostream& stream);
+	Waveform(data::Format::CP dataFormat, gr::date date, std::iostream& stream);
 
 	//! delete waveform object
 	virtual ~Waveform();

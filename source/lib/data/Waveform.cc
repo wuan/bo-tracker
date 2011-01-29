@@ -12,7 +12,7 @@ namespace blitzortung {
     {
     }
 
-    Waveform::Waveform(const Format& dataFormat, gr::date date, std::iostream& stream) :
+    Waveform::Waveform(Format::CP dataFormat, gr::date date, std::iostream& stream) :
       array_(data::Array::AP(new data::Array(dataFormat)))
     {
 
@@ -28,7 +28,7 @@ namespace blitzortung {
       }
 
       unsigned short deltaNanoseconds = 0;
-      if (dataFormat.getNumberOfSamples() > 1) {
+      if (dataFormat->getNumberOfSamples() > 1) {
 	util::Stream::ReadValue(stream, deltaNanoseconds);
       }
       dt_ = pt::nanoseconds(deltaNanoseconds);

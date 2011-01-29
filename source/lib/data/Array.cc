@@ -3,10 +3,10 @@
 namespace blitzortung {
   namespace data {
 
-    Array::Array(const Format& format) :
+    Array::Array(Format::CP format) :
       format_(format)
     {
-      data_ = new char[format_.getDataSize()];
+      data_ = new char[format_->getDataSize()];
     }
 
     Array::~Array() {
@@ -14,11 +14,11 @@ namespace blitzortung {
     }
 
     unsigned int Array::getNumberOfSamples() const {
-      return format_.getNumberOfSamples();
+      return format_->getNumberOfSamples();
     }
 
     unsigned short Array::getNumberOfChannels() const {
-      return format_.getNumberOfChannels();
+      return format_->getNumberOfChannels();
     }
 
     void Array::set(int value, unsigned int sample, unsigned short channel) {
@@ -29,14 +29,14 @@ namespace blitzortung {
     }
 
     void Array::toStream(std::iostream& stream) const {
-      stream.write(data_, format_.getDataSize());
+      stream.write(data_, format_->getDataSize());
     }
 
     void Array::fromStream(std::iostream& stream) {
-      stream.read(data_, format_.getDataSize());
+      stream.read(data_, format_->getDataSize());
     }
 
-    const data::Format& Array::getFormat() const {
+    const data::Format::CP& Array::getFormat() const {
       return format_;
     }
 

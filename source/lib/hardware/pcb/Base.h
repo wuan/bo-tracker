@@ -33,7 +33,7 @@ namespace hardware {
 	gps::Base& gps_;
 
 	//! data format object
-	data::Format::AP dataFormat_;
+	data::Format::CP dataFormat_;
 
 	//! returnes int value of given hex string
 	int parseHex(const std::string& hexString);

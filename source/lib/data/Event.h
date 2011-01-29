@@ -36,7 +36,7 @@ namespace blitzortung {
 
 	Event(Waveform::AP, GpsInfo::AP);
 
-	Event(const data::Format& dataFormat, const gr::date& date, std::iostream& stream);
+	Event(data::Format::CP dataFormat, const gr::date& date, std::iostream& stream);
 
 	virtual ~Event();
 
@@ -67,13 +67,13 @@ namespace blitzortung {
 	void toStream(std::iostream&) const;
 
 	//! read binary object data from stream
-	void fromStream(const data::Format& dataFormat, const gr::date&, std::iostream&);
+	void fromStream(data::Format::P& dataFormat, const gr::date&, std::iostream&);
 
 	//! get binary storage size of sample
 	unsigned int getSize() const;
 
 	//! get binary storage size of sample
-	static unsigned int GetSize(const Format& dataFormat);
+	static unsigned int GetSize(const Format::CP& dataFormat);
 
     };
 

@@ -39,7 +39,7 @@ namespace blitzortung {
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
 	    data::GpsInfo::AP gpsInfo(new data::GpsInfo(gps_));
 
-	    data::Array::AP array(new data::Array(*dataFormat_));
+	    data::Array::AP array(new data::Array(dataFormat_));
 	    array->set(maxX, 0, 0);
 	    array->set(maxY, 0, 1);
 
