@@ -26,7 +26,7 @@ namespace blitzortung {
 	  virtual std::string eventToString(const data::Event& event) const;
 
 	  //! send data to server
-	  void send(const data::Event::VP& events) const;
+	  void send(const data::Events& events) const;
       };
 
     }

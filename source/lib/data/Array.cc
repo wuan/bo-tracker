@@ -3,14 +3,15 @@
 namespace blitzortung {
   namespace data {
 
-    Array::Array(Format::CP format) :
+    Array::Array(const Format::CP& format) :
       format_(format)
     {
       data_ = new char[format_->getDataSize()];
     }
 
     Array::~Array() {
-      delete data_;
+      if (data_ != 0)
+	delete data_;
     }
 
     unsigned int Array::getNumberOfSamples() const {

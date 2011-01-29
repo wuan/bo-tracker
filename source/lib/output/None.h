@@ -22,7 +22,7 @@ namespace blitzortung {
 	virtual ~None();
 
 	//! output data to file
-	void output(data::Event::VP& events);
+	void output(data::Events& events);
 
     };
   }

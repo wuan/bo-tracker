@@ -18,10 +18,10 @@ namespace blitzortung {
 	logger_.debugStream() << "deleted";
     }
 
-    void None::output(data::Event::VP& eventsForOutput) {
+    void None::output(data::Events& eventsForOutput) {
 
-      for (data::Event::VI event = eventsForOutput->begin(); event != eventsForOutput->end(); ) {
-	eventsForOutput->erase(event);
+      for (data::Event::VI event = eventsForOutput.begin(); event != eventsForOutput.end(); ) {
+	//eventsForOutput->erase(event);
       }
 
     }

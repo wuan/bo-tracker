@@ -7,7 +7,7 @@ namespace blitzortung {
   DataThread::DataThread(Queue<data::Event>& sampleQueue, const network::transfer::Base& transfer, output::Base& output)
     : sampleQueue_(sampleQueue),
     transfer_(transfer),
-    samples_(new data::Event::V()),
+    events_(),
     output_(output),
     logger_("DataThread")
   {
@@ -31,36 +31,36 @@ namespace blitzortung {
     eventRateLimit_ = eventRateLimit;
   }
 
-  data::Event::VP DataThread::prepareData(pt::ptime& now, pt::ptime& lastSent) {
-    data::Event::VP deletedEvents(new data::Event::V());
+  data::Events::AP DataThread::prepareData(pt::ptime& now, pt::ptime& lastSent) {
+    data::Events::AP deletedEvents(new data::Events());
 
     if (logger_.isDebugEnabled())
-      logger_.debugStream() << "() sample vector contains " << samples_->size() << " elements";
+      logger_.debugStream() << "() sample vector contains " << events_->size() << " elements";
 
     double secondsElapsed = ((now - lastSent).total_milliseconds() / 1000);
-    double eventRate = double(samples_->size()) / secondsElapsed;
+    double eventRate = double(events_->size()) / secondsElapsed;
 
     lastSent = now;
 
     if (logger_.isInfoEnabled())
-      logger_.infoStream() << "() sending " << samples_->size() << " samples (rate " << eventRate << " samples/second) at " << now;
+      logger_.infoStream() << "() sending " << events_->size() << " events (rate " << eventRate << " events/second) at " << now;
 
     if (eventRate > eventRateLimit_) {
-      samples_->sort(data::Event::CompareAmplitude());
+      events_->sort(data::Event::CompareAmplitude());
 
       if (logger_.isInfoEnabled())
 	logger_.infoStream() << "() ratelimit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed;
 
       int sampleLimit = eventRateLimit_ * secondsElapsed;
 
-      //samples_->transfer(samples_->begin() + sampleLimit, samples_->end());
-      deletedEvents->transfer(deletedEvents->end(), samples_->begin(), samples_->end(), *samples_);
+      //events_->transfer(events_->begin() + sampleLimit, events_->end());
+      deletedEvents->transfer(deletedEvents->end(), events_->begin(), events_->end(), *events_);
 
       if (logger_.isInfoEnabled())
-	logger_.infoStream() << "() erasing elements to have " << sampleLimit << " elements (new # of elements: " << samples_->size() << ")";
+	logger_.infoStream() << "() erasing elements to have " << sampleLimit << " elements (new # of elements: " << events_->size() << ")";
 
-      // time sort samples
-      samples_->sort();
+      // time sort events
+      events_->sort();
     }
 
     return deletedEvents;
@@ -82,38 +82,38 @@ namespace blitzortung {
 
       sampleQueue_.timed_wait(xt);
 
-      // get new samples from queue until it is empty
+      // get new events from queue until it is empty
       while (! sampleQueue_.empty()) {
 	data::Event::AP sample(sampleQueue_.pop());
 
-	samples_->push_back(sample);
+	events_->add(sample);
       }
 
       pt::ptime now = pt::second_clock::universal_time();
 
       if (now - lastSent >= sleepTime_) {
 
-	if (samples_->size() > 0) {
+	if (events_->size() > 0) {
 
 	  // prepare data for transmission
-	  data::Event::VP deletedEvents = prepareData(now, lastSent);
+	  data::Events::AP deletedEvents = prepareData(now, lastSent);
 
 	  // transmit data
-	  transfer_.send(samples_);
+	  transfer_.send(*events_);
 
 	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "() recollect samples " << samples_->size() << " + " << deletedEvents->size();
-	  samples_->transfer(samples_->end(), *deletedEvents);
+	    logger_.debugStream() << "() recollect events " << events_->size() << " + " << deletedEvents->size();
+	  events_->transfer(events_->end(), *deletedEvents);
 
-	  samples_->sort();
+	  events_->sort();
 
 	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "() recollected " << samples_->size() << " samples ";
+	    logger_.debugStream() << "() recollected " << events_->size() << " events ";
 
-	  output_.output(samples_);
+	  output_.output(*events_);
 
-	  // delete all samples
-	  samples_->clear();
+	  // delete all events
+	  events_->clear();
 	}
 
       }

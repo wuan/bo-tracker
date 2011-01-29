@@ -37,13 +37,28 @@ namespace blitzortung {
 	  pt::ptime eventtime = gps_.getTime(counter);
 
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
+
+
 	    data::GpsInfo::AP gpsInfo(new data::GpsInfo(gps_));
 
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "parse() gps valid " << *gpsInfo;
+
 	    data::Array::AP array(new data::Array(dataFormat_));
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "parse() data array created";
+
 	    array->set(maxX, 0, 0);
 	    array->set(maxY, 0, 1);
 
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "parse() data array filled";
+
 	    data::Waveform::AP waveform(new data::Waveform(array, eventtime));
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "parse() waveform created " << *gpsInfo;
 
 	    event = data::Event::AP(new data::Event(waveform, gpsInfo));
 	  } else {

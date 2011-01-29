@@ -4,7 +4,7 @@
 CPPUNIT_TEST_SUITE_REGISTRATION( EventV2Test );
 
 unsigned int EventV2Test::getDataSize() const {
-  return 278;
+  return 150;
 }
 
 void EventV2Test::setUp() {
