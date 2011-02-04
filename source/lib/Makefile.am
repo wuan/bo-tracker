@@ -21,6 +21,7 @@ libblitzortung_la_SOURCES = \
 	data/Array.h data/Array.cc \
 	data/Format.h data/Format.cc \
 	data/Event.h data/Event.cc \
+	data/MEvent.h data/MEvent.cc \
 	data/Events.h data/Events.cc \
 	data/EventsFile.h data/EventsFile.cc \
 	data/EventsHeader.h data/EventsHeader.cc \

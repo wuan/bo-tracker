@@ -1,5 +1,6 @@
 #include "exception/Base.h"
 #include "network/transfer/Udp.h"
+#include "data/MEvent.h"
 
 namespace blitzortung {
   namespace network {
@@ -39,9 +40,11 @@ namespace blitzortung {
 	oss << " " << wfm.getTimeDelta().total_nanoseconds() << " ";
 	oss << std::hex << std::uppercase << std::setw(2) << std::setfill('0');
 
-	for (unsigned int i = 0; i < wfm.getNumberOfSamples(); i++) {
-	  oss << int(wfm.get(i, 0)) + (1 << 7) << int(wfm.get(i, 1)) + (1 <<7);
-	}
+	oss << dynamic_cast<const data::MEvent&>(event).getRawData();
+
+	/*for (unsigned int i = 0; i < wfm.getNumberOfSamples(); i++) {
+	  oss << int(wfm.get(i, 0)) + (1 << 7) << int(wfm.get(i, 1)) + (1 << 7);
+	}*/
 
 	oss << std::nouppercase << " " << VERSION << std::endl;
 

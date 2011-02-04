@@ -1,0 +1,37 @@
+#ifndef BLITZORTUNG_DATA_MEVENT_H_
+#define BLITZORTUNG_DATA_MEVENT_H_
+
+#include "namespaces.h"
+#include "data/Event.h"
+
+namespace blitzortung {
+  namespace data {
+
+    //! class for gps information
+    class MEvent : public Event {
+
+      public:
+
+	typedef boost::ptr_vector<Event> V;
+	typedef V::iterator VI;
+	typedef V::const_iterator CVI;
+	typedef boost::shared_ptr<V> VP;
+	typedef std::auto_ptr<Event> AP;
+
+      private:
+
+	const std::string rawData_;
+
+      public:
+
+	MEvent(Waveform::AP, GpsInfo::AP, const std::string&);
+
+	virtual ~MEvent();
+
+	//! get the raw data string
+	const std::string& getRawData() const;
+    };
+
+  }
+}
+#endif
