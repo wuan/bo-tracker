@@ -127,8 +127,7 @@ namespace blitzortung {
       return Event::AP(events_.release(target).release());
     }
 
-
-    std::string Events::appendToFile(const std::string& fileName) {
+    std::string Events::appendToFile(const std::string& fileName) const {
       if (events_.size() > 0) {
 
 	if (logger_.isDebugEnabled()) {
