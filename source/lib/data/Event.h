@@ -1,5 +1,5 @@
-#ifndef BLITZORTUNG_DATA_SAMPLE_H_
-#define BLITZORTUNG_DATA_SAMPLE_H_
+#ifndef BLITZORTUNG_DATA_EVENT_H_
+#define BLITZORTUNG_DATA_EVENT_H_
 
 #include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>

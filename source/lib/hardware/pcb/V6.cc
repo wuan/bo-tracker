@@ -1,6 +1,7 @@
 #include "exception/Base.h"
 #include "hardware/pcb/V6.h"
 #include "data/Waveform.h"
+#include "data/MEvent.h"
 
 namespace blitzortung {
   namespace hardware {
@@ -77,7 +78,7 @@ namespace blitzortung {
 
 	data::Waveform::AP wfm(new data::Waveform(array, eventtime, SAMPLE_RATE));
 
-	data::Event::AP event = data::Event::AP(new data::Event(wfm, gps_.getInfo()));
+	data::Event::AP event = data::MEvent::AP(new data::MEvent(wfm, gps_.getInfo(), data));
 
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "parseData() done";
