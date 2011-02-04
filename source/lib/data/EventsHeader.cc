@@ -171,7 +171,7 @@ namespace blitzortung {
     }
     
     bool EventsHeader::operator==(const EventsHeader& other) {
-      return date_ == other.date_ && dataFormat_ == other.dataFormat_;
+      return date_ == other.date_ && *dataFormat_ == *(other.dataFormat_);
     }
 	
     bool EventsHeader::operator!=(const EventsHeader& other) {

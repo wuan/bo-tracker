@@ -66,14 +66,12 @@ namespace blitzortung {
     }
 
     void EventsFile::append(const Events& events) {
-
       // check if file exists
       if (header_.fileExists(name_)) {
 	writeEvents(name_, events, true);
       } else {
 	writeEvents(name_, events);
       }
-
     }
     
     void EventsFile::writeEvents(const std::string& name, const Events& events, bool append) {
@@ -98,7 +96,7 @@ namespace blitzortung {
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "writeEvents() write header " << header_.getDate() << " " << header_.getDataFormat() << " ";
 	}
-
+	
 	open(std::ios::out | std::ios::binary | std::ios::app);
 
 	if (logger_.isDebugEnabled())
