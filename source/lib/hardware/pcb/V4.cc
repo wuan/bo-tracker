@@ -6,7 +6,7 @@ namespace blitzortung {
     namespace pcb {
 
       V4::V4(comm::Base& serial, gps::Base& gps) :
-	Base(serial, gps),
+	Base(serial, gps, data::Format::CP(new data::Format(8,2,1))),
 	logger_("hardware.pcb.V4")
       {
 	if (logger_.isDebugEnabled())
@@ -38,12 +38,12 @@ namespace blitzortung {
 
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
 
-
 	    data::GpsInfo::AP gpsInfo(new data::GpsInfo(gps_));
 
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "parse() gps valid " << *gpsInfo;
 
+	    logger_.infoStream() << " create data array " << *dataFormat_;
 	    data::Array::AP array(new data::Array(dataFormat_));
 
 	    if (logger_.isDebugEnabled())

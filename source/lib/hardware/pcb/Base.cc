@@ -10,9 +10,10 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
      
-      Base::Base(comm::Base& comm, gps::Base& gps) :
+      Base::Base(comm::Base& comm, gps::Base& gps, const data::Format::CP& dataFormat) :
 	comm_(comm),
 	gps_(gps),
+	dataFormat_(dataFormat),
 	logger_("hardware.pcb.Base")
       {
 	if (logger_.isDebugEnabled())
@@ -56,7 +57,7 @@ namespace blitzortung {
 	  } else if (fields_[0] == "BLSEQ" || fields_[0] == "BLSIG") {
 	    return parse(fields_);
 	  } else {
-	    std::cout << "unknown data " << fields_[0] << std::endl;
+	    logger_.warnStream() << "unknown data " << fields_[0];
 	  }
 	}
 	return data::Event::AP();

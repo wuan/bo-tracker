@@ -4,6 +4,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "namespaces.h"
+#include "Logger.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
@@ -13,22 +14,28 @@ namespace blitzortung {
     class Format {
 
       public:
-
 	typedef std::auto_ptr<Format> AP;
 	typedef boost::shared_ptr<Format> P;
 	typedef boost::shared_ptr<const Format> CP;
 
       private:
 
+	//! number of bits per sample
 	unsigned char numberOfBits_;
 
+	//! number of channels
 	unsigned char numberOfChannels_;
 
+	//! number of samples per channel
 	unsigned short numberOfSamples_;
 
+	//! intermediate value of bytes per sample
 	unsigned char sampleByteSize_;
 
+	//! intermediate value of total data size
 	unsigned int dataByteSize_;
+
+	mutable Logger logger_;
 
 	void updateSizes();
 
@@ -47,7 +54,6 @@ namespace blitzortung {
 
 	//! construct from stream
 	Format(std::iostream&);
-
 
 	//! delete waveform object
 	virtual ~Format();

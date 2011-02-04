@@ -9,7 +9,7 @@ namespace blitzortung {
       const pt::time_duration V6::SAMPLE_RATE = pt::nanoseconds(3125);
 
       V6::V6(comm::Base& comm, gps::Base& gps) :
-	Base(comm, gps),
+	Base(comm, gps, data::Format::CP(new data::Format(8,2,64))),
 	logger_("hardware.pcb.V6")
       {
 	if (logger_.isDebugEnabled())

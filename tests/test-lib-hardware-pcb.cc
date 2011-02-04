@@ -28,18 +28,12 @@ void HardwareTest::testV4() {
   comm.addReceivedLine("BLSIG,F133E6,CF4,860");
   comm.addReceivedLine("BLSIG,F1341D,450,77C");
 
-  std::cout << "open gps\n";
-
   bo::hardware::gps::Sirf gps(comm);
-
-  std::cout << "open pcb\n";
 
   bo::hardware::pcb::V4 pcb(comm, gps);
 
   int count = 0;
   while (pcb.isOpen()) {
-
-    std::cout << "read pcb\n";
 
     bo::data::Event::AP event = pcb.read();
 

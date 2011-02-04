@@ -49,7 +49,7 @@ namespace hardware {
       public:
 
 	//! constructor for base class
-	Base(comm::Base&, gps::Base&);
+	Base(comm::Base&, gps::Base&, const data::Format::CP&);
 
 	//! destructor
 	virtual ~Base();
