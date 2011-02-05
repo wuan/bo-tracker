@@ -24,6 +24,8 @@ namespace blitzortung {
 
     void Array::set(int value, unsigned int sample, unsigned short channel) {
       unsigned int index = format_->getIndex(sample, channel);
+      if (index > format_->getDataSize() - 1)
+	throw exception::Base("Array::set() index out of range");
       data_[index] = char(value);
     }
 
