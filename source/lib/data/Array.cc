@@ -23,10 +23,12 @@ namespace blitzortung {
     }
 
     void Array::set(int value, unsigned int sample, unsigned short channel) {
+      unsigned int index = format_->getIndex(sample, channel);
+      data_[index] = char(value);
     }
 
     int Array::get(unsigned int sample, unsigned short channel) const {
-      return 0;
+      return data_[format_->getIndex(sample, channel)];
     }
 
     void Array::toStream(std::iostream& stream) const {

@@ -1,7 +1,7 @@
 #ifndef BLITZORTUNG_NETWORK_TRANSFER_BASE_H_
 #define BLITZORTUNG_NETWORK_TRANSFER_BASE_H_
 
-#define VERSION                 "DebianTracker&nbsp;Ver.&nbsp;0.9.1"
+#define VERSION                 "debT&nbsp;0.9.2"
 
 #include <arpa/inet.h>
 #include <netdb.h>

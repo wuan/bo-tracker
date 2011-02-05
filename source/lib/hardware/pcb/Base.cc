@@ -52,8 +52,6 @@ namespace blitzortung {
 
 	  if (fields_[0] == "BLSEC") {
 	    parseGps(fields_);
-
-	    fields_.clear();
 	  } else if (fields_[0] == "BLSEQ" || fields_[0] == "BLSIG") {
 	    return parse(fields_);
 	  } else {

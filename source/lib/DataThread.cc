@@ -7,7 +7,7 @@ namespace blitzortung {
   DataThread::DataThread(Queue<data::Event>& sampleQueue, const network::transfer::Base& transfer, output::Base& output)
     : sampleQueue_(sampleQueue),
     transfer_(transfer),
-    events_(),
+    events_(new data::Events()),
     output_(output),
     logger_("DataThread")
   {
@@ -92,6 +92,9 @@ namespace blitzortung {
       pt::ptime now = pt::second_clock::universal_time();
 
       if (now - lastSent >= sleepTime_) {
+
+	if (logger_.isDebugEnabled())
+	  logger_.debug("() awake, transmitting data");
 
 	if (events_->size() > 0) {
 
