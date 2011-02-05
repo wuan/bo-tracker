@@ -53,7 +53,6 @@ namespace blitzortung {
       }
     }
 
-
     EventsFile::~EventsFile() {
     }
 
@@ -66,7 +65,9 @@ namespace blitzortung {
     }
 
     void EventsFile::append(const Events& events) {
-      // check if file exists
+
+      header_.set(events);
+
       if (header_.fileExists(name_)) {
 	writeEvents(name_, events, true);
       } else {
@@ -77,6 +78,9 @@ namespace blitzortung {
     void EventsFile::writeEvents(const std::string& name, const Events& events, bool append) {
 
       if (events.size() > 0) {
+
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "writeEvents() " << name << " append: " << append;
 
 	header_.set(events);
 
@@ -156,7 +160,6 @@ namespace blitzortung {
     Events::AP EventsFile::read(const pt::time_duration& start, const pt::time_duration& end) {
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "read()";
-
 
       header_.read(name_);
      
