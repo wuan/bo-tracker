@@ -14,7 +14,7 @@ namespace blitzortung {
 	typedef std::auto_ptr<Base> AP;
 
 	//! output data to file
-	virtual void output(data::Events& samples) = 0;
+	virtual void output(const data::Events& samples) = 0;
 
     };
   }

@@ -126,7 +126,7 @@ namespace blitzortung {
 	//
 	
 	//! append current events to given file
-	std::string appendToFile(const std::string&);
+	std::string appendToFile(const std::string&) const;
 
 	//! write current events to given file
 	std::string writeToFile(const std::string&);

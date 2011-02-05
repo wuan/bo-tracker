@@ -24,8 +24,7 @@ namespace blitzortung {
 	virtual ~File();
 
 	//! output data to file
-	void output(data::Events& events);
-
+	void output(const data::Events& events);
     };
   }
 }

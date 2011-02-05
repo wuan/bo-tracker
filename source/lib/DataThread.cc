@@ -66,8 +66,6 @@ namespace blitzortung {
     return deletedEvents;
   }
 
-
-
   void DataThread::operator()() {
 
     pt::ptime lastSent = pt::second_clock::universal_time();
@@ -101,11 +99,13 @@ namespace blitzortung {
 	  // prepare data for transmission
 	  data::Events::AP deletedEvents = prepareData(now, lastSent);
 
+	  logger_.infoStream() << "transmit " << events_->size() << " events";
 	  // transmit data
 	  transfer_.send(*events_);
 
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "() recollect events " << events_->size() << " + " << deletedEvents->size();
+
 	  events_->transfer(events_->end(), *deletedEvents);
 
 	  events_->sort();
@@ -113,6 +113,7 @@ namespace blitzortung {
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "() recollected " << events_->size() << " events ";
 
+	  logger_.infoStream() << "output " << events_->size() << " events";
 	  output_.output(*events_);
 
 	  // delete all events
