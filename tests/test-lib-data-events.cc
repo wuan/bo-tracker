@@ -6,16 +6,21 @@
 
 //CPPUNIT_TEST_SUITE_REGISTRATION( EventTest );
 
-bo::data::Event::AP EventTest::getEvent(const pt::ptime& time) {
+bo::data::Event::AP EventTest::createEvent(const pt::ptime& time) {
 
   bo::data::Array::AP array(new bo::data::Array(dataFormat_));
 
-  for (unsigned int i=0; i < 128; i++) {
+  for (unsigned int i=0; i < dataFormat_->getNumberOfSamples(); i++) {
     array->set(100 - i, i, 0);
     array->set(-50 + i, i, 1);
   }
 
-  bo::data::Waveform::AP wfm(new bo::data::Waveform(array, time + pt::nanoseconds(3125) * 10, pt::nanoseconds(3125)));
+  pt::time_duration dt = pt::nanoseconds(0);
+
+  if (dataFormat_->getNumberOfSamples() > 1)
+    dt = pt::nanoseconds(3125);
+
+  bo::data::Waveform::AP wfm(new bo::data::Waveform(array, time + pt::nanoseconds(3125) * 10, dt));
 
   // create GpsInfo
   bo::data::GpsInfo::AP gpsInfo(new bo::data::GpsInfo());
@@ -23,7 +28,7 @@ bo::data::Event::AP EventTest::getEvent(const pt::ptime& time) {
   return bo::data::Event::AP(new bo::data::Event(wfm, gpsInfo));
 }
 
-bo::data::Events::P EventTest::getEvents1() {
+bo::data::Events::P EventTest::createEvents1() {
   gr::date eventDate(2010,8,1);
 
   std::vector<pt::time_duration> eventTimes;
@@ -62,7 +67,7 @@ bo::data::Events::P EventTest::getEvents1() {
 
   for (std::vector<pt::time_duration>::iterator eventTime = eventTimes.begin(); eventTime != eventTimes.end(); eventTime++) {
     pt::ptime eventDateTime(eventDate, *eventTime);
-    bo::data::Event::AP event = getEvent(eventDateTime);
+    bo::data::Event::AP event = createEvent(eventDateTime);
 
     events->add(event);
   }
@@ -70,7 +75,7 @@ bo::data::Events::P EventTest::getEvents1() {
   return events;
 }
 
-bo::data::Events::P EventTest::getEvents2() {
+bo::data::Events::P EventTest::createEvents2() {
   bo::data::Events::P events(new bo::data::Events());
 
   return events;
@@ -86,13 +91,14 @@ void EventTest::testAdd() {
 
   bo::data::Events events;
 
-  events.add(getEvent(pt::ptime(eventDate, pt::time_duration(11,20,00))));
-  events.add(getEvent(pt::ptime(eventDate, pt::time_duration(11,21,00))));
-  events.add(getEvent(pt::ptime(eventDate, pt::time_duration(11,22,00))));
-  events.add(getEvent(pt::ptime(eventDate, pt::time_duration(11,25,00))));
-  events.add(getEvent(pt::ptime(eventDate, pt::time_duration(11,30,00))));
+  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,20,00))));
+  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,21,00))));
+  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,22,00))));
+  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,22,00))));
+  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,25,00))));
+  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,30,00))));
 
-  CPPUNIT_ASSERT_THROW(events.add(getEvent(pt::ptime(eventDate, pt::time_duration(11,30,00)) + gr::days(1))), bo::exception::Base);
+  CPPUNIT_ASSERT_THROW(events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,30,00)) + gr::days(1))), bo::exception::Base);
 
   /*for(bo::data::Events::I event=events.begin(); event != events.end(); event++) {
     std::cout << *event << std::endl;
@@ -101,7 +107,7 @@ void EventTest::testAdd() {
 
 void EventTest::testWrite() {
 
-  bo::data::Events::P events = getEvents1();
+  bo::data::Events::P events = createEvents1();
 
   int originalSize = events->size();
 
@@ -123,7 +129,7 @@ void EventTest::testWrite() {
 
 void EventTest::testAppend() {
 
-  bo::data::Events::P events = getEvents1();
+  bo::data::Events::P events = createEvents1();
 
   int originalSize = events->size();
 
@@ -146,7 +152,7 @@ void EventTest::testSize() {
 
   gr::date eventDate(2010,8,1);
 
-  bo::data::Event::AP event = getEvent(pt::ptime(eventDate, pt::time_duration(11,20,00)));
+  bo::data::Event::AP event = createEvent(pt::ptime(eventDate, pt::time_duration(11,20,00)));
 
   std::stringstream ss;
 

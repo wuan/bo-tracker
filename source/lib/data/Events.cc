@@ -7,11 +7,15 @@ namespace blitzortung {
     Events::Events() :
       logger_("data.Events")
     {
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "create() " << this;
     }
 
     Events::Events(const gr::date& date, const Format::CP& dataFormat) :
       logger_("data.Events")
     {
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "create(" << date << ", " << dataFormat << ") " << this;
       date_ = date;
       dataFormat_ = dataFormat;
     }
@@ -19,8 +23,15 @@ namespace blitzortung {
     Events::Events(const EventsHeader& header) :
       logger_("data.Events")
     {
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "create(header) " << this;
       dataFormat_ = header.getDataFormat();
       date_ = header.getDate();
+    }
+
+    Events::~Events() {
+      if (logger_.isDebugEnabled())
+	logger_.debug("destroy");
     }
 
     void Events::add(Event* event) {

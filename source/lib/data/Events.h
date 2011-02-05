@@ -54,6 +54,9 @@ namespace blitzortung {
 	//! create Events with date and dataformat
 	Events(const gr::date& date, const Format::CP& dataFormat);
 
+	//! destructor
+	virtual ~Events();
+
 	//! add event to collection
 	void add(Event::AP);
 

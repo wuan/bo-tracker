@@ -21,9 +21,9 @@ class EventTest : public CPPUNIT_NS :: TestFixture
 
   private:
 
-    bo::data::Events::P getEvents1();
-    bo::data::Events::P getEvents2();
-    bo::data::Event::AP getEvent(const pt::ptime&);
+    bo::data::Events::P createEvents1();
+    bo::data::Events::P createEvents2();
+    bo::data::Event::AP createEvent(const pt::ptime&);
 
   protected:
 
