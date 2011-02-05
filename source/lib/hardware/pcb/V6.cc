@@ -61,8 +61,8 @@ namespace blitzortung {
 	int numberOfEvents = data.size() >> 2;
 
 	if (logger_.isInfoEnabled())
-	  logger_.infoStream() << "parseData() " << numberOfEvents;
-     
+	  logger_.infoStream() << "parseData() " << numberOfEvents << " to format " << *dataFormat_;
+    
 	data::Array::AP array(new data::Array(dataFormat_));
 
 	for (int i=0; i < numberOfEvents; i++) {
