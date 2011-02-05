@@ -21,11 +21,8 @@ namespace blitzortung {
     }
 
 
-    void File::output(data::Events& events) {
-      data::Events outputEvents(events.getDate(), events.getDataFormat());
-
-      if (logger_.isDebugEnabled())
-	logger_.debugStream() << "output()" << events.size() << "events";
+    void File::output(const data::Events& events) {
+/*      data::Events outputEvents(events.getDate(), events.getDataFormat());
 
       // move all current events to
       for (data::Event::VI event = events.begin(); event != events.end();) {
@@ -37,10 +34,13 @@ namespace blitzortung {
 	}
 
 	outputEvents.add(events.release(event));
-      }
+      }*/
 
-      if (outputEvents.size() > 0) {
-	outputEvents.appendToFile(outputFile_);
+      if (events.size() > 0) {
+	if (logger_.isInfoEnabled())
+	  logger_.infoStream() << "output() append " << events.size() << " events to file " << outputFile_;
+
+	events.appendToFile(outputFile_);
       }
     }
 

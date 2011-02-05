@@ -18,9 +18,9 @@ namespace blitzortung {
 	logger_.debugStream() << "deleted";
     }
 
-    void None::output(data::Events& eventsForOutput) {
+    void None::output(const data::Events& eventsForOutput) {
 
-      for (data::Event::VI event = eventsForOutput.begin(); event != eventsForOutput.end(); ) {
+      for (data::Event::CVI event = eventsForOutput.begin(); event != eventsForOutput.end(); ) {
 	//eventsForOutput->erase(event);
       }
 
