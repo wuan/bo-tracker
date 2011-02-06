@@ -67,7 +67,7 @@ set ylabel "y amplitude"
 set xr [-1.0:1.0]
 set yr [-1.0:1.0]
 set grid front
-plot "$TMPDATA" u 8:9 not
+plot "$TMPDATA" u ($8/127.0):($9/127.0) not
 ***
 
 $NICE blitzortung-statistics --mode=strokes --time-delta=5 --data-path=$RAWPATH > $TMPDATA
