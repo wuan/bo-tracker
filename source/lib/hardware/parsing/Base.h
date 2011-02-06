@@ -17,6 +17,13 @@ namespace blitzortung {
 
 	protected:
 
+	  bool valid_;
+
+	  unsigned int counter_;
+
+	  //! parse int string
+	  int parseInt(const std::string& floatString) const;
+
 	  //! parse float string
 	  float parseFloat(const std::string& floatString) const;
 
@@ -24,7 +31,7 @@ namespace blitzortung {
 	  unsigned int parseHex(const std::string& hexString) const;
 
 	  //! parse gps coordinate string
-	  float parseGpsCoord(const std::string &coordString, const char hemisphere) const;
+	  float parseGpsCoord(const std::string& coordString, const std::string& hemisphere) const;
 
 	public:
 
@@ -32,9 +39,11 @@ namespace blitzortung {
 	  Base();
 
 	  //! destructor
-	  virtual ~Parse();
+	  virtual ~Base();
 	  
-	  virtual bool parse(const std::vector<std::string>) = 0;
+	  bool isValid() const;
+	  
+	  unsigned int getCounterValue() const;
       };
 
     }

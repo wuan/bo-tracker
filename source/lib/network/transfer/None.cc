@@ -10,6 +10,9 @@ namespace blitzortung {
       {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "initialized";
+
+	localCreds_.setUsername("username");
+	localCreds_.setPassword("password");
       }
 
       None::~None() {
