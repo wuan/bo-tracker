@@ -8,6 +8,7 @@
 #include "hardware/gps/Base.h"
 #include "data/Event.h"
 #include "data/Format.h"
+#include "hardware/parsing/Samples.h"
 
 namespace blitzortung {
   namespace hardware {
@@ -58,11 +59,8 @@ namespace blitzortung {
 	//! returns a sample read from the hardware
 	data::Event::AP read();
 
-	//! returns a sample parsed from the given string vector
-	/*!
-	  this function needs to be declared in any of the derived classes
-	 */
-	data::Event::AP parse(const std::vector<std::string> &);
+	//! returns a sample created from the given parser data
+	data::Event::AP createSample(parsing::Samples& samplesParser);
     };
 
   }

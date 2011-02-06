@@ -14,6 +14,7 @@
 #include "hardware/gps/data/Base.h"
 #include "hardware/gps/data/Time.h"
 #include "hardware/gps/data/Location.h"
+#include "hardware/parsing/Ticks.h"
 
 namespace blitzortung {
   namespace hardware {
@@ -47,7 +48,7 @@ namespace blitzortung {
 	  gr::date dateInitialized_;
 
 	  //! ring buffer to average satellite count values
-	  util::RingBuffer<int> satelliteCount_;
+	  util::RingBuffer<unsigned short> satelliteCount_;
 
 	  //! logger for class
 	  mutable Logger logger_;
@@ -63,8 +64,8 @@ namespace blitzortung {
 	  //! destructor
 	  virtual ~Base();
 
-	  //! parse NMEA data from pcb
-	  void parse(const std::vector<std::string> &fields);
+	  //! parse read parsed date
+	  void set(const hardware::parsing::Ticks& ticksParser);
 
 	  //! set GPS status char
 	  void setStatus(const char status);
@@ -76,10 +77,10 @@ namespace blitzortung {
 	  const bool isValid() const;
 
 	  //! add actual satellite count value
-	  void addSatelliteCount(const std::string &);
+	  void addSatelliteCount(const unsigned short);
 
 	  //! get average satellite count value
-	  int getSatelliteCount() const;
+	  unsigned short getSatelliteCount() const;
 
 	  //! get timestamp from counter value
 	  pt::ptime getTime(const int) const;

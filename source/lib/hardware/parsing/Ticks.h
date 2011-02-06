@@ -8,28 +8,22 @@
 
 #include "namespaces.h"
 #include "Logger.h"
-#include "data/GpsInfo.h"
-#include "util/RingBuffer.h"
-#include "hardware/gps/data/Time.h"
-#include "hardware/gps/data/Location.h"
+#include "hardware/parsing/Base.h"
 
 namespace blitzortung {
   namespace hardware {
     namespace parsing {
 
       //! base class for gps hardware objects      
-      class Ticks {
+      class Ticks : public Base {
 
 	private:
 
 	  //! combined date time string
 	  std::string dateTime_;
 
-	  //! counter vaoue
-	  unsigned int counter_; 
-
 	  //! gps status character
-	  char status_;
+	  std::string status_;
 
 	  //! gps longitude
 	  float longitude_;
@@ -46,28 +40,34 @@ namespace blitzortung {
 	  //! firmware version of the microcontroller
 	  std::string firmwareVersion_;
 
+	  //! logger for this class
+	  mutable Logger logger_;
+
 	public:
 
 	  //! constructor
 	  Ticks(const std::vector<std::string>);
 
-	  //! destructor
-	  virtual ~Ticks();
-
 	  //! parse incoming data
 	  bool parse(const std::vector<std::string>);
 
 	  //! read GPS status char
-	  const char getStatus() const;
+	  const char getGpsStatus() const;
 
-	  //! is GPS data valid?
-	  const bool isValid() const;
+	  //! get longitude value
+	  float getLongitude() const;
+
+	  //! get latitude value
+	  float getLatitude() const;
+
+	  //! get altitude value
+	  float getAltitude() const;
 
 	  //! get average satellite count value
-	  int getSatelliteCount() const;
+	  unsigned short getSatelliteCount() const;
 
 	  //! get timestamp from counter value
-	  const std::string getTime() const;
+	  const std::string& getDateTime() const;
       };
 
     }

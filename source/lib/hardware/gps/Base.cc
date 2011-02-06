@@ -32,14 +32,11 @@ namespace blitzortung {
 	return true;
       }
 
-      void Base::addSatelliteCount(const std::string &satelliteCountString) {
-	int satelliteCount;
-	std::istringstream iss(satelliteCountString);
-	iss >> satelliteCount;
+      void Base::addSatelliteCount(unsigned short satelliteCount) {
 	satelliteCount_.add(satelliteCount);
       }
 
-      int Base::getSatelliteCount() const {
+      unsigned short Base::getSatelliteCount() const {
 	return satelliteCount_.getAverage();
       }
 
@@ -101,32 +98,26 @@ namespace blitzortung {
 	dateInitialized_ = pt::second_clock::universal_time().date();
       }
 
-      void Base::parse(const std::vector<std::string>& fields) {
-
+      void Base::set(const hardware::parsing::Ticks& ticksParser) {
 
 	// initialize gps modules at least once a day
 	if (dateInitialized_ != pt::second_clock::universal_time().date()) {
 	  init();
 	}
 
-	parsing::Ticks gpsData(fields);
-
-	// read counter value
-	counter_ = gpsData.getCounter();
-
 	// set GPS reception status
-	setStatus(gpsData.getGpsStatus());
+	setStatus(ticksParser.getGpsStatus());
 
 	// set GPS PPS time
-	time_.setSecond(gpsData.getDateTime(), counter_);
+	time_.setSecond(ticksParser.getDateTime(), ticksParser.getCounterValue());
 
 	// exctract actual location and altitude information
-	location_.addLongitude(gpsData.getLongitude());
-	location_.addLatitude(gpsData.getLatitude());
-	location_.addAltitude(gpsData.getAltitude());
+	location_.addLongitude(ticksParser.getLongitude());
+	location_.addLatitude(ticksParser.getLatitude());
+	location_.addAltitude(ticksParser.getAltitude());
 
 	// add actual satellite count to ringbuffer
-	addSatelliteCount(gpsData.getSatelliteCount());
+	addSatelliteCount(ticksParser.getSatelliteCount());
       }
 
       bo::data::GpsInfo::AP Base::getInfo() const {

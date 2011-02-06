@@ -1,11 +1,31 @@
+#include <cmath>
+#include <sstream>
+
 #include "hardware/parsing/Base.h"
 
 namespace blitzortung {
   namespace hardware {
     namespace parsing {
 
+      Base::Base() {
+	valid_ = false;
+      }
+
+      Base::~Base() {
+      }
+
+      int Base::parseInt(const std::string& intString) const {
+	  int intValue;
+
+	  std::istringstream iss(intString);
+	  iss >> intValue;
+
+	  return intValue;
+      }
+
       float Base::parseFloat(const std::string& floatString) const {
 	  float floatValue;
+
 	  std::istringstream iss(floatString);
 	  iss >> floatValue;
 
@@ -20,7 +40,7 @@ namespace blitzortung {
 	  return value;
       }
 
-      float Base::parseGpsCoord(const std::string &coordString, const char hemisphere) const {
+      float Base::parseGpsCoord(const std::string& coordString, const std::string& hemisphere) const {
 	double degreeMinuteValue;
 
 	std::istringstream iss(coordString);
@@ -30,10 +50,18 @@ namespace blitzortung {
 
 	decimalDegreeValue += (degreeMinuteValue - decimalDegreeValue * 100.0) / 60.0;
 
-	if (hemisphere == 'W' || hemisphere == 'S')
+	if (hemisphere == "W" || hemisphere == "S")
 	  decimalDegreeValue *= -1.0;
 
 	return decimalDegreeValue;
+      }
+
+      unsigned int Base::getCounterValue() const {
+	return counter_;
+      }
+
+      bool Base::isValid() const {
+	return valid_;
       }
 
     }
