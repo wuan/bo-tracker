@@ -65,12 +65,15 @@ namespace blitzortung {
     
 	data::Array::AP array(new data::Array(dataFormat_));
 
+	int offset = 1 << (dataFormat_->getNumberOfBits() - 1);
+	logger_.infoStream() << "offset: " << offset;
+
 	for (int i=0; i < numberOfEvents; i++) {
 
 	  int index = i << 2;
 
-	  unsigned short xval = parseHex(data.substr(index, 2));
-	  unsigned short yval = parseHex(data.substr(index + 2, 2));
+	  short xval = parseHex(data.substr(index, 2)) - offset;
+	  short yval = parseHex(data.substr(index + 2, 2)) - offset;
 
 	  array->set(xval, i, 0);
 	  array->set(yval, i, 1);
