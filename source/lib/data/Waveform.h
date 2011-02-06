@@ -27,12 +27,7 @@ namespace blitzortung {
 	//! time difference between samples in nanoseconds
 	pt::time_duration dt_;
 	
-	//! maximum absolute value of signal
-	float maxVal_;
-	
-	//! index of maximum absolute value of signal
-	int maxIndex_;
-
+	//! data array
 	Array::AP array_;
 
       public:

@@ -34,7 +34,6 @@ namespace blitzortung {
       dt_ = pt::nanoseconds(deltaNanoseconds);
 
       array_->fromStream(stream);
-
     }
 
     Waveform::~Waveform()
@@ -74,7 +73,16 @@ namespace blitzortung {
     }
 
     unsigned int Waveform::getMaxIndex() const {
-      return maxIndex_;
+      unsigned int maxIndex = 0;
+      float maxAmplitude = 0.0;
+      for (unsigned int sample=0; sample < array_->getNumberOfSamples(); sample++) {
+	double amplitude = getAmplitude(sample);
+	if (amplitude > maxAmplitude) {
+	  maxIndex = sample;
+	  maxAmplitude = amplitude;
+	}
+      }
+      return maxIndex;
     }
 
     unsigned int Waveform::getNumberOfSamples() const {
