@@ -1,5 +1,3 @@
-#define VERSION                 "DebianTracker&nbsp;Ver.&nbsp;0.9.1"
-
 #include "exception/Base.h"
 #include "output/File.h"
 
@@ -22,19 +20,6 @@ namespace blitzortung {
 
 
     void File::output(const data::Events& events) {
-/*      data::Events outputEvents(events.getDate(), events.getDataFormat());
-
-      // move all current events to
-      for (data::Event::VI event = events.begin(); event != events.end();) {
-
-	if (outputEvents.size() != 0 &&
-	    outputEvents.getDate() != event->getWaveform().getTime().date()) {
-	  outputEvents.appendToFile(outputFile_);
-	  outputEvents.clear();
-	}
-
-	outputEvents.add(events.release(event));
-      }*/
 
       if (events.size() > 0) {
 	if (logger_.isInfoEnabled())
