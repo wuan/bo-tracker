@@ -71,7 +71,18 @@ void HardwareTest::testV6() {
     bo::data::Event::AP event = pcb.read();
 
     if (event.get() != 0) {
-      //std::cout << *event << std::endl;
+      //TODO add tests for event content
+
+      /*std::cout << *event << std::endl;
+      const bo::data::Array& array = event->getWaveform().getArray();
+      const bo::data::Format& format = *(array.getFormat());
+      std::cout << format << std::endl;
+      for (int sample=0; sample < format.getNumberOfSamples(); sample++) {
+	for (int channel=0; channel < format.getNumberOfChannels(); channel++) {
+	  std::cout << " " << array.get(sample, channel);
+	}
+      }
+      std::cout << std::endl;*/
       count++;
     }
 
