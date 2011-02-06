@@ -117,7 +117,7 @@ namespace blitzortung {
 	location_.addAltitude(ticksParser.getAltitude());
 
 	// add actual satellite count to ringbuffer
-	addSatelliteCount(ticksParser.getSatelliteCount());
+	addSatelliteCount(ticksParser.getNumberOfSatellites());
       }
 
       bo::data::GpsInfo::AP Base::getInfo() const {

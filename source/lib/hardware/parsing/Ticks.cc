@@ -73,15 +73,15 @@ namespace blitzortung {
 
 	  if (numberOfSatellitesIndex > 0) {
 	  // add actual satellite count to ringbuffer
-	  satelliteCount_ = parseInt(fields[numberOfSatellitesIndex]);
+	  numberOfSatellites_ = parseInt(fields[numberOfSatellitesIndex]);
 	  } else {
-	    satelliteCount_ = 0;
+	    numberOfSatellites_ = 0;
 	  }
 	}
       }
 
-      unsigned short Ticks::getSatelliteCount() const {
-	return satelliteCount_;
+      unsigned short Ticks::getNumberOfSatellites() const {
+	return numberOfSatellites_;
       }
 
       float Ticks::getLongitude() const {
