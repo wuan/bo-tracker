@@ -1,8 +1,9 @@
 all:
-	if [ ${CWD+x} ]; then cd $(CWD); fi; \
+	if [ ${CWD} ]; then cd ${CWD}; fi; \
 	aclocal; \
 	autoheader; \
 	autoconf; \
 	libtoolize; \
-	automake -a
+	automake -a; \
+	./configure
 

@@ -1,8 +1,21 @@
-blitzortung-tracker (1.0) stable; urgency=low
+blitzortung-tracker (0.9.2SNAPSHOT20110205) maverick; urgency=low
+
+  * sending data via UDP instead of TCP
+  * complete rework of internal sample processing:
+    * using a fixed internal sample format
+    * converting sample to selected fileformat directly before data is written
+
+ -- Andreas Wuerl <awuerl@gmx.net>  Wed, 5 Feb 2011 15:35:21 +0100
+
+blitzortung-tracker (0.9.1) maverick; urgency=low
 
   * adapted baudrate setting for new pcb versions
- 
- -- Andreas Wuerl <awuerl@gmx.net>  Wed, 18 Sep 2010 12:13:40 +0200
+  * rework of data output
+    * network and local targets can be arbitrarily chosen
+  * rework of sample to use waveform and gpsInfo substructures
+  * rework of creation of samples. now using factory objects
+
+ -- Andreas Wuerl <awuerl@gmx.net>  Wed, 14 Nov 2010 21:14:45 +0100
 
 blitzortung-tracker (0.9) unstable; urgency=low
 

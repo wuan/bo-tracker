@@ -10,11 +10,11 @@ namespace blitzortung {
   namespace hardware {
     namespace pcb {
      
-      Base::Base(comm::Base& comm, gps::Base& gps, const data::sample::Base::Creator& sampleCreator) :
+      Base::Base(comm::Base& comm, gps::Base& gps, const data::Format::CP& dataFormat) :
 	comm_(comm),
-	logger_("hardware.pcb.Base"),
 	gps_(gps),
-	sampleCreator_(sampleCreator)
+	dataFormat_(dataFormat),
+	logger_("hardware.pcb.Base")
       {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "initialized";
@@ -38,7 +38,7 @@ namespace blitzortung {
 	return comm_.isOpen();
       }
 
-      data::sample::Base::AP Base::read() {
+      data::Event::AP Base::read() {
 	std::string line = comm_.receive();
 
 	if (logger_.isInfoEnabled())
@@ -52,15 +52,13 @@ namespace blitzortung {
 
 	  if (fields_[0] == "BLSEC") {
 	    parseGps(fields_);
-
-	    fields_.clear();
 	  } else if (fields_[0] == "BLSEQ" || fields_[0] == "BLSIG") {
 	    return parse(fields_);
 	  } else {
-	    std::cout << "unknown data " << fields_[0] << std::endl;
+	    logger_.warnStream() << "unknown data " << fields_[0];
 	  }
 	}
-	return std::auto_ptr<data::sample::Base>();
+	return data::Event::AP();
       }
 
       void Base::parseGps(const std::vector<std::string>& fields) {

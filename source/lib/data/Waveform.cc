@@ -1,69 +1,120 @@
 #include "data/Waveform.h"
+#include "util/Stream.h"
+#include "util/Size.h"
 
 namespace blitzortung {
   namespace data {
 
-    template <typename T>
-    Waveform<T>::Waveform(const pt::ptime& t0) :
-      t0_(t0)
+    Waveform::Waveform(data::Array::AP array, const pt::ptime& t0, const pt::time_duration& dt) :
+      t0_(t0),
+      dt_(dt),
+      array_(array)
     {
     }
 
-    template <typename T>
-    Waveform<T>::~Waveform()
+    Waveform::Waveform(Format::CP dataFormat, gr::date date, std::iostream& stream) :
+      array_(data::Array::AP(new data::Array(dataFormat)))
     {
-    }
 
-    template <typename T>
-    void Waveform<T>::add(T xval, T yval) {
-      float val = xval * xval + yval * yval;
+      {
+	unsigned long long int nanoseconds;
+	util::Stream::ReadValue(stream, nanoseconds);
 
-      if (xdata_.size() == 0 || val > maxVal_) {
-	maxVal_ = val;
-	maxIndex_ = xdata_.size();
+	// fixed nanosecond to time conversion
+	int seconds = nanoseconds / 1000000000ULL;
+	nanoseconds %= 1000000000ULL;
+
+	t0_ = pt::ptime(date, pt::seconds(seconds) + pt::nanoseconds(nanoseconds));
       }
 
-      xdata_.push_back(xval);
-      ydata_.push_back(yval);
+      unsigned short deltaNanoseconds = 0;
+      if (dataFormat->getNumberOfSamples() > 1) {
+	util::Stream::ReadValue(stream, deltaNanoseconds);
+      }
+      dt_ = pt::nanoseconds(deltaNanoseconds);
+
+      array_->fromStream(stream);
+
     }
 
+    Waveform::~Waveform()
+    {
+    }
 
-    template <typename T>
-    int Waveform<T>::getMaxIndex() const {
-      if (xdata_.size() ==0)
-	throw exception::Base("data::Waveform::getMaxIndex() data arrays empty");
+    const pt::ptime& Waveform::getTime() const {
+      return t0_;
+    }
 
+    pt::ptime Waveform::getTime(unsigned int index) const {
+      return t0_ + dt_ * index;
+    }
+
+    const pt::time_duration& Waveform::getTimeDelta() const {
+      return dt_;
+    }
+
+    int Waveform::get(unsigned int index, unsigned short channel) const {
+      return array_->get(index, channel);
+    }
+
+    float Waveform::getAmplitude(unsigned int index) const {
+      double sum = 0.0;
+      unsigned short channels = array_->getNumberOfChannels();
+
+      if (channels > 1) {
+	for (int channel = 0; channel < channels; channel++) {
+	  float amp = get(index, channel);
+	  sum += amp * amp;
+	}
+
+	return sqrt(sum);
+      } else {
+	return get(index, 0);
+      }
+    }
+
+    unsigned int Waveform::getMaxIndex() const {
       return maxIndex_;
     }
 
-    template <typename T>
-    T Waveform<T>::getMaxX() const {
-      if (xdata_.size() ==0)
-	throw exception::Base("data::Waveform::getMaxX() data arrays empty");
-
-      return xdata_[maxIndex_];
+    unsigned int Waveform::getNumberOfSamples() const {
+      return array_->getNumberOfSamples();
     }
 
-    template <typename T>
-    T Waveform<T>::getMaxY() const {
-      if (ydata_.size() ==0)
-	throw exception::Base("data::Waveform::getMaxY() data arrays empty");
+    void Waveform::toStream(std::iostream& stream) {
 
-      return ydata_[maxIndex_];
+      unsigned long long int nanoseconds = t0_.time_of_day().total_nanoseconds();
+      util::Stream::WriteValue(stream, nanoseconds);
+
+      if (array_->getNumberOfSamples() > 1) {
+	unsigned short deltaNanoseconds = dt_.total_nanoseconds();
+	util::Stream::WriteValue(stream, deltaNanoseconds);
+      }
+
+      array_->toStream(stream);
     }
 
-    //! explicit instatiation of functions to be linked afterwards
-    template class Waveform<double>;
-    template class Waveform<float>;
-    template class Waveform<long int>;
-    template class Waveform<long unsigned int>;
-    template class Waveform<int>;
-    template class Waveform<unsigned int>;
-    template class Waveform<short>;
-    template class Waveform<unsigned short>;
-    template class Waveform<char>;
-    template class Waveform<unsigned char>;
-	
+    unsigned int Waveform::GetSize(const data::Format& dataFormat) {
+      util::Size size;
+
+      long long int nanoseconds;
+      size.add(nanoseconds);
+
+      if (dataFormat.getNumberOfSamples() > 1) {
+	unsigned short deltaNanoseconds;
+	size.add(deltaNanoseconds);
+      }
+
+      // gps data size + two times the size of an element (for x and y value)
+      return size.get() + dataFormat.getDataSize();
+    }
+
+    std::ostream& operator <<(std::ostream& os, const bo::data::Waveform& wfm) {
+
+      os << wfm.getArray();
+
+      return os;
+    }
 
   }
 }
