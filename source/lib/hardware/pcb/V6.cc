@@ -65,7 +65,7 @@ namespace blitzortung {
     
 	data::Array::AP array(new data::Array(dataFormat_));
 
-	int offset = 1 << (dataFormat_->getNumberOfBits() - 1);
+	int offset = 1 << (dataFormat_->getNumberOfBitsPerSample() - 1);
 	logger_.infoStream() << "offset: " << offset;
 
 	for (int i=0; i < numberOfEvents; i++) {

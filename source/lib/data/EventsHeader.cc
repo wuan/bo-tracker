@@ -168,7 +168,6 @@ namespace blitzortung {
     }
 
     bool EventsHeader::fileExists(const std::string& filename) const {
-      logger_.infoStream() << "fileExists(" << formatFilename(filename) << ") -> " << file_exists(formatFilename(filename));
       return file_exists(formatFilename(filename));
     }
     
