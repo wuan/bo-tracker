@@ -1,20 +1,32 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
 AM_LDFLAGS = \
-	-lboost_regex-mt \
-	-lboost_thread-mt \
+	-lboost_regex \
+	-lboost_thread \
 	-llog4cpp
 
-lib_LTLIBRARIES = libblitzortung-tracker.la
+lib_LTLIBRARIES = libblitzortung.la
 
-libblitzortung_tracker_la_SOURCES = \
-	data/Samples.h data/Samples.cc \
-	data/SamplesFile.h data/SamplesFile.cc \
-	data/SamplesHeader.h data/SamplesHeader.cc \
-	data/Waveform.h data/Waveform.cc \
+libblitzortung_la_LDFLAGS = \
+	-lboost_thread \
+	-lboost_regex \
+	-llog4cpp \
+	-release ${VERSION} \
+	-version_info ${LIBRARY_VERSION} \
+	-no undefined
+
+libblitzortung_la_SOURCES = \
+	DataThread.h DataThread.cc \
 	\
-	data/sample/Base.h data/sample/Base.cc \
-	data/sample/V1.h data/sample/V1.cc \
+	data/Array.h data/Array.cc \
+	data/Format.h data/Format.cc \
+	data/Event.h data/Event.cc \
+	data/MEvent.h data/MEvent.cc \
+	data/Events.h data/Events.cc \
+	data/EventsFile.h data/EventsFile.cc \
+	data/EventsHeader.h data/EventsHeader.cc \
+	data/Waveform.h data/Waveform.cc \
+	data/GpsInfo.h data/GpsInfo.cc \
 	\
 	exception/Base.h exception/Base.cc \
 	\
@@ -40,12 +52,23 @@ libblitzortung_tracker_la_SOURCES = \
 	\
 	namespace.h \
 	\
-	network/Base.h network/Base.cc \
-	network/Queue.h network/Queue.cc \
 	network/Creds.h network/Creds.cc \
 	network/transfer/Base.h network/transfer/Base.cc \
 	network/transfer/Tcp.h network/transfer/Tcp.cc \
+	network/transfer/Udp.h network/transfer/Udp.cc \
+	network/transfer/None.h network/transfer/None.cc \
+	\
+	output/Base.h \
+	output/None.h output/None.cc \
+	output/File.h output/File.cc \
+	\
+	Process.h Process.cc \
+	\
+	Queue.h Queue.cc \
 	\
 	util/RingBuffer.h util/RingBuffer.cc \
-	util/String.h util/String.cc
+	util/Size.h \
+	util/String.h util/String.cc \
+	util/Stream.h \
+	$(NULL)
 

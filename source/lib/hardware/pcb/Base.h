@@ -6,7 +6,8 @@
 
 #include "hardware/comm/Base.h"
 #include "hardware/gps/Base.h"
-#include "data/sample/Base.h"
+#include "data/Event.h"
+#include "data/Format.h"
 
 namespace blitzortung {
 namespace hardware {
@@ -26,27 +27,29 @@ namespace hardware {
 	//! vector for data fields
 	std::vector<std::string> fields_;
 
-	//! logger for objects of this class
-	mutable Logger logger_;
-
       protected:
 
 	//! reference to gps device object
 	gps::Base& gps_;
 
+	//! data format object
+	data::Format::CP dataFormat_;
+
 	//! returnes int value of given hex string
 	int parseHex(const std::string& hexString);
-
-	//! sample creator;
-        const data::sample::Base::Creator& sampleCreator_;	
 
 	//! gps parser interface, overload for modification
         virtual void parseGps(const std::vector<std::string>&);
 
+      private:
+
+	//! logger for objects of this class
+	mutable Logger logger_;
+
       public:
 
 	//! constructor for base class
-	Base(comm::Base&, gps::Base&, const data::sample::Base::Creator&);
+	Base(comm::Base&, gps::Base&, const data::Format::CP&);
 
 	//! destructor
 	virtual ~Base();
@@ -55,13 +58,13 @@ namespace hardware {
 	bool isOpen() const;
 
 	//! returns a sample read from the hardware
-	std::auto_ptr<data::sample::Base> read();
+	data::Event::AP read();
 
 	//! returns a sample parsed from the given string vector
 	/*!
 	this function needs to be declared in any of the derived classes
 	*/
-	virtual std::auto_ptr<data::sample::Base> parse(const std::vector<std::string> &) = 0;
+	virtual data::Event::AP parse(const std::vector<std::string> &) = 0;
     };
 
   }

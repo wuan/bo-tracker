@@ -2,31 +2,34 @@
 #define BLITZORTUNG_HARDWARE_PCB_V6_H_
 
 #include "hardware/pcb/Base.h"
-#include "data/sample/Base.h"
+#include "data/Event.h"
 
 namespace blitzortung {
 namespace hardware {
   namespace pcb {
    
     class V6 : public Base {
+
       private:
+
+	const static pt::time_duration SAMPLE_RATE;
 
 	//! logger for objects of this class
 	mutable Logger logger_;
 
-	//! returns a sample with the given reference time and the waveform data in the string
-	data::sample::Base::AP parseData(const pt::ptime&, const std::string&);
+	//! returns a event with the given reference time and the waveform data in the string
+	data::Event::AP parseData(const pt::ptime&, const std::string&);
 
       public:
 
         //! create V6 hardware object
-	V6(comm::Base&, gps::Base&, const data::sample::Base::Creator&);
+	V6(comm::Base&, gps::Base&);
 
 	//! delete V6 hardware object
 	virtual ~V6();
 
-	//! returns a sample from the given splitted line returned from the measurement device
-	virtual data::sample::Base::AP parse(const std::vector<std::string>&);
+	//! returns a event from the given splitted line returned from the measurement device
+	virtual data::Event::AP parse(const std::vector<std::string>&);
     };
 
   }

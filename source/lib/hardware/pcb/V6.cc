@@ -1,13 +1,16 @@
 #include "exception/Base.h"
 #include "hardware/pcb/V6.h"
 #include "data/Waveform.h"
+#include "data/MEvent.h"
 
 namespace blitzortung {
   namespace hardware {
     namespace pcb {
 
-      V6::V6(comm::Base& comm, gps::Base& gps, const data::sample::Base::Creator& sampleCreator) :
-	Base(comm, gps, sampleCreator),
+      const pt::time_duration V6::SAMPLE_RATE = pt::nanoseconds(3125);
+
+      V6::V6(comm::Base& comm, gps::Base& gps) :
+	Base(comm, gps, data::Format::CP(new data::Format(8,2,64))),
 	logger_("hardware.pcb.V6")
       {
 	if (logger_.isDebugEnabled())
@@ -19,11 +22,11 @@ namespace blitzortung {
 	  logger_.debugStream() << "deleted";
       }
 
-      data::sample::Base::AP V6::parse(const std::vector<std::string> &fields) {
+      data::Event::AP V6::parse(const std::vector<std::string> &fields) {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "parse() called";
 
-	data::sample::Base::AP sample;
+	data::Event::AP event;
 	
 	// parse lighning event information
 	if (fields[0] == "BLSEQ") {
@@ -34,80 +37,53 @@ namespace blitzortung {
 	  pt::ptime eventtime = gps_.getTime(counter);
 
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
-	    sample = parseData(eventtime, fields[2]);
+	    if (logger_.isInfoEnabled())
+	      logger_.infoStream() << "ѕtring data size: " << fields[2].size();
 
-	    sample->setAntennaLongitude(gps_.getLocation().getLongitude());
-	    sample->setAntennaLatitude(gps_.getLocation().getLatitude());
-	    sample->setAntennaAltitude(gps_.getLocation().getAltitude());
-	    sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
-	    sample->setGpsStatus(gps_.getStatus());
+	    event = parseData(eventtime, fields[2]);
 
 	    if (logger_.isDebugEnabled())
-	      logger_.debugStream() << "parse() sample ready";
+	      logger_.debugStream() << "parse() event ready";
 
 	  } else {
-	    logger_.warnStream() << "GPS information is not yet valid -> no sample created";
+	    logger_.warnStream() << "GPS information is not yet valid -> no event created";
 	  }
 
 	} else {
 	  logger_.errorStream() << "parse() data header '" << fields[0] << "' mismatch";
 	}
 
-	return sample;
+	return event;
       }
 
-      data::sample::Base::AP V6::parseData(const pt::ptime& eventtime, const std::string& data) {
+      data::Event::AP V6::parseData(const pt::ptime& eventtime, const std::string& data) {
 
-	const int AD_MAX_VALUE = 128;
-	const int AD_MAX_VOLTAGE = 2500;
-	const int AD_THRESHOLD_VOLTAGE = 500;
+	int numberOfEvents = data.size() >> 2;
 
-	int numberOfSamples = data.size() >> 2;
-       
-	data::Waveform<short> wfm(eventtime);
+	if (logger_.isInfoEnabled())
+	  logger_.infoStream() << "parseData() " << numberOfEvents << " to format " << *dataFormat_;
+    
+	data::Array::AP array(new data::Array(dataFormat_));
 
-	for (int i=0; i < numberOfSamples; i++) {
+	for (int i=0; i < numberOfEvents; i++) {
 
 	  int index = i << 2;
 
-	  short xval = parseHex(data.substr(index, 2)) - AD_MAX_VALUE;
-	  short yval = parseHex(data.substr(index + 2, 2)) - AD_MAX_VALUE;
+	  unsigned short xval = parseHex(data.substr(index, 2));
+	  unsigned short yval = parseHex(data.substr(index + 2, 2));
 
-	  wfm.add(xval, yval);
+	  array->set(xval, i, 0);
+	  array->set(yval, i, 1);
 	}
 
-        float maxX = wfm.getMaxX();
-	float maxY = wfm.getMaxY();
-	int maxIndex = wfm.getMaxIndex();
+	data::Waveform::AP wfm(new data::Waveform(array, eventtime, SAMPLE_RATE));
+
+	data::Event::AP event = data::MEvent::AP(new data::MEvent(wfm, gps_.getInfo(), data));
 
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "parseData() preliminary max X: " << maxX << " Y: " << maxY << " index: " << maxIndex; 
+	  logger_.debugStream() << "parseData() done";
 
-	// correction introduced with v 16 of the original tracker software
-	if ((abs(maxX) < AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE) &&
-	    (abs(maxY) < AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE)) {
-
-	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "parseData() signal below threshold " << abs(maxX) << " or " << abs(maxY) << " < " << AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE;
-	  maxX = AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE;
-	  maxY = 0.0;
-	  maxIndex = -1;
-
-	}
-
-	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "parseData() final max X: " << maxX << ", Y: " << maxY << ", index: " << maxIndex;
-
-	data::sample::Base::AP sample(sampleCreator_());
-
-	sample->setTime(eventtime);
-	sample->setOffset(maxIndex, 1);
-	sample->setAmplitude(maxX / AD_MAX_VALUE, maxY / AD_MAX_VALUE, 1);
-
-	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "parseData() transmitted max X: " << maxX / AD_MAX_VALUE << ", Y: " << maxY / AD_MAX_VALUE << ", index: " << maxIndex - 1;
-
-	return sample;
+	return event;
       }
     }
   }

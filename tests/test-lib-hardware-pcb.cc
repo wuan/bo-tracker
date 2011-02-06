@@ -7,7 +7,6 @@
 
 #include "hardware/comm/Dummy.h"
 #include "hardware/gps/Sirf.h"
-#include "data/sample/V1.h"
 
 #include "test-lib-hardware-pcb.h"
 
@@ -24,22 +23,22 @@ void HardwareTest::testV4() {
 
   comm.setBaudRate(19200);
 
-  comm.addReceivefLine("BLSEC,185630,190810,A,4729.2852,N,01904.2683,E,AB852D");
+  comm.addReceivedLine("BLSEC,185630,190810,A,4729.2852,N,01904.2683,E,AB852D");
   comm.addReceivedLine("BLSEC,185631,190810,A,4729.2856,N,01904.2688,E,D1ABEA");
   comm.addReceivedLine("BLSIG,F133E6,CF4,860");
   comm.addReceivedLine("BLSIG,F1341D,450,77C");
 
   bo::hardware::gps::Sirf gps(comm);
 
-  bo::hardware::pcb::V4 pcb(comm, gps, bo::data::sample::V1::Creator());
+  bo::hardware::pcb::V4 pcb(comm, gps);
 
   int count = 0;
   while (pcb.isOpen()) {
 
-    bo::data::sample::Base::AP sample = pcb.read();
+    bo::data::Event::AP event = pcb.read();
 
-    if (sample.get() != 0) {
-      //std::cout << *sample << std::endl;
+    if (event.get() != 0) {
+      //std::cout << *event << std::endl;
       count++;
     }
 
@@ -64,15 +63,15 @@ void HardwareTest::testV6() {
 
   bo::hardware::gps::Sirf gps(comm);
 
-  bo::hardware::pcb::V6 pcb(comm, gps, bo::data::sample::V1::Creator());
+  bo::hardware::pcb::V6 pcb(comm, gps);
 
   int count = 0;
   while (pcb.isOpen()) {
 
-    bo::data::sample::Base::AP sample = pcb.read();
+    bo::data::Event::AP event = pcb.read();
 
-    if (sample.get() != 0) {
-      //std::cout << *sample << std::endl;
+    if (event.get() != 0) {
+      //std::cout << *event << std::endl;
       count++;
     }
 

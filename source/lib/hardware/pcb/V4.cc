@@ -1,12 +1,12 @@
-#include "exception/Base.h"
 #include "hardware/pcb/V4.h"
+#include "exception/Base.h"
 
 namespace blitzortung {
   namespace hardware {
     namespace pcb {
 
-      V4::V4(comm::Base& serial, gps::Base& gps, const data::sample::Base::Creator& sampleCreator) :
-	Base(serial, gps, sampleCreator),
+      V4::V4(comm::Base& serial, gps::Base& gps) :
+	Base(serial, gps, data::Format::CP(new data::Format(8,2,1))),
 	logger_("hardware.pcb.V4")
       {
 	if (logger_.isDebugEnabled())
@@ -18,11 +18,11 @@ namespace blitzortung {
 	  logger_.debugStream() << "deleted";
       }
 
-      data::sample::Base::AP V4::parse(const std::vector<std::string> &fields) {
+      data::Event::AP V4::parse(const std::vector<std::string> &fields) {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "parse() called";
 
-	data::sample::Base::AP sample;
+	data::Event::AP event;
 	
 	// parse lighning event information
 	if (fields[0] == "BLSIG") {
@@ -37,26 +37,39 @@ namespace blitzortung {
 	  pt::ptime eventtime = gps_.getTime(counter);
 
 	  if (gps_.isValid() && eventtime != pt::not_a_date_time) {
-	    sample = data::sample::Base::AP(sampleCreator_());
 
-	    sample->setTime(eventtime);
-	    sample->setOffset(0, 1);
-	    sample->setAmplitude(maxX/1023.0, maxY/1023.0, 1);
-	    sample->setAntennaLongitude(gps_.getLocation().getLongitude());
-	    sample->setAntennaLatitude(gps_.getLocation().getLatitude());
-	    sample->setAntennaAltitude(gps_.getLocation().getAltitude());
-	    sample->setGpsNumberOfSatellites(gps_.getSatelliteCount());
-	    sample->setGpsStatus(gps_.getStatus());
+	    data::GpsInfo::AP gpsInfo(new data::GpsInfo(gps_));
 
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "parse() gps valid " << *gpsInfo;
+
+	    logger_.infoStream() << " create data array " << *dataFormat_;
+	    data::Array::AP array(new data::Array(dataFormat_));
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "parse() data array created";
+
+	    array->set(maxX, 0, 0);
+	    array->set(maxY, 0, 1);
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "parse() data array filled";
+
+	    data::Waveform::AP waveform(new data::Waveform(array, eventtime));
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "parse() waveform created " << *gpsInfo;
+
+	    event = data::Event::AP(new data::Event(waveform, gpsInfo));
 	  } else {
-	    logger_.warnStream() << "GPS information is not yet valid -> no sample created";
+	    logger_.warnStream() << "GPS information is not yet valid -> no event created";
 	  }
 
 	} else {
 	  logger_.errorStream() << "parse() data header '" << fields[0] << "' mismatch";
 	}
 
-	return sample;
+	return event;
       }
 
       void V4::parseGps(const std::vector<std::string>& fields) {
