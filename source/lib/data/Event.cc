@@ -89,11 +89,15 @@ namespace blitzortung {
 
       os.setf(std::ios::fixed);
       os.precision(4);
-      os << wfm.getTime() << " " << gpsInfo;
+      unsigned int maxIndex = wfm.getMaxIndex();
+      
+      os << wfm.getTime(maxIndex) << " " << gpsInfo;
       os << " " << wfm.getTimeDelta().total_nanoseconds();
 
       os.precision(2);
-      os << " " << wfm;
+      os << " " << wfm.get(maxIndex, 0);
+      os << " " << wfm.get(maxIndex, 1);
+      os << " " << maxIndex;
 
       // restore original locale
       os.imbue(oldLocale);
