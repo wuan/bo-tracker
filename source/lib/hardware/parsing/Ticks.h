@@ -35,10 +35,7 @@ namespace blitzortung {
 	  float altitude_;
 
 	  //! gps number of satellites in use
-	  unsigned short satelliteCount_;
-
-	  //! firmware version of the microcontroller
-	  std::string firmwareVersion_;
+	  unsigned short numberOfSatellites_;
 
 	  //! logger for this class
 	  mutable Logger logger_;
@@ -64,7 +61,7 @@ namespace blitzortung {
 	  float getAltitude() const;
 
 	  //! get average satellite count value
-	  unsigned short getSatelliteCount() const;
+	  unsigned short getNumberOfSatellites() const;
 
 	  //! get timestamp from counter value
 	  const std::string& getDateTime() const;
