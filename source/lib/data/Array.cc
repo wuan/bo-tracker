@@ -31,9 +31,10 @@ namespace blitzortung {
       ((char*)(data_))[index] = (char)(value);
     }
 
-    int Array::get(unsigned int sample, unsigned short channel) const {
+    float Array::get(unsigned int sample, unsigned short channel) const {
+      float divider = 1 << ( format_->getNumberOfBitsPerSample() - 1);
       // TODO add casts for different sample sizes
-      return ((char*)(data_))[format_->getIndex(sample, channel)];
+      return ((char*)(data_))[format_->getIndex(sample, channel)]/divider;
     }
 
     void Array::toStream(std::iostream& stream) const {

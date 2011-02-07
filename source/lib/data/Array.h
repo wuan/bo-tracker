@@ -45,7 +45,7 @@ namespace blitzortung {
 
 	void set(int value, unsigned int sample, unsigned short channel=0);
 
-	int get(unsigned int sample, unsigned short channel=0) const;
+	float get(unsigned int sample, unsigned short channel=0) const;
 
 	//! write binary object data to stream
 	void toStream(std::iostream&) const;
