@@ -11,7 +11,7 @@ namespace blitzortung {
 
     Array::~Array() {
       if (data_ != 0)
-	delete data_;
+	delete (char*)data_;
     }
 
     unsigned int Array::getNumberOfSamples() const {
@@ -26,19 +26,22 @@ namespace blitzortung {
       unsigned int index = format_->getIndex(sample, channel);
       if (index > format_->getDataSize() - 1)
 	throw exception::Base("Array::set() index out of range");
-      data_[index] = char(value);
+
+      // TODO add casts for different sample sizes
+      ((char*)(data_))[index] = (char)(value);
     }
 
     int Array::get(unsigned int sample, unsigned short channel) const {
-      return data_[format_->getIndex(sample, channel)];
+      // TODO add casts for different sample sizes
+      return ((char*)(data_))[format_->getIndex(sample, channel)];
     }
 
     void Array::toStream(std::iostream& stream) const {
-      stream.write(data_, format_->getDataSize());
+      stream.write((char*)data_, format_->getDataSize());
     }
 
     void Array::fromStream(std::iostream& stream) {
-      stream.read(data_, format_->getDataSize());
+      stream.read((char*)data_, format_->getDataSize());
     }
 
     const data::Format::CP& Array::getFormat() const {

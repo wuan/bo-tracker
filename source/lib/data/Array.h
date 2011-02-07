@@ -23,7 +23,7 @@ namespace blitzortung {
 	const Format::CP format_;
 
 	//! vector for x channel data
-	char* data_;
+	void* data_;
 
       public:
 
