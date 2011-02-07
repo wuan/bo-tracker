@@ -44,9 +44,7 @@ libblitzortung_la_SOURCES = \
 	hardware/comm/Dummy.h hardware/comm/Dummy.cc \
 	hardware/comm/SerialPort.h hardware/comm/SerialPort.cc \
 	\
-	hardware/pcb/Base.h hardware/pcb/Base.cc \
-	hardware/pcb/V4.h hardware/pcb/V4.cc \
-	hardware/pcb/V6.h hardware/pcb/V6.cc \
+	hardware/Pcb.h hardware/Pcb.cc \
 	\
 	Logger.h Logger.cc \
 	\

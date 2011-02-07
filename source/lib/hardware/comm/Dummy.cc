@@ -42,7 +42,7 @@ namespace blitzortung {
       }
       
       void Dummy::addReceivedLine(const std::string& line) {
-	dummyData_.push_back(line+"\r");
+	dummyData_.push_back(line);
       }
 
     }

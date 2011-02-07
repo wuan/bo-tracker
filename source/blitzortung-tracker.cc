@@ -16,8 +16,7 @@
 #include "hardware/gps/Garmin.h"
 #include "hardware/gps/Sirf.h"
 #include "hardware/gps/Sjn.h"
-#include "hardware/pcb/V4.h"
-#include "hardware/pcb/V6.h"
+#include "hardware/Pcb.h"
 #include "Process.h"
 #include "network/transfer/Udp.h"
 #include "output/File.h"
@@ -37,7 +36,6 @@ int main(int argc, char **argv) {
   std::string outputFile = "";
   unsigned short serialBaudRate = 19200;
   unsigned short sleepTime = 20;
-  unsigned short pcbVersion = 6;
   double eventRateLimit = 1.0;
   std::string gpsType = "sirf";
 
@@ -55,7 +53,6 @@ int main(int argc, char **argv) {
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
     ("sleep-time,s", po::value<unsigned short>(&sleepTime)->default_value(sleepTime), "sleep time between data transmission")
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (sjn, garmin or sirf)")
-    ("pcb-version", po::value<unsigned short>(&pcbVersion)->default_value(pcbVersion), "version of PCB (4 or 6)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("output,o", po::value<std::string>(&outputFile), "output file name (e.g. Name_%Y%m%d.bor)")
     ("verbose,v", "verbose mode")
@@ -143,22 +140,7 @@ int main(int argc, char **argv) {
 
 
   // create hardware driver object for blitzortung measurement hardware
-  bo::hardware::pcb::Base::AP hardware;
-
-  switch (pcbVersion) {
-    case 4:
-      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V4(serial, *gps));
-      break;
-
-    case 6:
-      hardware = bo::hardware::pcb::Base::AP(new bo::hardware::pcb::V6(serial, *gps));
-      break;
-
-    default:
-      std::ostringstream oss;
-      oss << "invalid pcb version: " << pcbVersion;
-      throw bo::exception::Base(oss.str());
-  }
+  bo::hardware::Pcb hardware(serial, *gps);
 
   //! set credentials/parameters for network connection
   bo::network::Creds creds;
@@ -182,9 +164,9 @@ int main(int argc, char **argv) {
   //! create object of network driver for event transmission
   bo::Process process(*transfer, pt::seconds(sleepTime), eventRateLimit, *output);
 
-  while (hardware->isOpen()) {
+  while (hardware.isOpen()) {
 
-    bo::data::Event::AP event = hardware->read();
+    bo::data::Event::AP event = hardware.read();
 
     if (event.get() != 0) {
       process.push(event);
