@@ -10,7 +10,7 @@ AC_CONFIG_MACRO_DIR([m4])
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
 
-CXXFLAGS="${CXXFLAGS} -Wall -DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG"
+CXXFLAGS="${CXXFLAGS} -fsigned-char -Wall -DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG"
 AC_SUBST(CXXFLAGS)
 
 # include libtool support
