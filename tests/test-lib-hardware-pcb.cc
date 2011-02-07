@@ -1,9 +1,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "hardware/pcb/Base.h"
-#include "hardware/pcb/V4.h"
-#include "hardware/pcb/V6.h"
+#include "hardware/Pcb.h"
 
 #include "hardware/comm/Dummy.h"
 #include "hardware/gps/Sirf.h"
@@ -30,7 +28,7 @@ void HardwareTest::testV4() {
 
   bo::hardware::gps::Sirf gps(comm);
 
-  bo::hardware::pcb::V4 pcb(comm, gps);
+  bo::hardware::Pcb pcb(comm, gps);
 
   int count = 0;
   while (pcb.isOpen()) {
@@ -63,7 +61,7 @@ void HardwareTest::testV6() {
 
   bo::hardware::gps::Sirf gps(comm);
 
-  bo::hardware::pcb::V6 pcb(comm, gps);
+  bo::hardware::Pcb pcb(comm, gps);
 
   int count = 0;
   while (pcb.isOpen()) {

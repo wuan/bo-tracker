@@ -1,5 +1,5 @@
-#ifndef BLITZORTUNG_HARDWARE_PCB_BASE_H_
-#define BLITZORTUNG_HARDWARE_PCB_BASE_H_
+#ifndef BLITZORTUNG_HARDWARE_PCB_H_
+#define BLITZORTUNG_HARDWARE_PCB_H_
 
 #include <string>
 #include <vector>
@@ -10,15 +10,14 @@
 #include "data/Format.h"
 
 namespace blitzortung {
-namespace hardware {
-  namespace pcb {
-   
+  namespace hardware {
+
     //! base class for blitzortung acquisition PCB
-    class Base {
+    class Pcb {
 
       public:
 
-	typedef std::auto_ptr<Base> AP;
+	typedef std::auto_ptr<Pcb> AP;
 
       private:
 	//! reference to communication object
@@ -32,14 +31,11 @@ namespace hardware {
 	//! reference to gps device object
 	gps::Base& gps_;
 
-	//! data format object
-	data::Format::CP dataFormat_;
-
 	//! returnes int value of given hex string
 	int parseHex(const std::string& hexString);
 
 	//! gps parser interface, overload for modification
-        virtual void parseGps(const std::vector<std::string>&);
+	void parseGps(const std::vector<std::string>&);
 
       private:
 
@@ -49,10 +45,10 @@ namespace hardware {
       public:
 
 	//! constructor for base class
-	Base(comm::Base&, gps::Base&, const data::Format::CP&);
+	Pcb(comm::Base&, gps::Base&);
 
 	//! destructor
-	virtual ~Base();
+	virtual ~Pcb();
 
 	//! returns if pcb object's connection is opened
 	bool isOpen() const;
@@ -62,13 +58,12 @@ namespace hardware {
 
 	//! returns a sample parsed from the given string vector
 	/*!
-	this function needs to be declared in any of the derived classes
-	*/
-	virtual data::Event::AP parse(const std::vector<std::string> &) = 0;
+	  this function needs to be declared in any of the derived classes
+	 */
+	data::Event::AP parse(const std::vector<std::string> &);
     };
 
   }
-}
 }
 
 #endif
