@@ -52,7 +52,7 @@ namespace blitzortung {
       return dt_;
     }
 
-    int Waveform::get(unsigned int index, unsigned short channel) const {
+    float Waveform::get(unsigned int index, unsigned short channel) const {
       return array_->get(index, channel);
     }
 

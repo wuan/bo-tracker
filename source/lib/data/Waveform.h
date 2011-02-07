@@ -57,7 +57,7 @@ namespace blitzortung {
 	void add(unsigned char x);
 
 	//! returns value at index
-	int get(unsigned int index, unsigned short channel=0) const;
+	float get(unsigned int index, unsigned short channel=0) const;
 
 	//! returns amplitude at index
 	float getAmplitude(unsigned int index) const;
