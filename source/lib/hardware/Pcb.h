@@ -42,6 +42,8 @@ namespace blitzortung {
 	//! logger for objects of this class
 	mutable Logger logger_;
 
+	std::string firmwareVersion_;
+
       public:
 
 	//! constructor for base class

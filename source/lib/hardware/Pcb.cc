@@ -49,7 +49,7 @@ namespace blitzortung {
 
 	  util::String::split(line, fields_, ",");
 
-	  if (fields_[0] == "BLSEC") {
+	  if (fields_[0] == "BLSEC" || fields_[0] == "BS") {
 	    parseGps(fields_);
 	  } else if (fields_[0] == "BLSEQ" || fields_[0] == "BLSIG" || fields_[0] == "BLSTR") {
 	    if (logger_.isDebugEnabled())
