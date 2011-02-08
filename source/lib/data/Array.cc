@@ -14,6 +14,10 @@ namespace blitzortung {
 	delete (char*)data_;
     }
 
+    unsigned short Array::getNumberOfBitsPerSample() const {
+      return format_->getNumberOfBitsPerSample();
+    }
+
     unsigned int Array::getNumberOfSamples() const {
       return format_->getNumberOfSamples();
     }

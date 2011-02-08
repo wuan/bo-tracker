@@ -36,6 +36,7 @@ namespace blitzortung {
 	  //! destructor
 	  virtual ~Sirf();
 
+	  const std::string getType() const;
       };
 
     }

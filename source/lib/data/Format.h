@@ -59,10 +59,10 @@ namespace blitzortung {
 	virtual ~Format();
 
 	//! returns the number of bits
-	unsigned char getNumberOfBitsPerSample() const;
+	unsigned short getNumberOfBitsPerSample() const;
 
 	//! returns the number of channels per measurement
-	unsigned char getNumberOfChannels() const;
+	unsigned short getNumberOfChannels() const;
 
 	//! returns the number of measurements per waveform
 	unsigned short getNumberOfSamples() const;
@@ -81,6 +81,9 @@ namespace blitzortung {
 
 	//! comparison operator for data format
 	bool operator==(const Format& other) const;
+
+	//! comparison operator for data format
+	bool operator!=(const Format& other) const;
 
     };
 

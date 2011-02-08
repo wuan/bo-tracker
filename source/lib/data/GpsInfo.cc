@@ -53,7 +53,7 @@ namespace blitzortung {
       return altitude_;
     }
 
-    unsigned char GpsInfo::getNumberOfSatellites() const {
+    unsigned short GpsInfo::getNumberOfSatellites() const {
       return numberOfSatellites_;
     }
 

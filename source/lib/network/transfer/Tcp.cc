@@ -18,56 +18,6 @@ namespace blitzortung {
 	  logger_.debugStream() << "deleted";
       }
 
-      std::string Tcp::eventToString(const data::Event& event) const {
-	const data::Waveform& wfm = event.getWaveform();
-	const data::GpsInfo& gpsInfo = event.getGpsInfo();
-
-	const int AD_MAX_VALUE = 128;
-	const int AD_MAX_VOLTAGE = 2500;
-	const int AD_THRESHOLD_VOLTAGE = 500;
-
-	int maxIndex = wfm.getMaxIndex();
-        float maxX = wfm.get(maxIndex, 0);
-	float maxY = wfm.get(maxIndex, 1);
-
-	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "parseData() preliminary max X: " << maxX << " Y: " << maxY << " index: " << maxIndex; 
-
-	// correction introduced with v 16 of the original tracker software
-	if ((abs(maxX) < AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE) &&
-	    (abs(maxY) < AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE)) {
-
-	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "parseData() signal below threshold " << abs(maxX) << " or " << abs(maxY) << " < " << AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE;
-	  maxX = AD_MAX_VALUE*AD_THRESHOLD_VOLTAGE/AD_MAX_VOLTAGE;
-	  maxY = 0.0;
-	  maxIndex = -1;
-	}
-
-	pt::ptime timestamp = wfm.getTime() + wfm.getTimeDelta() * maxIndex;
-
-	std::ostringstream oss;
-
-	pt::time_facet *timefacet = new pt::time_facet();
-	timefacet->format("%Y-%m-%d %H:%M:%S.%f");
-	std::locale oldLocale = oss.imbue(std::locale(std::locale::classic(), timefacet));
-
-	oss << timestamp;
-	oss.setf(std::ios::fixed);
-	oss.precision(6);
-
-	oss << " " << gpsInfo.getLatitude() << " " << gpsInfo.getLongitude();
-	oss << " " << gpsInfo.getAltitude();
-	oss << " " << creds_.getUsername() << " " << creds_.getPassword();
-	oss << " " << maxX << " " << maxY;
-	oss << " " << gpsInfo.getStatus() << " " << VERSION << std::endl;
-
-	// restore original locale
-	oss.imbue(oldLocale);
-
-	return oss.str();
-      }
-
       void Tcp::send(const data::Events& events) const {
 	int sock_id;
 

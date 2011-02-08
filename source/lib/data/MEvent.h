@@ -12,11 +12,11 @@ namespace blitzortung {
 
       public:
 
-	typedef boost::ptr_vector<Event> V;
+	typedef boost::ptr_vector<MEvent> V;
 	typedef V::iterator VI;
 	typedef V::const_iterator CVI;
 	typedef boost::shared_ptr<V> VP;
-	typedef std::auto_ptr<Event> AP;
+	typedef std::auto_ptr<MEvent> AP;
 
       private:
 

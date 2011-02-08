@@ -135,6 +135,8 @@ namespace blitzortung {
 	} else {
 	  throw exception::Base("blitzortung::hardware::gps::Base.parse() wrong data to parse");
 	}
+	if (logger_.isDebugEnabled())
+	  logger_.debug("parse() done");
       }
 
       bo::data::GpsInfo::AP Base::getInfo() const {

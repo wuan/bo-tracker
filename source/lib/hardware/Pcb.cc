@@ -5,6 +5,8 @@
 #include "hardware/Pcb.h"
 #include "data/MEvent.h"
 
+#define VERSION                 "debT&nbsp;0.9.2"
+
 namespace blitzortung {
   namespace hardware {
      
@@ -50,11 +52,17 @@ namespace blitzortung {
 	  if (fields_[0] == "BLSEC") {
 	    parseGps(fields_);
 	  } else if (fields_[0] == "BLSEQ" || fields_[0] == "BLSIG" || fields_[0] == "BLSTR") {
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "read() parse fields for '" << fields_[0] << "'";
 	    return parse(fields_);
 	  } else {
 	    logger_.warnStream() << "unknown data " << fields_[0];
 	  }
 	}
+
+	if (logger_.isDebugEnabled())
+	  logger_.debug("read() returning empty event");
+
 	return data::Event::AP();
       }
 
@@ -162,6 +170,22 @@ namespace blitzortung {
 	  array->set(yval, i, 1);
 	}
 
+	data.append(" ");
+	data.append(VERSION);
+	data.append(" ");
+	data.append("-");
+	data.append(" ");
+	{
+	  std::ostringstream oss;
+	  oss << comm_.getBaudRate();
+	  data.append(oss.str());
+	}
+	data.append(" ");
+	data.append(gps_.getType());
+	logger_.infoStream() << "gpsType '" << gps_.getType() << "'";
+
+	logger_.infoStream() << "set data '" << data << "'";
+	
 	data::Waveform::AP wfm(new data::Waveform(array, eventtime, sampleDt));
 
 	event = data::MEvent::AP(new data::MEvent(wfm, gps_.getInfo(), data));

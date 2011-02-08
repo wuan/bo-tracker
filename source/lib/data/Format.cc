@@ -34,11 +34,11 @@ namespace blitzortung {
     Format::~Format() {
     }
 
-    unsigned char Format::getNumberOfBitsPerSample() const {
+    unsigned short Format::getNumberOfBitsPerSample() const {
       return numberOfBits_;
     }
 
-    unsigned char Format::getNumberOfChannels() const {
+    unsigned short Format::getNumberOfChannels() const {
       return numberOfChannels_;
     }
 
@@ -76,6 +76,10 @@ namespace blitzortung {
       return numberOfBits_ == other.numberOfBits_ &&
 	numberOfSamples_ == other.numberOfSamples_ &&
 	numberOfChannels_ == other.numberOfChannels_;
+    }
+
+    bool Format::operator!=(const Format& other) const {
+      return !(*this == other);
     }
 
     std::ostream& operator<<(std::ostream& os, const Format& format) {
