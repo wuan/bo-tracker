@@ -1,5 +1,6 @@
-blitzortung-tracker (0.9.2SNAPSHOT20110205) maverick; urgency=low
+blitzortung-tracker (0.9.2SNAPSHOT20110208) maverick; urgency=low
 
+  * rewrote data parsing to remove dependency from pcb version
   * sending data via UDP instead of TCP
   * complete rework of internal sample processing:
     * using a fixed internal sample format
