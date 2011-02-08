@@ -36,6 +36,7 @@ namespace blitzortung {
 	  //! destructor
 	  virtual ~Garmin();
 
+	  const std::string getType() const;
       };
 
     }

@@ -69,7 +69,7 @@ namespace blitzortung {
 	short getAltitude() const;
 
 	//! returns the number of satellites available to the gps module
-	unsigned char getNumberOfSatellites() const;
+	unsigned short getNumberOfSatellites() const;
 
 	//! returns the acquisition status of the gps module
 	char getStatus() const;

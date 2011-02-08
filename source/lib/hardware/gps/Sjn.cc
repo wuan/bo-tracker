@@ -26,6 +26,9 @@ namespace blitzortung {
 
       }
 
+      const std::string Sjn::getType() const {
+	return "Sjn";
+      }
     }
   }
 }

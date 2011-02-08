@@ -55,6 +55,10 @@ namespace blitzortung {
 	}
       }
 
+      const std::string Garmin::getType() const {
+	return "Garmin";
+      }
+
     }
   }
 }

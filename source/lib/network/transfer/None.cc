@@ -4,8 +4,8 @@ namespace blitzortung {
   namespace network {
     namespace transfer {
 
-      None::None(const Creds& creds) :
-	Base(creds), 
+      None::None() :
+	Base(localCreds_),
 	logger_("network.transfer.None")
       {
 	if (logger_.isDebugEnabled())
@@ -18,21 +18,14 @@ namespace blitzortung {
 
       }
 
-      std::string None::eventToString(blitzortung::data::Event const& event) const {
-	std::ostringstream oss;
+      void None::send(const data::Events& events) const {
+	if (logger_.isDebugEnabled()) {
+	  logger_.debugStream() << "send() : " << events.size() << "events";
 
-	oss << event;
-
-	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "eventToString() : " << oss.str();
-
-	return oss.str();
-      }
-
-
-      void None::send(const data::Event::VP& events) {
-	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "send() : " << events->size() << "events";
+	  for (data::Event::CVI event = events.begin(); event != events.end(); event++) {
+	    logger_.debugStream() << eventToString(*event);
+	  }
+	}
       }
 
     }

@@ -19,41 +19,6 @@ namespace blitzortung {
 	  logger_.debugStream() << "deleted";
       }
 
-      std::string Udp::eventToString(const data::Event& event) const {
-	const data::Waveform& wfm = event.getWaveform();
-	const data::GpsInfo& gpsInfo = event.getGpsInfo();
-
-	std::ostringstream oss;
-
-	pt::time_facet *timefacet = new pt::time_facet();
-	timefacet->format("%Y-%m-%d %H:%M:%S.%f");
-	std::locale oldLocale = oss.imbue(std::locale(std::locale::classic(), timefacet));
-
-	oss << wfm.getTime();
-	oss.setf(std::ios::fixed);
-	oss.precision(6);
-
-	oss << " " << gpsInfo.getLatitude() << " " << gpsInfo.getLongitude();
-	oss << " " << gpsInfo.getAltitude();
-	oss << " " << creds_.getUsername() << " " << creds_.getPassword();
-	oss << " " << gpsInfo.getStatus() << " " << 2 << " " << 64 << " " << 8;
-	oss << " " << wfm.getTimeDelta().total_nanoseconds() << " ";
-	oss << std::hex << std::uppercase << std::setw(2) << std::setfill('0');
-
-	oss << static_cast<const data::MEvent&>(event).getRawData();
-
-	/*for (unsigned int i = 0; i < wfm.getNumberOfSamples(); i++) {
-	  oss << int(wfm.get(i, 0)) + (1 << 7) << int(wfm.get(i, 1)) + (1 << 7);
-	}*/
-
-	oss << std::nouppercase << " " << VERSION << std::endl;
-
-	// restore original locale
-	oss.imbue(oldLocale);
-
-	return oss.str();
-      }
-
       void Udp::send(const data::Events& events) const {
 	int sock_id;
 
@@ -95,7 +60,9 @@ namespace blitzortung {
 	  std::string data = eventToString(*event);
 
 	  if (logger_.isInfoEnabled())
-	    logger_.infoStream() << data.substr(0, data.size() -1);
+	    logger_.infoStream() << data;
+
+	  data.append("\n");
 
 	  if (sendto(sock_id, data.c_str(), data.size(), 0, (sockaddr*) &serv_addr, sizeof(sockaddr)) == -1) {
 	    logger_.warnStream() << "() error transmitting data";

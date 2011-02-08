@@ -14,6 +14,8 @@ class HardwareTest : public CPPUNIT_NS :: TestFixture
 
   private:
 
+  void run(bo::hardware::comm::Base& comm);
+
   public:
   void setUp();
   void tearDown();

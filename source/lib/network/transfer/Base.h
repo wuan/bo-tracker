@@ -1,8 +1,6 @@
 #ifndef BLITZORTUNG_NETWORK_TRANSFER_BASE_H_
 #define BLITZORTUNG_NETWORK_TRANSFER_BASE_H_
 
-#define VERSION                 "debT&nbsp;0.9.2"
-
 #include <arpa/inet.h>
 #include <netdb.h>
 
@@ -30,9 +28,8 @@ namespace blitzortung {
 
 	protected:
 
-	  //! reference to credentials
-	  const network::Creds& creds_;
-	
+	  const Creds& creds_;
+
 	public:
 
 	  //! create network transfer object
@@ -42,7 +39,7 @@ namespace blitzortung {
 	  virtual ~Base();
 
 	  //! create data string from event
-	  virtual std::string eventToString(const data::Event& event) const = 0;
+	  std::string eventToString(const data::Event& event) const;
 
 	  //! send data to server
 	  virtual void send(const data::Events& events) const = 0;

@@ -52,6 +52,9 @@ namespace blitzortung {
 	}
       }
 
+      const std::string Sirf::getType() const {
+	return "SiRF";
+      }
     }
   }
 }

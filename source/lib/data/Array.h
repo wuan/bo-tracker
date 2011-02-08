@@ -39,6 +39,8 @@ namespace blitzortung {
 	//! delete waveform object
 	virtual ~Array();
 
+	unsigned short getNumberOfBitsPerSample() const;
+
 	unsigned int getNumberOfSamples() const;
 
 	unsigned short getNumberOfChannels() const;

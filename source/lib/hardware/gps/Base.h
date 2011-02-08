@@ -92,6 +92,9 @@ namespace blitzortung {
 
 	  //! get actual gps information
 	  blitzortung::data::GpsInfo::AP getInfo() const;
+
+	  //! get gps device type
+	  virtual const std::string getType() const = 0;
       };
 
     }

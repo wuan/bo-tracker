@@ -6,9 +6,41 @@
 #include "hardware/comm/Dummy.h"
 #include "hardware/gps/Sirf.h"
 
+#include "data/MEvent.h"
+
+#include "network/transfer/None.h"
+
 #include "test-lib-hardware-pcb.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION( HardwareTest );
+
+void HardwareTest::run(bo::hardware::comm::Base& comm) {
+  bo::hardware::gps::Sirf gps(comm);
+
+  bo::hardware::Pcb pcb(comm, gps);
+
+  int count = 0;
+  while (pcb.isOpen()) {
+
+    bo::data::Event::AP event = pcb.read();
+
+    bo::network::transfer::None transfer;
+
+    if (event.get() != 0) {
+      bo::data::MEvent& mevent = dynamic_cast<bo::data::MEvent&>(*event);
+      std::cout << std::endl;
+      std::cout << "data: '" << mevent.getRawData() << "'\n";
+      std::cout << "format: " << *(mevent.getWaveform().getArray().getFormat()) << std::endl;
+
+      std::cout << transfer.eventToString(mevent) << std::endl;
+      //std::cout << *event << std::endl;
+      count++;
+    }
+
+  }
+
+  CPPUNIT_ASSERT_EQUAL(2, count);
+}
 
 void HardwareTest::setUp() {
 }
@@ -26,22 +58,7 @@ void HardwareTest::testV4() {
   comm.addReceivedLine("BLSIG,F133E6,CF4,860");
   comm.addReceivedLine("BLSIG,F1341D,450,77C");
 
-  bo::hardware::gps::Sirf gps(comm);
-
-  bo::hardware::Pcb pcb(comm, gps);
-
-  int count = 0;
-  while (pcb.isOpen()) {
-
-    bo::data::Event::AP event = pcb.read();
-
-    if (event.get() != 0) {
-      //std::cout << *event << std::endl;
-      count++;
-    }
-
-  }
-  CPPUNIT_ASSERT_EQUAL(2, count);
+  run(comm);
 }
 
 void HardwareTest::testV6() {
@@ -59,33 +76,7 @@ void HardwareTest::testV6() {
   comm.addReceivedLine("BLSEQ,F67E15,667E667D6A7E707F787F817F887F8C808F80907F8F809381968191808A7F847F7F7F737E647D587D507D487B467B4D7C587C647C747D887F9780A181A983AF84B084AD84AA83A782A0819A80957F907F8A7D847E807E7C7D777B747C727C727B717B717D727F737F75807682778279827A817A817B807C7E7C7C7A7B797B777A");
   comm.addReceivedLine("BLSEQ,00D13B,4C7E1A8103831E834F7F7F7DB07EDE7DF37AF17BEC7FE580D17DB77EA3828D81747E6A7F6D81697F627C607E61805F7E617E69816F827280787F79807780767E7B7D797D727D6F7D747E757E727F73807D80837E847D867E877E827D7D7D7B7F777E737C737C767D767C7A7D817E8580858089818B818B828D819180917E927D");
 
-  bo::hardware::gps::Sirf gps(comm);
-
-  bo::hardware::Pcb pcb(comm, gps);
-
-  int count = 0;
-  while (pcb.isOpen()) {
-
-    bo::data::Event::AP event = pcb.read();
-
-    if (event.get() != 0) {
-      //TODO add tests for event content
-
-      /*std::cout << *event << std::endl;
-      const bo::data::Array& array = event->getWaveform().getArray();
-      const bo::data::Format& format = *(array.getFormat());
-      std::cout << format << std::endl;
-      for (int sample=0; sample < format.getNumberOfSamples(); sample++) {
-	for (int channel=0; channel < format.getNumberOfChannels(); channel++) {
-	  std::cout << " " << array.get(sample, channel);
-	}
-      }
-      std::cout << std::endl;*/
-      count++;
-    }
-
-  }
-  CPPUNIT_ASSERT_EQUAL(2, count);
+  run(comm);
 }
 
 

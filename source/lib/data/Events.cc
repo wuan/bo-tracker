@@ -40,14 +40,12 @@ namespace blitzortung {
 	dataFormat_ = event->getWaveform().getArray().getFormat();
       } else {
 	if (date_ != event->getWaveform().getTime().date())
-	  throw exception::Base("event date mismatch");
+	  throw exception::Base("Events::add() event date mismatch");
+	if (*(dataFormat_) != *(event->getWaveform().getArray().getFormat()))
+	  throw exception::Base("Events::add() event dataformat mismatch");
       }
-      if (date_ == event->getWaveform().getTime().date() &&
-	  dataFormat_ == event->getWaveform().getArray().getFormat()) {
-	events_.push_back(event);
-      } else {
-	throw exception::Base("data.Events.add() mismatch");
-      }
+
+      events_.push_back(event);
     }
 
     void Events::add(Event::AP event) {

@@ -14,19 +14,18 @@ namespace blitzortung {
 	  //! logger for this class
 	  mutable Logger logger_;
 
+	  Creds localCreds_;
+
 	public:
 
 	  //! create network transfer object
-	  None(const Creds& creds);
+	  None();
 
 	  //! destroy object
 	  virtual ~None();
 
-	  //! create data string from event
-	  virtual std::string eventToString(const data::Event& event) const;
-
 	  //! send data to server
-	  virtual void send(const data::Event::VP& events);
+	  virtual void send(const data::Events& events) const;
 
       };
 
