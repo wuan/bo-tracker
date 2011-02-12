@@ -49,8 +49,8 @@ namespace blitzortung {
 	}
 
 	if (valid_) {
-	  if (logger_.isInfoEnabled())
-	    logger_.infoStream() << "valid fields";
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "valid fields";
 
 	  // read counter value
 	  counter_ = parseHex(fields[counterIndex]);
