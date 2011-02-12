@@ -50,11 +50,7 @@ namespace blitzortung {
 
 	  util::String::split(line, fields, ",");
 
-	  logger_.infoStream() << "read() parse ticks";
-
 	  parsing::Ticks ticksParser(fields);
-
-	  logger_.infoStream() << "read() done";
 
 	  if (ticksParser.isValid()) {
 	    if (logger_.isDebugEnabled())
