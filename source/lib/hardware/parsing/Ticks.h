@@ -1,5 +1,5 @@
-#ifndef BLITZORTUNG_HARDWARE_GPS_PARSE_H_
-#define BLITZORTUNG_HARDWARE_GPS_PARSE_H_
+#ifndef BLITZORTUNG_HARDWARE_PARSING_TICKS_H_
+#define BLITZORTUNG_HARDWARE_PARSING_TICKS_H_
 
 #include <boost/shared_ptr.hpp>
 
@@ -10,17 +10,15 @@
 #include "Logger.h"
 #include "data/GpsInfo.h"
 #include "util/RingBuffer.h"
-#include "hardware/comm/Parse.h"
-#include "hardware/gps/data/Parse.h"
 #include "hardware/gps/data/Time.h"
 #include "hardware/gps/data/Location.h"
 
 namespace blitzortung {
   namespace hardware {
-    namespace gps {
+    namespace parsing {
 
       //! base class for gps hardware objects      
-      class Parse {
+      class Ticks {
 
 	private:
 
@@ -51,10 +49,13 @@ namespace blitzortung {
 	public:
 
 	  //! constructor
-	  Parse(const std::vector<std::string>);
+	  Ticks(const std::vector<std::string>);
 
 	  //! destructor
-	  virtual ~Parse();
+	  virtual ~Ticks();
+
+	  //! parse incoming data
+	  bool parse(const std::vector<std::string>);
 
 	  //! read GPS status char
 	  const char getStatus() const;
@@ -67,18 +68,6 @@ namespace blitzortung {
 
 	  //! get timestamp from counter value
 	  const std::string getTime() const;
-
-	  //! get reference to location object
-	  const data::Location& getLocation() const;
-
-	  //! initialize GPS hardware
-	  void init(bool force=false);
-
-	  //! get actual gps information
-	  blitzortung::data::GpsInfo::AP getInfo() const;
-
-	  //! get gps device type
-	  virtual const std::string getType() const = 0;
       };
 
     }

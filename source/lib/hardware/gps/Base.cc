@@ -2,6 +2,7 @@
 #include "exception/Base.h"
 #include "hardware/gps/data/Base.h"
 #include "hardware/gps/Base.h"
+#include "hardware/parsing/Ticks.h"
 
 namespace blitzortung {
   namespace hardware {
@@ -100,43 +101,32 @@ namespace blitzortung {
 	dateInitialized_ = pt::second_clock::universal_time().date();
       }
 
-      void Base::parse(const std::vector<std::string> &fields) {
+      void Base::parse(const std::vector<std::string>& fields) {
+
 
 	// initialize gps modules at least once a day
 	if (dateInitialized_ != pt::second_clock::universal_time().date()) {
 	  init();
 	}
 
-	if (fields[0] == "BLSEC") {
+	parsing::Ticks gpsData(fields);
 
-	  // read counter value
-	  int counter;
-	  {
-	    std::istringstream iss(fields[1]);
-	    iss >> std::hex >> counter;
-	  }
+	// read counter value
+	counter_ = gpsData.getCounter();
 
-	  // set GPS reception status
-	  setStatus(fields[2][0]);
+	// set GPS reception status
+	setStatus(gpsData.getGpsStatus());
 
-	  // set GPS PPS time
-	  time_.setSecond(fields[4] + " " + fields[3], counter);
+	// set GPS PPS time
+	time_.setSecond(gpsData.getDateTime(), counter_);
 
-	  // exctract actual location and altitude information
-	  location_.addLongitude(fields[7], fields[8][0]);
-	  location_.addLatitude(fields[5], fields[6][0]);
-	  location_.addAltitude(fields[9]);
+	// exctract actual location and altitude information
+	location_.addLongitude(gpsData.getLongitude());
+	location_.addLatitude(gpsData.getLatitude());
+	location_.addAltitude(gpsData.getAltitude());
 
-	  // use of value in fields[10] ???
-	  
-	  // add actual satellite count to ringbuffer
-	  addSatelliteCount(fields[11]);
-	  
-	} else {
-	  throw exception::Base("blitzortung::hardware::gps::Base.parse() wrong data to parse");
-	}
-	if (logger_.isDebugEnabled())
-	  logger_.debug("parse() done");
+	// add actual satellite count to ringbuffer
+	addSatelliteCount(gpsData.getSatelliteCount());
       }
 
       bo::data::GpsInfo::AP Base::getInfo() const {

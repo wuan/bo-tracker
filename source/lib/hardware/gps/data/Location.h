@@ -17,19 +17,17 @@ namespace blitzortung {
 	    util::RingBuffer<double> latitude_;
 	    util::RingBuffer<double> altitude_;
 
-	    static double getCoordFromNmea(const std::string &);
-
 	  public:
 	    Location();
 	    virtual ~Location();
 
-	    void addLongitude(const std::string &, const char);
+	    void addLongitude(const float longitude);
 	    double getLongitude() const;
 
-	    void addLatitude(const std::string &, const char);
+	    void addLatitude(const float latitude);
 	    double getLatitude() const;
 
-	    void addAltitude(const std::string &);
+	    void addAltitude(const float altitude);
 	    double getAltitude() const;
 
 	};
