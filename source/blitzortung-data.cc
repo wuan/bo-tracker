@@ -47,19 +47,18 @@ void printEvent(const bo::data::Event& event) {
 }
 
 void printAllSamplesOfEvent(const bo::data::Event& event) {
+
   std::cout << event;
 
   const bo::data::Waveform& waveform = event.getWaveform();
 
   for (unsigned int sample = 0; sample < waveform.getNumberOfSamples(); sample++) {
-    std::cout << event;
-
     for (unsigned int channel = 0; channel < waveform.getNumberOfChannels(); channel++) {
-      std::cout << " " << waveform.get(sample, channel);
+      std::cout << " (" << sample << "," << channel << ")" << waveform.get(sample, channel);
     }
-
-    std::cout << std::endl;
   }
+
+  std::cout << std::endl;
 }
 
 int main(int argc, char **argv) {
