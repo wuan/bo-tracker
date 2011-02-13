@@ -56,6 +56,12 @@ namespace blitzortung {
           //! hardware specific method for device initialization to be overloaded	  
 	  virtual void initWrite(const unsigned int) = 0;
 
+	  //! set GPS status char
+	  void setStatus(const char status);
+
+	  //! add actual satellite count value
+	  void addSatelliteCount(const unsigned short);
+
 	public:
 
 	  //! constructor
@@ -67,17 +73,11 @@ namespace blitzortung {
 	  //! parse read parsed date
 	  void set(const hardware::parsing::Ticks& ticksParser);
 
-	  //! set GPS status char
-	  void setStatus(const char status);
-
 	  //! read GPS status char
 	  const char getStatus() const;
 
 	  //! is GPS data valid?
 	  const bool isValid() const;
-
-	  //! add actual satellite count value
-	  void addSatelliteCount(const unsigned short);
 
 	  //! get average satellite count value
 	  unsigned short getSatelliteCount() const;

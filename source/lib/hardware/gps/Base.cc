@@ -121,9 +121,7 @@ namespace blitzortung {
       }
 
       bo::data::GpsInfo::AP Base::getInfo() const {
-	bo::data::GpsInfo::AP gpsInfo(new bo::data::GpsInfo(*this));
-
-	return gpsInfo;
+	return bo::data::GpsInfo::AP(new bo::data::GpsInfo(*this));
       }
     }
   }
