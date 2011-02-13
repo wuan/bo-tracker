@@ -68,7 +68,7 @@ namespace blitzortung {
 	    int index = sample * hexCharsPerSample;
 
 	    for (int channel=0; channel < numberOfChannels; channel++) {
-	      array->set(parseHex(rawData_.substr(index, hexCharsPerSample)) - offset, sample, channel);
+	      array->set(parseHex(rawData_.substr(index + hexCharsPerSample * channel, hexCharsPerSample)) - offset, sample, channel);
 	    }
 	  }
 
