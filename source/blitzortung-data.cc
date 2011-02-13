@@ -46,6 +46,22 @@ void printEvent(const bo::data::Event& event) {
     std::cout << event << std::endl;
 }
 
+void printAllSamplesOfEvent(const bo::data::Event& event) {
+  std::cout << event;
+
+  const bo::data::Waveform& waveform = event.getWaveform();
+
+  for (unsigned int sample = 0; sample < waveform.getNumberOfSamples(); sample++) {
+    std::cout << event;
+
+    for (unsigned int channel = 0; channel < waveform.getNumberOfChannels(); channel++) {
+      std::cout << " " << waveform.get(sample, channel);
+    }
+
+    std::cout << std::endl;
+  }
+}
+
 int main(int argc, char **argv) {
 
   std::string file = "";
@@ -56,12 +72,13 @@ int main(int argc, char **argv) {
   // programm arguments/options
   boost::program_options::options_description desc("program options");
   desc.add_options()
-    ("help", "show program help")
+    ("help,h", "show program help")
     ("input-file,i", po::value<std::string>(&file), "file name")
     ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
     ("endtime,e", po::value<std::string>(&endTimeString), "end time in HHMM or HHMMSS format")
     ("time-series,t", "output timeseries of single data points")
     ("verbose,v", "verbose mode")
+    ("long-data,l", "output all samples")
     ("debug", "debug mode")
     ;
 
@@ -113,6 +130,9 @@ int main(int argc, char **argv) {
   void (*eventOperation)(const bo::data::Event&);
 
   eventOperation = &printEvent;
+
+  if (vm.count("long-data"))
+    eventOperation = &printAllSamplesOfEvent;
 
   for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
     (*eventOperation)(*event);

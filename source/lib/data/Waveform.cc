@@ -89,6 +89,10 @@ namespace blitzortung {
       return array_->getNumberOfSamples();
     }
 
+    unsigned int Waveform::getNumberOfChannels() const {
+      return array_->getNumberOfChannels();
+    }
+
     void Waveform::toStream(std::iostream& stream) {
 
       unsigned long long int nanoseconds = t0_.time_of_day().total_nanoseconds();

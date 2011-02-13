@@ -77,6 +77,10 @@ namespace blitzortung {
 	//! return actual size of waveform
 	unsigned int getNumberOfSamples() const;
 
+	//! return actual size of waveform
+	unsigned int getNumberOfChannels() const;
+
+	//! return reference to contained array
 	const Array& getArray() const {
 	  return *array_;
 	}
