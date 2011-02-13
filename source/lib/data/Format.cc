@@ -54,7 +54,7 @@ namespace blitzortung {
       dataByteSize_ = sampleByteSize_ * numberOfChannels_ * numberOfSamples_;
     }
 
-    unsigned short Format::getBytesPerSample() const {
+    unsigned short Format::getNumberOfBytesPerSample() const {
       return sampleByteSize_;
     }
 

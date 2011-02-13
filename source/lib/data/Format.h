@@ -68,7 +68,7 @@ namespace blitzortung {
 	unsigned short getNumberOfSamples() const;
 
 	//! returns the number of bytes per single sample
-	unsigned short getBytesPerSample() const;
+	unsigned short getNumberOfBytesPerSample() const;
 
 	//! returns the total size of the data according to the format
 	unsigned int getDataSize() const;

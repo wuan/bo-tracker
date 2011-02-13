@@ -50,12 +50,6 @@ namespace blitzortung {
 	//! delete waveform object
 	virtual ~Waveform();
 
-	//! add sample to collection
-	/*!
-	\param x x-value of sample
-	*/
-	void add(unsigned char x);
-
 	//! returns value at index
 	float get(unsigned int index, unsigned short channel=0) const;
 
