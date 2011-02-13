@@ -1,7 +1,10 @@
-#ifndef TESTS_TEST_LIB_DATA_SAMPLES_H_
-#define TESTS_TEST_LIB_DATA_SAMPLES_H_
+#ifndef TESTS_TEST_LIB_DATA_WAVEFORM_H_
+#define TESTS_TEST_LIB_DATA_WAVEFORM_H_
 
 #include <boost/shared_ptr.hpp>
+
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>  
  
 #include "namespaces.h"
 #include "data/Waveform.h"

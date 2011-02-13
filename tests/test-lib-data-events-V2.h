@@ -1,5 +1,5 @@
-#ifndef TESTS_TEST_LIB_DATA_SAMPLES_V2_H_
-#define TESTS_TEST_LIB_DATA_SAMPLES_V2_H_
+#ifndef TESTS_TEST_LIB_DATA_EVENTS_V2_H_
+#define TESTS_TEST_LIB_DATA_EVENTS_V2_H_
 
 #include "namespaces.h"
 #include "test-lib-data-events.h"
