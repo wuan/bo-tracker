@@ -18,6 +18,8 @@ namespace blitzortung {
 	typedef boost::shared_ptr<Format> P;
 	typedef boost::shared_ptr<const Format> CP;
 
+	enum Type {BYTE=1, SHORT=2, INT=4};
+
       private:
 
 	//! number of bits per sample
@@ -30,14 +32,11 @@ namespace blitzortung {
 	unsigned short numberOfSamples_;
 
 	//! intermediate value of bytes per sample
-	unsigned char sampleByteSize_;
-
-	//! intermediate value of total data size
-	unsigned int dataByteSize_;
+	Type sampleType_;
 
 	mutable Logger logger_;
 
-	void updateSizes();
+	void updateDataType();
 
       public:
 
@@ -70,6 +69,9 @@ namespace blitzortung {
 	//! returns the number of bytes per single sample
 	unsigned short getNumberOfBytesPerSample() const;
 
+	//! get data type of format
+	Type getDataType() const;
+
 	//! returns the total size of the data according to the format
 	unsigned int getDataSize() const;
 
@@ -84,6 +86,7 @@ namespace blitzortung {
 
 	//! comparison operator for data format
 	bool operator!=(const Format& other) const;
+
 
     };
 
