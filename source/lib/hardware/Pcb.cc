@@ -25,15 +25,6 @@ namespace blitzortung {
 	  logger_.debugStream() << "destroyed";
       }
 
-      int Pcb::parseHex(const std::string& hexString) {
-	int hexValue;
-
-	std::istringstream iss(hexString);
-	iss >> std::hex >> hexValue;
-
-	return hexValue;
-      }
-
       bool Pcb::isOpen() const {
 	return comm_.isOpen();
       }
@@ -57,6 +48,10 @@ namespace blitzortung {
 	      logger_.debugStream() << "read() TicksParser is valid";
 
 	    gps_.set(ticksParser);
+
+	    if (ticksParser.getFirmwareVersion().size() > 0)
+	      firmwareVersion_ = ticksParser.getFirmwareVersion();
+
 	  } else {
 	    parsing::Samples samplesParser(fields, gps_);
 
@@ -101,21 +96,24 @@ namespace blitzortung {
 	  logger_.infoStream() << "createSample() waveform " << *waveform;
     
 	rawData.append(" ");
+
 	rawData.append(VERSION);
 	rawData.append(" ");
-	rawData.append("-");
+
+	if (firmwareVersion_.size() > 0)
+	  rawData.append(firmwareVersion_);
+	else 
+	  rawData.append("-");
 	rawData.append(" ");
+
 	{
 	  std::ostringstream oss;
 	  oss << comm_.getBaudRate();
 	  rawData.append(oss.str());
 	}
 	rawData.append(" ");
-	rawData.append(gps_.getType());
-	logger_.infoStream() << "gpsType '" << gps_.getType() << "'";
 
-	logger_.infoStream() << "set data '" << rawData << "'";
-	
+	rawData.append(gps_.getType());
 
 	data::Event::AP event(new data::MEvent(waveform, gps_.getInfo(), rawData));
 

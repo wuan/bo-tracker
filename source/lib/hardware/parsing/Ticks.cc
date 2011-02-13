@@ -19,20 +19,10 @@ namespace blitzortung {
 	unsigned int latitudeHemisphereIndex = 0;
 	unsigned int altitudeIndex = 0;
 	unsigned int numberOfSatellitesIndex = 0;
+	unsigned int firmwareVersionIndex = 0;
 
 	unsigned int index = 1;
-	if (fields[0] == "BLSEC") {
-	  if (fields.size() == 9) {
-	    timeIndex = index++;
-	    dateIndex = index++;
-	    gpsStatusIndex = index++;
-	    latitudeIndex = index++;
-	    latitudeHemisphereIndex = index++;
-	    longitudeIndex = index++;
-	    longitudeHemisphereIndex = index++;
-	    counterIndex = index++;
-	    valid_ = true;
-	  } else if (fields.size() == 12) {
+	if (fields[0] == "BS") {
 	    counterIndex = index++;
 	    gpsStatusIndex =  index++;
 	    timeIndex = index++;
@@ -44,6 +34,31 @@ namespace blitzortung {
 	    altitudeIndex = index++;
 	    index++;
 	    numberOfSatellitesIndex = index++;
+	    firmwareVersionIndex = index++;
+	    valid_ = true;
+	} else if (fields[0] == "BLSEC") {
+	  if (fields.size() == 12) {
+	    counterIndex = index++;
+	    gpsStatusIndex =  index++;
+	    timeIndex = index++;
+	    dateIndex = index++;
+	    latitudeIndex = index++;
+	    latitudeHemisphereIndex = index++;
+	    longitudeIndex = index++;
+	    longitudeHemisphereIndex = index++;
+	    altitudeIndex = index++;
+	    index++;
+	    numberOfSatellitesIndex = index++;
+	    valid_ = true;
+	  } else if (fields.size() == 9) {
+	    timeIndex = index++;
+	    dateIndex = index++;
+	    gpsStatusIndex = index++;
+	    latitudeIndex = index++;
+	    latitudeHemisphereIndex = index++;
+	    longitudeIndex = index++;
+	    longitudeHemisphereIndex = index++;
+	    counterIndex = index++;
 	    valid_ = true;
 	  }
 	}
@@ -68,14 +83,20 @@ namespace blitzortung {
 	  if (altitudeIndex > 0) {
 	    altitude_ = parseFloat(fields[altitudeIndex]);
 	  } else {
-	    altitude_ = NAN;
+	    altitude_ = 0;
 	  }
 
 	  if (numberOfSatellitesIndex > 0) {
-	  // add actual satellite count to ringbuffer
-	  numberOfSatellites_ = parseInt(fields[numberOfSatellitesIndex]);
+	    // add actual satellite count to ringbuffer
+	    numberOfSatellites_ = parseInt(fields[numberOfSatellitesIndex]);
 	  } else {
 	    numberOfSatellites_ = 0;
+	  }
+
+	  if (firmwareVersionIndex > 0) {
+	    firmwareVersion_ = fields[firmwareVersionIndex];
+	  } else {
+	    firmwareVersion_ = "-";
 	  }
 	}
       }
@@ -92,7 +113,7 @@ namespace blitzortung {
 	return latitude_;
       }
 
-      float Ticks::getAltitude() const {
+      short Ticks::getAltitude() const {
 	return altitude_;
       }
 
@@ -102,6 +123,10 @@ namespace blitzortung {
 
       const std::string& Ticks::getDateTime() const {
 	return dateTime_;
+      }
+
+      const std::string& Ticks::getFirmwareVersion() const {
+	return firmwareVersion_;
       }
 
     }

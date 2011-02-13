@@ -17,7 +17,7 @@ void HardwareParsingTest::setUp() {
 void HardwareParsingTest::tearDown() {
 }
 
-void HardwareParsingTest::testTicksParsingTest(const std::string& input, const std::string& dateTime, unsigned int counterValue, float longitude, float latitude, float altitude, unsigned short numberOfSatellites, const std::string& gpsStatus) {
+void HardwareParsingTest::testTicksParsingTest(const std::string& input, const std::string& dateTime, unsigned int counterValue, float longitude, float latitude, short altitude, unsigned short numberOfSatellites, const std::string& gpsStatus) {
   std::vector<std::string> fields;
 
   bo::util::String::split(input, fields, ",");
@@ -28,10 +28,7 @@ void HardwareParsingTest::testTicksParsingTest(const std::string& input, const s
   CPPUNIT_ASSERT_EQUAL(counterValue, ticksParser.getCounterValue());
   CPPUNIT_ASSERT_DOUBLES_EQUAL(longitude, ticksParser.getLongitude(), 1e-4);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(latitude, ticksParser.getLatitude(), 1e-4);
-  if (! isnan(altitude))
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(altitude, ticksParser.getAltitude(), 1e-4);
-  else
-    CPPUNIT_ASSERT(isnan(ticksParser.getAltitude()));
+  CPPUNIT_ASSERT_EQUAL(altitude, ticksParser.getAltitude());
   CPPUNIT_ASSERT_EQUAL(numberOfSatellites, ticksParser.getNumberOfSatellites());
   CPPUNIT_ASSERT_EQUAL(gpsStatus[0], ticksParser.getGpsStatus());
 }
@@ -40,23 +37,23 @@ void HardwareParsingTest::testTicksParsing() {
   testTicksParsingTest("BLSEC,185630,190810,A,4729.2852,N,01904.2683,E,AB852D",
       "190810 185630",
       11240749,
-      19.0711, 47.4881, NAN,
+      19.0711, 47.4881, 0,
       0, "A");
   testTicksParsingTest("BLSEC,185631,190810,V,4729.2856,S,01904.2688,W,D1ABEA",
       "190810 185631",
       13741034,
-      -19.0711, -47.4881, NAN,
+      -19.0711, -47.4881, 0,
       0, "V");
 
   testTicksParsingTest("BLSEC,0833CC,A,131531,200810,4808.1189,N,01132.6299,E,576.5000,M,06",
       "200810 131531",
       537548,
-      11.5438, 48.1353, 576.5,
+      11.5438, 48.1353, 576,
       6, "A");
   testTicksParsingTest("BLSEC,2E59FE,V,131532,200810,4808.1187,N,01132.6301,E,577.2000,M,06",
       "200810 131532",
       3037694,
-      11.5438, 48.1353, 577.2,
+      11.5438, 48.1353, 577,
       6, "V");
 }
 
