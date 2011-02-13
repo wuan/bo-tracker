@@ -10,7 +10,7 @@ namespace blitzortung {
       numberOfSamples_(numberOfSamples),
       logger_("data.Format")
     {
-      updateSizes();
+      updateDataType();
     }
 
     Format::Format() :
@@ -19,7 +19,7 @@ namespace blitzortung {
       numberOfSamples_(0),
       logger_("data.Format")
     {
-      updateSizes();
+      updateDataType();
     }
 
     Format::Format(std::iostream& stream) :
@@ -28,7 +28,8 @@ namespace blitzortung {
       util::Stream::ReadValue(stream, numberOfSamples_);
       util::Stream::ReadValue(stream, numberOfChannels_);
       util::Stream::ReadValue(stream, numberOfBits_);
-      updateSizes();
+
+      updateDataType();
     }
 
     Format::~Format() {
@@ -46,24 +47,30 @@ namespace blitzortung {
       return numberOfSamples_;
     }
 
-    void Format::updateSizes() {
-      unsigned short bitBytes = numberOfBits_ + 7;
-      bitBytes /= 8;
-      sampleByteSize_ = bitBytes;
+    void Format::updateDataType() {
+      if (numberOfBits_ <= 8) {
+	sampleType_ = BYTE;
+      } else if (numberOfBits_ <= 16) {
+	sampleType_ = SHORT;
+      } else {
+	sampleType_ = INT;
+      }
+    }
 
-      dataByteSize_ = sampleByteSize_ * numberOfChannels_ * numberOfSamples_;
+    Format::Type Format::getDataType() const {
+      return sampleType_;
     }
 
     unsigned short Format::getNumberOfBytesPerSample() const {
-      return sampleByteSize_;
+      return sampleType_;
     }
 
     unsigned int Format::getDataSize() const {
-      return dataByteSize_;
+      return sampleType_ * numberOfChannels_ * numberOfSamples_;
     }
 
     unsigned int Format::getIndex(unsigned short index, unsigned char channel) const {
-      return (index * numberOfChannels_ + channel) * sampleByteSize_;
+      return index * numberOfChannels_ + channel;
     }
 
     void Format::toStream(std::iostream& stream) const {

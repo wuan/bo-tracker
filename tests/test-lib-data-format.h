@@ -19,6 +19,8 @@ class FormatTest : public CPPUNIT_NS :: TestFixture
   void setUp();
   void tearDown();
 
+  void doIndexTest(bo::data::Format::CP format);
+
   //! tests
 
   void testIndex();

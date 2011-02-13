@@ -31,14 +31,40 @@ namespace blitzortung {
       if (index > format_->getDataSize() - 1)
 	throw exception::Base("Array::set() index out of range");
 
-      // TODO add casts for different sample sizes
-      ((char*)(data_))[index] = (char)(value);
+      switch(format_->getDataType()) {
+	case Format::BYTE:
+	  ((char*)(data_))[index] = (char)(value);
+	  break;
+
+	case Format::SHORT:
+	  ((short*)(data_))[index] = (short)(value);
+	  break;
+
+	case Format::INT:
+	  ((int*)(data_))[index] = value;
+	  break;
+
+	default:
+	  throw exception::Base("Array::set() unhandled in memory data type of format");
+      }
     }
 
     float Array::get(unsigned int sample, unsigned short channel) const {
       float divider = 1 << ( format_->getNumberOfBitsPerSample() - 1);
-      // TODO add casts for different sample sizes
-      return ((char*)(data_))[format_->getIndex(sample, channel)]/divider;
+
+      switch(format_->getDataType()) {
+	case Format::BYTE:
+	  return ((char*)(data_))[format_->getIndex(sample, channel)]/divider;
+
+	case Format::SHORT:
+	  return ((short*)(data_))[format_->getIndex(sample, channel)]/divider;
+
+	case Format::INT:
+	  return ((int*)(data_))[format_->getIndex(sample, channel)]/divider;
+
+	default:
+	  throw exception::Base("Array::get() unhandled in memory data type of format");
+      }
     }
 
     void Array::toStream(std::iostream& stream) const {
