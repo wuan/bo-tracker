@@ -32,12 +32,6 @@ namespace blitzortung {
 	//! reference to gps device object
 	gps::Base& gps_;
 
-	//! returnes int value of given hex string
-	int parseHex(const std::string& hexString);
-
-	//! gps parser interface, overload for modification
-	void parseGps(const std::vector<std::string>&);
-
       private:
 
 	//! logger for objects of this class
