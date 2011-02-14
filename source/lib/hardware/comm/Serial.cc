@@ -50,10 +50,12 @@ namespace blitzortung {
 	      if (logger_.isDebugEnabled()) {
 		std::ostringstream oss;
 		oss << std::hex << (int)checksum;
-		logger_.debugStream() << "read() checksum mismatch: '" << line << "' vs. " << oss.str() ;
+		logger_.noticeStream() << "checkLine() checksum mismatch: '" << line << "' vs. " << oss.str() ;
 	      }
 	    }
 	  }
+	} else {
+	  logger_.noticeStream() << "checkLine() invalid line '" << line << "'";
 	}
 	return "";
       }
