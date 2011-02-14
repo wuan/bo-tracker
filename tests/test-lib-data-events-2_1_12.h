@@ -1,12 +1,15 @@
-#ifndef TESTS_TEST_LIB_DATA_EVENTS_V2_H_
-#define TESTS_TEST_LIB_DATA_EVENTS_V2_H_
+#ifndef TESTS_TEST_LIB_DATA_EVENTS_2_1_12_H_
+#define TESTS_TEST_LIB_DATA_EVENTS_2_1_12_H_
 
+#include <boost/shared_ptr.hpp>
+ 
 #include "namespaces.h"
+#include "data/Events.h"
 #include "test-lib-data-events.h"
  
-class EventV2Test : public EventTest
+class Event_2_1_12_Test : public EventTest
 {
-  CPPUNIT_TEST_SUITE( EventV2Test );
+  CPPUNIT_TEST_SUITE( Event_2_1_12_Test );
   CPPUNIT_TEST( testAdd );
   CPPUNIT_TEST( testWrite );
   CPPUNIT_TEST( testAppend );

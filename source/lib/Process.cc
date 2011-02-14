@@ -19,7 +19,9 @@ namespace blitzortung {
   Process::~Process() {
   }
 
-  void Process::push(data::Event::AP& data) {
+  void Process::push(data::Event::AP data) {
+    if (logger_.isDebugEnabled())
+      logger_.debugStream() << "push() " << data->getWaveform().getTime();
     eventQueue_.push(data);
   }
 

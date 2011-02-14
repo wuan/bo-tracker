@@ -31,14 +31,14 @@ namespace blitzortung {
       //! limit value of maximum events / second;
       double eventRateLimit_;
 
-      //! output file name
+      //! output object
       output::Base& output_;
 
       //! logger for this class
       mutable Logger logger_;
 
       //! prepare data for transmission
-      data::Events::AP prepareData(pt::ptime&, pt::ptime&);
+      data::Events::AP prepareData(const pt::ptime&, const pt::ptime&);
 
       //! get string to be transmitted for every sample
       std::string sampleToString(const data::Event& sample);

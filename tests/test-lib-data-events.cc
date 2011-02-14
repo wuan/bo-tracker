@@ -1,23 +1,30 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "data/Event.h"
+#include "data/MEvent.h"
 #include "test-lib-data-events.h"
 
 //CPPUNIT_TEST_SUITE_REGISTRATION( EventTest );
 
 bo::data::Event::AP EventTest::createEvent(const pt::ptime& time) {
+  return createEventWithFormat(dataFormat_, time);
+}
 
-  bo::data::Array::AP array(new bo::data::Array(dataFormat_));
+bo::data::Event::AP EventTest::createEventWithFormat(bo::data::Format::CP dataFormat, const pt::ptime& time) {
 
-  for (unsigned int i=0; i < dataFormat_->getNumberOfSamples(); i++) {
-    array->set(100 - i, i, 0);
-    array->set(-50 + i, i, 1);
+  bo::data::Array::AP array(new bo::data::Array(dataFormat));
+
+  int valueOffset[] = {100, -50};
+
+  for (unsigned int sample=0; sample < dataFormat->getNumberOfSamples(); sample++) {
+    for (unsigned int channel=0; channel < dataFormat->getNumberOfChannels(); channel++) {
+      array->set(valueOffset[channel] + sample, sample, channel);
+    }
   }
 
   pt::time_duration dt = pt::nanoseconds(0);
 
-  if (dataFormat_->getNumberOfSamples() > 1)
+  if (dataFormat->getNumberOfSamples() > 1)
     dt = pt::nanoseconds(3125);
 
   bo::data::Waveform::AP wfm(new bo::data::Waveform(array, time + pt::nanoseconds(3125) * 10, dt));
@@ -25,7 +32,7 @@ bo::data::Event::AP EventTest::createEvent(const pt::ptime& time) {
   // create GpsInfo
   bo::data::GpsInfo::AP gpsInfo(new bo::data::GpsInfo());
 
-  return bo::data::Event::AP(new bo::data::Event(wfm, gpsInfo));
+  return bo::data::Event::AP(new bo::data::MEvent(wfm, gpsInfo, "n/a"));
 }
 
 bo::data::Events::P EventTest::createEvents1() {

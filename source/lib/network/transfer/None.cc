@@ -23,10 +23,10 @@ namespace blitzortung {
 
       void None::send(const data::Events& events) const {
 	if (logger_.isDebugEnabled()) {
-	  logger_.debugStream() << "send() : " << events.size() << "events";
+	  logger_.debugStream() << "send() send " << events.size() << " events";
 
 	  for (data::Event::CVI event = events.begin(); event != events.end(); event++) {
-	    logger_.debugStream() << eventToString(*event);
+	    logger_.debugStream() << "send() event '" << eventToString(*event) << "'";
 	  }
 	}
       }
