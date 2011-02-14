@@ -84,6 +84,11 @@ namespace blitzortung {
       while (! sampleQueue_.empty()) {
 	data::Event::AP sample(sampleQueue_.pop());
 
+	if (events_->size() != 0 && events_->getDate() != sample->getWaveform().getTime().date()) {
+	  sampleQueue_.push(sample);
+	  break;
+	}
+
 	events_->add(sample);
       }
 
