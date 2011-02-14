@@ -4,8 +4,8 @@
 
 namespace blitzortung {
 
-  DataThread::DataThread(Queue<data::Event>& sampleQueue, const network::transfer::Base& transfer, output::Base& output)
-    : sampleQueue_(sampleQueue),
+  DataThread::DataThread(Queue<data::Event>& sampleQueue, const network::transfer::Base& transfer, output::Base& output) :
+    sampleQueue_(sampleQueue),
     transfer_(transfer),
     events_(new data::Events()),
     output_(output),
@@ -31,13 +31,11 @@ namespace blitzortung {
     eventRateLimit_ = eventRateLimit;
   }
 
-  data::Events::AP DataThread::prepareData(pt::ptime& now, pt::ptime& lastSent) {
+  data::Events::AP DataThread::prepareData(const pt::ptime& now, const pt::ptime& lastSent) {
     data::Events::AP deletedEvents(new data::Events());
 
     double secondsElapsed = ((now - lastSent).total_milliseconds() / 1000);
     double eventRate = double(events_->size()) / secondsElapsed;
-
-    lastSent = now;
 
     if (logger_.isDebugEnabled())
       logger_.debugStream() << "prepareData() " << events_->size() << " events (rate " << eventRate << " events/second) at " << now;
@@ -73,53 +71,63 @@ namespace blitzortung {
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "() wait for data";
 
+      // wait for next incoming sample
       sampleQueue_.timed_wait(xt);
-
-      // get new events from queue until it is empty
-      while (! sampleQueue_.empty()) {
-	data::Event::AP sample(sampleQueue_.pop());
-
-	if (events_->size() != 0 && events_->getDate() != sample->getWaveform().getTime().date()) {
-	  sampleQueue_.push(sample);
-	  break;
-	}
-
-	events_->add(sample);
-      }
 
       pt::ptime now = pt::second_clock::universal_time();
 
       if (now - lastSent >= sleepTime_) {
 
-	if (logger_.isDebugEnabled())
-	  logger_.debug("() awake, transmitting data");
+	bool sendAgain = false;
 
-	if (events_->size() > 0) {
+	do {
+	  // get new events from queue until it is empty
+	  while (! sampleQueue_.empty()) {
 
-	  // prepare data for transmission
-	  data::Events::AP deletedEvents = prepareData(now, lastSent);
+	    if (events_->size() != 0 && events_->getDate() != sampleQueue_.front().getWaveform().getTime().date()) {
+	      if (logger_.isDebugEnabled())
+		logger_.debugStream() << "() stopped reading queue at transition to next day";
+	      sendAgain = true;
+	      break;
+	    }
 
-	  logger_.infoStream() << "transmit " << events_->size() << " events";
-	  // transmit data
-	  transfer_.send(*events_);
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "() pop from queue " << sampleQueue_.front().getWaveform().getTime();
+	    events_->add(sampleQueue_.pop());
+	  }
 
-	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "() recollect events " << events_->size() << " + " << deletedEvents->size();
+	  if (events_->size() > 0) {
 
-	  events_->transfer(events_->end(), *deletedEvents);
+	    if (logger_.isDebugEnabled())
+	      logger_.debug("() transmitting/saving data");
 
-	  events_->sort();
+	    // prepare data for transmission
+	    data::Events::AP deletedEvents = prepareData(now, lastSent);
 
-	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "() recollected " << events_->size() << " events ";
+	    logger_.infoStream() << "transmit " << events_->size() << " events";
+	    // transmit data
+	    transfer_.send(*events_);
+	    logger_.infoStream() << "transmit done";
 
-	  logger_.infoStream() << "output " << events_->size() << " events";
-	  output_.output(*events_);
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "() recollect events " << events_->size() << " + " << deletedEvents->size();
 
-	  // delete all events
-	  events_->clear();
-	}
+	    events_->transfer(events_->end(), *deletedEvents);
 
+	    events_->sort();
+
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "() recollected " << events_->size() << " events ";
+
+	    logger_.infoStream() << "output " << events_->size() << " events";
+	    output_.output(*events_);
+
+	    // delete all events
+	    events_->clear();
+	  }
+	} while (sendAgain);
+
+	lastSent = now;
       }
     }
   }

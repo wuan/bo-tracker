@@ -18,7 +18,7 @@ namespace blitzortung {
 
     void None::output(const data::Events& eventsForOutput) {
 
-      for (data::Event::CVI event = eventsForOutput.begin(); event != eventsForOutput.end(); ) {
+      for (data::Event::CVI event = eventsForOutput.begin(); event != eventsForOutput.end(); event++) {
 	//eventsForOutput->erase(event);
       }
 

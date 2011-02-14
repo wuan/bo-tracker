@@ -45,6 +45,8 @@ class EventTest : public CPPUNIT_NS :: TestFixture
     void testAppend();
 
     void testSize();
+
+    static bo::data::Event::AP createEventWithFormat(bo::data::Format::CP dataFormat, const pt::ptime&);
 };
 
 #endif

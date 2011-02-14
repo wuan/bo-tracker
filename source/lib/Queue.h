@@ -38,7 +38,7 @@ namespace blitzortung {
 	virtual ~Queue();
 
 	//! push one element to the end of the queue
-	void push(std::auto_ptr<T>& data);
+	void push(std::auto_ptr<T> data);
 
 	//! check if the queue is empty
 	bool empty() const;
