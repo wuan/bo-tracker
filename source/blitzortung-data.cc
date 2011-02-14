@@ -48,17 +48,23 @@ void printEvent(const bo::data::Event& event) {
 
 void printAllSamplesOfEvent(const bo::data::Event& event) {
 
-  std::cout << event;
+  pt::time_facet *timefacet = new pt::time_facet();
+  timefacet->format("%Y-%m-%d %H:%M:%S.%f");
+  std::locale oldLocale = std::cout.imbue(std::locale(std::locale::classic(), timefacet));
+
+  std::cout << "# " << event << std::endl;
 
   const bo::data::Waveform& waveform = event.getWaveform();
 
   for (unsigned int sample = 0; sample < waveform.getNumberOfSamples(); sample++) {
+    std::cout << waveform.getTime(sample);
     for (unsigned int channel = 0; channel < waveform.getNumberOfChannels(); channel++) {
-      std::cout << " (" << sample << "," << channel << ")" << waveform.get(sample, channel);
+      std::cout << " " << waveform.get(sample, channel);
     }
+    std::cout << std::endl;
   }
 
-  std::cout << std::endl;
+  std::cout.imbue(oldLocale);
 }
 
 int main(int argc, char **argv) {
