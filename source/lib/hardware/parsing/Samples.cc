@@ -6,7 +6,8 @@ namespace blitzortung {
     namespace parsing {
 
       Samples::Samples(const std::vector<std::string> fields, const hardware::gps::Base& gps) :
-	Base()
+	Base(),
+	logger_("hardware.parsing.Samples")
       {
 	data::Format::CP dataFormat;
 	pt::ptime eventtime;
@@ -51,9 +52,6 @@ namespace blitzortung {
 	}
 
 	// parse lighning event information
-
-	
-
 	if (gps.isValid() && eventtime != pt::not_a_date_time) {
 	  int numberOfEvents = rawData_.size() >> 2;
 
@@ -62,13 +60,15 @@ namespace blitzortung {
 	  unsigned short hexCharsPerSample = (dataFormat->getNumberOfBitsPerSample() + 3 ) / 4;
 	  unsigned short numberOfChannels = dataFormat->getNumberOfChannels();
 	  int offset = 1 << (dataFormat->getNumberOfBitsPerSample() - 1);
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "#ch " << numberOfChannels << ", #chars/sample " << hexCharsPerSample << " zeroOffset " << offset;
 
+	  int index = 0;
 	  for (int sample=0; sample < numberOfEvents; sample++) {
-
-	    int index = sample * hexCharsPerSample;
-
 	    for (int channel=0; channel < numberOfChannels; channel++) {
-	      array->set(parseHex(rawData_.substr(index + hexCharsPerSample * channel, hexCharsPerSample)) - offset, sample, channel);
+	      std::string hexString = rawData_.substr(index, hexCharsPerSample);
+	      array->set(parseHex(hexString) - offset, sample, channel);
+	      index += hexCharsPerSample;
 	    }
 	  }
 

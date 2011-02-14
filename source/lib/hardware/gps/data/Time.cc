@@ -64,8 +64,7 @@ namespace blitzortung {
 
 	pt::ptime Time::getTime(const int counter) const {
 	  if (counterTicksPerSecond_.getActualSize() == 0) {
-	    if (logger_.isInfoEnabled())
-	      logger_.infoStream() << "getTime() no time available";
+	    logger_.noticeStream() << "getTime() no time available";
 	    return pt::not_a_date_time;
 	  }
 
@@ -73,8 +72,8 @@ namespace blitzortung {
 
 	  int nanoseconds = 1e9 * getCounterDifference(counter) / counterTicksPerSecond;
 
-	  if (logger_.isInfoEnabled())
-	    logger_.infoStream() << "getTime(): counter: " << counter << " diff " << getCounterDifference(counter) << " ns: " << nanoseconds << " ticks / s: " << counterTicksPerSecond;
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "getTime(): counter: " << counter << " diff " << getCounterDifference(counter) << " ns: " << nanoseconds << " ticks / s: " << counterTicksPerSecond;
 
 	  return second_ + pt::nanoseconds(nanoseconds);
 	}

@@ -27,6 +27,9 @@ namespace blitzortung {
 	  //! string containing the raw data transmitted from the hardware
 	  std::string rawData_;
 
+	  //! logger for this class
+	  mutable Logger logger_;
+
 	public:
 
 	  //! constructor
