@@ -50,6 +50,9 @@ namespace blitzortung {
 	  oss << "PSRF100,1," << targetBaudRate << ",8,1,0";
 	  communication_.send(oss.str());
 	}
+
+	// enable SBAS
+	communication_.send("PSRF151,01");
       }
 
       const std::string Sirf::getType() const {

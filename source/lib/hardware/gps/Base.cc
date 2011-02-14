@@ -48,14 +48,14 @@ namespace blitzortung {
 	return location_;
       }
 
-      void Base::init(bool force) {
+      void Base::init(bool fullInitialization) {
 
 	const unsigned int targetBaudRate = communication_.getBaudRate();
 
-	if (force) {
+	if (fullInitialization) {
 	  
 	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "init() force";
+	    logger_.debugStream() << "init() perform full initialization";
 
 	  // fill vector of supported baud rates
 	  std::vector<unsigned int> baudRates;
