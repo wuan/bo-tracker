@@ -62,6 +62,11 @@ namespace blitzortung {
 	  //! add actual satellite count value
 	  void addSatelliteCount(const unsigned short);
 
+	protected:
+
+	  //! initialize GPS hardware
+	  void init(bool fullInitialization=false);
+
 	public:
 
 	  //! constructor
@@ -87,9 +92,6 @@ namespace blitzortung {
 
 	  //! get reference to location object
 	  const data::Location& getLocation() const;
-
-	  //! initialize GPS hardware
-	  void init(bool force=false);
 
 	  //! get actual gps information
 	  blitzortung::data::GpsInfo::AP getInfo() const;
