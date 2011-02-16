@@ -29,7 +29,6 @@
 
 int main(int argc, char **argv) {
 
-//  QMainWindow mainWindow;
   std::string username, password, servername;
   unsigned short serverport;
   std::string serialPortName = "/dev/ttyUSB0";
@@ -39,7 +38,9 @@ int main(int argc, char **argv) {
   double eventRateLimit = 1.0;
   std::string gpsType = "sirf";
 
-  bo::Logger logger("");
+  // create main logger
+  bo::Logger logger("blitzortung-tracker");
+  std::string logFileName = "";
 
   // programm arguments/options
   boost::program_options::options_description desc("program options");
@@ -53,6 +54,7 @@ int main(int argc, char **argv) {
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
     ("sleep-time,s", po::value<unsigned short>(&sleepTime)->default_value(sleepTime), "sleep time between data transmission")
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (sjn, garmin or sirf)")
+    ("logfile", po::value<std::string>(&logFileName), "file name for log output (defaults to stdout)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("output,o", po::value<std::string>(&outputFile), "output file name (e.g. Name_%Y%m%d.bor)")
     ("verbose,v", "verbose mode")
@@ -90,6 +92,10 @@ int main(int argc, char **argv) {
 
   // logging setup
 
+  if (vm.count("logfile")) {
+    logger.setLogFile(logFileName);
+  }
+
   logger.setPriority(log4cpp::Priority::NOTICE);
 
   if (vm.count("verbose")) {
@@ -99,7 +105,6 @@ int main(int argc, char **argv) {
   if (vm.count("debug")) {
     logger.setPriority(log4cpp::Priority::DEBUG);
   }
-      
 
   switch (serialBaudRate) {
     case 4800:

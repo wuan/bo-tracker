@@ -47,7 +47,8 @@ namespace blitzortung {
 	// restore original locale
 	oss.imbue(oldLocale);
 
-	logger_.infoStream() << "eventToStream() '" << oss.str() << "'";
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "eventToString() '" << oss.str() << "'";
 
 
 	return oss.str();

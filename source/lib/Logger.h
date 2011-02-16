@@ -25,6 +25,9 @@ namespace blitzortung {
       //! set logging priority
       void setPriority(const log4cpp::Priority::Value priority);
 
+      //! set log output to file
+      void setLogFile(const std::string& logFileName);
+
       //! write INFO string
       void info(const std::string& message);
 
