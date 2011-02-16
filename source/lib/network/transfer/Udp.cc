@@ -51,8 +51,6 @@ namespace blitzortung {
 	  memcpy((char*) &serv_addr.sin_addr.s_addr, hostinfo->h_addr, hostinfo->h_length);
 	}
 
-	if (logger_.isInfoEnabled())
-	  logger_.infoStream() << "send data to '" << creds_.getServername() << "' port " << creds_.getServerport();
 
 	// loop through all current events
 	for (data::Event::CVI event = events.begin(); event != events.end(); event++) {
@@ -60,7 +58,7 @@ namespace blitzortung {
 	  std::string data = eventToString(*event);
 
 	  if (logger_.isInfoEnabled())
-	    logger_.infoStream() << data;
+	    logger_.infoStream() << "send data to '" << creds_.getServername() << "' port " << creds_.getServerport() << ": '" << data << "'";
 
 	  data.append("\n");
 

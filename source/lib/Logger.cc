@@ -10,18 +10,17 @@ namespace blitzortung {
     category_(log4cpp::Category::getInstance(loggerName))
   {
     // only create and set an appender when the category instance is without one
-    if (! category_.ownsAppender()) {
+    if (category_.getParent() == 0 && ! category_.ownsAppender()) {
 
       // create and set appender to standard output
       log4cpp::Appender* app = new log4cpp::OstreamAppender("Appender", &std::cout);
+      //log4cpp::Appender* app = new log4cpp::FileAppender("Appender", "blitzortung.log");
       category_.setAppender(app);
 
       // create and set basic layout
       log4cpp::Layout* layout = new log4cpp::BasicLayout();
       app->setLayout(layout);
 
-      // set further logging  parameters
-      category_.setAdditivity(false);
       //category_.setPriority(log4cpp::Priority::NOTICE);
     }
   }
@@ -35,7 +34,7 @@ namespace blitzortung {
 
   void Logger::setLogFile(const std::string& logFileName) {
 
-    category_.setAdditivity(false);
+    log4cpp::Category& rootCategory = category_.getRoot();
 
     log4cpp::Appender* app = new log4cpp::FileAppender("FileAppender", logFileName);
 
@@ -43,7 +42,7 @@ namespace blitzortung {
     log4cpp::Layout* layout = new log4cpp::BasicLayout();
     app->setLayout(layout);
 
-    category_.setAppender(app);
+    rootCategory.setAppender(app);
   }
 
   void Logger::info(const std::string& message) {
