@@ -60,7 +60,9 @@ namespace blitzortung {
 	  // fill vector of supported baud rates
 	  std::vector<unsigned int> baudRates;
 	  baudRates.push_back(4800);
+	  baudRates.push_back(9600);
 	  baudRates.push_back(19200);
+	  baudRates.push_back(38400);
 
 	  // send initialization for every supported baud rate except the target baud rate
 	  for (std::vector<unsigned int>::const_iterator baudRate=baudRates.begin(); baudRate != baudRates.end(); baudRate++) {

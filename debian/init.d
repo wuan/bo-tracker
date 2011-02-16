@@ -27,9 +27,6 @@ DESC=blitzortung-tracker
 
 test -x $DAEMON || exit 0
 
-LOGFILE=/var/log/blitzortung-tracker.log
-DAEMON_OPTS="$DAEMON_OPTS >>$LOGFILE 2>>$LOGFILE"
-
 PIDFILE=/var/run/$NAME.pid
 DODTIME=5                   # Time to wait for the server to die, in seconds
                             # If this value is set too low you might not

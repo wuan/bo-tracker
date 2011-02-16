@@ -45,7 +45,7 @@ namespace blitzortung {
 	  break;
 
 	default:
-	  throw exception::Base("Array::set() unhandled in memory data type of format");
+	  throw exception::Base("Array::set() unhandled format data type");
       }
     }
 
@@ -63,7 +63,7 @@ namespace blitzortung {
 	  return ((int*)(data_))[format_->getIndex(sample, channel)]/divider;
 
 	default:
-	  throw exception::Base("Array::get() unhandled in memory data type of format");
+	  throw exception::Base("Array::get() unhandled format data type");
       }
     }
 

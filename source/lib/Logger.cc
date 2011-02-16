@@ -1,4 +1,5 @@
 #include <log4cpp/OstreamAppender.hh>
+#include <log4cpp/FileAppender.hh>
 #include <log4cpp/BasicLayout.hh>
 
 #include "Logger.h"
@@ -30,6 +31,19 @@ namespace blitzortung {
 
   void Logger::setPriority(const log4cpp::Priority::Value priority) {
     category_.setPriority(priority);
+  }
+
+  void Logger::setLogFile(const std::string& logFileName) {
+
+    category_.setAdditivity(false);
+
+    log4cpp::Appender* app = new log4cpp::FileAppender("FileAppender", logFileName);
+
+    // create and set basic layout
+    log4cpp::Layout* layout = new log4cpp::BasicLayout();
+    app->setLayout(layout);
+
+    category_.setAppender(app);
   }
 
   void Logger::info(const std::string& message) {
