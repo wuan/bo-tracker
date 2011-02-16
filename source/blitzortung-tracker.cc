@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
   std::string gpsType = "sirf";
 
   // create main logger
-  bo::Logger logger("blitzortung-tracker");
+  bo::Logger logger;
   std::string logFileName = "";
 
   // programm arguments/options

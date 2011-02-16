@@ -15,7 +15,7 @@ namespace blitzortung {
 	portName_(portName),
 	buffer_(""),
 	isOpen_(false),
-	logger_("hardware.SerialPort")
+	logger_("hardware.comm.SerialPort")
       {
 
 	if (logger_.isInfoEnabled())
@@ -71,13 +71,21 @@ namespace blitzortung {
 	    baudBit = B4800;
 	    break;
 
+	  case 9600:
+	    baudBit = B9600;
+	    break;
+
 	  case 19200:
 	    baudBit = B19200;
 	    break;
 
+	  case 38400:
+	    baudBit = B38400;
+	    break;
+
 	  default:
 	    std::ostringstream oss;
-	    oss << "blitzortung::hardware::Serial::setBaudRate() unsupported Baud-Rate " << baudRate;
+	    oss << "blitzortung::hardware::comm::SerialPort::setBaudRate() unsupported Baud-Rate " << baudRate;
 	    throw exception::Base(oss.str());
 	}
 
@@ -97,12 +105,18 @@ namespace blitzortung {
 	  case B4800:
 	    return 4800;
 
+	  case B9600:
+	    return 9600;
+
 	  case B19200:
 	    return 19200;
 
+	  case B38400:
+	    return 38400;
+
 	  default:
 	    std::ostringstream oss;
-	    oss << "blitzortung::hardware::Serial::getBaudRate() unsupported Baud-Rate-Bit: " << baudBit;
+	    oss << "blitzortung::hardware::comm::SerialPort::getBaudRate() unsupported Baud-Rate-Bit: " << baudBit;
 	    throw exception::Base(oss.str());
 	}
       }
