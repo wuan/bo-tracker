@@ -1,6 +1,8 @@
 #ifndef LIBBLITZORTUNG_UTIL_RINGBUFFER_H_
 #define LIBBLITZORTUNG_UTIL_RINGBUFFER_H_
 
+#include <boost/shared_array.hpp>
+
 namespace blitzortung {
   namespace util {
 
@@ -9,7 +11,7 @@ namespace blitzortung {
 
 	private:
 	  //! pointer to data array
-	  T *data_;
+	  boost::shared_array<T> data_;
 
 	  //! actual data write position
 	  int pos_;

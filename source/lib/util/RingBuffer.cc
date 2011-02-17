@@ -7,23 +7,15 @@ namespace blitzortung {
 
     // TODO calcluating the sum by summing up all elemnts with a given type can cause problems with overflows occuring, this has to be circumvented in a future release
 
-    template <typename T> RingBuffer<T>::RingBuffer(int size) {
-      size_ = size;
-
-      // allocate data array
-      data_ = 0;
-      data_ = new T[size_];
-
-      // initialize parameters
-      pos_ = 0;
-      actualSize_ = 0;
+    template <typename T> RingBuffer<T>::RingBuffer(int size) :
+      data_(new T[size]),
+      pos_(0),
+      size_(size),
+      actualSize_(0)
+    {
     }
 
     template <typename T> RingBuffer<T>::~RingBuffer() {
-      if (data_ != 0) {
-	delete data_;
-        data_ = 0;
-      }
     }
 
     template <typename T> void RingBuffer<T>::add(const T &element) {
