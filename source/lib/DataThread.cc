@@ -104,10 +104,8 @@ namespace blitzortung {
 	    // prepare data for transmission
 	    data::Events::AP deletedEvents = prepareData(now, lastSent);
 
-	    logger_.infoStream() << "transmit " << events_->size() << " events";
 	    // transmit data
 	    transfer_.send(*events_);
-	    logger_.infoStream() << "transmit done";
 
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "() recollect events " << events_->size() << " + " << deletedEvents->size();
@@ -119,7 +117,6 @@ namespace blitzortung {
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "() recollected " << events_->size() << " events ";
 
-	    logger_.infoStream() << "output " << events_->size() << " events";
 	    output_.output(*events_);
 
 	    // delete all events
