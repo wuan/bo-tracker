@@ -42,7 +42,7 @@ namespace blitzortung {
 	  std::string eventToString(const data::Event& event) const;
 
 	  //! send data to server
-	  virtual void send(const data::Events& events) const = 0;
+	  virtual void send(const data::Events& events) = 0;
 
       };
 

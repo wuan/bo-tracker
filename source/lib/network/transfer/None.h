@@ -25,7 +25,7 @@ namespace blitzortung {
 	  virtual ~None();
 
 	  //! send data to server
-	  virtual void send(const data::Events& events) const;
+	  virtual void send(const data::Events& events);
 
       };
 

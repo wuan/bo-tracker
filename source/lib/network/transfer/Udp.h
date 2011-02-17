@@ -11,8 +11,20 @@ namespace blitzortung {
 
 	private:
 
+	  //! socket id of udp connection
+	  int sockId_;
+
+	  //! socket info of udp connection
+	  sockaddr_in servAddr_;
+
 	  //! logger for this class
 	  mutable Logger logger_;
+
+	  //! open udp connection to server
+	  bool openConnection();
+
+	  //! close udp connection to server
+	  void closeConnection();
 
 	public:
 
@@ -23,7 +35,7 @@ namespace blitzortung {
 	  virtual ~Udp();
 
 	  //! send data to server
-	  void send(const data::Events& events) const;
+	  void send(const data::Events& events);
       };
 
     }

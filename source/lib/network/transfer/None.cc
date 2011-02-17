@@ -21,7 +21,7 @@ namespace blitzortung {
 
       }
 
-      void None::send(const data::Events& events) const {
+      void None::send(const data::Events& events) {
 	if (logger_.isDebugEnabled()) {
 	  logger_.debugStream() << "send() send " << events.size() << " events";
 
