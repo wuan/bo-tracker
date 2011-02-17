@@ -4,7 +4,7 @@
 
 namespace blitzortung {
 
-  DataThread::DataThread(Queue<data::Event>& sampleQueue, const network::transfer::Base& transfer, output::Base& output) :
+  DataThread::DataThread(Queue<data::Event>& sampleQueue, network::transfer::Base& transfer, output::Base& output) :
     sampleQueue_(sampleQueue),
     transfer_(transfer),
     events_(new data::Events()),

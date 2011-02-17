@@ -23,7 +23,7 @@ namespace blitzortung {
       Queue<bo::data::Event>& sampleQueue_;
 
       //! network data transfer object
-      const network::transfer::Base& transfer_;
+      network::transfer::Base& transfer_;
 
       //! vector of samples
       data::Events::P events_;
@@ -46,7 +46,7 @@ namespace blitzortung {
     public:
 
       //! create network transfer object
-      DataThread(Queue<data::Event>& sampleQueue, const network::transfer::Base& transfer, output::Base&);
+      DataThread(Queue<data::Event>& sampleQueue, network::transfer::Base& transfer, output::Base&);
 
       //! delete nework transfer object
       virtual ~DataThread();

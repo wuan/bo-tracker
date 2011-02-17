@@ -6,8 +6,9 @@ namespace blitzortung {
   namespace network {
     namespace transfer {
 
-      Udp::Udp(const Creds& creds)
-	: Base(creds),
+      Udp::Udp(const Creds& creds) :
+	Base(creds),
+	sockId_(-1),
 	logger_("network.transfer.Udp")
       {
 	if (logger_.isDebugEnabled())
@@ -15,63 +16,72 @@ namespace blitzortung {
       }
 
       Udp::~Udp() {
+	closeConnection();
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "deleted";
       }
 
-      void Udp::send(const data::Events& events) const {
-	int sock_id;
+      bool Udp::openConnection() {
+	if (sockId_ < 0) {
+	  sockId_ = socket (AF_INET, SOCK_DGRAM, 0);
 
-	sock_id = socket (AF_INET, SOCK_DGRAM, 0);
-
-	if (sock_id == -1) {
-	  logger_.warnStream() << "could not open socket";
-
-	  return;
-	}
-
-	sockaddr_in serv_addr;
-	serv_addr.sin_family = AF_INET;
-	serv_addr.sin_port = htons(creds_.getServerport());
-	serv_addr.sin_addr.s_addr = inet_addr(creds_.getServername().c_str());
-
-	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "openConnection() host: " << creds_.getServername() << " port " << creds_.getServerport();
-
-	if (serv_addr.sin_addr.s_addr == INADDR_NONE) {
-	  /* host not given by IP but by name */
-	  hostent *hostinfo = gethostbyname (creds_.getServername().c_str());
-
-	  if (hostinfo == NULL) {
-	    close(sock_id);
-	    logger_.warnStream() << "could not get host information for '" << creds_.getServername() << "'";
-
-	    return;
+	  if (sockId_ == -1) {
+	    logger_.warnStream() << "could not open socket";
+	    return false;
 	  }
-	  memcpy((char*) &serv_addr.sin_addr.s_addr, hostinfo->h_addr, hostinfo->h_length);
-	}
 
+	  servAddr_.sin_family = AF_INET;
+	  servAddr_.sin_port = htons(creds_.getServerport());
+	  servAddr_.sin_addr.s_addr = inet_addr(creds_.getServername().c_str());
 
-	// loop through all current events
-	for (data::Event::CVI event = events.begin(); event != events.end(); event++) {
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "openConnection() host: " << creds_.getServername() << " port " << creds_.getServerport();
 
-	  std::string data = eventToString(*event);
+	  if (servAddr_.sin_addr.s_addr == INADDR_NONE) {
+	    /* host not given by IP but by name */
+	    hostent *hostinfo = gethostbyname (creds_.getServername().c_str());
 
-	  if (logger_.isInfoEnabled())
-	    logger_.infoStream() << "send data to '" << creds_.getServername() << "' port " << creds_.getServerport() << ": '" << data << "'";
-
-	  data.append("\n");
-
-	  if (sendto(sock_id, data.c_str(), data.size(), 0, (sockaddr*) &serv_addr, sizeof(sockaddr)) == -1) {
-	    logger_.warnStream() << "() error transmitting data";
-	    break;
+	    if (hostinfo == NULL) {
+	      logger_.warnStream() << "could not get host information for '" << creds_.getServername() << "'";
+	      closeConnection();
+	      return false;
+	    }
+	    memcpy((char*) &servAddr_.sin_addr.s_addr, hostinfo->h_addr, hostinfo->h_length);
 	  }
 	}
+	return true;
+      }
 
-	close(sock_id);
+      void Udp::closeConnection() {
+	if (sockId_ >= 0) {
+	  close(sockId_);
+	  sockId_ = -1;
 
-	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "() connection closed";
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "closeConnection() connection closed";
+	}
+      }
+
+      void Udp::send(const data::Events& events) {
+
+	if (openConnection()) {
+
+	  // loop through all current events
+	  for (data::Event::CVI event = events.begin(); event != events.end(); event++) {
+
+	    std::string data = eventToString(*event);
+
+	    if (logger_.isInfoEnabled())
+	      logger_.infoStream() << "send data to '" << creds_.getServername() << "' port " << creds_.getServerport() << ": '" << data << "'";
+
+	    data.append("\n");
+
+	    if (sendto(sockId_, data.c_str(), data.size(), 0, (sockaddr*) &servAddr_, sizeof(sockaddr)) == -1) {
+	      logger_.warnStream() << "() error transmitting data";
+	      break;
+	    }
+	  }
+	}
       }
 
     }
