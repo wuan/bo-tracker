@@ -11,9 +11,10 @@
 namespace blitzortung {
   namespace hardware {
 
-    Pcb::Pcb(comm::Base& comm, gps::Base& gps) :
+    Pcb::Pcb(comm::Base& comm, gps::Base& gps, unsigned short firmwareVersion) :
       comm_(comm),
       gps_(gps),
+      firmwareVersion_(firmwareVersion),
       logger_("hardware.Pcb")
     {
       if (logger_.isDebugEnabled())
@@ -49,7 +50,7 @@ namespace blitzortung {
 
 	  gps_.set(ticksParser);
 
-	  if (ticksParser.getFirmwareVersion().size() > 0)
+	  if (ticksParser.getFirmwareVersion() > 0)
 	    firmwareVersion_ = ticksParser.getFirmwareVersion();
 
 	} else {
@@ -90,9 +91,11 @@ namespace blitzortung {
 	rawData.append(VERSION);
 	rawData.append(" ");
 
-	if (firmwareVersion_.size() > 0)
-	  rawData.append(firmwareVersion_);
-	else 
+	if (firmwareVersion_ > 0) {
+	  std::ostringstream oss;
+	  oss << firmwareVersion_;
+	  rawData.append(oss.str());
+	} else 
 	  rawData.append("-");
 	rawData.append(" ");
 

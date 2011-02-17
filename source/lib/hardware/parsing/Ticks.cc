@@ -94,9 +94,9 @@ namespace blitzortung {
 	  }
 
 	  if (firmwareVersionIndex > 0) {
-	    firmwareVersion_ = fields[firmwareVersionIndex];
+	    firmwareVersion_ = parseInt(fields[firmwareVersionIndex]);
 	  } else {
-	    firmwareVersion_ = "-";
+	    firmwareVersion_ = 0;
 	  }
 	}
       }
@@ -125,7 +125,7 @@ namespace blitzortung {
 	return dateTime_;
       }
 
-      const std::string& Ticks::getFirmwareVersion() const {
+      unsigned short Ticks::getFirmwareVersion() const {
 	return firmwareVersion_;
       }
 
