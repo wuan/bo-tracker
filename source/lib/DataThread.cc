@@ -9,6 +9,7 @@ namespace blitzortung {
     transfer_(transfer),
     events_(new data::Events()),
     output_(output),
+    strokesPerSecond_(60*60),
     logger_("DataThread")
   {
     sleepTime_ = pt::seconds(20);
@@ -31,21 +32,20 @@ namespace blitzortung {
     eventRateLimit_ = eventRateLimit;
   }
 
-  data::Events::AP DataThread::prepareData(const pt::ptime& now, const pt::ptime& lastSent) {
+  data::Events::AP DataThread::prepareData() {
     data::Events::AP deletedEvents(new data::Events());
 
-    double secondsElapsed = ((now - lastSent).total_milliseconds() / 1000);
-    double eventRate = double(events_->size()) / secondsElapsed;
+    double secondsElapsed = strokesPerSecond_.getActualSize();
+    double eventRate = double(strokesPerSecond_.getSum()) / secondsElapsed;
 
-    if (logger_.isDebugEnabled())
-      logger_.debugStream() << "prepareData() " << events_->size() << " events (rate " << eventRate << " events/second) at " << now;
+    if (logger_.isInfoEnabled())
+      logger_.infoStream() << "prepareData() " << events_->size() << " events (rate " << eventRate << " events/second)";
 
     if (eventRate > eventRateLimit_) {
       events_->sort(data::Event::CompareAmplitude());
 
       int sampleLimit = eventRateLimit_ * secondsElapsed;
 
-      //events_->transfer(events_->begin() + sampleLimit, events_->end());
       deletedEvents->transfer(deletedEvents->end(), events_->begin(), events_->end(), *events_);
 
       if (logger_.isInfoEnabled()) {
@@ -61,8 +61,6 @@ namespace blitzortung {
 
   void DataThread::operator()() {
 
-    pt::ptime lastSent = pt::second_clock::universal_time();
-
     while (true) {
       boost::xtime xt;
       boost::xtime_get(&xt, boost::TIME_UTC);
@@ -74,59 +72,54 @@ namespace blitzortung {
       // wait for next incoming sample
       sampleQueue_.timed_wait(xt);
 
-      pt::ptime now = pt::second_clock::universal_time();
+      bool sendAgain = false;
+      do {
+	// get new events from queue until it is empty
+	while (! sampleQueue_.empty()) {
 
-      if (now - lastSent >= sleepTime_) {
-
-	bool sendAgain = false;
-
-	do {
-	  // get new events from queue until it is empty
-	  while (! sampleQueue_.empty()) {
-
-	    if (events_->size() != 0 && events_->getDate() != sampleQueue_.front().getWaveform().getTime().date()) {
-	      if (logger_.isDebugEnabled())
-		logger_.debugStream() << "() stopped reading queue at transition to next day";
-	      sendAgain = true;
-	      break;
-	    }
-
+	  if (events_->size() != 0 && events_->getDate() != sampleQueue_.front().getWaveform().getTime().date()) {
 	    if (logger_.isDebugEnabled())
-	      logger_.debugStream() << "() pop from queue " << sampleQueue_.front().getWaveform().getTime();
-	    events_->add(sampleQueue_.pop());
+	      logger_.debugStream() << "() stopped reading queue at transition to next day";
+	    sendAgain = true;
+	    break;
 	  }
 
-	  if (events_->size() > 0) {
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "() pop from queue " << sampleQueue_.front().getWaveform().getTime();
+	  events_->add(sampleQueue_.pop());
+	}
 
-	    if (logger_.isDebugEnabled())
-	      logger_.debug("() transmitting/saving data");
+        strokesPerSecond_.add(events_->size());
 
-	    // prepare data for transmission
-	    data::Events::AP deletedEvents = prepareData(now, lastSent);
+	if (events_->size() > 0) {
 
-	    // transmit data
-	    transfer_.send(*events_);
+	  if (logger_.isDebugEnabled())
+	    logger_.debug("() transmitting/saving data");
 
-	    if (logger_.isDebugEnabled())
-	      logger_.debugStream() << "() recollect events " << events_->size() << " + " << deletedEvents->size();
+	  // prepare data for transmission
+	  data::Events::AP deletedEvents = prepareData();
 
-	    events_->transfer(events_->end(), *deletedEvents);
+	  // transmit data
+	  transfer_.send(*events_);
 
-	    events_->sort();
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "() recollect events " << events_->size() << " + " << deletedEvents->size();
 
-	    if (logger_.isDebugEnabled())
-	      logger_.debugStream() << "() recollected " << events_->size() << " events ";
+	  events_->transfer(events_->end(), *deletedEvents);
 
-	    output_.output(*events_);
+	  events_->sort();
 
-	    // delete all events
-	    events_->clear();
-	  }
-	} while (sendAgain);
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "() recollected " << events_->size() << " events ";
 
-	lastSent = now;
-      }
+	  output_.output(*events_);
+
+	  // delete all events
+	  events_->clear();
+	}
+
+      } while (sendAgain);
+
     }
   }
-
 }

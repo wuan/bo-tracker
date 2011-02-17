@@ -10,6 +10,7 @@
 #include "network/transfer/Base.h"
 #include "output/Base.h"
 #include "Logger.h"
+#include "util/RingBuffer.h"
 
 namespace blitzortung {
 
@@ -34,11 +35,14 @@ namespace blitzortung {
       //! output object
       output::Base& output_;
 
+      //! ring buffer for rate limiter
+      util::RingBuffer<unsigned short> strokesPerSecond_;
+
       //! logger for this class
       mutable Logger logger_;
 
       //! prepare data for transmission
-      data::Events::AP prepareData(const pt::ptime&, const pt::ptime&);
+      data::Events::AP prepareData();
 
       //! get string to be transmitted for every sample
       std::string sampleToString(const data::Event& sample);
