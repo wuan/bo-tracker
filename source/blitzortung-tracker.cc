@@ -154,9 +154,7 @@ int main(int argc, char **argv) {
   creds.setUsername(username);
   creds.setPassword(password);
 
-  bo::network::transfer::Base::AP transfer;
-
-  transfer = bo::network::transfer::Base::AP(new bo::network::transfer::Udp(creds));
+  bo::network::transfer::Udp transfer(creds);
 
   bo::output::Base::AP output;
 
@@ -167,7 +165,7 @@ int main(int argc, char **argv) {
   }
 
   //! create object of network driver for event transmission
-  bo::Process process(*transfer, pt::seconds(1), eventRateLimit, *output);
+  bo::Process process(transfer, eventRateLimit, *output);
 
   while (hardware.isOpen()) {
 

@@ -56,7 +56,6 @@ libblitzortung_la_SOURCES = \
 	\
 	network/Creds.h network/Creds.cc \
 	network/transfer/Base.h network/transfer/Base.cc \
-	network/transfer/Tcp.h network/transfer/Tcp.cc \
 	network/transfer/Udp.h network/transfer/Udp.cc \
 	network/transfer/None.h network/transfer/None.cc \
 	\

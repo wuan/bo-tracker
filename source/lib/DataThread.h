@@ -17,9 +17,6 @@ namespace blitzortung {
   class DataThread {
 
     private:
-      //! time between successive tranfers in seconds
-      pt::time_duration sleepTime_;
-
       //! reference to incoming sample data queue
       Queue<bo::data::Event>& sampleQueue_;
 
@@ -54,9 +51,6 @@ namespace blitzortung {
 
       //! delete nework transfer object
       virtual ~DataThread();
-
-      //! set sleep time between data transfers in seconds
-      void setSleepTime(const pt::time_duration& sleepTime);
 
       //! set limit of average number of events per minute transmitted
       void setEventRateLimit(const double eventRateLimit);
