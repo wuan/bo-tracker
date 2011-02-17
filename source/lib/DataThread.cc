@@ -34,30 +34,25 @@ namespace blitzortung {
   data::Events::AP DataThread::prepareData(pt::ptime& now, pt::ptime& lastSent) {
     data::Events::AP deletedEvents(new data::Events());
 
-    if (logger_.isDebugEnabled())
-      logger_.debugStream() << "() sample vector contains " << events_->size() << " elements";
-
     double secondsElapsed = ((now - lastSent).total_milliseconds() / 1000);
     double eventRate = double(events_->size()) / secondsElapsed;
 
     lastSent = now;
 
-    if (logger_.isInfoEnabled())
-      logger_.infoStream() << "() sending " << events_->size() << " events (rate " << eventRate << " events/second) at " << now;
+    if (logger_.isDebugEnabled())
+      logger_.debugStream() << "prepareData() " << events_->size() << " events (rate " << eventRate << " events/second) at " << now;
 
     if (eventRate > eventRateLimit_) {
       events_->sort(data::Event::CompareAmplitude());
-
-      if (logger_.isInfoEnabled())
-	logger_.infoStream() << "() ratelimit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed;
 
       int sampleLimit = eventRateLimit_ * secondsElapsed;
 
       //events_->transfer(events_->begin() + sampleLimit, events_->end());
       deletedEvents->transfer(deletedEvents->end(), events_->begin(), events_->end(), *events_);
 
-      if (logger_.isInfoEnabled())
-	logger_.infoStream() << "() erasing elements to have " << sampleLimit << " elements (new # of elements: " << events_->size() << ")";
+      if (logger_.isInfoEnabled()) {
+	logger_.infoStream() << "prepareData() limit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed << ", erasing to " << sampleLimit << " elements (new # of elements: " << events_->size() << ")";
+      }
 
       // time sort events
       events_->sort();
