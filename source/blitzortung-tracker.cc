@@ -36,6 +36,7 @@ int main(int argc, char **argv) {
   unsigned short serialBaudRate = 19200;
   double eventRateLimit = 1.0;
   std::string gpsType = "sirf";
+  unsigned short firmwareVersion = 0;
 
   // create main logger
   bo::Logger logger;
@@ -55,6 +56,7 @@ int main(int argc, char **argv) {
     ("logfile", po::value<std::string>(&logFileName), "file name for log output (defaults to stdout)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("output,o", po::value<std::string>(&outputFile), "output file name (e.g. Name_%Y%m%d.bor)")
+    ("firmware-version", po::value<unsigned short>(&firmwareVersion)->default_value(firmwareVersion), "manually specify firmware version")
     ("verbose,v", "verbose mode")
     ("debug", "debug mode")
     ;
@@ -143,7 +145,7 @@ int main(int argc, char **argv) {
 
 
   // create hardware driver object for blitzortung measurement hardware
-  bo::hardware::Pcb hardware(serial, *gps);
+  bo::hardware::Pcb hardware(serial, *gps, firmwareVersion);
 
   //! set credentials/parameters for network connection
   bo::network::Creds creds;
