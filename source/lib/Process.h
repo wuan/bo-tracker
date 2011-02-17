@@ -28,7 +28,7 @@ namespace blitzortung {
 
     public:
       //! constructor
-      Process(network::transfer::Base& transfer, const pt::time_duration& sleepTime, const double eventRateLimit, output::Base& output);
+      Process(network::transfer::Base& transfer, const double eventRateLimit, output::Base& output);
 
       //! destructor
       virtual ~Process();

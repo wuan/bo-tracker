@@ -12,20 +12,15 @@ namespace blitzortung {
     strokesPerSecond_(60*60),
     logger_("DataThread")
   {
-    sleepTime_ = pt::seconds(20);
     eventRateLimit_ = 1.0;
 
     if (logger_.isDebugEnabled())
-      logger_.debugStream() << "initalized( sleep: " << sleepTime_ << ", eventRateLimit: " << eventRateLimit_ << ")";
+      logger_.debugStream() << "initalized(eventRateLimit: " << eventRateLimit_ << ")";
   }
 
   DataThread::~DataThread() {
     if (logger_.isDebugEnabled())
       logger_.debugStream() << "deleted";
-  }
-
-  void DataThread::setSleepTime(const pt::time_duration& sleepTime) {
-    sleepTime_ = sleepTime;
   }
 
   void DataThread::setEventRateLimit(const double eventRateLimit) {

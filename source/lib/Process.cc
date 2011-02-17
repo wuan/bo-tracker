@@ -5,12 +5,11 @@
 
 namespace blitzortung {
 
-  Process::Process(network::transfer::Base& transfer, const pt::time_duration& sleepTime, const double eventRateLimit, output::Base& output) :
+  Process::Process(network::transfer::Base& transfer, const double eventRateLimit, output::Base& output) :
     logger_("Process")
   {
     DataThread dataThread(eventQueue_, transfer, output);
 
-    dataThread.setSleepTime(sleepTime);
     dataThread.setEventRateLimit(eventRateLimit);
 
     boost::thread thread(dataThread);

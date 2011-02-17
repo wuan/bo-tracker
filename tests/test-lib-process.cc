@@ -27,7 +27,7 @@ void ProcessTest::testAroundMidnight() {
   bo::network::transfer::None transfer;
   bo::output::None output;
 
-  bo::Process process(transfer, pt::seconds(5), 1, output);
+  bo::Process process(transfer, 1, output);
 
   bo::data::Format::CP dataFormat(new bo::data::Format(12,2,1));
 
