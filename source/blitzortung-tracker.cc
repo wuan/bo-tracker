@@ -1,7 +1,7 @@
 /*  
 
     Copyright (C) 2003-2010  Egon Wanke <blitzortung@gmx.org>
-    Copyright (C) 2010       Andreas Würl <awuerl@gmx.net>
+    Copyright (C) 2010, 2011 Andreas Würl <awuerl@gmx.net>
 
 */
 
@@ -34,7 +34,6 @@ int main(int argc, char **argv) {
   std::string serialPortName = "/dev/ttyUSB0";
   std::string outputFile = "";
   unsigned short serialBaudRate = 19200;
-  unsigned short sleepTime = 20;
   double eventRateLimit = 1.0;
   std::string gpsType = "sirf";
 
@@ -52,7 +51,6 @@ int main(int argc, char **argv) {
     ("password,p", po::value<std::string>(&password), "password of blitzortung.org")
     ("server-host,h", po::value<std::string>(&servername), "blitzortung.org servername")
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
-    ("sleep-time,s", po::value<unsigned short>(&sleepTime)->default_value(sleepTime), "sleep time between data transmission")
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (sjn, garmin or sirf)")
     ("logfile", po::value<std::string>(&logFileName), "file name for log output (defaults to stdout)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
@@ -167,7 +165,7 @@ int main(int argc, char **argv) {
   }
 
   //! create object of network driver for event transmission
-  bo::Process process(*transfer, pt::seconds(sleepTime), eventRateLimit, *output);
+  bo::Process process(*transfer, pt::seconds(1), eventRateLimit, *output);
 
   while (hardware.isOpen()) {
 
