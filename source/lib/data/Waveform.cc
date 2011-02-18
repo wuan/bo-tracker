@@ -5,6 +5,11 @@
 namespace blitzortung {
   namespace data {
 
+    Waveform::Waveform(const pt::ptime& t0) :
+      t0_(t0)
+    {
+    }
+
     Waveform::Waveform(data::Array::AP array, const pt::ptime& t0, const pt::time_duration& dt) :
       t0_(t0),
       dt_(dt),
@@ -106,6 +111,10 @@ namespace blitzortung {
       array_->toStream(stream);
     }
 
+    bool Waveform::isEmpty() const {
+      return array_.get() == 0;
+    }
+	
     unsigned int Waveform::GetSize(const data::Format& dataFormat) {
       util::Size size;
 

@@ -32,10 +32,17 @@ namespace blitzortung {
 
       public:
 
-        //! create a waveform object
+        //! create an empty waveform object
 	/*!
 	\param t0 reference time of waveform
-	\param dt time between consecutive data
+	*/
+	Waveform(const pt::ptime& t0);
+
+        //! create a waveform object
+	/*!
+	\param array auto_ptr to Array object
+	\param t0 reference time of waveform
+	\param dt time between consecutive data (non zero if Array has more than one sample
 	*/
 	Waveform(data::Array::AP array, const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
 
@@ -81,6 +88,9 @@ namespace blitzortung {
 
 	//! write to stream
 	void toStream(std::iostream&);
+
+	//! returns true if the waveform array is empty
+	bool isEmpty() const;
 
 	//! static function to determine size of a particular waveform structure
 	static unsigned int GetSize(const data::Format& dataFormat);

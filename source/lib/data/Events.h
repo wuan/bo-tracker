@@ -93,6 +93,9 @@ namespace blitzortung {
 	//! erase all events
 	void clear();
 
+	//! erase single event
+	Event::VI erase(Event::VI);
+
 	//! erase events between two iterators
 	Event::VI erase(Event::VI, Event::VI);
 

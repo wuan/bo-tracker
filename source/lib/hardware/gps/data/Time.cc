@@ -51,7 +51,7 @@ namespace blitzortung {
 	  oldCounter_ = counter;
 	}
 
-	const pt::ptime& Time::getSecond() const {
+	const pt::ptime& Time::getTime() const {
 	  return second_;
 	}
 
