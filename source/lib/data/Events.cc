@@ -88,6 +88,10 @@ namespace blitzortung {
       events_.clear();
     }
 
+    Event::VI Events::erase(Event::VI element) {
+      return events_.erase(element);
+    }
+
     Event::VI Events::erase(Event::VI start, Event::VI end) {
       return events_.erase(start, end);
     }

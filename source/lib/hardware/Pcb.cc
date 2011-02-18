@@ -53,6 +53,16 @@ namespace blitzortung {
 	  if (ticksParser.getFirmwareVersion() > 0)
 	    firmwareVersion_ = ticksParser.getFirmwareVersion();
 
+	  if (lastSampleCreated_.is_not_a_date_time()) {
+	    lastSampleCreated_ = gps_.getTime();
+	    logger_.infoStream() << "read() initialize lastSampleCreated to " << gps_.getTime();
+	  }
+
+	  if (gps_.getTime() - lastSampleCreated_ >= pt::seconds(10)) {
+	    lastSampleCreated_ = gps_.getTime();
+	    return createKeepaliveSample();
+	  }
+
 	} else {
 	  parsing::Samples samplesParser(fields, gps_);
 
@@ -61,6 +71,8 @@ namespace blitzortung {
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "read() SampleParser is valid";
 
+	    logger_.infoStream() << "read() set lastSampleCreated to " << gps_.getTime();
+	    lastSampleCreated_ = gps_.getTime();
 	    return createSample(samplesParser);
 	  } else {
 	    logger_.warnStream() << "unknown data '" << line << "'";
@@ -72,6 +84,12 @@ namespace blitzortung {
 	logger_.debug("read() returning empty event");
 
       return data::Event::AP();
+    }
+
+    data::Event::AP Pcb::createKeepaliveSample() {
+      data::Waveform::AP waveform(new data::Waveform(gps_.getTime()));
+
+      return data::Event::AP(new data::MEvent(waveform, gps_.getInfo(), "-"));
     }
 
     data::Event::AP Pcb::createSample(parsing::Samples& samplesParser) {
@@ -95,8 +113,9 @@ namespace blitzortung {
 	  std::ostringstream oss;
 	  oss << firmwareVersion_;
 	  rawData.append(oss.str());
-	} else 
+	} else {
 	  rawData.append("-");
+	}
 	rawData.append(" ");
 
 	{

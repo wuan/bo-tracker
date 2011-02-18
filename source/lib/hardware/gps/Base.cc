@@ -40,6 +40,10 @@ namespace blitzortung {
 	return satelliteCount_.getAverage();
       }
 
+      pt::ptime Base::getTime() const {
+	return time_.getTime();
+      }
+
       pt::ptime Base::getTime(const int counter) const {
 	return time_.getTime(counter);
       }

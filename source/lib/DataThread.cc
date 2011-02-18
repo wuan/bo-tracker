@@ -112,6 +112,14 @@ namespace blitzortung {
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "() recollected " << events_->size() << " events ";
 
+	  // remove empty events from list
+	  for (data::Event::VI event = events_->begin(); event != events_->end();) {
+	    if (event->getWaveform().isEmpty())
+	      events_->erase(event);
+	    else
+	      event++;
+	  }
+
 	  output_.output(*events_);
 
 	  // delete all events

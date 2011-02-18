@@ -42,7 +42,7 @@ namespace blitzortung {
 
 	    void setSecond(const std::string &timeString, int counter);
 
-	    const pt::ptime& getSecond() const;
+	    const pt::ptime& getTime() const;
 
 	    pt::ptime getTime(const int) const;
 	};

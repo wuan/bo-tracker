@@ -87,6 +87,9 @@ namespace blitzortung {
 	  //! get average satellite count value
 	  unsigned short getSatelliteCount() const;
 
+	  //! get actual second timestamp
+	  pt::ptime getTime() const;
+
 	  //! get timestamp from counter value
 	  pt::ptime getTime(const int) const;
 

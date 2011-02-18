@@ -27,6 +27,9 @@ namespace blitzortung {
 	//! vector for data fields
 	std::vector<std::string> fields_;
 
+	//! last time when a sample was created
+	pt::ptime lastSampleCreated_;
+
       protected:
 
 	//! reference to gps device object
@@ -40,6 +43,11 @@ namespace blitzortung {
 	//! logger for objects of this class
 	mutable Logger logger_;
 
+	//! returns a sample created from the given parser data
+	data::Event::AP createSample(parsing::Samples& samplesParser);
+
+	//! returns a dummy sample which is used as a keepalive message
+	data::Event::AP createKeepaliveSample();
       public:
 
 	//! constructor for base class
@@ -53,9 +61,6 @@ namespace blitzortung {
 
 	//! returns a sample read from the hardware
 	data::Event::AP read();
-
-	//! returns a sample created from the given parser data
-	data::Event::AP createSample(parsing::Samples& samplesParser);
     };
 
   }
