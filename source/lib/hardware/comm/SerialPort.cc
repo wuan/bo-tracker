@@ -154,6 +154,11 @@ namespace blitzortung {
 	return "";
       }
 
+      void SerialPort::flushInput() const {
+	tcflush(serialFd_, TCIFLUSH);
+      }
+
+
     }
   }
 }
