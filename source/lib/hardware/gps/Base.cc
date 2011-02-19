@@ -19,6 +19,8 @@ namespace blitzortung {
       }
 
       void Base::setStatus(const char status) {
+	if (status != status_)
+	  logger_.noticeStream() << "status change " << status_ << " -> " << status;
 	status_ = status;
       }
 
