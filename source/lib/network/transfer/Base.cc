@@ -38,11 +38,12 @@ namespace blitzortung {
 	oss << " " << gpsInfo.getAltitude();
 	oss << " " << creds_.getUsername() << " " << creds_.getPassword();
 	oss << " " << gpsInfo.getStatus() << " " << gpsInfo.getNumberOfSatellites();
-	oss << " " << wfm.getArray().getNumberOfChannels() << " " << wfm.getArray().getNumberOfSamples() << " " << wfm.getArray().getNumberOfBitsPerSample();
-	//oss << " " << wfm.getTimeDelta().total_nanoseconds();
-	oss << " ";
-
-	oss << static_cast<const data::MEvent&>(event).getRawData();
+	if (wfm.isEmpty()) {
+	  oss << " 0 0 0";
+	} else {
+	  oss << " " << wfm.getArray().getNumberOfChannels() << " " << wfm.getArray().getNumberOfSamples() << " " << wfm.getArray().getNumberOfBitsPerSample();
+	}
+	oss << " " << static_cast<const data::MEvent&>(event).getRawData();
 
 	// restore original locale
 	oss.imbue(oldLocale);

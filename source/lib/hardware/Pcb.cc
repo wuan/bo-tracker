@@ -58,7 +58,7 @@ namespace blitzortung {
 	    logger_.infoStream() << "read() initialize lastSampleCreated to " << gps_.getTime();
 	  }
 
-	  if (gps_.getTime() - lastSampleCreated_ >= pt::seconds(10)) {
+	  if (gps_.getTime() - lastSampleCreated_ >= pt::minutes(10)) {
 	    lastSampleCreated_ = gps_.getTime();
 	    return createKeepaliveSample();
 	  }
@@ -66,8 +66,7 @@ namespace blitzortung {
 	} else {
 	  parsing::Samples samplesParser(fields, gps_);
 
-	  if (samplesParser.isValid()) {
-
+	  if (samplesParser.isValid()) { 
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "read() SampleParser is valid";
 
@@ -87,14 +86,22 @@ namespace blitzortung {
     }
 
     data::Event::AP Pcb::createKeepaliveSample() {
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "createKeppaliveSample()";
+
       data::Waveform::AP waveform(new data::Waveform(gps_.getTime()));
 
-      return data::Event::AP(new data::MEvent(waveform, gps_.getInfo(), "-"));
+      std::string rawData("-");
+      rawData.append(getInfoString());
+
+      data::Event::AP event(new data::MEvent(waveform, gps_.getInfo(), rawData));
+
+      return event;
     }
 
     data::Event::AP Pcb::createSample(parsing::Samples& samplesParser) {
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "createSample() called";
+	logger_.debugStream() << "createSample()";
 
       data::Waveform::AP waveform = samplesParser.getWaveform();
 
@@ -103,6 +110,19 @@ namespace blitzortung {
       if (gps_.isValid() && waveform->getTime() != pt::not_a_date_time) {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "createSample() waveform " << *waveform;
+
+	rawData.append(getInfoString());
+
+	return data::Event::AP(new data::MEvent(waveform, gps_.getInfo(), rawData));
+      } else {
+	logger_.warnStream() << "createSample() GPS information is not yet valid -> no event created";
+      }
+
+      return data::Event::AP();
+    }
+
+    std::string Pcb::getInfoString() const {
+	std::string rawData;
 
 	rawData.append(" ");
 
@@ -126,13 +146,7 @@ namespace blitzortung {
 	rawData.append(" ");
 
 	rawData.append(gps_.getType());
-
-	return data::Event::AP(new data::MEvent(waveform, gps_.getInfo(), rawData));
-      } else {
-	logger_.warnStream() << "createSample() GPS information is not yet valid -> no event created";
-      }
-
-      return data::Event::AP();
+	return rawData;
     }
 
   }
