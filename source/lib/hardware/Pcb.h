@@ -30,10 +30,11 @@ namespace blitzortung {
 	//! last time when a sample was created
 	pt::ptime lastSampleCreated_;
 
-      protected:
-
 	//! reference to gps device object
 	gps::Base& gps_;
+
+	//! get info string which is appended to the raw data
+	std::string getInfoString() const;
 
       private:
 

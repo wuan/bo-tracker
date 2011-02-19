@@ -86,6 +86,7 @@ namespace blitzortung {
 
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "() pop from queue " << sampleQueue_.front().getWaveform().getTime();
+
 	  events_->add(sampleQueue_.pop());
 	}
 
