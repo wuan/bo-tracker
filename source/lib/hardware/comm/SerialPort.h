@@ -44,6 +44,8 @@ namespace blitzortung {
 
 	  void send(const std::string &);
 
+	  void flushInput() const;
+
       };
 
     }

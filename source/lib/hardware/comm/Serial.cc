@@ -66,6 +66,7 @@ namespace blitzortung {
 
       void Serial::setBaudRate(const unsigned int baudRate) {
 	serialPort_.setBaudRate(baudRate);
+	serialPort_.flushInput();
       }
 
       const unsigned int Serial::getBaudRate() const {

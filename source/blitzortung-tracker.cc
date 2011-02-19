@@ -106,6 +106,13 @@ int main(int argc, char **argv) {
     logger.setPriority(log4cpp::Priority::DEBUG);
   }
 
+  std::string cmdline;
+  for (int i=0; i<argc; i++) {
+    cmdline.append(" ");
+    cmdline.append(argv[i]);
+  }
+  logger.noticeStream() << "startup" << cmdline;
+
   switch (serialBaudRate) {
     case 4800:
     case 9600:
