@@ -20,7 +20,6 @@ namespace blitzortung {
 	//! return the error description
 	virtual const char* what() const throw();
     };
-
   }
 }
 
