@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <exception>
 #include <string>
 
 #include <boost/program_options.hpp>
@@ -174,14 +175,18 @@ int main(int argc, char **argv) {
   //! create object of network driver for event transmission
   bo::Process process(transfer, eventRateLimit, *output);
 
-  while (hardware.isOpen()) {
+  try {
+    while (hardware.isOpen()) {
 
-    bo::data::Event::AP event = hardware.read();
+      bo::data::Event::AP event = hardware.read();
 
-    if (event.get() != 0) {
-      process.push(event);
+      if (event.get() != 0) {
+	process.push(event);
+      }
+
     }
-
+  } catch (std::exception& e) {
+    logger.errorStream() << "exception caught in main loop: '" << e.what() << "'";
   }
 
 }

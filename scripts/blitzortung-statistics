@@ -383,6 +383,5 @@ elif options.mode == "strokes":
             participated = participatedStrokes[time]
         print time.strftime(timeformat), totalStrokes[time], participated
 
-
 else:
     raise Exception("unknown mode '%s'" %(options.mode))
