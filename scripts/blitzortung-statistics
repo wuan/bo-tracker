@@ -11,7 +11,6 @@ import optparse
 import datetime, pytz
 
 whitespace = re.compile('\s+')
-timeformat = '%Y-%m-%d %H:%M:%S'
 
 class Config():
     def __init__(self, configfilename=None):
@@ -66,17 +65,54 @@ class Point():
 
 class Time():
 
-    def __init__(self, time):
+    timeformat = '%Y-%m-%d %H:%M:%S'
+
+    def __init__(self, date, time):
+	nanoseconds = int(time[-9:])
+	time = datetime.datetime.strptime(date + ' ' + time[:-10], Time.timeformat)
+	time = time.replace(microsecond=int(round(nanoseconds / 1000.0)), tzinfo=pytz.UTC)
         self.time = time
 
     def difference(self, other):
         return self.time - other.time
 
+    def getTime(self):
+      return self.time
+
 class Event(Point, Time):
 
-    def __init__(self, x, y, time):
+    def __init__(self, x, y, date, time):
         Point.__init__(self, x, y)
-        Time.__init__(self, time)
+        Time.__init__(self, date, time)
+
+class RawEvent(Event):
+#2011-02-20 15:16:26.723987041 11.5436 48.1355 521 8 3125 -0.12 0.20 14
+    def __init__(self, data = None):
+        if data != None:
+            ' Construct rawevent from blitzortung text format data line '
+            fields = data.split(' ')
+            if len(fields) >= 8:
+                position_x = float(fields[3])
+                position_y = float(fields[2])
+                Event.__init__(self, position_x, position_y, fields[0], fields[1])
+        	self.height = int(fields[4])
+                self.numberOfSatellites = int(fields[5])
+		self.samplePeriod = int(fields[6])
+                self.amplitudeX = float(fields[7])
+                self.amplitudeY = float(fields[8])
+            else:
+                raise Error("not enough data fields for raw event data '%s'" %(data))
+
+    def __str__(self):
+      return "%s.%06d %.4f %.4f %d %d %d %.2f %.2f" %(self.time.strftime(Time.timeformat), self.time.microsecond, self.x, self.y, self.height, self.numberOfSatellites, self.samplePeriod, self.amplitudeX, self.amplitudeY)
+
+    def getXAmplitude(self):
+      return self.amplitudeX
+
+    def getYAmplitude(self):
+      return self.amplitudeY
+
+
 
 class Stroke(Event):
     '''
@@ -88,12 +124,9 @@ class Stroke(Event):
             ' Construct stroke from blitzortung text format data line '
             fields = data.split(' ')
             if len(fields) >= 8:
-                nanoseconds = int(fields[1][-9:])
-                time = datetime.datetime.strptime(fields[0] + ' ' + fields[1][:-10], timeformat)
-                time = time.replace(microsecond=int(round(nanoseconds / 1000.0)), tzinfo=pytz.UTC)
                 position_x = float(fields[3])
                 position_y = float(fields[2])
-                Event.__init__(self, position_x, position_y, time)
+                Event.__init__(self, position_x, position_y, fields[0], fields[1])
 
                 self.amplitude = float(fields[4][:-2])
                 self.typeVal = int(fields[5])
@@ -108,12 +141,6 @@ class Stroke(Event):
             else:
                 raise Error("not enough data fields from stroke data line '%s'" %(data))
         self.height = 0.0
-
-    def getTime(self):
-        return self.time
-
-    def setTime(self, time):
-        self.time = time
 
     def getPosition(self):
         return self.position
@@ -227,6 +254,9 @@ class TimeInterval():
     def getEndMinute(self):
         return self.getEndTime() - datetime.timedelta(minutes=1)
 
+    def contains(self, time):
+      return time >= self.getStartTime() and time <= self.getEndTime()
+
 
 class TimeIntervals(TimeInterval):
 
@@ -234,8 +264,6 @@ class TimeIntervals(TimeInterval):
         TimeInterval.__init__(self, endTime, deltaTime)
 
         self.totalDuration = self.roundTime(totalDuration)
-
-        print "TimeInvervals ",self.deltaTime, self.endTime, self.totalDuration
 
         self.time = self.endTime - self.totalDuration
 
@@ -274,27 +302,30 @@ class Data:
             output = ""
             print "ignore errors"
 
-        return output.splitlines()
+	rawEvents = []
+
+	for line in output.splitlines():
+	  rawEvents.append(RawEvent(line))
+
+	return rawEvents
 
     def list(self):
-        for line in self.get():
-            print line.strip()
+        for event in self.get():
+            print event
 
 class Histogram(Data):
 
     def __init__(self, files, time):
         Data.__init__(self, files, time)
 
-        while True:
+	while True:
 
             # count the number of samples
             counter = 0
             ampsum = 0.0
-            for line in self.get():
-                fields = whitespace.split(line)
-
-                xamp = float(fields[7])
-                yamp = float(fields[8])
+            for rawEvent in self.get():
+                xamp = rawEvent.getXAmplitude()
+                yamp = rawEvent.getYAmplitude()
                 ampsum += math.sqrt(xamp * xamp + yamp * yamp)
                 counter += 1
 
@@ -319,19 +350,18 @@ class StrokesUrl:
     def add(self, name, value):
         self.url += '&' + str(name).strip() + '=' + str(value).strip()
 
-    def get(self):
-        return self.url
-
     def readData(self):
         urlconnection = urllib.urlopen(self.url)
         data = urlconnection.read().strip()
         urlconnection.close()
         return data
 
-    def get(self):
+    def get(self, timeInterval=None):
         strokes = []
         for line in self.readData().split('\n'):
-            strokes.append(Stroke(line))
+	    stroke = Stroke(line)
+	    if timeInterval==None or timeInterval.contains(stroke.getTime()):
+                strokes.append(stroke)
         return strokes
 
 class Strokes(StrokesUrl):
@@ -363,21 +393,20 @@ now = now.replace(tzinfo=pytz.UTC)
 
 delta = datetime.timedelta(minutes=options.timedelta)
 
-files = RawFiles(options.datapath)
+timeInterval = TimeInterval(now, delta)
 
+files = RawFiles(options.datapath)
+config = Config()
 
 if options.mode == "histogram":
     timeInterval = TimeIntervals(now, delta)
     histogram = Histogram(files, timeInterval)
 
 elif options.mode == "data":
-    timeInterval = TimeInterval(now, delta)
     data = Data(files, timeInterval)
     data.list()
 
 elif options.mode == "strokes":
-    timeInterval = TimeInterval(now, delta)
-    config = Config()
     participantSource = ParticipantStrokes(config)
     strokes = participantSource.get()
     totalStrokes = {}
@@ -408,12 +437,28 @@ elif options.mode == "strokes":
         participated = '0'
         if participatedStrokes.has_key(time):
             participated = participatedStrokes[time]
-        print time.strftime(timeformat), totalStrokes[time], participated
+        print time.strftime(Time.timeformat), totalStrokes[time], participated
 
 elif options.mode == "test":
-    point1 = Point(11,49)
-    point2 = Point(11,50)
-    print point1.distance(point2)
+    serverStrokes = Strokes(config)
+    print "get strokes"
+    strokes = serverStrokes.get(timeInterval)
 
+    data = Data(files, timeInterval)
+    rawEvents = data.get()
+   
+    rawIterator = iter(rawEvents)
+    for stroke in strokes:
+      print "stroke",stroke
+      try:
+        while True:
+          rawEvent = rawIterator.next()
+          print "event",rawEvent
+
+          if rawEvent.getTime() > stroke.getTime():
+	    break
+	print rawEvent.getTime(),stroke.getTime(),rawEvent.distance(stroke)
+      except StopIteration:
+        break
 else:
     raise Exception("unknown mode '%s'" %(options.mode))
