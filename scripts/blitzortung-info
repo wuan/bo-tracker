@@ -107,4 +107,17 @@ set polar
 set title "lightning radar (last 2 hours)"
 plot "$TMPDATA" u (90-\$1):2 not
 ***
+
+$NICE blitzortung-statistics --mode=residual --time-delta=120 --data-path=$RAWPATH > $TMPDATA
+
+$NICE gnuplot <<***
+set term png size $PICXSIZE,$PICYSIZE
+set output "$TARGETDIR/residuals.png"
+set title "last 2 hours residual times"
+set xlabel "residual time [us]"
+set ylabel "stroke - sensor distance [km]"
+set grid front
+plot "$TMPDATA" u 3:4 not
+***
+
 rm -rf $TMPDATA
