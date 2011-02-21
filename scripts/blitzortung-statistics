@@ -53,7 +53,7 @@ class Point():
         self.y = y
 
     def __invgeod(self, other):
-        pipe = subprocess.Popen(['invgeod', '+ellps=WGS84', '+units=m'], stdin = subprocess.PIPE, stdout = subprocess.PIPE)
+        pipe = subprocess.Popen(['invgeod', '+ellps=WGS84', '+units=m','-f','%.5f'], stdin = subprocess.PIPE, stdout = subprocess.PIPE)
         (output, error) = pipe.communicate("%f %f %f %f" %(self.y, self.x, other.y, other.x))
         return Point.__whitespaceRe.split(output.strip())
 
@@ -92,8 +92,8 @@ class RawEvent(Event):
             ' Construct rawevent from blitzortung text format data line '
             fields = data.split(' ')
             if len(fields) >= 8:
-                position_x = float(fields[3])
-                position_y = float(fields[2])
+                position_x = float(fields[2])
+                position_y = float(fields[3])
                 Event.__init__(self, position_x, position_y, fields[0], fields[1])
         	self.height = int(fields[4])
                 self.numberOfSatellites = int(fields[5])
@@ -206,13 +206,35 @@ class RawFiles:
         else:
             raise Exception("no file for date "+date.strftime('%Y-%m-%d'))
 
-class TimeInterval():
+class TimeRange():
+
+  def __init__(self, endTime, deltaTime=datetime.timedelta(hours=2)):
+    self.endTime = endTime
+    self.startTime = endTime - deltaTime
+
+  def __str__(self):
+    return "['" + str(self.startTime) + "':'" + str(self.endTime) + "']"
+
+  def getStartTime(self):
+    return self.startTime
+
+  def getEndTime(self):
+    return self.endTime
+
+  def getEndMinute(self):
+    return self.getEndTime() - datetime.timedelta(minutes=1)
+
+  def contains(self, time):
+    return time >= self.getStartTime() and time <= self.getEndTime()
+
+class TimeInterval(TimeRange):
 
     def __init__(self, endTime, deltaTime=datetime.timedelta(hours=1)):
-        self.deltaTime = deltaTime
-        self.endTime = self.roundTime(endTime)
+      self.deltaTime = deltaTime
+      TimeRange.__init__(self, self.roundTime(endTime), deltaTime)
 
-        self.time = self.endTime - self.deltaTime
+    def __str__(self):
+      return "['" + str(self.startTime) + "':'" + str(self.endTime) + "'," + str(self.deltaTime) + "]"
 
     def totalSeconds(self, time):
         ' return the total seconds of the given time or datetime (relative to midnight) '
@@ -242,21 +264,8 @@ class TimeInterval():
     def next(self):
         raise Exception(' no next interval ')
 
-    def getStartTime(self):
-        return self.time
-
-    def getEndTime(self):
-        return self.time + self.deltaTime
-
     def getCenterTime(self):
-        return self.time + self.deltaTime / 2
-
-    def getEndMinute(self):
-        return self.getEndTime() - datetime.timedelta(minutes=1)
-
-    def contains(self, time):
-      return time >= self.getStartTime() and time <= self.getEndTime()
-
+        return self.startTime + self.deltaTime / 2
 
 class TimeIntervals(TimeInterval):
 
@@ -265,17 +274,20 @@ class TimeIntervals(TimeInterval):
 
         self.totalDuration = self.roundTime(totalDuration)
 
-        self.time = self.endTime - self.totalDuration
+        self.startTime = self.endTime - self.totalDuration
 
     def hasNext(self):
-        return self.time + self.deltaTime < self.endTime
+        return self.startTime + self.deltaTime < self.endTime
 
     def next(self):
         if self.hasNext():
-            self.time += self.deltaTime
-            return self.time
+            self.startTime += self.deltaTime
+            return self.startTime
         else:
             raise Exception('no more time intervals')
+
+    def getEndTime(self):
+      return self.startTime + self.deltaTime
 
 class Data:
 
@@ -393,8 +405,6 @@ now = now.replace(tzinfo=pytz.UTC)
 
 delta = datetime.timedelta(minutes=options.timedelta)
 
-timeInterval = TimeInterval(now, delta)
-
 files = RawFiles(options.datapath)
 config = Config()
 
@@ -403,10 +413,13 @@ if options.mode == "histogram":
     histogram = Histogram(files, timeInterval)
 
 elif options.mode == "data":
+    timeInterval = TimeInterval(now, delta)
+    print timeInterval
     data = Data(files, timeInterval)
     data.list()
 
 elif options.mode == "strokes":
+    timeInterval = TimeInterval(now, delta)
     participantSource = ParticipantStrokes(config)
     strokes = participantSource.get()
     totalStrokes = {}
@@ -439,26 +452,41 @@ elif options.mode == "strokes":
             participated = participatedStrokes[time]
         print time.strftime(Time.timeformat), totalStrokes[time], participated
 
-elif options.mode == "test":
+elif options.mode == "residual":
+    timeInterval = TimeRange(now, delta)
     serverStrokes = Strokes(config)
-    print "get strokes"
     strokes = serverStrokes.get(timeInterval)
 
     data = Data(files, timeInterval)
     rawEvents = data.get()
    
-    rawIterator = iter(rawEvents)
-    for stroke in strokes:
-      print "stroke",stroke
-      try:
-        while True:
-          rawEvent = rawIterator.next()
-          print "event",rawEvent
+    if len(rawEvents) > 0:
+      rawIterator = iter(rawEvents)
+      rawEvent = rawIterator.next()
+	
+      for stroke in strokes:
+	print "stroke",stroke
+	try:
+	  while rawEvent.getTime() < stroke.getTime():
+	    rawEvent = rawIterator.next()
+	    print "  event",rawEvent
+	  print "  distance:",rawEvent.distance(stroke)/1000.0,rawEvent.difference(stroke)
+	except StopIteration:
+	  break
 
-          if rawEvent.getTime() > stroke.getTime():
-	    break
-	print rawEvent.getTime(),stroke.getTime(),rawEvent.distance(stroke)
-      except StopIteration:
-        break
+elif options.mode == "radar":
+    timeInterval = TimeRange(now, delta)
+    serverStrokes = Strokes(config)
+    strokes = serverStrokes.get()
+
+    data = Data(files, timeInterval)
+    rawEvents = data.get()
+   
+    if len(rawEvents) > 0:
+      rawIterator = iter(rawEvents)
+      rawEvent = rawIterator.next()
+	
+      for stroke in strokes:
+	print rawEvent.azimuth(stroke), rawEvent.distance(stroke)/1000.0
 else:
     raise Exception("unknown mode '%s'" %(options.mode))

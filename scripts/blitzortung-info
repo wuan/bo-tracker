@@ -95,5 +95,16 @@ set format x "%H:%M"
 plot 1 lt -2 not, "$TMPDATA" u 1:3 ti "total (sum $TOTALSTROKES)" w boxes lt 1 fs solid 0.5, "" u 1:4 ti "sensor participated (sum $TOTALPARTICIPATEDSTROKES, avg. $PARTICIPATEDPERCENT %)" w boxes lt 3 fs solid 0.5
 ***
 
+$NICE blitzortung-statistics --mode=radar --time-delta=120 --data-path=$RAWPATH > $TMPDATA
 
+$NICE gnuplot <<***
+set term png size $PICYSIZE,$PICYSIZE
+set output "$TARGETDIR/radar.png"
+set size square
+set angles degree
+set grid polar
+set polar
+set title "lightning radar (last 2 hours)"
+plot "$TMPDATA" u (90-\$1):2 not
+***
 rm -rf $TMPDATA
