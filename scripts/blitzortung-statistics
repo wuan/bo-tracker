@@ -477,7 +477,7 @@ elif options.mode == "residual":
 #print "             dt:", rawEvent.difference(stroke)
 	  runtime = rawEvent.distance(stroke) / cReduced / 1000.0
 	  dt = rawEvent.difference(stroke)
-	  if dt.seconds == 0:
+	  if dt.seconds == 0 and abs(dt.microseconds) < 10000:
 	    print stroke.getTime(), dt.microseconds - runtime, rawEvent.distance(stroke) / 1000.0, rawEvent.difference(stroke)
 	except StopIteration:
 	  break
