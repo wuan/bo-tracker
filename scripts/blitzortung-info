@@ -50,7 +50,7 @@ set xr ["$STARTTIME":"$ENDTIME"]
 set yr [0:*]
 set format x "%H:%M"
 set pointsize 0.8
-plot 0.2 lt -2 not, "$TMPDATA" u 1:4 not w p 1 13
+plot 0.2 lt -2 not, "$TMPDATA" u 1:4 not w p lt 1
 ***
 
 $NICE blitzortung-statistics --mode=data --time-delta=120 --data-path=$RAWPATH > $TMPDATA
@@ -67,7 +67,7 @@ set ylabel "y amplitude"
 set xr [-1.0:1.0]
 set yr [-1.0:1.0]
 set grid front
-plot "$TMPDATA" u 8:9 not
+plot "$TMPDATA" u 8:9 not w p lt 1
 ***
 
 $NICE blitzortung-statistics --mode=strokes --time-delta=5 --data-path=$RAWPATH > $TMPDATA
@@ -105,7 +105,7 @@ set angles degree
 set grid polar
 set polar
 set title "lightning radar (last 2 hours)"
-plot "$TMPDATA" u (90-\$1):2 not
+plot 0 lt -2 not, "$TMPDATA" u (90-\$1):2 not w p lt 1
 ***
 
 $NICE blitzortung-statistics --mode=residual --time-delta=120 --data-path=$RAWPATH > $TMPDATA
@@ -117,7 +117,7 @@ set title "last 2 hours residual times"
 set xlabel "residual time [us]"
 set ylabel "stroke - sensor distance [km]"
 set grid front
-plot "$TMPDATA" u 3:4 not
+plot 0 lt -2 not, "$TMPDATA" u 3:4 not w p lt 1
 ***
 
 rm -rf $TMPDATA
