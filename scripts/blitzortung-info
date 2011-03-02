@@ -5,7 +5,7 @@ RAWPATH=$2
 
 NICE="nice -n 19"
 
-FONTSIZE=10
+FONTSIZE=9
 PICXSIZE="480"
 PICYSIZE="320"
 
@@ -33,7 +33,7 @@ set output "$TARGETDIR/timecount.png"
 set xdata time
 set timefmt "%Y-%m-%d %H:%M:%S"
 set xlabel "UTC time"
-set ylabel "# of events"
+set ylabel "# of measured local events"
 set boxwidth 15*60
 set log y
 set xr ["$STARTTIME":"$ENDTIME"]
@@ -49,7 +49,7 @@ set output "$TARGETDIR/timeamp.png"
 set xdata time
 set timefmt "%Y-%m-%d %H:%M:%S"
 set xlabel "UTC time"
-set ylabel "average amplitude"
+set ylabel "average amplitude of local events"
 set boxwidth 15*60
 set grid front
 set xr ["$STARTTIME":"$ENDTIME"]
@@ -67,7 +67,7 @@ $NICE gnuplot <<***
 set term png $FONTSIZE size $PICYSIZE,$PICYSIZE
 set output "$TARGETDIR/xyamp.png"
 set size square
-set title "last 2 hours (sum $TOTALSAMPLES)"
+set title "last 2 hours events (sum $TOTALSAMPLES)"
 set xlabel "x amplitude"
 set ylabel "y amplitude"
 set xr [-1.0:1.0]
