@@ -34,7 +34,7 @@ namespace blitzortung {
 	  if (fields[2].size() == 256) {
 	    // BLSIG type 2
 	    dataFormat = data::Format::CP(new data::Format(8, 2, 64));
-	    sampleDt = pt::nanoseconds(3125);
+	    sampleDt = pt::nanoseconds(2900);
 	    rawData_ = fields[2];
 	  }
 	} else if (fields[0] == "BD") {
