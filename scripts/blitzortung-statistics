@@ -479,8 +479,9 @@ elif options.mode == "residual":
 	  dt = rawEvent.difference(stroke)
 	  if dt.seconds == 0:
 	    residualTimeUs = dt.microseconds - runtime
-	    if abs(residualTimeUs) < 200:
-	      print stroke.getTime(), residualTimeUs, rawEvent.distance(stroke) / 1000.0, rawEvent.difference(stroke)
+	    if abs(residualTimeUs) < 300:
+	      timeDelta = rawEvent.difference(stroke)
+	      print "%s %.1f %d %.2f %.2f" %(stroke.getTime().strftime(Time.timeformat), residualTimeUs, timeDelta.seconds*1000000 + timeDelta.microseconds, rawEvent.distance(stroke) / 1000.0, rawEvent.azimuth(stroke))
 	except StopIteration:
 	  break
 
