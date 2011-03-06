@@ -116,7 +116,7 @@ plot 0 lt -2 not, "$TMPDATA" u (90-\$1):2 not w p lt $STROKESCOLOR
 ***
 
 RESIDUAL_FILE=$RAWPATH/residual.log
-$NICE blitzortung-statistics --mode=residual --time-delta=15 --data-path=$RAWPATH > $RESIDUAL_FILE
+$NICE blitzortung-statistics --mode=residual --time-delta=15 --data-path=$RAWPATH >> $RESIDUAL_FILE
 
 $NICE blitzortung-statistics --mode=residual --time-delta=120 --data-path=$RAWPATH > $TMPDATA
 
