@@ -65,6 +65,10 @@ libblitzortung_la_SOURCES = \
 	\
 	Process.h Process.cc \
 	\
+	socket/Unix.h socket/Unix.cc \
+	socket/Listener.h socket/Listener.cc \
+	socket/Server.h socket/Server.cc \
+	\
 	Queue.h Queue.cc \
 	\
 	util/RingBuffer.h util/RingBuffer.cc \
