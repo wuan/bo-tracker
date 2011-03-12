@@ -33,10 +33,15 @@ namespace blitzortung {
 	    logger_.warnStream() << "() recv failed " << n;
 	} else {
 	  buffer[n]=0;
-	  logger_.infoStream() << "() read: '" << buffer << "' " << n;
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "() read: '" << buffer << "' " << n;
 
-	  if (!done) {
-	    if (send(socket_, buffer, n, 0) < 0) {
+	  std::string input(buffer);
+	  std::string output = respond(input);
+
+	  if (!done && output.size() > 0) {
+	    n = send(socket_, output.c_str(), output.size(), 0);
+	    if (n < 0) {
 	      done = true;
 	      logger_.warnStream() << "() send failed " << n;
 	    }
@@ -47,6 +52,10 @@ namespace blitzortung {
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "() ended";
       close(socket_);
+    }
+
+    std::string Server::respond(const std::string& input) {
+      return input;
     }
 
   }
