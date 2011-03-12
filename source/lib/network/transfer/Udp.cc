@@ -23,7 +23,7 @@ namespace blitzortung {
 
       bool Udp::openConnection() {
 	if (sockId_ < 0) {
-	  sockId_ = socket (AF_INET, SOCK_DGRAM, 0);
+	  sockId_ = socket(AF_INET, SOCK_DGRAM, 0);
 
 	  if (sockId_ == -1) {
 	    logger_.warnStream() << "could not open socket";

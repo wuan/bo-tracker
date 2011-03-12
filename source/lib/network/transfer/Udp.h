@@ -1,6 +1,9 @@
 #ifndef BLITZORTUNG_NETWORK_TRANSFER_UDP_H_
 #define BLITZORTUNG_NETWORK_TRANSFER_UDP_H_
 
+#include <arpa/inet.h>
+#include <netdb.h>
+
 #include "network/transfer/Base.h"
 
 namespace blitzortung {
