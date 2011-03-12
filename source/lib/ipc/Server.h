@@ -20,6 +20,8 @@ namespace blitzortung {
 	//! logger for this class
 	mutable Logger logger_;
 
+	std::string respond(const std::string&);
+
       public:
 
 	//! construct socket
@@ -27,6 +29,7 @@ namespace blitzortung {
 
 	//! server thread procedure
 	void operator ()();
+
     };
 
   }

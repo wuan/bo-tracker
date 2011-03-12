@@ -20,9 +20,9 @@ namespace blitzortung {
       sockaddr.sun_family = AF_UNIX;
 
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "bind to socket file '" << socketFileName << "'";
+	logger_.debugStream() << "bind to socket file '" << socketFileName_ << "'";
 
-      strcpy(sockaddr.sun_path, socketFileName.c_str());
+      strcpy(sockaddr.sun_path, socketFileName_.c_str());
 
       unlink(sockaddr.sun_path);
       int addrlen = sizeof(sockaddr.sun_family) + strlen(sockaddr.sun_path); 
@@ -38,7 +38,9 @@ namespace blitzortung {
     UnixSocket::~UnixSocket()
     {
       close(socket_);
+
       unlink(socketFileName_.c_str());
+
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "close socket " << socket_;
     }

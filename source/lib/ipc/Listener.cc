@@ -28,7 +28,7 @@ namespace blitzortung {
 
         listen(socket_, 10);
 
-	const unsigned int connectionSocket = accept(socket_, sockaddr_, &sockaddrSize_);
+	const int connectionSocket = accept(socket_, sockaddr_, &sockaddrSize_);
 
 	if (connectionSocket == -1) {
 	  logger_.errorStream() << "connection error";
