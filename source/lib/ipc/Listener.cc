@@ -14,27 +14,35 @@ namespace blitzortung {
       sockaddrSize_(sockaddrSize),
       logger_("Listener")
     {
-      logger_.infoStream() << "created for socket " << socket_;
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "created for socket " << socket_;
     }
 
     void Listener::operator ()() {
-      logger_.infoStream() << "() running for socket " << socket_;
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "() running for socket " << socket_;
+
       for (;;) {
-	logger_.infoStream() << "() listen";
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "() listen";
+
         listen(socket_, 10);
 
-	int connectionSocket = accept(socket_, sockaddr_, &sockaddrSize_);
+	const unsigned int connectionSocket = accept(socket_, sockaddr_, &sockaddrSize_);
+
 	if (connectionSocket == -1) {
 	  logger_.errorStream() << "connection error";
 	} else {
-	  logger_.infoStream() << "() start server";
-	  Server server(connectionSocket);
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "() start server";
 
+	  Server server(connectionSocket);
 	  boost::thread thread(server);
 	}
 
       }
-      logger_.infoStream() << "() done for socket " << socket_;
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "() done for socket " << socket_;
     }
 
   }

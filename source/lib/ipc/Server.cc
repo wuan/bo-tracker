@@ -11,11 +11,13 @@ namespace blitzortung {
       socket_(socket),
       logger_("Server")
     {
-      logger_.infoStream() << "initialize server for socket " << socket_;
+      if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "initialize server for socket " << socket_;
     }
 
     void Server::operator ()() {
-      logger_.infoStream() << "() started for socket " << socket_;
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "() started for socket " << socket_;
 
       char buffer[100];
       bool done = false;
@@ -24,9 +26,10 @@ namespace blitzortung {
 	int n = recv(socket_, buffer, 100, 0);
 	if (n <= 0) {
 	  done = true;
-	  if (n==0)
-	    logger_.infoStream() << "() connection closed";
-	  else
+	  if (n==0) {
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "() connection closed";
+	  } else
 	    logger_.warnStream() << "() recv failed " << n;
 	} else {
 	  buffer[n]=0;
@@ -39,9 +42,10 @@ namespace blitzortung {
 	    }
 	  }
 	}
-      } while(!done);
+      } while (!done);
 
-      logger_.infoStream() << "() ended";
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "() ended";
       close(socket_);
     }
 

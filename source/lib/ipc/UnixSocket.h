@@ -15,6 +15,8 @@ namespace blitzortung {
 	//! generated ѕocket
 	unsigned int socket_;
 
+	const std::string& socketFileName_;
+
 	//! logger for this class
 	mutable Logger logger_;
 
