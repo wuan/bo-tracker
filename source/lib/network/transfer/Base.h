@@ -1,9 +1,6 @@
 #ifndef BLITZORTUNG_NETWORK_TRANSFER_BASE_H_
 #define BLITZORTUNG_NETWORK_TRANSFER_BASE_H_
 
-#include <arpa/inet.h>
-#include <netdb.h>
-
 #include <boost/thread/thread.hpp>
 #include <boost/thread/xtime.hpp>
 #include <boost/thread/condition.hpp>

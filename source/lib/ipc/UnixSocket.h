@@ -1,13 +1,14 @@
-#ifndef BLITZORTUNG_SOCKET_UNIX_H_
-#define BLITZORTUNG_SOCKET_UNIX_H_
+#ifndef BLITZORTUNG_IPC_UNIXSOCKET_H_
+#define BLITZORTUNG_IPC_UNIXSOCKET_H_
 
 #include <boost/thread/thread.hpp>
 
 #include "Logger.h"
 
 namespace blitzortung {
+  namespace ipc {
 
-    class Unix : private boost::noncopyable {
+    class UnixSocket : private boost::noncopyable {
 
       private:
 
@@ -20,11 +21,12 @@ namespace blitzortung {
       public:
 
 	//! construct socket
-	Unix(const std::string& socketFileName);
+	UnixSocket(const std::string& socketFileName);
 
 	//! destruct socket
-	virtual ~Unix();
+	virtual ~UnixSocket();
     };
+  }
 }
 
 #endif
