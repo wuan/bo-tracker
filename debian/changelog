@@ -1,3 +1,9 @@
+blitzortung-tracker (0.9.3SNAPSHOT20110305113000) unstable; urgency=low
+
+  * fixed sample rate for older firmware versions (< 27)
+
+ -- Andreas Wuerl <awuerl@gmx.net>  Wed, 5 Mar 2011 19:41:45 +0100
+
 blitzortung-tracker (0.9.2) unstable; urgency=low
 
   * rework of status graphs
