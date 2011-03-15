@@ -41,13 +41,13 @@ namespace blitzortung {
 	  if (fields[2].size() == 256) {
 	    // BD type 1
 	    dataFormat = data::Format::CP(new data::Format(8, 2, 64));
-	    sampleDt = pt::nanoseconds(2930);
+	    sampleDt = pt::nanoseconds(2800);
 	    rawData_ = fields[2];
 	  }
 	} else if (fields[0] == "BM") {
 	  // BM type 1
 	  dataFormat = data::Format::CP(new data::Format(8, 1, 128));
-	  sampleDt = pt::nanoseconds(2930);
+	  sampleDt = pt::nanoseconds(2800);
 	  rawData_ = fields[2];
 	}
 
