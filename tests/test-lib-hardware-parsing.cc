@@ -17,7 +17,7 @@ void HardwareParsingTest::setUp() {
 void HardwareParsingTest::tearDown() {
 }
 
-void HardwareParsingTest::testTicksParsingTest(const std::string& input, const std::string& dateTime, unsigned int counterValue, float longitude, float latitude, short altitude, unsigned short numberOfSatellites, const std::string& gpsStatus, const std::string& firmwareVersion) {
+void HardwareParsingTest::ticksParsingTest(const std::string& input, const std::string& dateTime, unsigned int counterValue, float longitude, float latitude, short altitude, unsigned short numberOfSatellites, const std::string& gpsStatus, const std::string& firmwareVersion) {
   std::vector<std::string> fields;
 
   bo::util::String::split(input, fields, ",");
@@ -35,24 +35,24 @@ void HardwareParsingTest::testTicksParsingTest(const std::string& input, const s
 }
 
 void HardwareParsingTest::testTicksParsing() {
-  testTicksParsingTest("BLSEC,185630,190810,A,4729.2852,N,01904.2683,E,AB852D",
+  ticksParsingTest("BLSEC,185630,190810,A,4729.2852,N,01904.2683,E,AB852D",
       "190810 185630",
       11240749,
       19.0711, 47.4881, 0,
       0, "A", "");
-  testTicksParsingTest("BLSEC,185631,190810,V,4729.2856,S,01904.2688,W,D1ABEA",
+  ticksParsingTest("BLSEC,185631,190810,V,4729.2856,S,01904.2688,W,D1ABEA",
       "190810 185631",
       13741034,
       -19.0711, -47.4881, 0,
       0, "V", "");
 
-  testTicksParsingTest("BLSEC,0833CC,A,131531,200810,4808.1189,N,01132.6299,E,576.5000,M,06",
+  ticksParsingTest("BLSEC,0833CC,A,131531,200810,4808.1189,N,01132.6299,E,576.5000,M,06",
       "200810 131531",
       537548,
       11.5438, 48.1353, 576,
       6, "A", "");
 
-  testTicksParsingTest("BLSEC,2E59FE,V,131532,200810,4808.1187,N,01132.6301,E,577.2000,M,06",
+  ticksParsingTest("BLSEC,2E59FE,V,131532,200810,4808.1187,N,01132.6301,E,577.2000,M,06",
       "200810 131532",
       3037694,
       11.5438, 48.1353, 577,
@@ -60,13 +60,14 @@ void HardwareParsingTest::testTicksParsing() {
 }
 
 void HardwareParsingTest::testTicksParsingF25() {
-  testTicksParsingTest("BS,11C2CC,A,084638,200311,4808.1313,N,01132.6202,E,532.8,09,27b",
+  std::cout << "testTicksParsingf25\n";
+  ticksParsingTest("BS,11C2CC,A,084638,200311,4808.1313,N,01132.6202,E,532.8,09,27b",
       "200311 084638",
       11240749,
       19.0711, 47.4881, 0,
       0, "A", "27b");
 
-  testTicksParsingTest("BS,37E912,A,084639,200311,4808.1313,N,01132.6201,E,532.9,09,27b",
+  ticksParsingTest("BS,37E912,A,084639,200311,4808.1313,N,01132.6201,E,532.9,09,27b",
       "200311 084638",
       11240749,
       19.0711, 47.4881, 0,
@@ -74,7 +75,7 @@ void HardwareParsingTest::testTicksParsingF25() {
 }
 
 void HardwareParsingTest::testSamplesParsing() {
-  //"BLSIG,F133E6,CF4,860");
+  //testSamplesParsing("BLSIG,F133E6,CF4,860");
   //"BLSIG,F1341D,450,77C");
 
   //"BLSEQ,F67E15,667E667D6A7E707F787F817F887F8C808F80907F8F809381968191808A7F847F7F7F737E647D587D507D487B467B4D7C587C647C747D887F9780A181A983AF84B084AD84AA83A782A0819A80957F907F8A7D847E807E7C7D777B747C727C727B717B717D727F737F75807682778279827A817A817B807C7E7C7C7A7B797B777A"
