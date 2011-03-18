@@ -35,7 +35,7 @@ namespace blitzortung {
 	  //! constructor
 	  Samples(const std::vector<std::string>, const hardware::gps::Base& gps);
 
-	  //! get timestamp from counter value
+	  //! get raw sample data string
 	  const std::string& getRawData() const;
 
 	  //! get parsed waveform
