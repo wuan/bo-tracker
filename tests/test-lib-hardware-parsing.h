@@ -4,7 +4,9 @@
 #include <boost/shared_ptr.hpp>
  
 #include "namespaces.h"
- 
+#include "data/Format.h"
+#include "hardware/gps/Base.h"
+
 class HardwareParsingTest : public CPPUNIT_NS :: TestFixture
 {
   CPPUNIT_TEST_SUITE( HardwareParsingTest );
@@ -21,6 +23,8 @@ class HardwareParsingTest : public CPPUNIT_NS :: TestFixture
   void ticksParsingTest(const std::string& input, const pt::ptime& dateTime, unsigned int counterValue,
       float longitude, float latitude, short altitude,
       unsigned short numberOfSatellites, const std::string& gpsStatus, const std::string& firmwareVersion);
+  void samplesParsingTest(const std::string& input, bo::hardware::gps::Base& gps,
+      unsigned int counterValue, bo::data::Format& format, const::std::string& rawData);
 
   //! tests
 

@@ -3,7 +3,9 @@
 
 #include <cmath>
 
+#include "hardware/gps/Sirf.h"
 #include "hardware/parsing/Ticks.h"
+#include "hardware/parsing/Samples.h"
 #include "util/String.h"
 
 
@@ -74,8 +76,29 @@ void HardwareParsingTest::testTicksParsingF25() {
       0, "A", "27b");
 }
 
+void HardwareParsingTest::samplesParsingTest(const std::string& input, bo::hardware::gps::Base& gps, unsigned int counterValue, bo::data::Format& format, const::std::string& rawData) {
+  std::vector<std::string> fields;
+
+  bo::util::String::split(input, fields, ",");
+
+  bo::hardware::parsing::Samples samplesParser(fields, gps);
+
+  CPPUNIT_ASSERT_EQUAL(counterValue, samplesParser.getCounterValue());
+  bo::data::Waveform::AP waveform = samplesParser.getWaveform();
+  CPPUNIT_ASSERT_EQUAL(format, *(waveform->getArray().getFormat()));
+  CPPUNIT_ASSERT_EQUAL(rawData, samplesParser.getRawData());
+}
+
 void HardwareParsingTest::testSamplesParsing() {
-  //testSamplesParsing("BLSIG,F133E6,CF4,860");
+  std::vector<std::string> fields;
+  
+  bo::util::String::split("BS,37E912,A,084639,200311,4808.1313,N,01132.6201,E,532.9,09,27b", fields, ",");
+  bo::hardware::parsing::Ticks ticksParser(fields);
+  
+  bo::hardware::gps::Sirf gps;
+  gps.set(ticksParser);
+  
+  testSamplesParsing("BLSIG,F133E6,CF4,860", gps);
   //"BLSIG,F1341D,450,77C");
 
   //"BLSEQ,F67E15,667E667D6A7E707F787F817F887F8C808F80907F8F809381968191808A7F847F7F7F737E647D587D507D487B467B4D7C587C647C747D887F9780A181A983AF84B084AD84AA83A782A0819A80957F907F8A7D847E807E7C7D777B747C727C727B717B717D727F737F75807682778279827A817A817B807C7E7C7C7A7B797B777A"
