@@ -9,6 +9,7 @@ class HardwareParsingTest : public CPPUNIT_NS :: TestFixture
 {
   CPPUNIT_TEST_SUITE( HardwareParsingTest );
   CPPUNIT_TEST( testTicksParsing );
+  CPPUNIT_TEST( testTicksParsingF25 );
   CPPUNIT_TEST( testSamplesParsing );
   CPPUNIT_TEST_SUITE_END();
 
@@ -17,9 +18,9 @@ class HardwareParsingTest : public CPPUNIT_NS :: TestFixture
   public:
   void setUp();
   void tearDown();
-  void testTicksParsingTest(const std::string& input, const std::string& dateTime, unsigned int counterValue,
+  void ticksParsingTest(const std::string& input, const std::string& dateTime, unsigned int counterValue,
       float longitude, float latitude, short altitude,
-      unsigned short numberOfSatellites, const std::string& gpsStatus);
+      unsigned short numberOfSatellites, const std::string& gpsStatus, const std::string& firmwareVersion);
 
   //! tests
 
