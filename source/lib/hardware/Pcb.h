@@ -39,7 +39,7 @@ namespace blitzortung {
       private:
 
 	//! firmware version of controller
-	unsigned short firmwareVersion_;
+	std::string firmwareVersion_;
 
 	//! logger for objects of this class
 	mutable Logger logger_;
@@ -52,7 +52,7 @@ namespace blitzortung {
       public:
 
 	//! constructor for base class
-	Pcb(comm::Base&, gps::Base&, unsigned short firmwareVersion=0);
+	Pcb(comm::Base&, gps::Base&, const std::string& firmwareVersion="");
 
 	//! destructor
 	virtual ~Pcb();

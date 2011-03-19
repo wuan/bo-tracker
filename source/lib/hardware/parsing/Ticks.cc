@@ -23,6 +23,7 @@ namespace blitzortung {
 
 	unsigned int index = 1;
 	if (fields[0] == "BS") {
+	  // BS,2370CF,A,160540,190311,4808.1291,N,01132.6191,E,525.0,06,27b
 	    counterIndex = index++;
 	    gpsStatusIndex =  index++;
 	    timeIndex = index++;
@@ -32,7 +33,6 @@ namespace blitzortung {
 	    longitudeIndex = index++;
 	    longitudeHemisphereIndex = index++;
 	    altitudeIndex = index++;
-	    index++;
 	    numberOfSatellitesIndex = index++;
 	    firmwareVersionIndex = index++;
 	    valid_ = true;
@@ -94,11 +94,12 @@ namespace blitzortung {
 	  }
 
 	  if (firmwareVersionIndex > 0) {
-	    firmwareVersion_ = parseInt(fields[firmwareVersionIndex]);
+	    firmwareVersion_ = fields[firmwareVersionIndex];
 	  } else {
-	    firmwareVersion_ = 0;
+	    firmwareVersion_ = "";
 	  }
 	}
+
       }
 
       unsigned short Ticks::getNumberOfSatellites() const {
@@ -125,7 +126,7 @@ namespace blitzortung {
 	return dateTime_;
       }
 
-      unsigned short Ticks::getFirmwareVersion() const {
+      const std::string& Ticks::getFirmwareVersion() const {
 	return firmwareVersion_;
       }
 

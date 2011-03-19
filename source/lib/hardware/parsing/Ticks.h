@@ -38,7 +38,7 @@ namespace blitzortung {
 	  unsigned short numberOfSatellites_;
 
 	  //! controller firmware version
-	  unsigned short firmwareVersion_;
+	  std::string firmwareVersion_;
 
 	  //! logger for this class
 	  mutable Logger logger_;
@@ -70,7 +70,7 @@ namespace blitzortung {
 	  const std::string& getDateTime() const;
 
 	  //! get firmware version
-	  unsigned short getFirmwareVersion() const;
+	  const std::string& getFirmwareVersion() const;
       };
 
     }
