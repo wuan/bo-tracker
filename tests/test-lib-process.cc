@@ -3,9 +3,6 @@
 
 #include "hardware/Pcb.h"
 
-#include "hardware/comm/Dummy.h"
-#include "hardware/gps/Sirf.h"
-
 #include "data/MEvent.h"
 
 #include "Process.h"

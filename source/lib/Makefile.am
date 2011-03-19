@@ -31,6 +31,7 @@ libblitzortung_la_SOURCES = \
 	exception/Base.h exception/Base.cc \
 	\
 	hardware/gps/Base.h hardware/gps/Base.cc \
+	hardware/gps/Dummy.h hardware/gps/Dummy.cc \
 	hardware/gps/Sirf.h hardware/gps/Sirf.cc \
 	hardware/gps/Garmin.h hardware/gps/Garmin.cc \
 	hardware/gps/Sjn.h hardware/gps/Sjn.cc \

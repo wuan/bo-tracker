@@ -24,7 +24,7 @@ class HardwareParsingTest : public CPPUNIT_NS :: TestFixture
       float longitude, float latitude, short altitude,
       unsigned short numberOfSatellites, const std::string& gpsStatus, const std::string& firmwareVersion);
   void samplesParsingTest(const std::string& input, bo::hardware::gps::Base& gps,
-      unsigned int counterValue, bo::data::Format format);
+      unsigned int counterValue, bo::data::Format format, const std::string& rawData);
 
   //! tests
 

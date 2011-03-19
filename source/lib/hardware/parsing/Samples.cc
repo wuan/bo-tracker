@@ -14,7 +14,8 @@ namespace blitzortung {
 	pt::time_duration sampleDt;
 
 	// the counter value is always at the second position
-	eventtime = gps.getTime(parseHex(fields[1]));
+	counter_ = parseHex(fields[1]);
+	eventtime = gps.getTime(counter_);
 
 	if (fields[0] == "BLSIG") {
 	  if (fields.size() > 3) {

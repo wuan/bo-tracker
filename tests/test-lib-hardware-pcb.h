@@ -15,7 +15,7 @@ class HardwareTest : public CPPUNIT_NS :: TestFixture
 
   private:
 
-  void run(bo::hardware::comm::Base& comm);
+  void run(bo::hardware::comm::Base& comm, unsigned int excpectedSamples);
 
   public:
   void setUp();
