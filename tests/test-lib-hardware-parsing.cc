@@ -3,6 +3,7 @@
 
 #include <cmath>
 
+#include "hardware/comm/Dummy.h"
 #include "hardware/gps/Sirf.h"
 #include "hardware/parsing/Ticks.h"
 #include "hardware/parsing/Samples.h"
@@ -62,7 +63,6 @@ void HardwareParsingTest::testTicksParsing() {
 }
 
 void HardwareParsingTest::testTicksParsingF25() {
-  std::cout << "testTicksParsingf25\n";
   ticksParsingTest("BS,11C2CC,A,084638,200311,4808.1313,N,01132.6202,E,532.8,09,27b",
       pt::ptime(gr::date(2011,3,20),pt::time_duration(8,46,38)),
       11240749,
@@ -76,7 +76,7 @@ void HardwareParsingTest::testTicksParsingF25() {
       0, "A", "27b");
 }
 
-void HardwareParsingTest::samplesParsingTest(const std::string& input, bo::hardware::gps::Base& gps, unsigned int counterValue, bo::data::Format& format, const::std::string& rawData) {
+void HardwareParsingTest::samplesParsingTest(const std::string& input, bo::hardware::gps::Base& gps, unsigned int counterValue, bo::data::Format format) {
   std::vector<std::string> fields;
 
   bo::util::String::split(input, fields, ",");
@@ -86,7 +86,7 @@ void HardwareParsingTest::samplesParsingTest(const std::string& input, bo::hardw
   CPPUNIT_ASSERT_EQUAL(counterValue, samplesParser.getCounterValue());
   bo::data::Waveform::AP waveform = samplesParser.getWaveform();
   CPPUNIT_ASSERT_EQUAL(format, *(waveform->getArray().getFormat()));
-  CPPUNIT_ASSERT_EQUAL(rawData, samplesParser.getRawData());
+  CPPUNIT_ASSERT_EQUAL(input, samplesParser.getRawData());
 }
 
 void HardwareParsingTest::testSamplesParsing() {
@@ -95,10 +95,11 @@ void HardwareParsingTest::testSamplesParsing() {
   bo::util::String::split("BS,37E912,A,084639,200311,4808.1313,N,01132.6201,E,532.9,09,27b", fields, ",");
   bo::hardware::parsing::Ticks ticksParser(fields);
   
-  bo::hardware::gps::Sirf gps;
+  bo::hardware::comm::Dummy comm;
+  bo::hardware::gps::Sirf gps(comm);
   gps.set(ticksParser);
   
-  testSamplesParsing("BLSIG,F133E6,CF4,860", gps);
+  samplesParsingTest("BLSIG,F133E6,CF4,860", gps, 1000, bo::data::Format(12, 2, 1));
   //"BLSIG,F1341D,450,77C");
 
   //"BLSEQ,F67E15,667E667D6A7E707F787F817F887F8C808F80907F8F809381968191808A7F847F7F7F737E647D587D507D487B467B4D7C587C647C747D887F9780A181A983AF84B084AD84AA83A782A0819A80957F907F8A7D847E807E7C7D777B747C727C727B717B717D727F737F75807682778279827A817A817B807C7E7C7C7A7B797B777A"
