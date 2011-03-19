@@ -11,7 +11,7 @@
 namespace blitzortung {
   namespace hardware {
 
-    Pcb::Pcb(comm::Base& comm, gps::Base& gps, unsigned short firmwareVersion) :
+    Pcb::Pcb(comm::Base& comm, gps::Base& gps, const std::string& firmwareVersion) :
       comm_(comm),
       gps_(gps),
       firmwareVersion_(firmwareVersion),
@@ -50,7 +50,7 @@ namespace blitzortung {
 
 	  gps_.set(ticksParser);
 
-	  if (ticksParser.getFirmwareVersion() > 0)
+	  if (ticksParser.getFirmwareVersion() != "")
 	    firmwareVersion_ = ticksParser.getFirmwareVersion();
 
 	  if (lastSampleCreated_.is_not_a_date_time()) {
@@ -66,11 +66,15 @@ namespace blitzortung {
 	} else {
 	  parsing::Samples samplesParser(fields, gps_);
 
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "read() parse samples";
+
 	  if (samplesParser.isValid()) { 
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "read() SampleParser is valid";
 
-	    logger_.infoStream() << "read() set lastSampleCreated to " << gps_.getTime();
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "read() set lastSampleCreated to " << gps_.getTime();
 	    lastSampleCreated_ = gps_.getTime();
 	    return createSample(samplesParser);
 	  } else {
@@ -129,10 +133,8 @@ namespace blitzortung {
 	rawData.append(VERSION);
 	rawData.append(" ");
 
-	if (firmwareVersion_ > 0) {
-	  std::ostringstream oss;
-	  oss << firmwareVersion_;
-	  rawData.append(oss.str());
+	if (firmwareVersion_ != "") {
+	  rawData.append(firmwareVersion_);
 	} else {
 	  rawData.append("-");
 	}
