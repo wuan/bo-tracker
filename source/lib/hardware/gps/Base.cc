@@ -11,6 +11,7 @@ namespace blitzortung {
       Base::Base(comm::Base& communication) :
 	communication_(communication),
 	satelliteCount_(data::Base::BUFFERSIZE),
+	status_(0),
 	logger_("hardware.gps.Base")
       {
       }
