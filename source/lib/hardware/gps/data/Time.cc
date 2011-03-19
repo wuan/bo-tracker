@@ -31,7 +31,7 @@ namespace blitzortung {
 	    logger_.debugStream() << "setSecond() " << second_ << " counter difference: " << counterTicksElapsed;
 
 	  if (ignoreCounter_ <= 0) {
-	    // TODO this is a temporary fix to avoid problems introduce by bad counter values
+	    // TODO this is a temporary fix to avoid problems introduced by bad counter values
 	    if (counterTicksElapsed > 2400000 && counterTicksElapsed < 2600000) {
 	      counterTicksPerSecond_.add(counterTicksElapsed);
 	    } else {
