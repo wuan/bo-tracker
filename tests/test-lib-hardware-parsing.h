@@ -24,6 +24,7 @@ class HardwareParsingTest : public CPPUNIT_NS :: TestFixture
   //! tests
 
   void testTicksParsing();
+  void testTicksParsingF25();
   void testSamplesParsing();
 };
 

@@ -56,6 +56,9 @@ namespace blitzortung {
 
   void DataThread::operator()() {
 
+    if (logger_.isInfoEnabled())
+      logger_.infoStream() << "() started";
+
     while (true) {
       boost::xtime xt;
       boost::xtime_get(&xt, boost::TIME_UTC);
@@ -125,5 +128,8 @@ namespace blitzortung {
       } while (sendAgain);
 
     }
+
+    if (logger_.isInfoEnabled())
+      logger_.infoStream() << "() terminated";
   }
 }

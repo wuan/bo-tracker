@@ -415,7 +415,6 @@ if options.mode == "histogram":
 
 elif options.mode == "data":
     timeInterval = TimeRange(now, delta)
-    print timeInterval
     data = Data(files, timeInterval)
     data.list()
 
