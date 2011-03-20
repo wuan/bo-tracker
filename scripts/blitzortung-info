@@ -127,13 +127,17 @@ $NICE blitzortung-statistics --mode=residual --time-delta=15 --data-path=$RAWPAT
 $NICE blitzortung-statistics --mode=residual --time-delta=120 --data-path=$RAWPATH > $TMPDATA
 
 $NICE gnuplot <<***
+bin(x, s) = s*floor(x/s+0.5)
+binwidth = 5.0
+
 set term png $FONTSIZE size $PICXSIZE,$PICYSIZE
 set output "$TARGETDIR/residuals.png"
 set title "last 2 hours residual times"
 set xlabel "residual time [us]"
 set ylabel "stroke - sensor distance [km]"
 set grid front
-plot 0 lt -2 not, "$TMPDATA" u 3:4 not w p lt $OWNSTROKESCOLOR
+
+plot 0 lt -2 not, "$TMPDATA" u (bin(\$3,binwidth)):(1/binwidth) not smooth frequency w boxes lt $OWNSTROKESCOLOR fs solid 0.5
 ***
 
 rm -rf $TMPDATA

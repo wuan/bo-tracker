@@ -1,8 +1,10 @@
 #include <log4cpp/OstreamAppender.hh>
 #include <log4cpp/FileAppender.hh>
-#include <log4cpp/BasicLayout.hh>
+#include <log4cpp/PatternLayout.hh>
 
 #include "Logger.h"
+
+#define LOGGER_LAYOUT "%d{%d.%m.%Y %H:%M:%S.%l} %p %c %x: %m%n"
 
 namespace blitzortung {
 
@@ -14,12 +16,12 @@ namespace blitzortung {
 
       // create and set appender to standard output
       log4cpp::Appender* app = new log4cpp::OstreamAppender("Appender", &std::cout);
-      //log4cpp::Appender* app = new log4cpp::FileAppender("Appender", "blitzortung.log");
       category_.setAppender(app);
 
-      // create and set basic layout
-      log4cpp::Layout* layout = new log4cpp::BasicLayout();
-      app->setLayout(layout);
+      // create and set layout
+      log4cpp::PatternLayout* layout = new log4cpp::PatternLayout();
+      layout->setConversionPattern(LOGGER_LAYOUT);
+      app->setLayout((log4cpp::Layout*)layout);
 
       //category_.setPriority(log4cpp::Priority::NOTICE);
     }
@@ -38,9 +40,10 @@ namespace blitzortung {
 
     log4cpp::Appender* app = new log4cpp::FileAppender("FileAppender", logFileName);
 
-    // create and set basic layout
-    log4cpp::Layout* layout = new log4cpp::BasicLayout();
-    app->setLayout(layout);
+    // create and set layout
+      log4cpp::PatternLayout* layout = new log4cpp::PatternLayout();
+      layout->setConversionPattern(LOGGER_LAYOUT);
+      app->setLayout((log4cpp::Layout*)layout);
 
     rootCategory.setAppender(app);
   }
