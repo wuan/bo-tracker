@@ -17,7 +17,7 @@ void HardwareParsingTest::setUp() {
 void HardwareParsingTest::tearDown() {
 }
 
-void HardwareParsingTest::ticksParsingTest(const std::string& input, const std::string& dateTime, unsigned int counterValue, float longitude, float latitude, short altitude, unsigned short numberOfSatellites, const std::string& gpsStatus, const std::string& firmwareVersion) {
+void HardwareParsingTest::ticksParsingTest(const std::string& input, const pt::ptime& dateTime, unsigned int counterValue, float longitude, float latitude, short altitude, unsigned short numberOfSatellites, const std::string& gpsStatus, const std::string& firmwareVersion) {
   std::vector<std::string> fields;
 
   bo::util::String::split(input, fields, ",");
@@ -36,24 +36,24 @@ void HardwareParsingTest::ticksParsingTest(const std::string& input, const std::
 
 void HardwareParsingTest::testTicksParsing() {
   ticksParsingTest("BLSEC,185630,190810,A,4729.2852,N,01904.2683,E,AB852D",
-      "190810 185630",
+      pt::ptime(gr::date(2010,8,19),pt::time_duration(18,56,30)),
       11240749,
       19.0711, 47.4881, 0,
       0, "A", "");
   ticksParsingTest("BLSEC,185631,190810,V,4729.2856,S,01904.2688,W,D1ABEA",
-      "190810 185631",
+      pt::ptime(gr::date(2010,8,19),pt::time_duration(18,56,31)),
       13741034,
       -19.0711, -47.4881, 0,
       0, "V", "");
 
   ticksParsingTest("BLSEC,0833CC,A,131531,200810,4808.1189,N,01132.6299,E,576.5000,M,06",
-      "200810 131531",
+      pt::ptime(gr::date(2010,8,20),pt::time_duration(13,15,31)),
       537548,
       11.5438, 48.1353, 576,
       6, "A", "");
 
   ticksParsingTest("BLSEC,2E59FE,V,131532,200810,4808.1187,N,01132.6301,E,577.2000,M,06",
-      "200810 131532",
+      pt::ptime(gr::date(2010,8,20),pt::time_duration(13,15,32)),
       3037694,
       11.5438, 48.1353, 577,
       6, "V", "");
@@ -62,13 +62,13 @@ void HardwareParsingTest::testTicksParsing() {
 void HardwareParsingTest::testTicksParsingF25() {
   std::cout << "testTicksParsingf25\n";
   ticksParsingTest("BS,11C2CC,A,084638,200311,4808.1313,N,01132.6202,E,532.8,09,27b",
-      "200311 084638",
+      pt::ptime(gr::date(2011,3,20),pt::time_duration(8,46,38)),
       11240749,
       19.0711, 47.4881, 0,
       0, "A", "27b");
 
   ticksParsingTest("BS,37E912,A,084639,200311,4808.1313,N,01132.6201,E,532.9,09,27b",
-      "200311 084638",
+      pt::ptime(gr::date(2011,3,20),pt::time_duration(8,46,38)),
       11240749,
       19.0711, 47.4881, 0,
       0, "A", "27b");

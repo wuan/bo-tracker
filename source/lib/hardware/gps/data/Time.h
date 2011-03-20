@@ -15,8 +15,6 @@ namespace blitzortung {
 
 	class Time : public Base {
 	  private:
-	    //! stringstream used for date time parsing
-	    std::istringstream dateTimeInput_;
 
 	    //! timestamp of actual second
 	    pt::ptime second_;
@@ -40,7 +38,7 @@ namespace blitzortung {
 	    Time();
 	    virtual ~Time();
 
-	    void setSecond(const std::string &timeString, int counter);
+	    void setSecond(const pt::ptime& dateTime, int counter);
 
 	    const pt::ptime& getTime() const;
 

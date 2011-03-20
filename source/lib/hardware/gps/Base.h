@@ -41,14 +41,14 @@ namespace blitzortung {
 	  //! gps location data object
 	  data::Location location_;
 
-	  //! gps status character
-	  char status_;
-
 	  //! date when gps was last initialized
 	  gr::date dateInitialized_;
 
 	  //! ring buffer to average satellite count values
 	  util::RingBuffer<unsigned short> satelliteCount_;
+
+	  //! gps status character
+	  char status_;
 
 	  //! logger for class
 	  mutable Logger logger_;

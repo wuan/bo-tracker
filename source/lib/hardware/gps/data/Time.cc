@@ -11,9 +11,6 @@ namespace blitzortung {
 	  ignoreCounter_(1),
 	  logger_("hardware.gps.data.Time")
 	{
-	  pt::time_input_facet *facet = new pt::time_input_facet();
-	  facet->format("%d%m%y %H%M%S");
-	  dateTimeInput_.imbue(std::locale(std::locale::classic(), facet));
 
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "initialized";
@@ -24,9 +21,8 @@ namespace blitzortung {
 	    logger_.debugStream() << "deleted";
 	}
 
-	void Time::setSecond(const std::string &timeString, int counter) {
-	  dateTimeInput_.str(timeString);
-	  dateTimeInput_ >> second_;
+	void Time::setSecond(const pt::ptime& dateTime, int counter) {
+	  second_ = dateTime;
 
 	  // counter difference between calls is number of ticks per second
 	  int counterTicksElapsed = getCounterDifference(counter);

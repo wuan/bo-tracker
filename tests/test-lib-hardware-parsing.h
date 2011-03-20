@@ -18,7 +18,7 @@ class HardwareParsingTest : public CPPUNIT_NS :: TestFixture
   public:
   void setUp();
   void tearDown();
-  void ticksParsingTest(const std::string& input, const std::string& dateTime, unsigned int counterValue,
+  void ticksParsingTest(const std::string& input, const pt::ptime& dateTime, unsigned int counterValue,
       float longitude, float latitude, short altitude,
       unsigned short numberOfSatellites, const std::string& gpsStatus, const std::string& firmwareVersion);
 
