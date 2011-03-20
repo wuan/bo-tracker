@@ -45,8 +45,8 @@ namespace blitzortung {
 	parsing::Ticks ticksParser(fields);
 
 	if (ticksParser.isValid()) {
-	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "read() TicksParser is valid";
+	  //if (logger_.isDebugEnabled())
+	  //  logger_.debugStream() << "read() TicksParser is valid";
 
 	  gps_.set(ticksParser);
 
@@ -70,8 +70,8 @@ namespace blitzortung {
 	    logger_.debugStream() << "read() parse samples";
 
 	  if (samplesParser.isValid()) { 
-	    if (logger_.isDebugEnabled())
-	      logger_.debugStream() << "read() SampleParser is valid";
+	    //if (logger_.isDebugEnabled())
+	    //  logger_.debugStream() << "read() SampleParser is valid";
 
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "read() set lastSampleCreated to " << gps_.getTime();
@@ -83,8 +83,8 @@ namespace blitzortung {
 	}
       }
 
-      if (logger_.isDebugEnabled())
-	logger_.debug("read() returning empty event");
+      //if (logger_.isDebugEnabled())
+      //logger_.debug("read() returning empty event");
 
       return data::Event::AP();
     }

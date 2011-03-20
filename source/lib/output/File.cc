@@ -25,6 +25,10 @@ namespace blitzortung {
 	if (logger_.isInfoEnabled())
 	  logger_.infoStream() << "output() append " << events.size() << " events to file " << outputFile_;
 
+        if (logger_.isDebugEnabled()) {
+	  for (data::Event::CVI event = events.begin(); event != events.end(); event++)
+	    logger_.debugStream() << "output()  " << *event;
+	}
 	events.appendToFile(outputFile_);
       }
     }
