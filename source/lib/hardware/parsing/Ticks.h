@@ -20,7 +20,7 @@ namespace blitzortung {
 	private:
 
 	  //! combined date time string
-	  std::string dateTime_;
+	  pt::ptime dateTime_;
 
 	  //! gps status character
 	  std::string status_;
@@ -67,7 +67,7 @@ namespace blitzortung {
 	  unsigned short getNumberOfSatellites() const;
 
 	  //! get timestamp from counter value
-	  const std::string& getDateTime() const;
+	  const pt::ptime& getDateTime() const;
 
 	  //! get firmware version
 	  const std::string& getFirmwareVersion() const;
