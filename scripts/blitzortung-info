@@ -134,8 +134,9 @@ set term png $FONTSIZE size $PICXSIZE,$PICYSIZE
 set output "$TARGETDIR/residuals.png"
 set title "last 2 hours residual times"
 set xlabel "residual time [us]"
-set ylabel "stroke - sensor distance [km]"
+set ylabel "count"
 set grid front
+set boxwidth 5
 
 plot 0 lt -2 not, "$TMPDATA" u (bin(\$3,binwidth)):(1/binwidth) not smooth frequency w boxes lt $OWNSTROKESCOLOR fs solid 0.5
 ***
@@ -151,6 +152,9 @@ ACTUALSAMPLES=$($NICE blitzortung-statistics --mode=data | wc -l)
 
 echo "$ENDTIME $ACTUALSTROKES $ACTUALPARTICIPATEDSTROKES $ACTUALSAMPLES" >> $STATISTICS_FILE
 
+STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -1week)
+ENDTIME=$(date +"%Y-%m-%d %H:%M:00")
+
 $NICE gnuplot <<***
 set term png $FONTSIZE size $PICXSIZE,$PICYSIZE
 set output "$TARGETDIR/statistics.png"
@@ -158,10 +162,11 @@ set title "participation statistics"
 set xdata time
 set timefmt "%Y-%m-%d %H:%M:%S"
 set xlabel "UTC time"
-set ylabel "counts"
+set ylabel "counts per quarter hour"
+set xr ["$STARTTIME":"$ENDTIME"]
 set grid front
 plot 0 lt -2 not, \
-       "$STATISTICS_FILE" u 1:5 ti "local events" w l lt $OWNEVENTSCOLOR lw 2, \
+       "<tail -672 $STATISTICS_FILE" u 1:5 ti "local events" w l lt $OWNEVENTSCOLOR lw 2, \
        "" u 1:3 ti "strokes" w l lt $STROKESCOLOR lw 2, \
        "" u 1:4 ti "participated strokes" w l lt $OWNSTROKESCOLOR lw 2
 ***
