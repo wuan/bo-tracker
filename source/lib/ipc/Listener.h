@@ -3,10 +3,8 @@
 
 #include <sys/socket.h>
 
-#include <boost/thread/thread.hpp>
-#include <boost/thread/condition.hpp>
-
 #include "Logger.h"
+#include "ipc/server/factory/Base.h"
 
 namespace blitzortung {
   namespace ipc {
@@ -21,6 +19,9 @@ namespace blitzortung {
 	sockaddr* sockaddr_;
 
 	socklen_t sockaddrSize_;
+	
+	// reference to server factory object	
+	const ipc::server::factory::Base& serverFactory_;
 
 	//! logger for this class
 	mutable Logger logger_;
@@ -28,7 +29,7 @@ namespace blitzortung {
       public:
 
 	//! construct socket
-	Listener(const unsigned int socket, sockaddr* sockaddr, socklen_t sockaddrSize);
+	Listener(const unsigned int socket, sockaddr* sockaddr, socklen_t sockaddrSize, const ipc::server::factory::Base& serverFactory);
 
 	//! listener thread procedure
 	void operator ()();

@@ -8,7 +8,8 @@ namespace blitzortung {
   namespace hardware {
     namespace comm {
 
-      Dummy::Dummy() :
+      Dummy::Dummy(bool keepOpen) :
+	keepOpen_(keepOpen),
 	logger_("hardware.comm.Dummy")
       {
 	readPosition_ = 0;
@@ -18,6 +19,10 @@ namespace blitzortung {
       }
 
       bool Dummy::isOpen() const {
+	return isAvailable() || keepOpen_;
+      }
+
+      bool Dummy::isAvailable() const {
 	return readPosition_ < dummyData_.size();
       }
 
@@ -30,9 +35,10 @@ namespace blitzortung {
       }
 
       std::string Dummy::receive() {
-	if (isOpen())
+	if (isAvailable())
 	  return dummyData_[readPosition_++];
 
+	sleep(1);
 	return "";
       }
 

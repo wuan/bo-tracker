@@ -4,6 +4,7 @@
 #include <boost/thread/thread.hpp>
 
 #include "Logger.h"
+#include "ipc/server/factory/Base.h"
 
 namespace blitzortung {
   namespace ipc {
@@ -15,6 +16,7 @@ namespace blitzortung {
 	//! generated ѕocket
 	unsigned int socket_;
 
+	//! name of socket file	
 	const std::string socketFileName_;
 
 	//! logger for this class
@@ -23,7 +25,7 @@ namespace blitzortung {
       public:
 
 	//! construct socket
-	UnixSocket(const std::string& socketFileName);
+	UnixSocket(const std::string& socketFileName, const ipc::server::factory::Base& serverFactory);
 
 	//! destruct socket
 	virtual ~UnixSocket();

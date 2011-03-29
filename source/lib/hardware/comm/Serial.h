@@ -28,7 +28,7 @@ namespace blitzortung {
 	public:
 
 	  //! Constructor
-	  Serial(SerialPort &);
+	  Serial(const SerialPort &);
 
 	  //! Destructor
 	  virtual ~Serial();
