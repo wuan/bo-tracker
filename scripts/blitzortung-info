@@ -138,7 +138,7 @@ set ylabel "count"
 set grid front
 set boxwidth 5
 
-plot 0 lt -2 not, "$TMPDATA" u (bin(\$3,binwidth)):(1/binwidth) not smooth frequency w boxes lt $OWNSTROKESCOLOR fs solid 0.5
+plot 0 lt -2 not, "$TMPDATA" u (bin(\$3,binwidth)):(1) not smooth frequency w boxes lt $OWNSTROKESCOLOR fs solid 0.5
 ***
 
 rm -rf $TMPDATA

@@ -49,6 +49,7 @@ namespace blitzortung {
       }
 
       SerialPort::~SerialPort() {
+	logger_.infoStream() << "delete port with fd " << serialFd_;
 	if (serialFd_ >= 0) {
 	  close(serialFd_);
 	}
@@ -85,7 +86,7 @@ namespace blitzortung {
 
 	  default:
 	    std::ostringstream oss;
-	    oss << "blitzortung::hardware::comm::SerialPort::setBaudRate() unsupported Baud-Rate " << baudRate;
+	    oss << "blitzortung::hardware::comm::SerialPort::setBaudRate() " << portName_ << " unsupported Baud-Rate " << baudRate;
 	    throw exception::Base(oss.str());
 	}
 
@@ -116,7 +117,7 @@ namespace blitzortung {
 
 	  default:
 	    std::ostringstream oss;
-	    oss << "blitzortung::hardware::comm::SerialPort::getBaudRate() unsupported Baud-Rate-Bit: " << baudBit;
+	    oss << "blitzortung::hardware::comm::SerialPort::getBaudRate() " << portName_ << " unsupported Baud-Rate-Bit: " << baudBit;
 	    throw exception::Base(oss.str());
 	}
       }

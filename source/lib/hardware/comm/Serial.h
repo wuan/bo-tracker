@@ -14,7 +14,7 @@ namespace blitzortung {
 
 	private:
 	  //! serial port object
-	  SerialPort serialPort_;
+	  SerialPort& serialPort_;
 
 	  //! logger for this class
 	  mutable Logger logger_;
@@ -28,7 +28,7 @@ namespace blitzortung {
 	public:
 
 	  //! Constructor
-	  Serial(const SerialPort &);
+	  Serial(SerialPort &);
 
 	  //! Destructor
 	  virtual ~Serial();
