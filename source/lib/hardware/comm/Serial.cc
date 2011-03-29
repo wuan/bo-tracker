@@ -8,7 +8,7 @@ namespace blitzortung {
   namespace hardware {
     namespace comm {
 
-      Serial::Serial(const SerialPort& port) :
+      Serial::Serial(SerialPort& port) :
 	serialPort_(port),
 	logger_("hardware.comm.Serial")
       {

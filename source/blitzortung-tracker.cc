@@ -135,6 +135,7 @@ int main(int argc, char **argv) {
   // create serial port object
 
   bo::hardware::comm::Base::AP comm;
+  bo::hardware::comm::SerialPort::AP serialPort;
 
   if (serialPortName == "dummy") {
     comm = bo::hardware::comm::Base::AP(new bo::hardware::comm::Dummy(true));
@@ -148,7 +149,8 @@ int main(int argc, char **argv) {
     dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,F6A86F,A,084644,200311,4648.1314,N,01332.6203,E,532.7,09,27b");
     dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,1CCEB4,A,084645,200311,4648.1314,N,01332.6203,E,532.7,09,27b");
   } else {
-    comm = bo::hardware::comm::Base::AP(new bo::hardware::comm::Serial(bo::hardware::comm::SerialPort(serialPortName, serialBaudRate)));
+    serialPort = bo::hardware::comm::SerialPort::AP(new bo::hardware::comm::SerialPort(serialPortName, serialBaudRate));
+    comm = bo::hardware::comm::Base::AP(new bo::hardware::comm::Serial(*serialPort));
   }
 
   // select type of gps hardware

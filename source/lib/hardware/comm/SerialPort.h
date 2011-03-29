@@ -2,6 +2,7 @@
 #define BLITZORTUNG_HARDWARE_SERIALPORT_H_
 
 #include <string>
+#include <boost/noncopyable.hpp>
 
 #include "Logger.h"
 
@@ -9,7 +10,12 @@ namespace blitzortung {
   namespace hardware {
     namespace comm {
 
-      class SerialPort {
+      class SerialPort :  boost::noncopyable {
+
+	public:
+
+	  typedef std::auto_ptr<SerialPort> AP;
+
 	private:
 
 	  //! serial port device file path
@@ -25,7 +31,7 @@ namespace blitzortung {
 	  int serialFd_;
 
 	  //! class logger
-	  Logger logger_;
+	  mutable Logger logger_;
 
 	public:
 	  SerialPort(const std::string &port="/dev/ttyS0", const unsigned int baudRate = 19200);
