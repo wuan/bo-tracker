@@ -3,7 +3,9 @@ AUTOMAKE_OPTIONS = subdir-objects
 AM_LDFLAGS = \
 	-lboost_regex \
 	-lboost_thread \
-	-llog4cpp
+	-llog4cpp \
+	-ljson \
+	$(NULL)
 
 lib_LTLIBRARIES = libblitzortung.la
 
@@ -11,6 +13,7 @@ libblitzortung_la_LDFLAGS = \
 	-lboost_thread \
 	-lboost_regex \
 	-llog4cpp \
+	-ljson \
 	-release ${VERSION} \
 	-version_info ${LIBRARY_VERSION} \
 	-no undefined
@@ -68,7 +71,10 @@ libblitzortung_la_SOURCES = \
 	\
 	ipc/UnixSocket.h ipc/UnixSocket.cc \
 	ipc/Listener.h ipc/Listener.cc \
-	ipc/Server.h ipc/Server.cc \
+	ipc/server/Base.h ipc/server/Base.cc \
+	ipc/server/factory/Base.h ipc/server/factory/Base.cc \
+	ipc/server/Json.h ipc/server/Json.cc \
+	ipc/server/factory/Json.h ipc/server/factory/Json.cc \
 	\
 	Queue.h Queue.cc \
 	\

@@ -3,16 +3,17 @@
 
 #include "data/Event.h"
 #include "ipc/Listener.h"
-#include "ipc/Server.h"
+#include "ipc/server/factory/Base.h"
 
 namespace blitzortung {
   namespace ipc {
 
-    Listener::Listener(const unsigned int socket, sockaddr* sockaddr, socklen_t sockaddrSize) :
+    Listener::Listener(const unsigned int socket, sockaddr* sockaddr, socklen_t sockaddrSize, const ipc::server::factory::Base& serverFactory) :
       socket_(socket),
       sockaddr_(sockaddr),
       sockaddrSize_(sockaddrSize),
-      logger_("Listener")
+      serverFactory_(serverFactory),
+      logger_("ipc.Listener")
     {
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "created for socket " << socket_;
@@ -36,8 +37,7 @@ namespace blitzortung {
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "() start server";
 
-	  Server server(connectionSocket);
-	  boost::thread thread(server);
+	  boost::thread thread(serverFactory_.createServerThread(connectionSocket));
 	}
 
       }

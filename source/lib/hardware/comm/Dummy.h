@@ -1,5 +1,5 @@
-#ifndef BLITZORTUNG_HARDWARE_COMM_SERIAL_H_
-#define BLITZORTUNG_HARDWARE_COMM_SERIAL_H_
+#ifndef BLITZORTUNG_HARDWARE_COMM_DUMMY_H_
+#define BLITZORTUNG_HARDWARE_COMM_DUMMY_H_
 
 #include <string>
 
@@ -19,7 +19,10 @@ namespace blitzortung {
       class Dummy : public Base {
 
 	private:
-	
+
+	  //! should the interface kept open even if no data is available
+	  bool keepOpen_;
+
 	  //! array for storing dummy data
 	  std::vector<std::string> dummyData_;
 
@@ -32,10 +35,13 @@ namespace blitzortung {
 	  //! logger for classA
 	  mutable Logger logger_;
 
+	  //! returns true if data is still available
+	  bool isAvailable() const;
+
 	public:
 
 	  //! Constructor
-	  Dummy();
+	  Dummy(bool keepOpen=false);
 
 	  //! Destructor
 	  virtual ~Dummy();

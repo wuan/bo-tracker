@@ -12,6 +12,10 @@ namespace blitzortung {
 
 	public:
 
+	  typedef std::auto_ptr<Base> AP;
+
+	public:
+
 	  //! Constructor
 	  Base();
 

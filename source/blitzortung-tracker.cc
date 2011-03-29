@@ -14,6 +14,7 @@
 #include "namespaces.h"
 #include "hardware/comm/SerialPort.h"
 #include "hardware/comm/Serial.h"
+#include "hardware/comm/Dummy.h"
 #include "hardware/gps/Garmin.h"
 #include "hardware/gps/Sirf.h"
 #include "hardware/gps/Sjn.h"
@@ -24,6 +25,8 @@
 #include "output/None.h"
 #include "util/RingBuffer.h"
 #include "exception/Base.h"
+#include "ipc/UnixSocket.h"
+#include "ipc/server/factory/Json.h"
 #include "Logger.h"
 
 //#include "ui/ui_blitzortung-tracker.h"
@@ -131,19 +134,33 @@ int main(int argc, char **argv) {
 
   // create serial port object
 
-  bo::hardware::comm::SerialPort serialPort(serialPortName, serialBaudRate);
-  bo::hardware::comm::Serial serial(serialPort);
+  bo::hardware::comm::Base::AP comm;
+
+  if (serialPortName == "dummy") {
+    comm = bo::hardware::comm::Base::AP(new bo::hardware::comm::Dummy(true));
+    comm->setBaudRate(serialBaudRate);
+    dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,11C2CC,A,084638,200311,4648.1313,N,01332.6202,E,532.8,09,27b");
+    dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,37E912,A,084639,200311,4648.1313,N,01332.6201,E,532.9,09,27b");
+    dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,5E0F58,A,084640,200311,4648.1312,N,01332.6201,E,532.9,09,27b");
+    dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,84359D,A,084641,200311,4648.1312,N,01332.6201,E,532.8,09,27b");
+    dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,AA5BE3,A,084642,200311,4648.1312,N,01332.6201,E,532.8,09,27b");
+    dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,D08229,A,084643,200311,4648.1313,N,01332.6202,E,532.8,09,27b");
+    dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,F6A86F,A,084644,200311,4648.1314,N,01332.6203,E,532.7,09,27b");
+    dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,1CCEB4,A,084645,200311,4648.1314,N,01332.6203,E,532.7,09,27b");
+  } else {
+    comm = bo::hardware::comm::Base::AP(new bo::hardware::comm::Serial(bo::hardware::comm::SerialPort(serialPortName, serialBaudRate)));
+  }
 
   // select type of gps hardware
 
   bo::hardware::gps::Base::AP gps;
 
   if (gpsType == "garmin") {
-    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Garmin(serial));
+    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Garmin(*comm));
   } else if (gpsType == "sirf") {
-    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Sirf(serial));
+    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Sirf(*comm));
   } else if (gpsType == "sjn") {
-    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Sjn(serial));
+    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Sjn(*comm));
   } else {
     std::ostringstream oss;
     oss << "invalid value of gps-type: '" << gpsType << "'";
@@ -155,7 +172,7 @@ int main(int argc, char **argv) {
 
 
   // create hardware driver object for blitzortung measurement hardware
-  bo::hardware::Pcb hardware(serial, *gps, firmwareVersion);
+  bo::hardware::Pcb hardware(*comm, *gps, firmwareVersion);
 
   //! set credentials/parameters for network connection
   bo::network::Creds creds;
@@ -173,6 +190,10 @@ int main(int argc, char **argv) {
   } else {
     output = bo::output::Base::AP(new bo::output::None());
   }
+
+  // enable unix domain socket for process information
+  bo::ipc::server::factory::Json jsonServerFactory(*gps);
+  bo::ipc::UnixSocket socket("/tmp/sockettest", jsonServerFactory);
 
   //! create object of network driver for event transmission
   bo::Process process(transfer, eventRateLimit, *output);

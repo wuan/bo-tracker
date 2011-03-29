@@ -6,7 +6,6 @@ bin_PROGRAMS = blitzortung-tracker \
 
 AM_CXXFLAGS = \
 	-I lib
-#	$(QTCORE_CFLAGS)
 
 AM_LDFLAGS = \
 	-lboost_program_options

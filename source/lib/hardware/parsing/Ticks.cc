@@ -85,7 +85,7 @@ namespace blitzortung {
 	  latitude_ = parseGpsCoord(fields[latitudeIndex], fields[latitudeHemisphereIndex]);
 
 	  if (altitudeIndex > 0) {
-	    altitude_ = parseFloat(fields[altitudeIndex]);
+	    altitude_ = round(parseFloat(fields[altitudeIndex]));
 	  } else {
 	    altitude_ = 0;
 	  }

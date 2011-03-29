@@ -7,9 +7,9 @@
 namespace blitzortung {
   namespace ipc {
 
-    UnixSocket::UnixSocket(const std::string& socketFileName) :
-      socketFileName_(socketFileName), 
-      logger_("UnixSocket")
+    UnixSocket::UnixSocket(const std::string& socketFileName, const ipc::server::factory::Base& serverFactory) :
+      socketFileName_(socketFileName),
+      logger_("ipc.UnixSocket")
     {
       socket_ = socket(AF_UNIX, SOCK_STREAM, 0);
 
@@ -29,7 +29,7 @@ namespace blitzortung {
 
       bind(socket_, (struct sockaddr *)&sockaddr, addrlen);
 
-      Listener listener(socket_, (struct sockaddr*)&sockaddr, addrlen);
+      Listener listener(socket_, (struct sockaddr*)&sockaddr, addrlen, serverFactory);
 
       boost::thread thread(listener);
     }
