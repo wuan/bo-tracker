@@ -1,8 +1,12 @@
-blitzortung-tracker (0.9.3SNAPSHOT20110319193000) unstable; urgency=low
+blitzortung-tracker (0.9.3SNAPSHOT20110329184520) unstable; urgency=low
 
+  * added unix domain socket server with multithreaded listeners
+  * added server module to serve tracker information via JSON strings
+  * added dummy communication to run tracker without measurement hardware for tests
   * fixed sample rate for older firmware versions (< 27)
   * fixed tick parsing for recent firmware version
   * changing firmware version storage from integer to string
+  * minor fixeѕ
 
  -- Andreas Wuerl <awuerl@gmx.net>  Wed, 19 Mar 2011 19:21:23 +0100
 
