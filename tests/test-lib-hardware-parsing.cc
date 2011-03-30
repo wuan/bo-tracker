@@ -52,7 +52,7 @@ void HardwareParsingTest::testTicksParsing() {
   ticksParsingTest("BLSEC,0833CC,A,131531,200810,4808.1189,N,01132.6299,E,576.5000,M,06",
       pt::ptime(gr::date(2010,8,20),pt::time_duration(13,15,31)),
       537548,
-      11.5438, 48.1353, 576,
+      11.5438, 48.1353, 577,
       6, "A", "");
 
   ticksParsingTest("BLSEC,2E59FE,V,131532,200810,4808.1187,N,01132.6301,E,577.2000,M,06",
@@ -66,13 +66,13 @@ void HardwareParsingTest::testTicksParsingF25() {
   ticksParsingTest("BS,11C2CC,A,084638,200311,4808.1313,N,01132.6202,E,532.8,09,27b",
       pt::ptime(gr::date(2011,3,20),pt::time_duration(8,46,38)),
       1163980,
-      11.5436, 48.1355, 532,
+      11.5436, 48.1355, 533,
       9, "A", "27b");
 
   ticksParsingTest("BS,37E912,V,084639,200311,4808.1313,N,01132.6201,W,532.9,08,27b",
       pt::ptime(gr::date(2011,3,20),pt::time_duration(8,46,39)),
       3664146,
-      -11.5436, 48.1355, 532,
+      -11.5436, 48.1355, 533,
       8, "V", "27b");
 }
 

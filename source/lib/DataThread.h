@@ -16,9 +16,16 @@ namespace blitzortung {
 
   class DataThread {
 
+    public:
+
+      typedef util::RingBuffer<unsigned short> EventCountBuffer;
+
     private:
       //! reference to incoming sample data queue
       Queue<bo::data::Event>& sampleQueue_;
+
+      //! ring buffer for rate limiter
+      EventCountBuffer& eventCountBuffer_;
 
       //! network data transfer object
       network::transfer::Base& transfer_;
@@ -26,14 +33,11 @@ namespace blitzortung {
       //! vector of samples
       data::Events::P events_;
 
-      //! limit value of maximum events / second;
-      double eventRateLimit_;
-
       //! output object
       output::Base& output_;
 
-      //! ring buffer for rate limiter
-      util::RingBuffer<unsigned short> strokesPerSecond_;
+      //! limit value of maximum events / second;
+      double eventRateLimit_;
 
       //! logger for this class
       mutable Logger logger_;
@@ -47,7 +51,7 @@ namespace blitzortung {
     public:
 
       //! create network transfer object
-      DataThread(Queue<data::Event>& sampleQueue, network::transfer::Base& transfer, output::Base&);
+      DataThread(Queue<data::Event>& sampleQueue, EventCountBuffer& eventCountBuffer, network::transfer::Base& transfer, output::Base&);
 
       //! delete nework transfer object
       virtual ~DataThread();

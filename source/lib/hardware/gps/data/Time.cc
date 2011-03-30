@@ -75,9 +75,9 @@ namespace blitzortung {
 	}
 
 	double Time::getTickError() const {
-	  double counterTicksPerSecond = double(counterTicksPerSecond_.getSum()) / counterTicksPerSecond_.getActualSize();
+	  double counterTicksPerSecond = counterTicksPerSecond_.getAverage();
 
-	  return counterTicksPerSecond_.getStddev(); // / counterTicksPerSecond * 1e6;
+	  return counterTicksPerSecond_.getStddev() / counterTicksPerSecond * 1e6;
 	}
 
       }

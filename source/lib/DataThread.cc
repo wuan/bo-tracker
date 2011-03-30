@@ -4,12 +4,12 @@
 
 namespace blitzortung {
 
-  DataThread::DataThread(Queue<data::Event>& sampleQueue, network::transfer::Base& transfer, output::Base& output) :
+  DataThread::DataThread(Queue<data::Event>& sampleQueue, EventCountBuffer& eventCountBuffer, network::transfer::Base& transfer, output::Base& output) :
     sampleQueue_(sampleQueue),
+    eventCountBuffer_(eventCountBuffer),
     transfer_(transfer),
     events_(new data::Events()),
     output_(output),
-    strokesPerSecond_(60*60),
     logger_("DataThread")
   {
     eventRateLimit_ = 1.0;
@@ -30,8 +30,8 @@ namespace blitzortung {
   data::Events::AP DataThread::prepareData() {
     data::Events::AP deletedEvents(new data::Events());
 
-    double secondsElapsed = strokesPerSecond_.getActualSize();
-    double eventRate = double(strokesPerSecond_.getSum()) / secondsElapsed;
+    double secondsElapsed = eventCountBuffer_.getActualSize();
+    double eventRate = double(eventCountBuffer_.getSum()) / secondsElapsed;
 
     if (logger_.isInfoEnabled())
       logger_.infoStream() << "prepareData() " << events_->size() << " events (rate " << eventRate << " events/second)";
@@ -88,7 +88,7 @@ namespace blitzortung {
 	  events_->add(sampleQueue_.pop());
 	}
 
-        strokesPerSecond_.add(events_->size());
+        eventCountBuffer_.add(events_->size());
 
 	if (events_->size() > 0) {
 
@@ -132,4 +132,5 @@ namespace blitzortung {
     if (logger_.isInfoEnabled())
       logger_.infoStream() << "() terminated";
   }
+
 }

@@ -6,6 +6,7 @@
 
 #include "hardware/gps/Base.h"
 #include "ipc/server/Base.h"
+#include "Process.h"
 #include "Logger.h"
 
 namespace blitzortung {
@@ -15,6 +16,9 @@ namespace blitzortung {
       class Json : public Base {
 
 	private:
+
+	  //! process reference
+	  const Process& process_;
 
 	  //! gps hardware reference
 	  const hardware::gps::Base& gps_;
@@ -26,7 +30,7 @@ namespace blitzortung {
 
 	public:
 
-	  Json(const unsigned int socket, const hardware::gps::Base& gps);
+	  Json(const unsigned int socket, const Process& process, const hardware::gps::Base& gps);
 
       };
 
