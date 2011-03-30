@@ -90,6 +90,9 @@ namespace blitzortung {
 	  //! get actual second timestamp
 	  pt::ptime getTime() const;
 
+	  //! get actual tick error in us
+	  double getTickError() const;
+
 	  //! get timestamp from counter value
 	  pt::ptime getTime(const int) const;
 

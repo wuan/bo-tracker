@@ -33,8 +33,11 @@ namespace blitzortung {
 	    json_object* jsonGps = json_object_new_object();
 	    char gpsStatus = gps_.getStatus();
 	    json_object_object_add(jsonGps, "longitude", json_object_new_double(gps_.getLocation().getLongitude()));
+	    json_object_object_add(jsonGps, "longitudeError", json_object_new_double(gps_.getLocation().getLongitudeError()));
 	    json_object_object_add(jsonGps, "latitude", json_object_new_double(gps_.getLocation().getLatitude()));
+	    json_object_object_add(jsonGps, "latitudeError", json_object_new_double(gps_.getLocation().getLatitudeError()));
 	    json_object_object_add(jsonGps, "altitude", json_object_new_int(gps_.getLocation().getAltitude()));
+	    json_object_object_add(jsonGps, "altitudeError", json_object_new_int(gps_.getLocation().getAltitudeError()));
 	    pt::ptime gpsTime = gps_.getTime();
 	    std::ostringstream oss;
 	    gr::date_facet *datefacet = new gr::date_facet();
@@ -45,6 +48,7 @@ namespace blitzortung {
 	    oss.str("");
 	    oss << gpsTime.time_of_day();
 	    json_object_object_add(jsonGps, "time", json_object_new_string(oss.str().c_str()));
+	    json_object_object_add(jsonGps, "tickError", json_object_new_double(gps_.getTickError()));
 	    json_object_object_add(jsonGps, "status", json_object_new_string_len(&gpsStatus, 1));
 	    json_object_object_add(jsonGps, "satelliteCount", json_object_new_int(gps_.getSatelliteCount()));
 

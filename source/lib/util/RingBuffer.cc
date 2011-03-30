@@ -1,3 +1,4 @@
+#include <cmath>
 
 #include "exception/Base.h"
 #include "util/RingBuffer.h"
@@ -11,7 +12,8 @@ namespace blitzortung {
       data_(new T[size]),
       pos_(0),
       size_(size),
-      actualSize_(0)
+      actualSize_(0),
+      logger_("RingBuffer")
     {
     }
 
@@ -32,7 +34,7 @@ namespace blitzortung {
 	actualSize_++;
     }
 
-    template <typename T> T RingBuffer<T>::getSum() const {
+    template <typename T> double RingBuffer<T>::getSum() const {
       double sum = 0.0;
 
       for (int i=0; i < actualSize_; i++) {
@@ -41,7 +43,7 @@ namespace blitzortung {
       return sum;
     }
 
-    template <typename T> T RingBuffer<T>::getAverage() const {
+    template <typename T> double RingBuffer<T>::getAverage() const {
 
       if (actualSize_ == 0)
 	throw exception::Base("util::RingBuffer::getAverage() no average value of empty dataset"); 
@@ -49,8 +51,28 @@ namespace blitzortung {
       return getSum() / actualSize_;
     }
 
+    template <typename T> double RingBuffer<T>::getStddev() const {
+
+      if (actualSize_ == 0)
+	throw exception::Base("util::RingBuffer::getStddev() standard deviation of empty dataset cannot be calculated"); 
+
+      double average = getAverage();
+      double sum = 0.0;
+
+      for (int i=0; i < actualSize_; i++) {
+	sum += sqr(data_[i] - average);
+      }
+
+      //logger_.infoStream() << "getStddev() avg " << average << ", sum " << sum << ", actSize " << actualSize_ << ", ѕtddev " << sqrt(sum) / actualSize_;
+      return sqrt(sum) / actualSize_;
+    }
+
     template <typename T> int RingBuffer<T>::getActualSize() const {
       return actualSize_;
+    }
+
+    template <typename T> T RingBuffer<T>::sqr(T x) const {
+      return x*x;
     }
 
     //! explicit instatiation of functions to be linked afterwards

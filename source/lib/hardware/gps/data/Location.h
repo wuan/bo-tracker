@@ -23,12 +23,15 @@ namespace blitzortung {
 
 	    void addLongitude(const float longitude);
 	    double getLongitude() const;
+	    double getLongitudeError() const;
 
 	    void addLatitude(const float latitude);
 	    double getLatitude() const;
+	    double getLatitudeError() const;
 
 	    void addAltitude(const float altitude);
 	    double getAltitude() const;
+	    double getAltitudeError() const;
 
 	};
 

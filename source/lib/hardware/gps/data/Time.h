@@ -43,6 +43,9 @@ namespace blitzortung {
 	    const pt::ptime& getTime() const;
 
 	    pt::ptime getTime(const int) const;
+
+	    // returns the actual tick error in us
+	    double getTickError() const;
 	};
 
       }
