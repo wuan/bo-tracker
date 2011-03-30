@@ -33,7 +33,8 @@
 
 int main(int argc, char **argv) {
 
-  std::string username, password, servername;
+  std::string username, password;
+  std::string servername = "rechenserver.de";
   unsigned short serverport;
   std::string serialPortName = "/dev/ttyUSB0";
   std::string outputFile = "";
@@ -54,7 +55,7 @@ int main(int argc, char **argv) {
     ("baud-rate,b", po::value<unsigned short>(&serialBaudRate)->default_value(serialBaudRate), "baud rate of serial port (4800, 9600, 19200, 38400)")
     ("username,u", po::value<std::string>(&username), "username of blitzortung.org")
     ("password,p", po::value<std::string>(&password), "password of blitzortung.org")
-    ("server-host,h", po::value<std::string>(&servername), "blitzortung.org servername")
+    ("server-host,h", po::value<std::string>(&servername)->default_value(servername), "blitzortung.org servername")
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (sjn, garmin or sirf)")
     ("logfile", po::value<std::string>(&logFileName), "file name for log output (defaults to stdout)")

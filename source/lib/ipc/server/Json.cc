@@ -29,7 +29,6 @@ namespace blitzortung {
 	  if (cmd_obj != 0) {
 	    const char* command = json_object_get_string(cmd_obj);
 	    json_object_object_add(jsonResult, "command", json_object_new_string(command));
-	    json_object_put(cmd_obj);
 
 	    json_object* jsonGps = json_object_new_object();
 	    char gpsStatus = gps_.getStatus();
@@ -55,10 +54,12 @@ namespace blitzortung {
 	    json_object_object_add(jsonResult, "gps", jsonGps);
 
 	    json_object* jsonProcess = json_object_new_object();
-	    json_object_object_add(jsonGps, "numberOfSeconds", json_object_new_int(process_.getEventCountBuffer().getActualSize()));
-	    json_object_object_add(jsonGps, "numberOfEvents", json_object_new_int(process_.getEventCountBuffer().getSum()));
-	    json_object_object_add(jsonGps, "eventsPerSecond", json_object_new_double(process_.getEventCountBuffer().getAverage()));
+	    json_object_object_add(jsonProcess, "numberOfSeconds", json_object_new_int(process_.getEventCountBuffer().getActualSize()));
+	    json_object_object_add(jsonProcess, "numberOfEvents", json_object_new_int(process_.getEventCountBuffer().getSum()));
+	    json_object_object_add(jsonProcess, "eventsPerSecond", json_object_new_double(process_.getEventCountBuffer().getAverage()));
 	    json_object_object_add(jsonResult, "process", jsonProcess);
+
+	    json_object_put(cmd_obj);
 	  }
 
 	  json_object_put(jsonObj);
