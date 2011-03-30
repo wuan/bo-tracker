@@ -51,6 +51,10 @@ namespace blitzortung {
 	return time_.getTime(counter);
       }
 
+      double Base::getTickError() const {
+	return time_.getTickError();
+      }
+
       const data::Location& Base::getLocation() const {
 	return location_;
       }

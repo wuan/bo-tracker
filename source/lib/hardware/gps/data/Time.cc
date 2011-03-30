@@ -74,6 +74,12 @@ namespace blitzortung {
 	  return second_ + pt::nanoseconds(nanoseconds);
 	}
 
+	double Time::getTickError() const {
+	  double counterTicksPerSecond = double(counterTicksPerSecond_.getSum()) / counterTicksPerSecond_.getActualSize();
+
+	  return counterTicksPerSecond_.getStddev(); // / counterTicksPerSecond * 1e6;
+	}
+
       }
     }
   }

@@ -3,6 +3,8 @@
 
 #include <boost/shared_array.hpp>
 
+#include "Logger.h"
+
 namespace blitzortung {
   namespace util {
 
@@ -22,6 +24,11 @@ namespace blitzortung {
 	  //! actual size of data array
 	  int actualSize_;
 
+	  //! logger for this class
+	  mutable Logger logger_;
+
+	  T sqr(T x) const;
+
 	public:
 
 	  //! constructor  
@@ -34,10 +41,13 @@ namespace blitzortung {
 	  void add(const T &element);
 
 	  //! return sum of buffer content
-	  T getSum() const;
+	  double getSum() const;
 
 	  //! return average value of buffer content
-	  T getAverage() const;
+	  double getAverage() const;
+	  
+	  //! return standard deviation of buffer content
+	  double getStddev() const;
 
 	  //! return actual size of data
 	  int getActualSize() const;

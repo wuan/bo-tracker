@@ -25,12 +25,20 @@ namespace blitzortung {
 	  return longitude_.getAverage();
 	}
 
+	double Location::getLongitudeError() const {
+	  return longitude_.getStddev();
+	}
+
 	void Location::addLatitude(const float latitude) {
 	  latitude_.add(latitude);
 	}
 
 	double Location::getLatitude() const {
 	  return latitude_.getAverage();
+	}
+
+	double Location::getLatitudeError() const {
+	  return latitude_.getStddev();
 	}
 	  
 	void Location::addAltitude(const float altitude) {
@@ -39,6 +47,10 @@ namespace blitzortung {
 
 	double Location::getAltitude() const {
 	  return altitude_.getAverage();
+	}
+
+	double Location::getAltitudeError() const {
+	  return altitude_.getStddev();
 	}
 
       }
