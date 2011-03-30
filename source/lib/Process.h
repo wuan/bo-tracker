@@ -7,6 +7,7 @@
 #include "Queue.h"
 #include "output/Base.h"
 #include "network/transfer/Base.h"
+#include "DataThread.h"
 
 #include "data/Event.h"
 
@@ -23,6 +24,9 @@ namespace blitzortung {
       //! queue for data transfer from measurement thread
       Queue<data::Event> eventQueue_;
 
+      //! ring buffer for data rate limiter
+      DataThread::EventCountBuffer eventCountBuffer_;
+
       //! logger for this class
       mutable Logger logger_;
 
@@ -35,6 +39,10 @@ namespace blitzortung {
 
       //! add event to send queue
       void push(data::Event::AP);
+
+      //! get reference to event count buffer
+      const DataThread::EventCountBuffer& getEventCountBuffer() const;
+
   };
 }
 

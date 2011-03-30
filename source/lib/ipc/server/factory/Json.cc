@@ -5,7 +5,8 @@ namespace blitzortung {
     namespace server {
       namespace factory {
 
-	Json::Json(const hardware::gps::Base& gps) :
+	Json::Json(const Process& process, const hardware::gps::Base& gps) :
+	  process_(process),
 	  gps_(gps),
 	  logger_("іpc.server.factory.Json")
 	{
@@ -14,7 +15,7 @@ namespace blitzortung {
 	}
 
 	boost::thread Json::createServerThread(unsigned int socket) const {
-	  return boost::thread(ipc::server::Json(socket, gps_));
+	  return boost::thread(ipc::server::Json(socket, process_, gps_));
 	}
 
       }

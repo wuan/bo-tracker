@@ -6,9 +6,10 @@
 namespace blitzortung {
 
   Process::Process(network::transfer::Base& transfer, const double eventRateLimit, output::Base& output) :
+    eventCountBuffer_(60*60),
     logger_("Process")
   {
-    DataThread dataThread(eventQueue_, transfer, output);
+    DataThread dataThread(eventQueue_, eventCountBuffer_, transfer, output);
 
     dataThread.setEventRateLimit(eventRateLimit);
 
@@ -24,5 +25,8 @@ namespace blitzortung {
     eventQueue_.push(data);
   }
 
+  const DataThread::EventCountBuffer& Process::getEventCountBuffer() const {
+    return eventCountBuffer_;
+  }
 }
 

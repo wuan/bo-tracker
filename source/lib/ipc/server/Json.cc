@@ -10,8 +10,9 @@ namespace blitzortung {
   namespace ipc {
     namespace server {
 
-      Json::Json(const unsigned int socket, const hardware::gps::Base& gps) :
+      Json::Json(const unsigned int socket, const Process& process, const hardware::gps::Base& gps) :
 	Base(socket),
+	process_(process),
 	gps_(gps),
 	logger_("ipc.server.Json")
       {
@@ -27,8 +28,8 @@ namespace blitzortung {
 	  json_object* cmd_obj = json_object_object_get(jsonObj, "cmd");
 	  if (cmd_obj != 0) {
 	    const char* command = json_object_get_string(cmd_obj);
-
 	    json_object_object_add(jsonResult, "command", json_object_new_string(command));
+	    json_object_put(cmd_obj);
 
 	    json_object* jsonGps = json_object_new_object();
 	    char gpsStatus = gps_.getStatus();
@@ -51,10 +52,13 @@ namespace blitzortung {
 	    json_object_object_add(jsonGps, "tickError", json_object_new_double(gps_.getTickError()));
 	    json_object_object_add(jsonGps, "status", json_object_new_string_len(&gpsStatus, 1));
 	    json_object_object_add(jsonGps, "satelliteCount", json_object_new_int(gps_.getSatelliteCount()));
-
 	    json_object_object_add(jsonResult, "gps", jsonGps);
 
-	    json_object_put(cmd_obj);
+	    json_object* jsonProcess = json_object_new_object();
+	    json_object_object_add(jsonGps, "numberOfSeconds", json_object_new_int(process_.getEventCountBuffer().getActualSize()));
+	    json_object_object_add(jsonGps, "numberOfEvents", json_object_new_int(process_.getEventCountBuffer().getSum()));
+	    json_object_object_add(jsonGps, "eventsPerSecond", json_object_new_double(process_.getEventCountBuffer().getAverage()));
+	    json_object_object_add(jsonResult, "process", jsonProcess);
 	  }
 
 	  json_object_put(jsonObj);

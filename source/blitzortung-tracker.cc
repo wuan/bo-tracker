@@ -193,12 +193,12 @@ int main(int argc, char **argv) {
     output = bo::output::Base::AP(new bo::output::None());
   }
 
-  // enable unix domain socket for process information
-  bo::ipc::server::factory::Json jsonServerFactory(*gps);
-  bo::ipc::UnixSocket socket("/tmp/sockettest", jsonServerFactory);
-
   //! create object of network driver for event transmission
   bo::Process process(transfer, eventRateLimit, *output);
+
+  // enable unix domain socket for process information
+  bo::ipc::server::factory::Json jsonServerFactory(process, *gps);
+  bo::ipc::UnixSocket socket("/tmp/.blitzortung-tracker", jsonServerFactory);
 
   try {
     while (hardware.isOpen()) {

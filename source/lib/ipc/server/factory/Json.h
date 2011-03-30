@@ -15,6 +15,9 @@ namespace blitzortung {
 
 	  private:
 	    
+	    //! reference to process
+	    const Process& process_;
+
 	    //! reference to gps hardware
 	    const hardware::gps::Base& gps_;
 
@@ -24,7 +27,7 @@ namespace blitzortung {
 	  public:
 
 	    //! construct socket
-	    Json(const hardware::gps::Base& gps);
+	    Json(const Process& process, const hardware::gps::Base& gps);
 
 	    boost::thread createServerThread(const unsigned int socket) const;
 	};
