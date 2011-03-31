@@ -35,16 +35,26 @@ namespace blitzortung {
 	    mutable Logger logger_;
 
 	  public:
+
+	    //! create a gps time data object
 	    Time();
+
+	    //! delete a gps time data object
 	    virtual ~Time();
 
-	    void setSecond(const pt::ptime& dateTime, int counter);
+	    //! set actual timestamp an the corresponding counter value
+	    void setSecond(const pt::ptime& dateTime, int counterValue);
 
+	    //! get actual transmitted timestamp
 	    const pt::ptime& getTime() const;
 
-	    pt::ptime getTime(const int) const;
+	    //! get time of event represented by counter value
+	    pt::ptime getTime(const int counterValue) const;
 
-	    // returns the actual tick error in us
+	    //! return the actual number of counter ticks per second
+	    double getTicksPerSecond() const;
+
+	    //! returns the actual tick error in us
 	    double getTickError() const;
 	};
 

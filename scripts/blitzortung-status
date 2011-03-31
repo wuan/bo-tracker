@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+import time
+import socket
+import json
+
+s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+s.connect("/tmp/.blitzortung-tracker")
+s.send(json.dumps({'cmd':'getInfo'}))
+print s.recv(1024)
+s.close()
+
