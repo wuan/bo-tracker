@@ -5,7 +5,7 @@ namespace blitzortung {
   namespace hardware {
     namespace parsing {
 
-      Ticks::Ticks(const std::vector<std::string> fields) :
+      Ticks::Ticks(const std::vector<std::string>& fields) :
 	Base(),
 	logger_("hardware.parsing.Ticks()")
       {

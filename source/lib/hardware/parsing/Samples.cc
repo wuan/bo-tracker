@@ -5,7 +5,7 @@ namespace blitzortung {
   namespace hardware {
     namespace parsing {
 
-      Samples::Samples(const std::vector<std::string> fields, const hardware::gps::Base& gps) :
+      Samples::Samples(const std::vector<std::string>& fields, const hardware::gps::Base& gps) :
 	Base(),
 	logger_("hardware.parsing.Samples")
       {
