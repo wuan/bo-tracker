@@ -33,7 +33,7 @@ namespace blitzortung {
 	public:
 
 	  //! constructor
-	  Samples(const std::vector<std::string>, const hardware::gps::Base& gps);
+	  Samples(const std::vector<std::string>& fields, const hardware::gps::Base& gps);
 
 	  //! get raw sample data string
 	  const std::string& getRawData() const;

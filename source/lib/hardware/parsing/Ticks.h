@@ -46,7 +46,7 @@ namespace blitzortung {
 	public:
 
 	  //! constructor
-	  Ticks(const std::vector<std::string>);
+	  Ticks(const std::vector<std::string>&);
 
 	  //! parse incoming data
 	  bool parse(const std::vector<std::string>);
