@@ -29,6 +29,8 @@ namespace blitzortung {
 
       bind(socket_, (struct sockaddr *)&sockaddr, addrlen);
 
+      chmod(socketFileName_.c_str(), 0666);
+
       Listener listener(socket_, (struct sockaddr*)&sockaddr, addrlen, serverFactory);
 
       boost::thread thread(listener);

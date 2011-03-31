@@ -48,6 +48,7 @@ namespace blitzortung {
 	    oss.str("");
 	    oss << gpsTime.time_of_day();
 	    json_object_object_add(jsonGps, "time", json_object_new_string(oss.str().c_str()));
+	    json_object_object_add(jsonGps, "ticksPerSecond", json_object_new_double(gps_.getTicksPerSecond()));
 	    json_object_object_add(jsonGps, "tickError", json_object_new_double(gps_.getTickError()));
 	    json_object_object_add(jsonGps, "status", json_object_new_string_len(&gpsStatus, 1));
 	    json_object_object_add(jsonGps, "satelliteCount", json_object_new_int(gps_.getSatelliteCount()));

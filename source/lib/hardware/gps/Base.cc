@@ -51,6 +51,10 @@ namespace blitzortung {
 	return time_.getTime(counter);
       }
 
+      double Base::getTicksPerSecond() const {
+	return time_.getTicksPerSecond();
+      }
+
       double Base::getTickError() const {
 	return time_.getTickError();
       }

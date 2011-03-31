@@ -6,7 +6,7 @@
 #include "data/MEvent.h"
 #include "hardware/parsing/Ticks.h"
 
-#define VERSION "debT&nbsp;0.9.2"
+#define VERSION "debT&nbsp;0.9.3"
 
 namespace blitzortung {
   namespace hardware {
