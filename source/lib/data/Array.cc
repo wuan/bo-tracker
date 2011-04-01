@@ -75,6 +75,7 @@ namespace blitzortung {
       stream.read((char*)data_, format_->getDataSize());
     }
 
+    //const data::Format::CP& Array::getFormat() const {
     const data::Format::CP& Array::getFormat() const {
       return format_;
     }

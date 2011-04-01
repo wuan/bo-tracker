@@ -115,6 +115,10 @@ namespace blitzortung {
       return array_.get() == 0;
     }
 	
+    const Array& Waveform::getArray() const {
+      return *array_;
+    }
+	
     unsigned int Waveform::GetSize(const data::Format& dataFormat) {
       util::Size size;
 
@@ -131,7 +135,6 @@ namespace blitzortung {
     }
 
     std::ostream& operator <<(std::ostream& os, const bo::data::Waveform& wfm) {
-
       os << wfm.getArray();
 
       return os;

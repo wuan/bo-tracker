@@ -54,7 +54,7 @@ namespace blitzortung {
       gpsInfo_->toStream(stream);
     }
 
-    void Event::fromStream(data::Format::P& dataFormat, const gr::date& date, std::iostream& stream) {
+    void Event::fromStream(data::Format::CP& dataFormat, const gr::date& date, std::iostream& stream) {
       // read waveform from stream
       waveform_ = Waveform::AP(new Waveform(dataFormat, date, stream));
 

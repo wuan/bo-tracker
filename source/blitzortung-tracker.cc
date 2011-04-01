@@ -154,10 +154,10 @@ int main(int argc, char **argv) {
     comm = bo::hardware::comm::Base::AP(new bo::hardware::comm::Serial(*serialPort));
   }
 
-  // select type of gps hardware
 
   bo::hardware::gps::Base::AP gps;
 
+  // select type of gps hardware
   if (gpsType == "garmin") {
     gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Garmin(*comm));
   } else if (gpsType == "sirf") {
@@ -169,10 +169,6 @@ int main(int argc, char **argv) {
     oss << "invalid value of gps-type: '" << gpsType << "'";
     throw bo::exception::Base(oss.str());
   }
-
-  // waveform format description
-  bo::data::Format::AP wfmFormat;
-
 
   // create hardware driver object for blitzortung measurement hardware
   bo::hardware::Pcb hardware(*comm, *gps, firmwareVersion);

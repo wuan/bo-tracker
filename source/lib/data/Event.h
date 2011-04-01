@@ -40,44 +40,44 @@ namespace blitzortung {
 
 	virtual ~Event();
 
-	//! get reference to waveform
+	//! return reference to sample waveform
 	const Waveform& getWaveform() const;
 
-	//! release waveform from sample
+	//! release waveform from sample object
 	Waveform::AP releaseWaveform();
 
-	//! get reference to gps information
+	//! return reference to sample gps information
 	const GpsInfo& getGpsInfo() const;
 
-	//! release gps information from sample
+	//! release gps information from sample object
 	GpsInfo::AP releaseGpsInfo();
 
-	//! comparison operator <
+	//! comparison operator <, used for time sorting of events
 	bool operator<(const Event &) const;
 
-	//! class to compare timestamp of Strokes
+	//! class used to sort events by their maximum amplitude
 	struct CompareAmplitude : public std::binary_function<Event, Event, bool> {
 	  bool operator()(const first_argument_type& x, const second_argument_type& y) const;
 	};
 	
-	//! getter for amount of samples in waveform
+	//! getter for number of samples in waveform
 	virtual unsigned short getNumberOfSamples() const;
 
 	//! write binary object data to stream
 	void toStream(std::iostream&) const;
 
 	//! read binary object data from stream
-	void fromStream(data::Format::P& dataFormat, const gr::date&, std::iostream&);
+	void fromStream(data::Format::CP& dataFormat, const gr::date&, std::iostream&);
 
 	//! get binary storage size of sample
 	unsigned int getSize() const;
 
-	//! get binary storage size of sample
+	//! determine storage size of event in bytes
 	static unsigned int GetSize(const Format::CP& dataFormat);
 
     };
 
-    std::ostream& operator << (std::ostream& os, const Event&);
+    std::ostream& operator<< (std::ostream& os, const Event&);
 
   }
 }
