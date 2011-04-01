@@ -39,14 +39,19 @@ namespace blitzortung {
 	//! delete waveform object
 	virtual ~Array();
 
+	//! returns the number of bits per sample
 	unsigned short getNumberOfBitsPerSample() const;
 
+	//! returns the number of measurements per waveform
 	unsigned int getNumberOfSamples() const;
 
+	//! returns the number of channels per measurement
 	unsigned short getNumberOfChannels() const;
 
+	//! set a particular sample in a given channel to a value
 	void set(int value, unsigned int sample, unsigned short channel=0);
 
+	//! return the value of a sample in a given channel
 	float get(unsigned int sample, unsigned short channel=0) const;
 
 	//! write binary object data to stream
@@ -55,8 +60,9 @@ namespace blitzortung {
 	//! read binary object data from stream
 	void fromStream(std::iostream&);
 
+	//! return the actual format
 	const Format::CP& getFormat() const;
-
+	
     };
 
     std::ostream& operator <<(std::ostream& os, const Array&);

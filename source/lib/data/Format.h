@@ -14,10 +14,11 @@ namespace blitzortung {
     class Format {
 
       public:
-	typedef std::auto_ptr<Format> AP;
-	typedef boost::shared_ptr<Format> P;
+
+        // typedef for Format shared pointer
 	typedef boost::shared_ptr<const Format> CP;
 
+	// enum for the storage type of single data values
 	enum Type {BYTE=1, SHORT=2, INT=4};
 
       private:
@@ -31,11 +32,13 @@ namespace blitzortung {
 	//! number of samples per channel
 	unsigned short numberOfSamples_;
 
-	//! intermediate value of bytes per sample
+	//! intermediate value of bytes per sample value
 	Type sampleType_;
 
+	//! logger for this class
 	mutable Logger logger_;
 
+	//! update the data storage type according to the number of bits per sample value
 	void updateDataType();
 
       public:
@@ -57,7 +60,7 @@ namespace blitzortung {
 	//! delete waveform object
 	virtual ~Format();
 
-	//! returns the number of bits
+	//! returns the number of bits per sample
 	unsigned short getNumberOfBitsPerSample() const;
 
 	//! returns the number of channels per measurement
@@ -87,12 +90,10 @@ namespace blitzortung {
 	//! comparison operator for data format
 	bool operator!=(const Format& other) const;
 
-
     };
 
     //! stream output operator
     std::ostream& operator<<(std::ostream& os, const Format& format);
-
 
   }
 }

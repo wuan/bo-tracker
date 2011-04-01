@@ -82,9 +82,7 @@ namespace blitzortung {
 	unsigned int getNumberOfChannels() const;
 
 	//! return reference to contained array
-	const Array& getArray() const {
-	  return *array_;
-	}
+	const Array& getArray() const;
 
 	//! write to stream
 	void toStream(std::iostream&);

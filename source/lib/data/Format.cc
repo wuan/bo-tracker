@@ -47,7 +47,7 @@ namespace blitzortung {
       return numberOfSamples_;
     }
 
-    void Format::updateDataType() {
+    void Format::updateDataType() {      
       if (numberOfBits_ <= 8) {
 	sampleType_ = BYTE;
       } else if (numberOfBits_ <= 16) {

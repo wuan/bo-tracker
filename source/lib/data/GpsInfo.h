@@ -20,9 +20,6 @@ namespace blitzortung {
 
       private:
 
-	//! time
-	pt::ptime time_;
-
 	//! longitude
 	float longitude_;
 
@@ -77,6 +74,7 @@ namespace blitzortung {
 	//! write to stream
 	void toStream(std::iostream&);
 
+	//! return size of structure in bytes	
 	unsigned int getSize();
 
 	//! static function to determine size of a particular waveform structure
@@ -84,7 +82,6 @@ namespace blitzortung {
 
     };
 
-    
     std::ostream& operator << (std::ostream& os, const GpsInfo&);
 
   }
