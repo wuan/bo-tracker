@@ -54,15 +54,6 @@ namespace blitzortung {
       gpsInfo_->toStream(stream);
     }
 
-    void Event::fromStream(data::Format::CP& dataFormat, const gr::date& date, std::iostream& stream) {
-      // read waveform from stream
-      waveform_ = Waveform::AP(new Waveform(dataFormat, date, stream));
-
-      // read gps information from stream
-      gpsInfo_ = GpsInfo::AP(new GpsInfo(stream));
-
-    }
-
     //! get binary storage size of sample
     unsigned int Event::getSize() const {
       return GetSize(waveform_->getArray().getFormat());

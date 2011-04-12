@@ -33,9 +33,6 @@ namespace blitzortung {
 	*/
 	Array(const Format::CP& format);
 
-	//! create a waveform array object from an existing one and replace the format
-	Array(Array& array, Format::CP format);
-
 	//! delete waveform object
 	virtual ~Array();
 

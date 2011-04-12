@@ -13,7 +13,7 @@
 namespace blitzortung {
   namespace data {
 
-    //! class for gps information
+    //! class representing a single recorded sferics event with all relevant information
     class Event : boost::noncopyable {
 
       public:
@@ -34,10 +34,13 @@ namespace blitzortung {
 
       public:
 
+        //! construct Event with Data
 	Event(Waveform::AP, GpsInfo::AP);
 
+	//! construct Event from stream 
 	Event(data::Format::CP dataFormat, const gr::date& date, std::iostream& stream);
 
+	//! destruct Event
 	virtual ~Event();
 
 	//! return reference to sample waveform
@@ -63,11 +66,8 @@ namespace blitzortung {
 	//! getter for number of samples in waveform
 	virtual unsigned short getNumberOfSamples() const;
 
-	//! write binary object data to stream
+	//! write object as binary data to stream
 	void toStream(std::iostream&) const;
-
-	//! read binary object data from stream
-	void fromStream(data::Format::CP& dataFormat, const gr::date&, std::iostream&);
 
 	//! get binary storage size of sample
 	unsigned int getSize() const;
