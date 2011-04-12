@@ -34,16 +34,23 @@ namespace blitzortung {
 	  mutable Logger logger_;
 
 	public:
+	
+	  //! constructor
 	  SerialPort(const std::string &port="/dev/ttyS0", const unsigned int baudRate = 19200);
 
+	  //! destructor
 	  virtual ~SerialPort();
 
+	  //! returns true if serial port is open
 	  bool isOpen() const;
 
+	  //! set baud rate of serial port
 	  void setBaudRate(const unsigned int);
 
+	  //! returns the actual baud rate of the serial port
 	  const unsigned int getBaudRate() const;
 
+	  //!  returns a complete line of received data, blocks until data is arrived 
 	  const std::string receive();
 
 	  void send(unsigned char);

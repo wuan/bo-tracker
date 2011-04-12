@@ -14,7 +14,7 @@ namespace blitzortung {
 
     class EventsHeader;
 
-    //! class for containing events
+    //! container class for events
     class Events : boost::noncopyable {
 
       public:
@@ -22,9 +22,9 @@ namespace blitzortung {
         typedef Event::CVI CI;
 	typedef boost::shared_ptr<Events> P;
 	typedef std::auto_ptr<Events> AP;
-	//typedef event::Base Event;
 
       private:
+      
         //! date of events
 	gr::date date_;
 
@@ -43,12 +43,18 @@ namespace blitzortung {
 	//! replace events by events of given structure
 	void replace(Events&);
 
+	//! set date of event collection or check for mismatch
+	void setOrCheckDate(const gr::date&);
+
+	//! set data format of event collection or check for mismatch
+	void setOrCheckDataFormat(const data::Format::CP&);
+
       public:
 
 	//! create empty Events
 	Events();
 	
-	//! create Events from header
+	//! create Events with given header information
 	Events(const EventsHeader& header);
 
 	//! create Events with date and dataformat
@@ -74,9 +80,6 @@ namespace blitzortung {
 
 	//! get dataFormat
 	const Format::CP& getDataFormat() const;
-
-	//! set date of event collection
-	void setDate(const gr::date&);
 
 	//! get number of events
 	int size() const;

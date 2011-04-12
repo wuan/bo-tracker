@@ -35,23 +35,8 @@ namespace blitzortung {
     }
 
     void Events::add(Event* event) {
-      if (events_.size() == 0 || date_.is_not_a_date()) {
-	date_ = event->getWaveform().getTime().date();
-      } else {
-	if (date_ != event->getWaveform().getTime().date())
-	  throw exception::Base("Events::add() event date mismatch");
-      }
-
-      if (events_.size() == 0 || dataFormat_.get() == 0) {
-	if (! event->getWaveform().isEmpty()) {
-	  dataFormat_ = event->getWaveform().getArray().getFormat();
-	} else {
-	  dataFormat_ = data::Format::CP();
-	}
-      } else {
-	if (!event->getWaveform().isEmpty() && *(dataFormat_) != *(event->getWaveform().getArray().getFormat()))
-	  throw exception::Base("Events::add() event dataformat mismatch");
-      }
+      setOrCheckDate(event->getWaveform().getTime().date());
+      setOrCheckDataFormat(event->getWaveform().getArray().getFormat());
 
       events_.push_back(event);
     }
@@ -71,18 +56,27 @@ namespace blitzortung {
       return date_;
     }
 
-    void Events::setDate(const gr::date& date) {
-      if (events_.size() == 0) {
+    void Events::setOrCheckDate(const gr::date& date) {
+      if (events_.size() == 0 || date_.is_not_a_date()) {
 	date_ = date;
       } else {
-	throw exception::Base("data::Events::setDate() setting of date not allowed");
+	if (date_ != date)
+	  throw exception::Base("data::Events::setDate() event date mismatch");
       }
     }
-
+      
     const Format::CP& Events::getDataFormat() const {
       return dataFormat_;
     }
 
+    void Events::setOrCheckDataFormat(const data::Format::CP& dataFormat) {
+      if (events_.size() == 0 || dataFormat_.get() == 0) {
+	  dataFormat_ = dataFormat;
+      } else {
+	if (!dataFormat.get() != 0 && *(dataFormat_) != *(dataFormat))
+	  throw exception::Base("data::Events::setOrCheckDataFormat() event dataformat mismatch");
+      }
+    }
 
     int Events::size() const {
       return events_.size();
