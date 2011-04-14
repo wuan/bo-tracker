@@ -22,27 +22,29 @@ namespace blitzortung {
 	}
 
 	void Time::setSecond(const pt::ptime& dateTime, int counter) {
-	  second_ = dateTime;
+	  if (!dateTime.is_not_a_date_time()) {
+	    second_ = dateTime;
 
-	  // counter difference between calls is number of ticks per second
-	  int counterTicksElapsed = getCounterDifference(counter);
+	    // counter difference between calls is number of ticks per second
+	    int counterTicksElapsed = getCounterDifference(counter);
 
-	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "setSecond() " << second_ << " counter difference: " << counterTicksElapsed;
+	    if (logger_.isDebugEnabled())
+	      logger_.debugStream() << "setSecond() " << second_ << " counter difference: " << counterTicksElapsed;
 
-	  if (ignoreCounter_ <= 0) {
-	    // TODO this is a temporary fix to avoid problems introduced by bad counter values
-	    if (counterTicksElapsed > 2400000 && counterTicksElapsed < 2600000) {
-	      counterTicksPerSecond_.add(counterTicksElapsed);
+	    if (ignoreCounter_ <= 0) {
+	      // TODO this is a temporary fix to avoid problems introduced by bad counter values
+	      if (counterTicksElapsed > 2400000 && counterTicksElapsed < 2600000) {
+		counterTicksPerSecond_.add(counterTicksElapsed);
+	      } else {
+		logger_.warnStream() << "hardware::gps::data::Time::setSecond() counter value " << counterTicksElapsed << " out of range";
+	      }
 	    } else {
-	      logger_.warnStream() << "hardware::gps::data::Time::setSecond() counter value " << counterTicksElapsed << " out of range";
+	      ignoreCounter_--;
 	    }
-	  } else {
-	    ignoreCounter_--;
-	  }
 
-	  //if (counterTicksPerSecond_.getActualSize() > 0)
-	  //  std::cout << second_ << " " << counterTicksPerSecond_.getAverage() << std::endl;
+	    //if (counterTicksPerSecond_.getActualSize() > 0)
+	    //  std::cout << second_ << " " << counterTicksPerSecond_.getAverage() << std::endl;
+	  }
 
 	  oldCounter_ = counter;
 	}

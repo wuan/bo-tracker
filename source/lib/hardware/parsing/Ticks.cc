@@ -76,9 +76,13 @@ namespace blitzortung {
 	  // set GPS PPS time
 	  pt::time_input_facet *facet = new pt::time_input_facet();
 	  facet->format("%d%m%y %H%M%S");
-	  std::istringstream dateTimeInput(fields[dateIndex] + " " + fields[timeIndex]);
+	  std::string dateTime = fields[dateIndex] + " " + fields[timeIndex];
+	  std::istringstream dateTimeInput(dateTime);
 	  dateTimeInput.imbue(std::locale(std::locale::classic(), facet));
 	  dateTimeInput >> dateTime_;
+
+	  if (dateTime_.is_not_a_date_time())
+	    logger_.warnStream() << "Ticks() could not parse datetime '" << dateTime << "'";
 
 	  // exctract actual location and altitude information
 	  longitude_ = parseGpsCoord(fields[longitudeIndex], fields[longitudeHemisphereIndex]);
