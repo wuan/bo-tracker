@@ -36,7 +36,8 @@ namespace blitzortung {
 
     void Events::add(Event* event) {
       setOrCheckDate(event->getWaveform().getTime().date());
-      setOrCheckDataFormat(event->getWaveform().getArray().getFormat());
+      if (!event->getWaveform().isEmpty())
+        setOrCheckDataFormat(event->getWaveform().getArray().getFormat());
 
       events_.push_back(event);
     }
@@ -70,7 +71,7 @@ namespace blitzortung {
     }
 
     void Events::setOrCheckDataFormat(const data::Format::CP& dataFormat) {
-      if (events_.size() == 0 || dataFormat_.get() == 0) {
+      if ((events_.size() == 0 || dataFormat_.get() == 0) && dataFormat.get() != 0) {
 	  dataFormat_ = dataFormat;
       } else {
 	if (!dataFormat.get() != 0 && *(dataFormat_) != *(dataFormat))
