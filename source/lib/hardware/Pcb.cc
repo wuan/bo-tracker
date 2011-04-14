@@ -91,7 +91,7 @@ namespace blitzortung {
 
     data::Event::AP Pcb::createKeepaliveSample() {
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "createKeppaliveSample()";
+	logger_.debugStream() << "createKeepaliveSample()";
 
       data::Waveform::AP waveform(new data::Waveform(gps_.getTime()));
 
