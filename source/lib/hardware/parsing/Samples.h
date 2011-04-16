@@ -1,5 +1,5 @@
-#ifndef BLITZORTUNG_HARDWARE_PARSING_DATA_H_
-#define BLITZORTUNG_HARDWARE_PARSING_DATA_H_
+#ifndef BLITZORTUNG_HARDWARE_PARSING_SAMPLES_H_
+#define BLITZORTUNG_HARDWARE_PARSING_SAMPLES_H_
 
 #include <boost/shared_ptr.hpp>
 
@@ -20,6 +20,11 @@ namespace blitzortung {
       class Samples : public Base {
 
 	private:
+
+	  static const data::Format::CP FORMAT_8_2_1;
+	  static const data::Format::CP FORMAT_12_2_1;
+	  static const data::Format::CP FORMAT_8_2_64;
+	  static const data::Format::CP FORMAT_8_1_128;
 
 	  //! combined date time string
 	  data::Waveform::AP waveform_;
