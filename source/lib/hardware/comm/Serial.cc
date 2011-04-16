@@ -72,6 +72,10 @@ namespace blitzortung {
       const unsigned int Serial::getBaudRate() const {
 	return serialPort_.getBaudRate();
       }
+      
+      const std::string& Serial::getInterfaceName() const {
+	return serialPort_.getPortName();
+      }
 
       std::string Serial::receive() {
 	std::string line;

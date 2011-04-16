@@ -49,14 +49,20 @@ namespace blitzortung {
 
 	  //! returns the actual baud rate of the serial port
 	  const unsigned int getBaudRate() const;
+	  
+	  //! return the name of the serial port device
+	  const std::string getPortName() const;
 
 	  //!  returns a complete line of received data, blocks until data is arrived 
 	  const std::string receive();
 
+	  //! send single character via serial port
 	  void send(unsigned char);
 
+	  //! send string via serial port
 	  void send(const std::string &);
 
+	  //! flush input buffer of serial port	  
 	  void flushInput() const;
 
       };

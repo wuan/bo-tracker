@@ -121,6 +121,10 @@ namespace blitzortung {
 	    throw exception::Base(oss.str());
 	}
       }
+      
+      const std::string SerialPort::getPortName() const {
+	return portName_;
+      }
 
       void SerialPort::send(const std::string& data) {
 	int rc = write(serialFd_, data.c_str(), data.length());

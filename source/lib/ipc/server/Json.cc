@@ -29,7 +29,6 @@ namespace blitzortung {
 	  if (cmd_obj != 0) {
 	    const char* command = json_object_get_string(cmd_obj);
 	    json_object_object_add(jsonResult, "command", json_object_new_string(command));
-
 	    
 	    json_object* jsonHardware = json_object_new_object();
 	    json_object_object_add(jsonHardware, "firmware", json_object_new_string(hardware_.getFirmwareVersion().c_str()));
@@ -60,6 +59,12 @@ namespace blitzortung {
 	    json_object_object_add(jsonGps, "satelliteCount", json_object_new_int(gps.getSatelliteCount()));
 	    json_object_object_add(jsonGps, "type", json_object_new_string(gps.getType().c_str()));
 	    json_object_object_add(jsonHardware, "gps", jsonGps);
+	    
+	    const hardware::comm::Base& comm = hardware_.getComm();
+	    json_object* jsonComm = json_object_new_object();
+	    json_object_object_add(jsonGps, "baudRate", json_object_new_int(comm.getBaudRate()));
+	    json_object_object_add(jsonGps, "interfaceName", json_object_new_string(comm.getInterfaceName().c_str()));
+	    json_object_object_add(jsonHardware, "comm", jsonComm);
 
 	    json_object* jsonProcess = json_object_new_object();
 	    json_object_object_add(jsonProcess, "numberOfSeconds", json_object_new_int(process_.getEventCountBuffer().getActualSize()));
