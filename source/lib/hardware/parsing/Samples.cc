@@ -21,12 +21,12 @@ namespace blitzortung {
 	  if (fields.size() > 3) {
 	    if (fields[2].size() == 2 && fields[3].size() ==2) {
 	      // BLSIG type 1
-	      dataFormat = data::Format::CP(new data::Format(8, 2, 1));
+	      dataFormat = FORMAT_8_2_1;
 	      sampleDt = pt::nanoseconds(0);
 	      rawData_ = fields[2] + fields[3];
 	    } else if (fields[2].size() == 3 && fields[3].size() ==3) {
 	      // BLSIG type 2
-	      dataFormat = data::Format::CP(new data::Format(12, 2, 1));
+	      dataFormat = FORMAT_12_2_1;
 	      sampleDt = pt::nanoseconds(0);
 	      rawData_ = fields[2] + fields[3];
 	    }
@@ -34,20 +34,20 @@ namespace blitzortung {
 	} else if (fields[0] == "BLSEQ") {
 	  if (fields[2].size() == 256) {
 	    // BLSIG type 2
-	    dataFormat = data::Format::CP(new data::Format(8, 2, 64));
+	    dataFormat = FORMAT_8_2_64;
 	    sampleDt = pt::nanoseconds(2900);
 	    rawData_ = fields[2];
 	  }
 	} else if (fields[0] == "BD") {
 	  if (fields[2].size() == 256) {
 	    // BD type 1
-	    dataFormat = data::Format::CP(new data::Format(8, 2, 64));
+	    dataFormat = FORMAT_8_2_64;
 	    sampleDt = pt::nanoseconds(2800);
 	    rawData_ = fields[2];
 	  }
 	} else if (fields[0] == "BM") {
 	  // BM type 1
-	  dataFormat = data::Format::CP(new data::Format(8, 1, 128));
+	  dataFormat = FORMAT_8_1_128;
 	  sampleDt = pt::nanoseconds(2800);
 	  rawData_ = fields[2];
 	}
@@ -86,6 +86,11 @@ namespace blitzortung {
       const std::string& Samples::getRawData() const {
 	return rawData_;
       }
+
+      const data::Format::CP FORMAT_8_2_1 = data::Format::CP(new data::Format(8,2,1));
+      const data::Format::CP FORMAT_12_2_1 = data::Format::CP(new data::Format(12,2,1));
+      const data::Format::CP FORMAT_8_2_64 = data::Format::CP(new data::Format(8,2,64));
+      const data::Format::CP FORMAT_8_1_128 = data::Format::CP(new data::Format(8,1,128));
 
     }
   }
