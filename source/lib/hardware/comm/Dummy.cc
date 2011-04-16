@@ -33,6 +33,10 @@ namespace blitzortung {
       const unsigned int Dummy::getBaudRate() const {
 	return dummyBaud_;
       }
+      
+      const std::string& Dummy::getInterfaceName() const {
+	return dummyInterface_;
+      }
 
       std::string Dummy::receive() {
 	if (isAvailable())
@@ -50,6 +54,8 @@ namespace blitzortung {
       void Dummy::addReceivedLine(const std::string& line) {
 	dummyData_.push_back(line);
       }
+      
+      const std::string Dummy::dummyInterface_ = "dummy";
 
     }
   }

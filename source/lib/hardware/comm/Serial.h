@@ -38,6 +38,9 @@ namespace blitzortung {
 	  
 	  //! returns the actual baud rate
 	  const unsigned int getBaudRate() const;
+	  
+	  //! returns the interface name
+	  const std::string& getInterfaceName() const;
 
 	  //! returns true if the communication is active
 	  bool isOpen() const;

@@ -31,6 +31,9 @@ namespace blitzortung {
 
 	  //! dummy baud rate
 	  unsigned int dummyBaud_;
+	  
+	  //! dummy interface name
+	  const static std::string dummyInterface_;
 
 	  //! logger for classA
 	  mutable Logger logger_;
@@ -51,6 +54,9 @@ namespace blitzortung {
 	  
 	  //! returns the actual baud rate
 	  const unsigned int getBaudRate() const;
+	  
+	  //! returns the interface name
+	  const std::string& getInterfaceName() const;
 
 	  //! returns true if the communication is active
 	  bool isOpen() const;
