@@ -24,14 +24,14 @@ namespace blitzortung {
 
       strcpy(sockaddr.sun_path, socketFileName_.c_str());
 
-      int success = unlink(sockaddr.sun_path);
-      if (!success)
+      int failed = unlink(sockaddr.sun_path);
+      if (failed)
         logger_.warnStream() << "unlinking socket file '" << sockaddr.sun_path << "' failed";
 	
       int addrlen = sizeof(sockaddr.sun_family) + strlen(sockaddr.sun_path); 
 
-      success = bind(socket_, (struct sockaddr *)&sockaddr, addrlen);
-      if (success) {
+      failed = bind(socket_, (struct sockaddr *)&sockaddr, addrlen);
+      if (!failed) {
         chmod(socketFileName_.c_str(), 0666);
 
         Listener listener(socket_, (struct sockaddr*)&sockaddr, addrlen, serverFactory);
