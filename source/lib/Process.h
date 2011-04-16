@@ -24,9 +24,15 @@ namespace blitzortung {
       //! queue for data transfer from measurement thread
       Queue<data::Event> eventQueue_;
 
+      //! reference to transfer object
+      const network::transfer::Base& transfer_;
+      
+      //! reference to output object
+      const output::Base& output_;
+
       //! ring buffer for data rate limiter
       DataThread::EventCountBuffer eventCountBuffer_;
-
+      
       //! logger for this class
       mutable Logger logger_;
 
@@ -42,6 +48,12 @@ namespace blitzortung {
 
       //! get reference to event count buffer
       const DataThread::EventCountBuffer& getEventCountBuffer() const;
+      
+      //! get reference to transfer object
+      const network::transfer::Base& getTransfer() const;
+      
+      //! get reference to output object
+      const output::Base& getOutput() const;
 
   };
 }

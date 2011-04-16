@@ -6,6 +6,8 @@
 namespace blitzortung {
 
   Process::Process(network::transfer::Base& transfer, const double eventRateLimit, output::Base& output) :
+    transfer_(transfer),
+    output_(output),
     eventCountBuffer_(60*60),
     logger_("Process")
   {
@@ -27,6 +29,14 @@ namespace blitzortung {
 
   const DataThread::EventCountBuffer& Process::getEventCountBuffer() const {
     return eventCountBuffer_;
+  }
+  
+  const network::transfer::Base& Process::getTransfer() const {
+    return transfer_;
+  }
+      
+  const output::Base& Process::getOutput() const {
+    return output_;
   }
 }
 

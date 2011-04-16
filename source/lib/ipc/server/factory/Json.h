@@ -19,7 +19,7 @@ namespace blitzortung {
 	    const Process& process_;
 
 	    //! reference to gps hardware
-	    const hardware::gps::Base& gps_;
+	    const hardware::Pcb& pcb_;
 
 	    //! logger for this class
 	    mutable Logger logger_;
@@ -27,8 +27,9 @@ namespace blitzortung {
 	  public:
 
 	    //! construct socket
-	    Json(const Process& process, const hardware::gps::Base& gps);
+	    Json(const Process& process, const hardware::Pcb& pcb);
 
+	    //! create a server thread using an object of the corresponding class
 	    boost::thread createServerThread(const unsigned int socket) const;
 	};
 
