@@ -87,10 +87,10 @@ namespace blitzortung {
 	return rawData_;
       }
 
-      const data::Format::CP FORMAT_8_2_1 = data::Format::CP(new data::Format(8,2,1));
-      const data::Format::CP FORMAT_12_2_1 = data::Format::CP(new data::Format(12,2,1));
-      const data::Format::CP FORMAT_8_2_64 = data::Format::CP(new data::Format(8,2,64));
-      const data::Format::CP FORMAT_8_1_128 = data::Format::CP(new data::Format(8,1,128));
+      const data::Format::CP Samples::FORMAT_8_2_1 = data::Format::CP(new data::Format(8,2,1));
+      const data::Format::CP Samples::FORMAT_12_2_1 = data::Format::CP(new data::Format(12,2,1));
+      const data::Format::CP Samples::FORMAT_8_2_64 = data::Format::CP(new data::Format(8,2,64));
+      const data::Format::CP Samples::FORMAT_8_1_128 = data::Format::CP(new data::Format(8,1,128));
 
     }
   }
