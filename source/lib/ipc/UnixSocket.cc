@@ -24,16 +24,23 @@ namespace blitzortung {
 
       strcpy(sockaddr.sun_path, socketFileName_.c_str());
 
-      unlink(sockaddr.sun_path);
+      int success = unlink(sockaddr.sun_path);
+      if (!success)
+        logger_.warnStream() << "unlinking socket file '" << sockaddr.sun_path << "' failed";
+	
       int addrlen = sizeof(sockaddr.sun_family) + strlen(sockaddr.sun_path); 
 
-      bind(socket_, (struct sockaddr *)&sockaddr, addrlen);
+      success = bind(socket_, (struct sockaddr *)&sockaddr, addrlen);
+      if (success) {
+        chmod(socketFileName_.c_str(), 0666);
 
-      chmod(socketFileName_.c_str(), 0666);
+        Listener listener(socket_, (struct sockaddr*)&sockaddr, addrlen, serverFactory);
 
-      Listener listener(socket_, (struct sockaddr*)&sockaddr, addrlen, serverFactory);
+        boost::thread thread(listener);
+      } else {
+        logger_.warnStream() << "binding to socket file '" << sockaddr.sun_path << "' failed, socket-server not started";
+      }
 
-      boost::thread thread(listener);
     }
 
 
