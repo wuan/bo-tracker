@@ -49,6 +49,7 @@ namespace blitzortung {
 
 	//! returns a dummy sample which is used as a keepalive message
 	data::Event::AP createKeepaliveSample();
+	
       public:
 
 	//! constructor for base class
@@ -62,6 +63,15 @@ namespace blitzortung {
 
 	//! returns a sample read from the hardware
 	data::Event::AP read();
+
+	//! returns the firmware version string
+	const std::string& getFirmwareVersion() const;
+	
+	//! returns a reference to the gps object
+	const gps::Base& getGps() const;
+	
+	//! returns a reference to the comm object
+	const comm::Base& getComm() const;
     };
 
   }

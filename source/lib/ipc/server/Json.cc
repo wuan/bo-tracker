@@ -10,10 +10,10 @@ namespace blitzortung {
   namespace ipc {
     namespace server {
 
-      Json::Json(const unsigned int socket, const Process& process, const hardware::gps::Base& gps) :
+      Json::Json(const unsigned int socket, const Process& process, const hardware::Pcb& hardware) :
 	Base(socket),
 	process_(process),
-	gps_(gps),
+	hardware_(hardware),
 	logger_("ipc.server.Json")
       {
 	if (logger_.isDebugEnabled())
@@ -30,15 +30,21 @@ namespace blitzortung {
 	    const char* command = json_object_get_string(cmd_obj);
 	    json_object_object_add(jsonResult, "command", json_object_new_string(command));
 
+	    
+	    json_object* jsonHardware = json_object_new_object();
+	    json_object_object_add(jsonHardware, "firmware", json_object_new_string(hardware_.getFirmwareVersion().c_str()));
+	    json_object_object_add(jsonResult, "hardware", jsonHardware);
+
+	    const hardware::gps::Base& gps = hardware_.getGps();
 	    json_object* jsonGps = json_object_new_object();
-	    char gpsStatus = gps_.getStatus();
-	    json_object_object_add(jsonGps, "longitude", json_object_new_double(gps_.getLocation().getLongitude()));
-	    json_object_object_add(jsonGps, "longitudeError", json_object_new_double(gps_.getLocation().getLongitudeError()));
-	    json_object_object_add(jsonGps, "latitude", json_object_new_double(gps_.getLocation().getLatitude()));
-	    json_object_object_add(jsonGps, "latitudeError", json_object_new_double(gps_.getLocation().getLatitudeError()));
-	    json_object_object_add(jsonGps, "altitude", json_object_new_int(gps_.getLocation().getAltitude()));
-	    json_object_object_add(jsonGps, "altitudeError", json_object_new_int(gps_.getLocation().getAltitudeError()));
-	    pt::ptime gpsTime = gps_.getTime();
+	    char gpsStatus = gps.getStatus();
+	    json_object_object_add(jsonGps, "longitude", json_object_new_double(gps.getLocation().getLongitude()));
+	    json_object_object_add(jsonGps, "longitudeError", json_object_new_double(gps.getLocation().getLongitudeError()));
+	    json_object_object_add(jsonGps, "latitude", json_object_new_double(gps.getLocation().getLatitude()));
+	    json_object_object_add(jsonGps, "latitudeError", json_object_new_double(gps.getLocation().getLatitudeError()));
+	    json_object_object_add(jsonGps, "altitude", json_object_new_int(gps.getLocation().getAltitude()));
+	    json_object_object_add(jsonGps, "altitudeError", json_object_new_int(gps.getLocation().getAltitudeError()));
+	    pt::ptime gpsTime = gps.getTime();
 	    std::ostringstream oss;
 	    gr::date_facet *datefacet = new gr::date_facet();
 	    datefacet->format("%Y-%m-%d");
@@ -48,18 +54,19 @@ namespace blitzortung {
 	    oss.str("");
 	    oss << gpsTime.time_of_day();
 	    json_object_object_add(jsonGps, "time", json_object_new_string(oss.str().c_str()));
-	    json_object_object_add(jsonGps, "ticksPerSecond", json_object_new_double(gps_.getTicksPerSecond()));
-	    json_object_object_add(jsonGps, "tickError", json_object_new_double(gps_.getTickError()));
+	    json_object_object_add(jsonGps, "ticksPerSecond", json_object_new_double(gps.getTicksPerSecond()));
+	    json_object_object_add(jsonGps, "tickError", json_object_new_double(gps.getTickError()));
 	    json_object_object_add(jsonGps, "status", json_object_new_string_len(&gpsStatus, 1));
-	    json_object_object_add(jsonGps, "satelliteCount", json_object_new_int(gps_.getSatelliteCount()));
-	    json_object_object_add(jsonResult, "gps", jsonGps);
+	    json_object_object_add(jsonGps, "satelliteCount", json_object_new_int(gps.getSatelliteCount()));
+	    json_object_object_add(jsonGps, "type", json_object_new_string(gps.getType().c_str()));
+	    json_object_object_add(jsonHardware, "gps", jsonGps);
 
 	    json_object* jsonProcess = json_object_new_object();
 	    json_object_object_add(jsonProcess, "numberOfSeconds", json_object_new_int(process_.getEventCountBuffer().getActualSize()));
 	    json_object_object_add(jsonProcess, "numberOfEvents", json_object_new_int(process_.getEventCountBuffer().getSum()));
 	    json_object_object_add(jsonProcess, "eventsPerSecond", json_object_new_double(process_.getEventCountBuffer().getAverage()));
 	    json_object_object_add(jsonResult, "process", jsonProcess);
-
+	    	    
 	    json_object_put(cmd_obj);
 	  }
 

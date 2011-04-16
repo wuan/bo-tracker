@@ -4,7 +4,7 @@
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition.hpp>
 
-#include "hardware/gps/Base.h"
+#include "hardware/Pcb.h"
 #include "ipc/server/Base.h"
 #include "Process.h"
 #include "Logger.h"
@@ -21,7 +21,7 @@ namespace blitzortung {
 	  const Process& process_;
 
 	  //! gps hardware reference
-	  const hardware::gps::Base& gps_;
+	  const hardware::Pcb& hardware_;
 
 	  //! logger for this class
 	  mutable Logger logger_;
@@ -30,7 +30,7 @@ namespace blitzortung {
 
 	public:
 
-	  Json(const unsigned int socket, const Process& process, const hardware::gps::Base& gps);
+	  Json(const unsigned int socket, const Process& process, const hardware::Pcb& hardware);
 
       };
 

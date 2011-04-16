@@ -29,6 +29,19 @@ namespace blitzortung {
     bool Pcb::isOpen() const {
       return comm_.isOpen();
     }
+    
+
+    const std::string& Pcb::getFirmwareVersion() const {
+      return firmwareVersion_;
+    }
+	
+    const gps::Base& Pcb::getGps() const {
+      return gps_;
+    }
+	
+    const comm::Base& Pcb::getComm() const {
+      return comm_;
+    }
 
     data::Event::AP Pcb::read() {
       std::string line = comm_.receive();

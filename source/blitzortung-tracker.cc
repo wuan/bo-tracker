@@ -194,7 +194,7 @@ int main(int argc, char **argv) {
   bo::Process process(transfer, eventRateLimit, *output);
 
   // enable unix domain socket for process information
-  bo::ipc::server::factory::Json jsonServerFactory(process, *gps);
+  bo::ipc::server::factory::Json jsonServerFactory(process, hardware);
   bo::ipc::UnixSocket socket("/tmp/.blitzortung-tracker", jsonServerFactory);
 
   try {
