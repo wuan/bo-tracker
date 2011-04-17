@@ -7,8 +7,8 @@ namespace blitzortung {
   namespace hardware {
     namespace gps {
 
-      Sirf::Sirf(comm::Base& communication) :
-	Base(communication),
+      Sirf::Sirf(comm::Base& communication, bool disableSbas) :
+	Base(communication, disableSbas),
 	logger_("hardware.gps.Sirf")
       {
 	init(true);
@@ -51,8 +51,10 @@ namespace blitzortung {
 	  communication_.send(oss.str());
 	}
 
-	// enable SBAS
-	communication_.send("PSRF151,01");
+	if (disableSbas_)
+	  communication_.send("PSRF151,00");
+        else
+	  communication_.send("PSRF151,01");
       }
 
       const std::string Sirf::getType() const {

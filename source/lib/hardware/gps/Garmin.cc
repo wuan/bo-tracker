@@ -7,8 +7,8 @@ namespace blitzortung {
   namespace hardware {
     namespace gps {
 
-      Garmin::Garmin(comm::Base& communication) :
-	Base(communication),
+      Garmin::Garmin(comm::Base& communication, bool disableSbas) :
+	Base(communication, disableSbas),
 	logger_("hardware.gps.Garmin")
       {
 	init(true);
@@ -53,6 +53,11 @@ namespace blitzortung {
 	  oss << "PGRMC,,51.5,,,,,,,," << targetBaudKey << ",,2,4,";
 	  communication_.send(oss.str());
 	}
+	
+	if (disableSbas_)
+	  communication_.send("PGRMC1,1,,,,,,,N,,,,,");
+        else
+	  communication_.send("PGRMC1,1,,,,,,,W,,,,,");
       }
 
       const std::string Garmin::getType() const {

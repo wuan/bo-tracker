@@ -37,7 +37,6 @@ libblitzortung_la_SOURCES = \
 	hardware/gps/Dummy.h hardware/gps/Dummy.cc \
 	hardware/gps/Sirf.h hardware/gps/Sirf.cc \
 	hardware/gps/Garmin.h hardware/gps/Garmin.cc \
-	hardware/gps/Sjn.h hardware/gps/Sjn.cc \
 	\
 	hardware/gps/data/Base.h hardware/gps/data/Base.cc \
 	hardware/gps/data/Time.h hardware/gps/data/Time.cc \
