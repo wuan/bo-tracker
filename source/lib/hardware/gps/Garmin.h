@@ -31,7 +31,7 @@ namespace blitzortung {
 	public:
 
 	  //! constructor
-	  Garmin(comm::Base&);
+	  Garmin(comm::Base&, bool disableSbas);
 
 	  //! destructor
 	  virtual ~Garmin();

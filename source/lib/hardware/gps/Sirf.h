@@ -31,7 +31,7 @@ namespace blitzortung {
 	public:
 
 	  //! constructor
-	  Sirf(comm::Base&);
+	  Sirf(comm::Base&, bool disableSbas);
 
 	  //! destructor
 	  virtual ~Sirf();

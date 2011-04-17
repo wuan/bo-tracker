@@ -63,6 +63,9 @@ namespace blitzortung {
 	  void addSatelliteCount(const unsigned short);
 
 	protected:
+	
+	  //! disalbe SBASE flag
+	  bool disableSbas_;
 
 	  //! initialize GPS hardware
 	  void init(bool fullInitialization=false);
@@ -70,7 +73,7 @@ namespace blitzortung {
 	public:
 
 	  //! constructor
-	  Base(comm::Base&);
+	  Base(comm::Base&, bool disableSbas);
 
 	  //! destructor
 	  virtual ~Base();

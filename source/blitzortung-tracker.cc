@@ -17,7 +17,6 @@
 #include "hardware/comm/Dummy.h"
 #include "hardware/gps/Garmin.h"
 #include "hardware/gps/Sirf.h"
-#include "hardware/gps/Sjn.h"
 #include "hardware/Pcb.h"
 #include "Process.h"
 #include "network/transfer/Udp.h"
@@ -57,7 +56,8 @@ int main(int argc, char **argv) {
     ("password,p", po::value<std::string>(&password), "password of blitzortung.org")
     ("server-host,h", po::value<std::string>(&servername)->default_value(servername), "blitzortung.org servername")
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
-    ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (sjn, garmin or sirf)")
+    ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (garmin or sirf)")
+    ("gps-disable-sbas", "disable GPS SBAS")
     ("logfile", po::value<std::string>(&logFileName), "file name for log output (defaults to stdout)")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("output,o", po::value<std::string>(&outputFile), "output file name (e.g. Name_%Y%m%d.bor)")
@@ -156,18 +156,18 @@ int main(int argc, char **argv) {
 
 
   bo::hardware::gps::Base::AP gps;
-
-  // select type of gps hardware
-  if (gpsType == "garmin") {
-    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Garmin(*comm));
-  } else if (gpsType == "sirf") {
-    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Sirf(*comm));
-  } else if (gpsType == "sjn") {
-    gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Sjn(*comm));
-  } else {
-    std::ostringstream oss;
-    oss << "invalid value of gps-type: '" << gpsType << "'";
-    throw bo::exception::Base(oss.str());
+  {
+    bool disableSbas = vm.count("gps-disable-sbas");
+    // select type of gps hardware
+    if (gpsType == "garmin") {
+      gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Garmin(*comm, disableSbas));
+    } else if (gpsType == "sirf") {
+      gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Sirf(*comm, disableSbas));
+    } else {
+      std::ostringstream oss;
+      oss << "invalid value of gps-type: '" << gpsType << "'";
+      throw bo::exception::Base(oss.str());
+    }
   }
 
   // create hardware driver object for blitzortung measurement hardware
