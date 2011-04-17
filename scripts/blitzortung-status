@@ -4,9 +4,20 @@ import time
 import socket
 import json
 
+def jsonFormatter(json, depth=0):
+
+  for key in json.keys():
+    result = "  " * depth + key
+    if isinstance(json[key], dict):
+      print result
+      jsonFormatter(json[key], depth + 1)
+    else:
+      print result + ': ' + str(json[key])
+
 s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 s.connect("/tmp/.blitzortung-tracker")
 s.send(json.dumps({'cmd':'getInfo'}))
-print s.recv(1024)
+jsonObject = json.loads(s.recv(1024))
+jsonFormatter(jsonObject)
 s.close()
 
