@@ -12,7 +12,7 @@ import datetime, pytz
 
 whitespace = re.compile('\s+')
 
-class Config():
+class Config(object):
     def __init__(self, configfilename=None):
 
         self.config = {}
@@ -44,7 +44,7 @@ class Config():
 
         raise Exception("Config.get() key not found")
 
-class Point():
+class Point(object):
 
     __whitespaceRe = re.compile('\s+')
 
@@ -63,7 +63,7 @@ class Point():
     def azimuth(self, other):
         return float(self.__invgeod(other)[0])
 
-class Time():
+class Time(object):
 
     timeformat = '%Y-%m-%d %H:%M:%S'
 
@@ -207,7 +207,7 @@ class RawFiles:
         else:
             raise Exception("no file for date "+date.strftime('%Y-%m-%d'))
 
-class TimeRange():
+class TimeRange(object):
 
   def __init__(self, endTime, deltaTime=datetime.timedelta(hours=2)):
     self.endTime = endTime
@@ -290,7 +290,7 @@ class TimeIntervals(TimeInterval):
     def getEndTime(self):
       return self.startTime + self.deltaTime
 
-class Data:
+class Data(object):
 
     def __init__(self, files, time):
         self.files = files
