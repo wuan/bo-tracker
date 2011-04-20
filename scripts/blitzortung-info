@@ -123,6 +123,7 @@ plot 0 lt -2 not, "$TMPDATA" u (90-\$1):2 not w p lt $STROKESCOLOR
 
 RESIDUAL_FILE=$ANALYSISPATH/residuals.txt
 $NICE blitzortung-statistics --mode=residual --time-delta=15 --data-path=$RAWPATH >> $RESIDUAL_FILE
+chmod go+r $RESIDUAL_FILE || true
 
 $NICE blitzortung-statistics --mode=residual --time-delta=120 --data-path=$RAWPATH > $TMPDATA
 
@@ -151,6 +152,7 @@ ACTUALPARTICIPATEDSTROKES=$(echo $ACTUALSTROKEDATA | cut -d" " -f4)
 ACTUALSAMPLES=$($NICE blitzortung-statistics --mode=data | wc -l)
 
 echo "$ENDTIME $ACTUALSTROKES $ACTUALPARTICIPATEDSTROKES $ACTUALSAMPLES" >> $STATISTICS_FILE
+chmod go+r $STATISTICS_FILE || true
 
 STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -1week)
 ENDTIME=$(date +"%Y-%m-%d %H:%M:00")
