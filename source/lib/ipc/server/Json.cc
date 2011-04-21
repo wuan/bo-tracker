@@ -24,7 +24,7 @@ namespace blitzortung {
 	json_object* jsonResult = json_object_new_object();
 
 	json_object* jsonObj = json_tokener_parse(input.c_str());
-	if (int(jsonObj) > 0) {
+	if (jsonObj != 0) {
 	  json_object* cmd_obj = json_object_object_get(jsonObj, "cmd");
 	  if (cmd_obj != 0) {
 	    const char* command = json_object_get_string(cmd_obj);
