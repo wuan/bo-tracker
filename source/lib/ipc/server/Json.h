@@ -4,6 +4,8 @@
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition.hpp>
 
+#include <json/json.h>
+
 #include "hardware/Pcb.h"
 #include "ipc/server/Base.h"
 #include "Process.h"
@@ -23,8 +25,12 @@ namespace blitzortung {
 	  //! gps hardware reference
 	  const hardware::Pcb& hardware_;
 
+	  json_object* jsonResponse_;
+
 	  //! logger for this class
 	  mutable Logger logger_;
+
+	  void cmdGetInfo();
 
 	  virtual std::string respond(const std::string&);
 
