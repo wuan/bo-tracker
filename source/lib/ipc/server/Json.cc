@@ -1,8 +1,6 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
-#include <json/json.h>
-
 #include "data/Event.h"
 #include "ipc/server/Json.h"
 
@@ -20,19 +18,10 @@ namespace blitzortung {
 	  logger_.debugStream() << "initialize for socket " << socket;
       }
 
-      std::string Json::respond(const std::string& input) {
-	json_object* jsonResult = json_object_new_object();
-
-	json_object* jsonObj = json_tokener_parse(input.c_str());
-	if (jsonObj != 0) {
-	  json_object* cmd_obj = json_object_object_get(jsonObj, "cmd");
-	  if (cmd_obj != 0) {
-	    const char* command = json_object_get_string(cmd_obj);
-	    json_object_object_add(jsonResult, "command", json_object_new_string(command));
-	    
+      void Json::cmdGetInfo() {
 	    json_object* jsonHardware = json_object_new_object();
 	    json_object_object_add(jsonHardware, "firmware", json_object_new_string(hardware_.getFirmwareVersion().c_str()));
-	    json_object_object_add(jsonResult, "hardware", jsonHardware);
+	    json_object_object_add(jsonResponse_, "hardware", jsonHardware);
 
 	    const hardware::gps::Base& gps = hardware_.getGps();
 	    json_object* jsonGps = json_object_new_object();
@@ -70,7 +59,22 @@ namespace blitzortung {
 	    json_object_object_add(jsonProcess, "numberOfSeconds", json_object_new_int(process_.getEventCountBuffer().getActualSize()));
 	    json_object_object_add(jsonProcess, "numberOfEvents", json_object_new_int(process_.getEventCountBuffer().getSum()));
 	    json_object_object_add(jsonProcess, "eventsPerSecond", json_object_new_double(process_.getEventCountBuffer().getAverage()));
-	    json_object_object_add(jsonResult, "process", jsonProcess);
+	    json_object_object_add(jsonResponse_, "process", jsonProcess);
+      }
+
+      std::string Json::respond(const std::string& input) {
+	jsonResponse_ = json_object_new_object();
+
+	json_object* jsonObj = json_tokener_parse(input.c_str());
+	if (jsonObj != 0) {
+	  json_object* cmd_obj = json_object_object_get(jsonObj, "cmd");
+	  if (cmd_obj != 0) {
+	    std::string command(json_object_get_string(cmd_obj));
+
+	    json_object_object_add(jsonResponse_, "command", json_object_new_string(command.c_str()));
+
+	    if (command == "getInfo")
+	      cmdGetInfo();
 	    	    
 	    json_object_put(cmd_obj);
 	  }
@@ -78,15 +82,17 @@ namespace blitzortung {
 	  json_object_put(jsonObj);
 	} else {
 	  std::string result = "could not parse command '" + input + "'";
-	  json_object_object_add(jsonResult, "error", json_object_new_string(result.c_str()));
+	  json_object_object_add(jsonResponse_, "error", json_object_new_string(result.c_str()));
 	  logger_.warnStream() << result;
 	}
 
-	std::string jsonString(json_object_to_json_string(jsonResult));
-	json_object_put(jsonResult);
+	std::string jsonString(json_object_to_json_string(jsonResponse_));
+	json_object_put(jsonResponse_);
 
 	return jsonString;
       }
+
+
 
     }
   }
