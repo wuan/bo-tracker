@@ -21,14 +21,15 @@ namespace blitzortung {
 	if (logger_.isInfoEnabled())
 	  logger_.infoStream() << "initializing serial port " << portName_.c_str() << " with " << baudRate << " baud";
 
-	serialFd_ = open(portName_.c_str(), O_RDWR | O_NOCTTY);
+	serialFd_ = open(portName_.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 
 	if (serialFd_ < 0) {
 	  std::ostringstream oss;
 
 	  oss << "blitzortung::hardware::SerialPort::open() Unable to open port " << portName_;
 	  throw exception::Base(oss.str());
-	}
+	} else
+	  fcntl(serialFd_, F_SETFL, 0);
 
 	struct termios tio;
 	tio.c_iflag= IGNBRK | IGNPAR ;
