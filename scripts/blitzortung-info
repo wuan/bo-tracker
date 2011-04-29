@@ -28,8 +28,8 @@ if [ x$ANALYSISPATH == x ]; then
 fi
 
 TMPDATA=$(mktemp /tmp/$(basename $0).XXXXXX)
-STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -1day)
-ENDTIME=$(date +"%Y-%m-%d %H:%M:00")
+STARTTIME=$(date -u +"%Y-%m-%d %H:%M:00" -d -1day)
+ENDTIME=$(date -u +"%Y-%m-%d %H:%M:00")
 
 $NICE blitzortung-statistics --mode=histogram --time-delta=15 --data-path=$RAWPATH > $TMPDATA
 
@@ -84,7 +84,7 @@ plot "$TMPDATA" u 8:9 not w p lt $OWNEVENTSCOLOR
 
 $NICE blitzortung-statistics --mode=strokes --time-delta=5 --data-path=$RAWPATH > $TMPDATA
 
-STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -115minutes)
+STARTTIME=$(date -u +"%Y-%m-%d %H:%M:00" -d -115minutes)
 
 TOTALSTROKES=$(cat $TMPDATA | awk 'BEGIN {sum=0} {sum += $3} END {print sum}')
 TOTALPARTICIPATEDSTROKES=$(cat $TMPDATA | awk 'BEGIN {sum=0} {sum += $4} END {print sum}')
@@ -154,8 +154,8 @@ ACTUALSAMPLES=$($NICE blitzortung-statistics --mode=data | wc -l)
 echo "$ENDTIME $ACTUALSTROKES $ACTUALPARTICIPATEDSTROKES $ACTUALSAMPLES" >> $STATISTICS_FILE
 chmod go+r $STATISTICS_FILE || true
 
-STARTTIME=$(date +"%Y-%m-%d %H:%M:00" -d -1week)
-ENDTIME=$(date +"%Y-%m-%d %H:%M:00")
+STARTTIME=$(date -u +"%Y-%m-%d %H:%M:00" -d -1week)
+ENDTIME=$(date -u +"%Y-%m-%d %H:%M:00")
 
 $NICE gnuplot <<***
 set term png $FONTSIZE size $PICXSIZE,$PICYSIZE

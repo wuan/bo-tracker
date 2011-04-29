@@ -55,4 +55,9 @@ By default the software is installed to /usr/local, other targets can be set by 
 > ./configure --prefix=<desired path prefix>
 after make -f Makefile.cvs.
 
- -- Andreas Wuerl <awuerl@gmx.net>  Tue, 19 Apr 2011 14:43:00 +0200
+The analysis part has the following requirements:
+  * gnuplot (>= 4.3 ?)
+  * python-tz
+  * proj4 binaries
+
+ -- Andreas Wuerl <awuerl@gmx.net>  Tue, 29 Apr 2011 08:24:00 +0200
