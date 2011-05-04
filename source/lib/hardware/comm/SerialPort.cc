@@ -28,17 +28,47 @@ namespace blitzortung {
 
 	  oss << "blitzortung::hardware::SerialPort::open() Unable to open port " << portName_;
 	  throw exception::Base(oss.str());
-	} else
-	  fcntl(serialFd_, F_SETFL, 0);
+	}
 
-	struct termios tio;
-	tio.c_iflag= IGNBRK | IGNPAR ;
-	tio.c_oflag= OPOST | ONLCR ;
-	tio.c_cflag= B19200 | CS8 | CLOCAL | CREAD ; 
-	tio.c_lflag= 0;
-	tio.c_cc[VTIME]= 0;
-	tio.c_cc[VMIN]= 1;
-	tcsetattr(serialFd_, TCSANOW, &tio); 
+	// use serial port in blocking mode
+	fcntl(serialFd_, F_SETFL, 0);
+
+	struct termios options;
+
+	tcgetattr(serialFd_, &options);
+
+	// set baud rate
+	cfsetispeed(&options, B19200);
+	cfsetospeed(&options, B19200);
+	options.c_cflag |= (CLOCAL | CREAD) ; 
+
+	// No parity (8N1)
+	options.c_cflag &= ~PARENB;
+	options.c_cflag &= ~CSTOPB;
+
+	// set character size
+	options.c_cflag &= ~CSIZE;
+	options.c_cflag |= CS8;
+
+	// disable hardware flow control
+	options.c_cflag &= ~CRTSCTS;
+
+	// ignore break condition and parity errors 
+	options.c_iflag = (IGNBRK | IGNPAR);
+
+	// postprocess output and map LF to CRLF 
+	options.c_oflag = OPOST | ONLCR ;
+
+	// use raw input (no line based editing, echo, etc.)
+	options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+
+	// set control characters
+	// time to wait for data (tenth of seconds)
+	options.c_cc[VTIME]= 0;
+	// minimum number of characters to read
+	options.c_cc[VMIN]= 1;
+
+	tcsetattr(serialFd_, TCSANOW, &options); 
 
 	isOpen_ = true;
 
