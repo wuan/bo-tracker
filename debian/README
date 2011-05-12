@@ -3,10 +3,11 @@ The Debian Package blitzortung-tracker
 
 To build the package, first install the missing dependencies via
 > sudo apt-get install debhelper build-essential autotools-dev libtool fakeroot
+> sudo apt-get install libboost-program-options-dev libboost-thread-dev libboost-date-time-dev libboost-regex-dev libcppunit-dev liblog4cpp5-dev libjson0-dev
 
 > make -f Makefile.cvs
 
-The go to the source package directory blitzortung-tracker-simple_15.0 to create the package via
+The go to the source package directory blitzortung-tracker to create the package via
 
 > dpkg-buildpackage
 

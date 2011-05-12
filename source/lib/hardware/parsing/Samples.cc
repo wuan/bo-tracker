@@ -53,7 +53,7 @@ namespace blitzortung {
 	}
 
 	// parse lighning event information
-	if (gps.isValid() && eventtime != pt::not_a_date_time) {
+	if (dataFormat.get() != 0 && gps.isValid() && eventtime != pt::not_a_date_time) {
 	  int numberOfEvents = rawData_.size() >> 2;
 
 	  data::Array::AP array(new data::Array(dataFormat));
@@ -75,8 +75,17 @@ namespace blitzortung {
 
 	  waveform_ = data::Waveform::AP(new data::Waveform(array, eventtime, sampleDt));
 	  valid_ = true;
-	}
 
+	} else {
+	  waveform_.reset();
+
+	  std::string line;
+	  for (std::vector<std::string>::const_iterator field = fields.begin(); field != fields.end(); field++)
+	    line += *field + " ";
+
+	  logger_.warnStream() << "Ticks() could not parse sample '" << line << "'";
+	  valid_ = false;
+	}
       }
 
       data::Waveform::AP Samples::getWaveform() {
