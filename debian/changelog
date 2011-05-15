@@ -1,3 +1,13 @@
+blitzortung-tracker (0.9.4) unstable; urgency=low
+
+  * improved socket server functionality
+  * fix problems with parsing of sample data
+  * improved configuration of serial port
+  * added analysis cronjob
+  * better documentation / support for non Debian/Ubuntu systems
+
+ -- Andreas Wuerl <awuerl@gmx.net>  Thu, 20 May 2011 07:25:00 +0200
+
 blitzortung-tracker (0.9.3) unstable; urgency=low
 
   * added unix domain socket server with multithreaded listeners
