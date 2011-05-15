@@ -8,7 +8,7 @@
 """
 blitzortung python modules
 """
-__version__ = '0.2.0'
+__version__ = '0.9.4'
 
 import struct as _struct
 
@@ -21,10 +21,10 @@ import struct as _struct
 #-----------------------------------------------------------------------------
 
 class Error(Exception):
-    """
-    General Klimalogger error class.
-    """
-    pass
+  """
+  General Blitzortung error class.
+  """
+  pass
 
 
 #-----------------------------------------------------------------------------
@@ -38,14 +38,14 @@ import geom
 import files
 
 __all__ = [
-    'Config', # main classes
-    
-    'data.TimeIntervals', # data items
-    
-    'Db', # database access
-  
-    'Error', # custom exceptions
+  'Config', # main classes
 
-    'files.RawFiles', 'files.Data',
-    'geom.Point',
+  'data.TimeIntervals', # data items
+
+  'Db', # database access
+
+  'Error', # custom exceptions
+
+  'files.RawFiles', 'files.Data',
+  'geom.Point',
 ]
