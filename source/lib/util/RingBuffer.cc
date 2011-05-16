@@ -75,6 +75,11 @@ namespace blitzortung {
       return x*x;
     }
 
+    template <typename T> T RingBuffer<T>::operator[](unsigned int index) const {
+      // move write position
+      return data_[( pos_ + index ) % size_];
+    }
+
     //! explicit instatiation of functions to be linked afterwards
     template class RingBuffer<double>;
     template class RingBuffer<float>;

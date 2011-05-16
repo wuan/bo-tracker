@@ -10,10 +10,10 @@ namespace blitzortung {
 
       Base::Base(comm::Base& communication, bool disableSbas) :
 	communication_(communication),
-	disableSbas_(disableSbas),
 	satelliteCount_(data::Base::BUFFERSIZE),
 	status_(0),
-	logger_("hardware.gps.Base")
+	logger_("hardware.gps.Base"),
+	disableSbas_(disableSbas)
       {
       }
 
