@@ -52,6 +52,8 @@ namespace blitzortung {
 	  //! return actual size of data
 	  int getActualSize() const;
 
+	  //! index operation
+	  T operator[](unsigned int index) const;
       };
 
   }

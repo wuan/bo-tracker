@@ -32,6 +32,8 @@ namespace blitzortung {
 
 	  void cmdGetInfo();
 
+	  void cmdGetActivity();
+
 	  virtual std::string respond(const std::string&);
 
 	public:

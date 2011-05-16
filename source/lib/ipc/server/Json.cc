@@ -75,6 +75,8 @@ namespace blitzortung {
 
 	    if (command == "getInfo")
 	      cmdGetInfo();
+	    else if (command =="getActivity")
+	      cmdGetActivity();
 	    	    
 	    json_object_put(cmd_obj);
 	  }
@@ -92,6 +94,15 @@ namespace blitzortung {
 	return jsonString;
       }
 
+      void Json::cmdGetActivity() {
+	    json_object* jsonActivity = json_object_new_array();
+
+	    for (int i=0; i < process_.getEventCountBuffer().getActualSize(); i++) {
+	      json_object_array_add(jsonActivity, json_object_new_int(process_.getEventCountBuffer()[i]));
+	    }
+
+	    json_object_object_add(jsonResponse_, "activity", jsonActivity);
+      }
 
 
     }
