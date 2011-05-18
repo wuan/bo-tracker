@@ -77,7 +77,9 @@ namespace blitzortung {
 
     template <typename T> T RingBuffer<T>::operator[](unsigned int index) const {
       // move write position
-      return data_[( pos_ + index ) % size_];
+      logger_.debugStream() << "pos: " << pos_ << ", size " << size_ << ", index " << index << ", idx = " << ( pos_ + index ) % size_;
+      int start = (pos_ - actualSize_) % size_;
+      return data_[( start + index ) % size_];
     }
 
     //! explicit instatiation of functions to be linked afterwards
