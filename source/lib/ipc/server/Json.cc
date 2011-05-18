@@ -97,8 +97,21 @@ namespace blitzortung {
       void Json::cmdGetActivity() {
 	    json_object* jsonActivity = json_object_new_array();
 
-	    for (int i=0; i < process_.getEventCountBuffer().getActualSize(); i++) {
-	      json_object_array_add(jsonActivity, json_object_new_int(process_.getEventCountBuffer()[i]));
+	    const int totalNumberOfSeconds = process_.getEventCountBuffer().getActualSize();
+	    const int totalNumberOfMinutes = totalNumberOfSeconds / 60;
+
+	    logger_.noticeStream() << " seconds " << totalNumberOfSeconds << ", minutes " << totalNumberOfMinutes;
+
+	    for (int minute = totalNumberOfMinutes; minute > 0; minute--) {
+	      int eventsPerMinute = 0;
+	      for (int second = 0; second < 60; second ++) {
+		int index = (totalNumberOfMinutes - minute) * 60 + second;
+		eventsPerMinute += process_.getEventCountBuffer()[index];
+		if (second == 0 || second == 59)
+		  logger_.noticeStream() << "     minute " << minute << " second " << second << " index " << index;
+	      }
+	      logger_.noticeStream() << "   sum per minute " << eventsPerMinute;
+	      json_object_array_add(jsonActivity, json_object_new_int(eventsPerMinute));
 	    }
 
 	    json_object_object_add(jsonResponse_, "activity", jsonActivity);
