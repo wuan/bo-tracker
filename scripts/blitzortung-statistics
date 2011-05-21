@@ -112,17 +112,23 @@ elif options.mode == "residual":
 
 elif options.mode == "radar":
     timeInterval = blitzortung.data.TimeRange(now, delta)
-    serverStrokes = blitzortung.data.Strokes(config)
+    serverStrokes = blitzortung.data.ParticipantStrokes(config)
     strokes = serverStrokes.get()
 
     data = blitzortung.files.Data(fileNames, timeInterval)
     rawEvents = data.get()
    
+    userName = config.get('USERNAME')
+
     if len(rawEvents) > 0:
       rawIterator = iter(rawEvents)
       rawEvent = rawIterator.next()
 	
       for stroke in strokes:
-	print "%.1f %.1f" %(rawEvent.azimuth(stroke), rawEvent.distance(stroke)/1000.0)
+	result = "%.1f %.1f" %(rawEvent.azimuth(stroke), rawEvent.distance(stroke)/1000.0)
+	if stroke.hasParticipant(userName):
+	  print "? ? %s" % result
+	else:
+	  print "%s ? ?" % result
 else:
     raise Exception("unknown mode '%s'" %(options.mode))
