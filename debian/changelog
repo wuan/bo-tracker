@@ -1,3 +1,9 @@
+blitzortung-tracker (0.9.5SNAPSHOT201105221925) unstable; urgency=low
+
+  * separated shared python code into modules
+
+ -- Andreas Wuerl <awuerl@gmx.net>  Thu, 21 May 2011 19:25:00 +0200
+
 blitzortung-tracker (0.9.4) unstable; urgency=low
 
   * improved socket server functionality
