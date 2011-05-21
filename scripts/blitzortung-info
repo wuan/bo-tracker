@@ -117,6 +117,7 @@ set size square
 set angles degree
 set grid polar
 set polar
+set pointsize 0.8
 set title "lightning radar (last 2 hours)"
 plot 0 lt -2 not, "$TMPDATA" u (90-\$1):2 not w p lt $STROKESCOLOR, \
       "" u (90-\$3):4 not w p lt $OWNSTROKESCOLOR
@@ -129,6 +130,7 @@ set size square
 set angles degree
 set grid polar
 set polar
+set pointsize 0.8
 set xr [-200:200]
 set yr [-200:200]
 set title "local lightning radar (last 2 hours)"
