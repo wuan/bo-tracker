@@ -6,9 +6,11 @@
 
 '''
 
-import os
+import os, subprocess
 import glob
 import datetime
+
+import data
 
 class RawFiles(object):
 
@@ -35,8 +37,8 @@ class RawFiles(object):
 
 class Data(object):
 
-  def __init__(self, files, time):
-    self.files = files
+  def __init__(self, rawFiles, time):
+    self.rawFiles = rawFiles
     self.time = time
 
   def get(self):
@@ -48,20 +50,20 @@ class Data(object):
     endtime = end.strftime("%H%M")
 
     try:
-      rawFile = files.get(start.date())
+      rawFile = self.rawFiles.get(start.date())
 
-      data = subprocess.Popen(['blitzortung-data','-i', rawFile, '-s', starttime, '-e', endtime], stdout=subprocess.PIPE)
+      dataPipe = subprocess.Popen(['blitzortung-data','-i', rawFile, '-s', starttime, '-e', endtime], stdout=subprocess.PIPE)
 
-      (output, error) = data.communicate()
-    except:
+      (output, error) = dataPipe.communicate()
+    except Exception as e:
       pass
       output = ""
-      print "ignore errors"
+      print "ignore error:",e
 
     rawEvents = []
 
     for line in output.splitlines():
-      rawEvents.append(RawEvent(line))
+      rawEvents.append(data.RawEvent(line))
 
     return rawEvents
 

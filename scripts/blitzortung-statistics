@@ -17,7 +17,7 @@ whitespace = re.compile('\s+')
 parser = optparse.OptionParser()
 
 parser.add_option("--mode", dest="mode", default='histogram',
-                  help="select statistics mode [histogram, data, strokes]", type="string")
+                  help="select statistics mode [histogram, data, strokes, residual, radar]", type="string")
 
 parser.add_option("--time-delta", dest="timedelta", default=15, 
                   help="length of time interval in minutes", type="int")
@@ -32,21 +32,21 @@ now = now.replace(tzinfo=pytz.UTC)
 
 delta = datetime.timedelta(minutes=options.timedelta)
 
-files = blitzortung.files.RawFiles(options.datapath)
+fileNames = blitzortung.files.RawFiles(options.datapath)
 config = blitzortung.Config()
 
 if options.mode == "histogram":
     timeInterval = blitzortung.data.TimeIntervals(now, delta)
-    histogram = blitzortung.data.Histogram(files, timeInterval)
+    histogram = blitzortung.data.Histogram(fileNames, timeInterval)
 
 elif options.mode == "data":
     timeInterval = blitzortung.data.TimeRange(now, delta)
-    data = blitzortung.files.Data(files, timeInterval)
+    data = blitzortung.files.Data(fileNames, timeInterval)
     data.list()
 
 elif options.mode == "strokes":
-    timeInterval = TimeInterval(now, delta)
-    participantSource = ParticipantStrokes(config)
+    timeInterval = blitzortung.data.TimeInterval(now, delta)
+    participantSource = blitzortung.data.ParticipantStrokes(config)
     strokes = participantSource.get()
     totalStrokes = {}
     participatedStrokes = {}
@@ -76,14 +76,14 @@ elif options.mode == "strokes":
         participated = '0'
         if participatedStrokes.has_key(time):
             participated = participatedStrokes[time]
-        print time.strftime(Time.timeformat), totalStrokes[time], participated
+        print time.strftime(blitzortung.data.Time.timeformat), totalStrokes[time], participated
 
 elif options.mode == "residual":
-    timeInterval = TimeRange(now, delta)
-    serverStrokes = Strokes(config)
+    timeInterval = blitzortung.data.TimeRange(now, delta)
+    serverStrokes = blitzortung.data.Strokes(config)
     strokes = serverStrokes.get(timeInterval)
 
-    data = Data(files, timeInterval)
+    data = blitzortung.files.Data(fileNames, timeInterval)
     rawEvents = data.get()
     cVacuum = 0.299792458 # m / ns
     cReduced = (1 - 0.0025) * cVacuum
@@ -106,16 +106,16 @@ elif options.mode == "residual":
 	    residualTimeUs = dt.microseconds - runtime
 	    if abs(residualTimeUs) < 300:
 	      timeDelta = rawEvent.difference(stroke)
-	      print "%s %.1f %d %.2f %.2f" %(stroke.getTime().strftime(Time.timeformat), residualTimeUs, timeDelta.seconds*1000000 + timeDelta.microseconds, rawEvent.distance(stroke) / 1000.0, rawEvent.azimuth(stroke))
+	      print "%s %.1f %d %.2f %.2f" %(stroke.getTime().strftime(blitzortung.data.Time.timeformat), residualTimeUs, timeDelta.seconds*1000000 + timeDelta.microseconds, rawEvent.distance(stroke) / 1000.0, rawEvent.azimuth(stroke))
 	except StopIteration:
 	  break
 
 elif options.mode == "radar":
-    timeInterval = TimeRange(now, delta)
-    serverStrokes = Strokes(config)
+    timeInterval = blitzortung.data.TimeRange(now, delta)
+    serverStrokes = blitzortung.data.Strokes(config)
     strokes = serverStrokes.get()
 
-    data = Data(files, timeInterval)
+    data = blitzortung.files.Data(fileNames, timeInterval)
     rawEvents = data.get()
    
     if len(rawEvents) > 0:
@@ -123,6 +123,6 @@ elif options.mode == "radar":
       rawEvent = rawIterator.next()
 	
       for stroke in strokes:
-	print rawEvent.azimuth(stroke), rawEvent.distance(stroke)/1000.0
+	print "%.1f %.1f" %(rawEvent.azimuth(stroke), rawEvent.distance(stroke)/1000.0)
 else:
     raise Exception("unknown mode '%s'" %(options.mode))
