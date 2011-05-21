@@ -8,8 +8,11 @@
 
 import subprocess
 import re
+import pyproj
 
 class Point(object):
+
+  __geod = pyproj.Geod(ellps='WGS84', units='m')
 
   __whitespaceRe = re.compile('\s+')
 
@@ -18,12 +21,10 @@ class Point(object):
     self.y = y
 
   def __invgeod(self, other):
-    pipe = subprocess.Popen(['invgeod', '+ellps=WGS84', '+units=m','-f','%.5f'], stdin = subprocess.PIPE, stdout = subprocess.PIPE)
-    (output, error) = pipe.communicate("%f %f %f %f" %(self.y, self.x, other.y, other.x))
-    return Point.__whitespaceRe.split(output.strip())
+    return Point.__geod.inv(self.x, self.y, other.x, other.y)
 
   def distance(self, other):
-    return float(self.__invgeod(other)[2])
+    return self.__invgeod(other)[2]
 
   def azimuth(self, other):
-    return float(self.__invgeod(other)[0])
+    return self.__invgeod(other)[0]
