@@ -6,7 +6,9 @@
 
 '''
 
-import datetime
+import datetime, pytz
+import math
+import urllib
 
 import geom
 import files
@@ -113,7 +115,7 @@ class TimeIntervals(TimeInterval):
 class Event(geom.Point, Time):
 
   def __init__(self, x, y, date, time):
-    Point.__init__(self, x, y)
+    geom.Point.__init__(self, x, y)
     Time.__init__(self, date, time)
 
 class RawEvent(Event):
