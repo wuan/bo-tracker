@@ -56,11 +56,19 @@ void printAllSamplesOfEvent(const bo::data::Event& event) {
 
   const bo::data::Waveform& waveform = event.getWaveform();
 
+  unsigned int numberOfChannels = waveform.getNumberOfChannels();
   for (unsigned int sample = 0; sample < waveform.getNumberOfSamples(); sample++) {
     std::cout << waveform.getTime(sample);
-    for (unsigned int channel = 0; channel < waveform.getNumberOfChannels(); channel++) {
-      std::cout << " " << waveform.get(sample, channel);
+    double sum = 0.0;
+    for (unsigned int channel = 0; channel < numberOfChannels; channel++) {
+      double value = waveform.get(sample, channel);
+      sum += value * value;
+      std::cout << " " << value;
     }
+    if (numberOfChannels > 1)
+      std::cout << " " << sqrt(sum);
+    std::cout << " " << sample;
+
     std::cout << std::endl;
   }
 

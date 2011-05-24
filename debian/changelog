@@ -1,6 +1,7 @@
-blitzortung-tracker (0.9.5SNAPSHOT201105221925) unstable; urgency=low
+blitzortung-tracker (0.9.5SNAPSHOT201105242025) unstable; urgency=low
 
-  * separated shared python code into modules
+  * separated python code into blitzortung-tracker-tools package
+  * іmproved socket information for current activity
 
  -- Andreas Wuerl <awuerl@gmx.net>  Thu, 21 May 2011 19:25:00 +0200
 
