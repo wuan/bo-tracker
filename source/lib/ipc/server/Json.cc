@@ -97,19 +97,35 @@ namespace blitzortung {
       void Json::cmdGetActivity() {
 	    json_object* jsonActivity = json_object_new_array();
 
+	    const unsigned int intervalSeconds = 60;
 	    const int totalNumberOfSeconds = process_.getEventCountBuffer().getActualSize();
-	    const int totalNumberOfMinutes = totalNumberOfSeconds / 60;
+	    const int totalNumberOfIntervals = totalNumberOfSeconds / intervalSeconds;
 
-	    for (int minute = totalNumberOfMinutes; minute > 0; minute--) {
-	      int eventsPerMinute = 0;
-	      for (int second = 0; second < 60; second ++) {
-		int index = (totalNumberOfMinutes - minute) * 60 + second;
-		eventsPerMinute += process_.getEventCountBuffer()[index];
+
+	    for (int interval = totalNumberOfIntervals; interval > 0; interval--) {
+	      int eventsPerInterval = 0;
+	      for (int second = 0; second < intervalSeconds; second ++) {
+		int index = (totalNumberOfIntervals - interval) * intervalSeconds + second;
+		eventsPerInterval += process_.getEventCountBuffer()[index];
 	      }
-	      json_object_array_add(jsonActivity, json_object_new_int(eventsPerMinute));
+	      json_object_array_add(jsonActivity, json_object_new_int(eventsPerInterval));
 	    }
 
 	    json_object_object_add(jsonResponse_, "activity", jsonActivity);
+
+	    json_object_object_add(jsonResponse_, "intervalSeconds", json_object_new_int(intervalSeconds));
+
+	    const hardware::gps::Base& gps = hardware_.getGps();
+	    pt::ptime gpsTime = gps.getTime();
+	    std::ostringstream oss;
+	    gr::date_facet *datefacet = new gr::date_facet();
+	    datefacet->format("%Y-%m-%d");
+	    oss.imbue(std::locale(std::locale::classic(), datefacet));
+	    oss << gpsTime.date();
+	    json_object_object_add(jsonResponse_, "date", json_object_new_string(oss.str().c_str()));
+	    oss.str("");
+	    oss << gpsTime.time_of_day();
+	    json_object_object_add(jsonResponse_, "time", json_object_new_string(oss.str().c_str()));
       }
 
 

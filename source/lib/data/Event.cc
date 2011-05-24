@@ -86,8 +86,13 @@ namespace blitzortung {
       os << " " << wfm.getTimeDelta().total_nanoseconds();
 
       os.precision(2);
-      os << " " << wfm.get(maxIndex, 0);
-      os << " " << wfm.get(maxIndex, 1);
+      double squareSum = 0.0;
+      for (unsigned int channel = 0; channel < wfm.getNumberOfChannels(); channel++) {
+	double value = wfm.get(maxIndex, channel);
+	os << " " << value;
+	squareSum += value * value;
+      }
+      os << " " << sqrt(squareSum);
       os << " " << maxIndex;
 
       // restore original locale
