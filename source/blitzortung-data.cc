@@ -178,7 +178,7 @@ int main(int argc, char **argv) {
 
     histogram hist = ac::density(acc);
     for (int i = 0; i < hist.size(); i++) {
-      std::cout << hist[i].first << " " << hist[i].second << std::endl;
+      std::cout << hist[i].first << " " << hist[i].second * events.size() << std::endl;
     }
   } else if (mode == "default") {
     if (vm.count("long-data"))
