@@ -43,9 +43,7 @@ namespace blitzortung {
 
       deletedEvents->transfer(deletedEvents->end(), events_->begin(), events_->end(), *events_);
 
-      if (logger_.isNoticeEnabled()) {
-	logger_.noticeStream() << "prepareData() limit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed << ", erasing to " << sampleLimit << " elements (new # of elements: " << events_->size() << ")";
-      }
+	logger_.warnStream() << "prepareData() limit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed << ", erasing to " << sampleLimit << " elements (new # of elements: " << events_->size() << ")" << " deleted # " << deletedEvents->size();
 
       // time sort events
       events_->sort();
