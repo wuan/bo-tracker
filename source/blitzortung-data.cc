@@ -8,6 +8,9 @@
 #include <string>
 
 #include <boost/program_options.hpp>
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/density.hpp>
 
 #include "namespaces.h"
 #include "data/Events.h"
@@ -78,6 +81,7 @@ void printAllSamplesOfEvent(const bo::data::Event& event) {
 int main(int argc, char **argv) {
 
   std::string file = "";
+  std::string mode;
   std::string startTimeString, endTimeString;
 
   bo::Logger logger("");
@@ -89,7 +93,7 @@ int main(int argc, char **argv) {
     ("input-file,i", po::value<std::string>(&file), "file name")
     ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
     ("endtime,e", po::value<std::string>(&endTimeString), "end time in HHMM or HHMMSS format")
-    ("time-series,t", "output timeseries of single data points")
+    ("mode", po::value<std::string>(&mode)->default_value("plain"), "data mode( plain, statistics, histogram)")
     ("verbose,v", "verbose mode")
     ("long-data,l", "output all samples")
     ("debug", "debug mode")
@@ -144,11 +148,44 @@ int main(int argc, char **argv) {
 
   eventOperation = &printEvent;
 
-  if (vm.count("long-data"))
-    eventOperation = &printAllSamplesOfEvent;
+  if (mode == "statistics") {
+    double sum = 0.0;
+    for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
+      const bo::data::Waveform& waveform = event->getWaveform();
+      sum += waveform.getAmplitude(waveform.getMaxIndex());
+    }
+    double averageAmplitude = sum/events.size();
 
-  for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
-    (*eventOperation)(*event);
+    sum = 0.0;
+    for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
+      const bo::data::Waveform& waveform = event->getWaveform();
+      double distance = averageAmplitude - waveform.getAmplitude(waveform.getMaxIndex());
+      sum += distance * distance;
+    }
+    double amplitudeVariance = sqrt(sum)/events.size();
+
+    std::cout << events.size() << " " << averageAmplitude << " " << amplitudeVariance << std::endl;
+  } else if (mode == "histogram") {
+    ac::accumulator_set<double, ac::features<ac::tag::density> > acc(acc::tag::density::num_bins=20);
+
+    for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
+      const bo::data::Waveform& waveform = event->getWaveform();
+      acc(waveform.getAmplitude(waveform.getMaxIndex()));
+    }
+
+    ac::histogram_type hist = density(acc);
+    for (int i = 0; i < hist.size(); i++) {
+      std::cout << hist[i].first << " " << hist[i].second << std::endl;
+    }
+  } else if (mode == "default") {
+    if (vm.count("long-data"))
+      eventOperation = &printAllSamplesOfEvent;
+
+    for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
+      (*eventOperation)(*event);
+    }
+  } else {
+    std::cerr << "unknown mode '" << mode << "'";
+    exit(1);
   }
-      
 }
