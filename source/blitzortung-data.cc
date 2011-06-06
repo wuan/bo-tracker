@@ -17,6 +17,9 @@
 #include "exception/Base.h"
 #include "Logger.h"
 
+typedef ac::accumulator_set<double, ac::features<ac::tag::density> > accumulator;
+typedef boost::iterator_range<std::vector<std::pair<double, double> >::iterator > histogram; 
+
 pt::time_duration parseTime(const std::string& inputString, bool isEnd=false) {
   std::istringstream iss(inputString);
   pt::time_duration endOffset(pt::seconds(0));
@@ -33,7 +36,7 @@ pt::time_duration parseTime(const std::string& inputString, bool isEnd=false) {
   // create formatting facet and set format for time_duration type
   pt::time_input_facet *facet = new pt::time_input_facet();
   facet->time_duration_format(format.c_str());
-  
+
   iss.imbue(std::locale(std::locale::classic(), facet));
 
   pt::time_duration time;
@@ -46,7 +49,7 @@ pt::time_duration parseTime(const std::string& inputString, bool isEnd=false) {
 }
 
 void printEvent(const bo::data::Event& event) {
-    std::cout << event << std::endl;
+  std::cout << event << std::endl;
 }
 
 void printAllSamplesOfEvent(const bo::data::Event& event) {
@@ -117,7 +120,7 @@ int main(int argc, char **argv) {
     std::cerr << "'input-file' missing\n";
     return 5;
   }
-      
+
   // logging setup
 
   logger.setPriority(log4cpp::Priority::NOTICE);
@@ -166,14 +169,14 @@ int main(int argc, char **argv) {
 
     std::cout << events.size() << " " << averageAmplitude << " " << amplitudeVariance << std::endl;
   } else if (mode == "histogram") {
-    ac::accumulator_set<double, ac::features<ac::tag::density> > acc(acc::tag::density::num_bins=20);
+    accumulator acc(ac::tag::density::num_bins = 20, ac::tag::density::cache_size = 10);
 
     for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
       const bo::data::Waveform& waveform = event->getWaveform();
       acc(waveform.getAmplitude(waveform.getMaxIndex()));
     }
 
-    ac::histogram_type hist = density(acc);
+    histogram hist = ac::density(acc);
     for (int i = 0; i < hist.size(); i++) {
       std::cout << hist[i].first << " " << hist[i].second << std::endl;
     }

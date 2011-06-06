@@ -8,7 +8,8 @@ AM_CXXFLAGS = \
 	-I lib
 
 AM_LDFLAGS = \
-	-lboost_program_options
+	-lboost_program_options \
+	-lboost_math_c99
 
 blitzortung_tracker_SOURCES = \
 	blitzortung-tracker.cc
