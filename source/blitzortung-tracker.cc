@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
   std::string serialPortName = "/dev/ttyUSB0";
   std::string outputFile = "";
   unsigned short serialBaudRate = 19200;
-  double eventRateLimit = 1.0;
+  double eventRateLimit = 5.0;
   std::string gpsType = "sirf";
   std::string firmwareVersion = "-";
 
