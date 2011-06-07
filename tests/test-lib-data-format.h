@@ -13,6 +13,7 @@ class FormatTest : public CPPUNIT_NS :: TestFixture
 {
   CPPUNIT_TEST_SUITE( FormatTest );
   CPPUNIT_TEST( testIndex );
+  CPPUNIT_TEST( testOffset );
   CPPUNIT_TEST_SUITE_END();
 
   public:
@@ -20,10 +21,12 @@ class FormatTest : public CPPUNIT_NS :: TestFixture
   void tearDown();
 
   void doIndexTest(bo::data::Format::CP format);
+  void doOffsetTest(bo::data::Format::CP format);
 
   //! tests
 
   void testIndex();
+  void testOffset();
 };
 
 #endif

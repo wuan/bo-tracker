@@ -63,6 +63,9 @@ namespace blitzortung {
 	//! returns the number of bits per sample
 	unsigned short getNumberOfBitsPerSample() const;
 
+	//! returns the number of bits per sample
+	int getSampleZeroOffset() const;
+
 	//! returns the number of channels per measurement
 	unsigned short getNumberOfChannels() const;
 
