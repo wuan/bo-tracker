@@ -11,12 +11,15 @@
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/density.hpp>
+#include <boost/accumulators/statistics/mean.hpp>
+#include <boost/accumulators/statistics/variance.hpp>
 
 #include "namespaces.h"
 #include "data/Events.h"
 #include "exception/Base.h"
 #include "Logger.h"
 
+typedef ac::accumulator_set<double, ac::features<ac::tag::mean, ac::tag::variance> > statistics_accumulator;
 typedef ac::accumulator_set<double, ac::features<ac::tag::density> > accumulator;
 typedef boost::iterator_range<std::vector<std::pair<double, double> >::iterator > histogram; 
 
@@ -152,22 +155,14 @@ int main(int argc, char **argv) {
   eventOperation = &printEvent;
 
   if (mode == "statistics") {
-    double sum = 0.0;
+    statistics_accumulator acc;
+
     for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
       const bo::data::Waveform& waveform = event->getWaveform();
-      sum += waveform.getAmplitude(waveform.getMaxIndex());
+      acc(waveform.getAmplitude(waveform.getMaxIndex()));
     }
-    double averageAmplitude = sum/events.size();
 
-    sum = 0.0;
-    for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
-      const bo::data::Waveform& waveform = event->getWaveform();
-      double distance = averageAmplitude - waveform.getAmplitude(waveform.getMaxIndex());
-      sum += distance * distance;
-    }
-    double amplitudeVariance = sqrt(sum)/events.size();
-
-    std::cout << events.size() << " " << averageAmplitude << " " << amplitudeVariance << std::endl;
+    std::cout << events.size() << " " << ac::mean(acc) << " " << ac::variance(acc) << std::endl;
   } else if (mode == "histogram") {
     accumulator acc(ac::tag::density::num_bins = 20, ac::tag::density::cache_size = 10);
 
