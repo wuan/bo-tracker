@@ -10,6 +10,7 @@
 class HardwareParsingTest : public CPPUNIT_NS :: TestFixture
 {
   CPPUNIT_TEST_SUITE( HardwareParsingTest );
+  CPPUNIT_TEST( testHexStringParsing );
   CPPUNIT_TEST( testTicksParsing );
   CPPUNIT_TEST( testTicksParsingF25 );
   CPPUNIT_TEST( testSamplesParsing );
@@ -28,6 +29,7 @@ class HardwareParsingTest : public CPPUNIT_NS :: TestFixture
 
   //! tests
 
+  void testHexStringParsing();
   void testTicksParsing();
   void testTicksParsingF25();
   void testSamplesParsing();

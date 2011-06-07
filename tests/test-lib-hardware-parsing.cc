@@ -14,6 +14,15 @@
 
 CPPUNIT_TEST_SUITE_REGISTRATION( HardwareParsingTest );
 
+class ParseBase : public bo::hardware::parsing::Base {
+
+  public:
+    unsigned int parseHexString(const std::string hexString) {
+      return parseHex(hexString);
+    }
+
+};
+
 void HardwareParsingTest::setUp() {
 }
 
@@ -87,6 +96,19 @@ void HardwareParsingTest::samplesParsingTest(const std::string& input, bo::hardw
   bo::data::Waveform::AP waveform = samplesParser.getWaveform();
   CPPUNIT_ASSERT_EQUAL(format, *(waveform->getArray().getFormat()));
   CPPUNIT_ASSERT_EQUAL(rawData, samplesParser.getRawData());
+}
+
+void HardwareParsingTest::testHexStringParsing()
+{
+  ParseBase parseBase;
+
+  for (unsigned int i = 0; i <= 0xff; i++) {
+    std::ostringstream oss;
+    oss << std::hex;
+    oss << i;
+
+    CPPUNIT_ASSERT_EQUAL(i, parseBase.parseHexString(oss.str()));
+  }
 }
 
 void HardwareParsingTest::testSamplesParsing() {

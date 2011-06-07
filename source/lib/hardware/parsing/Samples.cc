@@ -60,7 +60,9 @@ namespace blitzortung {
 
 	  unsigned short hexCharsPerSample = (dataFormat->getNumberOfBitsPerSample() + 3 ) / 4;
 	  unsigned short numberOfChannels = dataFormat->getNumberOfChannels();
-	  int offset = 1 << (dataFormat->getNumberOfBitsPerSample() - 1);
+
+	  int offset = dataFormat->getSampleZeroOffset();
+
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "#ch " << numberOfChannels << ", #chars/sample " << hexCharsPerSample << " zeroOffset " << offset;
 
@@ -68,7 +70,7 @@ namespace blitzortung {
 	  for (int sample=0; sample < numberOfEvents; sample++) {
 	    for (int channel=0; channel < numberOfChannels; channel++) {
 	      std::string hexString = rawData_.substr(index, hexCharsPerSample);
-	      array->set(parseHex(hexString) - offset, sample, channel);
+	      array->set(int(offset + parseHex(hexString)), sample, channel);
 	      index += hexCharsPerSample;
 	    }
 	  }

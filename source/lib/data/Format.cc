@@ -39,6 +39,10 @@ namespace blitzortung {
       return numberOfBits_;
     }
 
+    int Format::getSampleZeroOffset() const {
+      return -(1 << (getNumberOfBitsPerSample() - 1));
+    }
+
     unsigned short Format::getNumberOfChannels() const {
       return numberOfChannels_;
     }
