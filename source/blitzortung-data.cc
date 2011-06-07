@@ -99,7 +99,7 @@ int main(int argc, char **argv) {
     ("input-file,i", po::value<std::string>(&file), "file name")
     ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
     ("endtime,e", po::value<std::string>(&endTimeString), "end time in HHMM or HHMMSS format")
-    ("mode", po::value<std::string>(&mode)->default_value("plain"), "data mode( plain, statistics, histogram)")
+    ("mode", po::value<std::string>(&mode)->default_value("default"), "data mode [default, statistics, histogram]")
     ("verbose,v", "verbose mode")
     ("long-data,l", "output all samples")
     ("debug", "debug mode")
