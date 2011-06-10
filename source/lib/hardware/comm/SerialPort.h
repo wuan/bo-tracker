@@ -51,7 +51,7 @@ namespace blitzortung {
 	  const unsigned int getBaudRate() const;
 	  
 	  //! return the name of the serial port device
-	  const std::string getPortName() const;
+	  const std::string& getPortName() const;
 
 	  //!  returns a complete line of received data, blocks until data is arrived 
 	  const std::string receive();
