@@ -55,6 +55,14 @@ void printEvent(const bo::data::Event& event) {
   std::cout << event << std::endl;
 }
 
+void printEventTime(const bo::data::Event& event) {
+  pt::time_facet *timefacet = new pt::time_facet();
+  timefacet->format("%Y-%m-%d %H:%M:%S.%f");
+  std::locale oldLocale = std::cout.imbue(std::locale(std::locale::classic(), timefacet));
+
+  std::cout << event.getWaveform().getTime() << std::endl;
+}
+
 void printAllSamplesOfEvent(const bo::data::Event& event) {
 
   pt::time_facet *timefacet = new pt::time_facet();
@@ -102,6 +110,7 @@ int main(int argc, char **argv) {
     ("mode", po::value<std::string>(&mode)->default_value("default"), "data mode [default, statistics, histogram]")
     ("verbose,v", "verbose mode")
     ("long-data,l", "output all samples")
+    ("event-time", "output eventtime")
     ("debug", "debug mode")
     ;
 
@@ -164,7 +173,7 @@ int main(int argc, char **argv) {
 
     std::cout << events.size() << " " << ac::mean(acc) << " " << ac::variance(acc) << std::endl;
   } else if (mode == "histogram") {
-    accumulator acc(ac::tag::density::num_bins = 20, ac::tag::density::cache_size = 10);
+    accumulator acc(ac::tag::density::num_bins = 20, ac::tag::density::cache_size = events.size());
 
     for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
       const bo::data::Waveform& waveform = event->getWaveform();
@@ -178,6 +187,8 @@ int main(int argc, char **argv) {
   } else if (mode == "default") {
     if (vm.count("long-data"))
       eventOperation = &printAllSamplesOfEvent;
+    else if (vm.count("event-time"))
+      eventOperation = &printEventTime;
 
     for (bo::data::Events::CI event = events.begin(); event != events.end(); event++) {
       (*eventOperation)(*event);
