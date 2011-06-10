@@ -153,7 +153,7 @@ namespace blitzortung {
 	}
       }
       
-      const std::string SerialPort::getPortName() const {
+      const std::string& SerialPort::getPortName() const {
 	return portName_;
       }
 

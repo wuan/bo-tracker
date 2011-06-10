@@ -4,24 +4,30 @@
 
 */
 
+#include "config.h"
+
 #include <iostream>
 #include <string>
 
 #include <boost/program_options.hpp>
+#ifdef HAVE_BOOST_ACCUMULATORS_ACCUMULATORS_HPP
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/density.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
+#endif
 
 #include "namespaces.h"
 #include "data/Events.h"
 #include "exception/Base.h"
 #include "Logger.h"
 
+#ifdef HAVE_BOOST_ACCUMULATORS_ACCUMULATORS_HPP
 typedef ac::accumulator_set<double, ac::features<ac::tag::mean, ac::tag::variance> > statistics_accumulator;
 typedef ac::accumulator_set<double, ac::features<ac::tag::density> > accumulator;
 typedef boost::iterator_range<std::vector<std::pair<double, double> >::iterator > histogram; 
+#endif
 
 pt::time_duration parseTime(const std::string& inputString, bool isEnd=false) {
   std::istringstream iss(inputString);
@@ -95,7 +101,7 @@ void printAllSamplesOfEvent(const bo::data::Event& event) {
 int main(int argc, char **argv) {
 
   std::string file = "";
-  std::string mode;
+  std::string mode = "default";
   std::string startTimeString, endTimeString;
 
   bo::Logger logger("");
@@ -107,7 +113,9 @@ int main(int argc, char **argv) {
     ("input-file,i", po::value<std::string>(&file), "file name")
     ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
     ("endtime,e", po::value<std::string>(&endTimeString), "end time in HHMM or HHMMSS format")
-    ("mode", po::value<std::string>(&mode)->default_value("default"), "data mode [default, statistics, histogram]")
+    #ifdef HAVE_BOOST_ACCUMULATORS_ACCUMULATORS_HPP
+    ("mode", po::value<std::string>(&mode)->default_value(mode), "data mode [default, statistics, histogram]")
+    #endif
     ("verbose,v", "verbose mode")
     ("long-data,l", "output all samples")
     ("event-time", "output eventtime")
@@ -163,6 +171,7 @@ int main(int argc, char **argv) {
 
   eventOperation = &printEvent;
 
+  #ifdef HAVE_BOOST_ACCUMULATORS_ACCUMULATORS_HPP
   if (mode == "statistics") {
     statistics_accumulator acc;
 
@@ -184,7 +193,9 @@ int main(int argc, char **argv) {
     for (int i = 0; i < hist.size(); i++) {
       std::cout << hist[i].first << " " << hist[i].second * events.size() << std::endl;
     }
-  } else if (mode == "default") {
+  } else 
+  #endif
+    if (mode == "default") {
     if (vm.count("long-data"))
       eventOperation = &printAllSamplesOfEvent;
     else if (vm.count("event-time"))
