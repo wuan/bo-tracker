@@ -6,7 +6,7 @@
 #include "data/MEvent.h"
 #include "hardware/parsing/Ticks.h"
 
-#define VERSION "debT&nbsp;0.9.4"
+#define TRACKER_VERSION "debT&nbsp;0.9.4"
 
 namespace blitzortung {
   namespace hardware {
@@ -143,7 +143,7 @@ namespace blitzortung {
 
 	rawData.append(" ");
 
-	rawData.append(VERSION);
+	rawData.append(TRACKER_VERSION);
 	rawData.append(" ");
 
 	if (firmwareVersion_ != "") {

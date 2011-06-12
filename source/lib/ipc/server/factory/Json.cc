@@ -14,8 +14,8 @@ namespace blitzortung {
 	    logger_.debugStream() << "initialize factory ";
 	}
 
-	boost::thread Json::createServerThread(unsigned int socket) const {
-	  return boost::thread(ipc::server::Json(socket, process_, pcb_));
+	void Json::createServerThread(unsigned int socket) const {
+	  boost::thread(ipc::server::Json(socket, process_, pcb_));
 	}
 
       }
