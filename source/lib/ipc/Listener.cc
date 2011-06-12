@@ -37,7 +37,7 @@ namespace blitzortung {
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "() start server";
 
-	  boost::thread thread(serverFactory_.createServerThread(connectionSocket));
+	  serverFactory_.createServerThread(connectionSocket);
 	}
 
       }
