@@ -104,7 +104,7 @@ namespace blitzortung {
 
 	    for (int interval = totalNumberOfIntervals; interval > 0; interval--) {
 	      int eventsPerInterval = 0;
-	      for (int second = 0; second < intervalSeconds; second ++) {
+	      for (unsigned int second = 0; second < intervalSeconds; second ++) {
 		int index = (totalNumberOfIntervals - interval) * intervalSeconds + second;
 		eventsPerInterval += process_.getEventCountBuffer()[index];
 	      }
