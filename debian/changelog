@@ -1,11 +1,11 @@
-blitzortung-tracker (0.9.5SNAPSHOT201106111534) unstable; urgency=low
+blitzortung-tracker (0.9.5SNAPSHOT201106121534) unstable; urgency=low
 
   * added simple statistics to blitzortung-data
   * separated python code into blitzortung-tracker-tools package
   * іmproved socket information for current activity
-  * added backwards compatibility for Debian 5
+  * made package compatibile with Debian 5
 
- -- Andreas Wuerl <awuerl@gmx.net>  Thu, 21 May 2011 19:25:00 +0200
+ -- Andreas Wuerl <awuerl@gmx.net>  Sun, 12 Jun 2011 15:34:00 +0200
 
 blitzortung-tracker (0.9.4) unstable; urgency=low
 
