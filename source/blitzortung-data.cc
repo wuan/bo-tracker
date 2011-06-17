@@ -80,8 +80,9 @@ void printAllSamplesOfEvent(const bo::data::Event& event) {
   const bo::data::Waveform& waveform = event.getWaveform();
 
   unsigned int numberOfChannels = waveform.getNumberOfChannels();
+  unsigned int timeDeltaNanoseconds = waveform.getTimeDelta().total_nanoseconds();
   for (unsigned int sample = 0; sample < waveform.getNumberOfSamples(); sample++) {
-    std::cout << waveform.getTime(sample);
+    std::cout << waveform.getTime(sample) << " " << timeDeltaNanoseconds * sample;
     double sum = 0.0;
     for (unsigned int channel = 0; channel < numberOfChannels; channel++) {
       double value = waveform.get(sample, channel);
@@ -94,6 +95,7 @@ void printAllSamplesOfEvent(const bo::data::Event& event) {
 
     std::cout << std::endl;
   }
+  std::cout << std::endl;
 
   std::cout.imbue(oldLocale);
 }
