@@ -1,4 +1,4 @@
-blitzortung-tracker (0.9.5SNAPSHOT201106121534) unstable; urgency=low
+blitzortung-tracker (0.9.5SNAPSHOT201106201833) unstable; urgency=low
 
   * added filter for signals with amplitude below trigger level
   * added simple statistics to blitzortung-data
