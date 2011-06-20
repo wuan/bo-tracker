@@ -76,7 +76,13 @@ namespace blitzortung {
 	  }
 
 	  waveform_ = data::Waveform::AP(new data::Waveform(array, eventtime, sampleDt));
-	  valid_ = true;
+
+	  if (waveform_->getAmplitude(waveform_->getMaxIndex() >= 0.2))
+	    valid_ = true;
+	  else {
+	    valid_ = false;
+	    logger_.noticeStream() << "low amplitude waveform rejected";
+	  }
 
 	} else {
 	  waveform_.reset();
