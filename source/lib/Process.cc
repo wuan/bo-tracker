@@ -32,7 +32,7 @@ namespace blitzortung {
       eventQueue_.push(data);
     } else {
       std::ostringstream oss;
-      oss << "small amptlitude signal at " << waveform.getTime().time_of_day();
+      oss << "filtered small amplitude signal with origin at " << waveform.getTime().time_of_day();
       logger_.notice(oss.str());
     }
   }
