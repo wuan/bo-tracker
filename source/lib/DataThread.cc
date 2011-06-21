@@ -86,8 +86,6 @@ namespace blitzortung {
 	  events_->add(sampleQueue_.pop());
 	}
 
-        eventCountBuffer_.add(events_->size());
-
 	if (events_->size() > 0) {
 
 	  if (logger_.isDebugEnabled())
@@ -119,9 +117,13 @@ namespace blitzortung {
 
 	  output_.output(*events_);
 
-	  // delete all events
-	  events_->clear();
 	}
+
+	// record number of events for the actual second
+        eventCountBuffer_.add(events_->size());
+
+	// delete all events
+	events_->clear();
 
       } while (sendAgain);
 
