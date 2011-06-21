@@ -28,8 +28,13 @@ namespace blitzortung {
 
     const data::Waveform& waveform = data->getWaveform();
 
-    if (waveform.isEmpty() || waveform.getAmplitude(waveform.getMaxIndex()) >= amplitudeLimit_)
+    if (waveform.isEmpty() || waveform.getAmplitude(waveform.getMaxIndex()) >= amplitudeLimit_) {
       eventQueue_.push(data);
+    } else {
+      std::ostringstream oss;
+      oss << "small amptlitude signal at " << waveform.getTime();
+      logger_.notice(oss.str());
+    }
   }
 
   const DataThread::EventCountBuffer& Process::getEventCountBuffer() const {
