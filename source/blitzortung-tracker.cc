@@ -39,6 +39,7 @@ int main(int argc, char **argv) {
   std::string outputFile = "";
   unsigned short serialBaudRate = 19200;
   double eventRateLimit = 5.0;
+  double amplitudeLimit = 0.1;
   std::string gpsType = "sirf";
   std::string firmwareVersion = "-";
 
@@ -59,6 +60,7 @@ int main(int argc, char **argv) {
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (garmin or sirf)")
     ("gps-disable-sbas", "disable GPS SBAS")
     ("logfile", po::value<std::string>(&logFileName), "file name for log output (defaults to stdout)")
+    ("amplitude-limit", po::value<double>(&amplitudeLimit)->default_value(amplitudeLimit), "lower limit of signal amplitude")
     ("event-rate-limit,l", po::value<double>(&eventRateLimit)->default_value(eventRateLimit), "limit of event rate (in events per second) 1.0 means max. 3600 events per hour")
     ("output,o", po::value<std::string>(&outputFile), "output file name (e.g. Name_%Y%m%d.bor)")
     ("firmware-version", po::value<std::string>(&firmwareVersion)->default_value(firmwareVersion), "manually specify firmware version")
@@ -192,6 +194,7 @@ int main(int argc, char **argv) {
 
   //! create object of network driver for event transmission
   bo::Process process(transfer, eventRateLimit, *output);
+  process.setAmplitudeLimit(amplitudeLimit);
 
   // enable unix domain socket for process information
   bo::ipc::server::factory::Json jsonServerFactory(process, hardware);

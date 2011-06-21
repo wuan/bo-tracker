@@ -32,6 +32,9 @@ namespace blitzortung {
 
       //! ring buffer for data rate limiter
       DataThread::EventCountBuffer eventCountBuffer_;
+
+      //! lower limit of amplitude
+      double amplitudeLimit_;
       
       //! logger for this class
       mutable Logger logger_;
@@ -54,6 +57,9 @@ namespace blitzortung {
       
       //! get reference to output object
       const output::Base& getOutput() const;
+
+      //! set amplitude limit
+      void setAmplitudeLimit(double amplitudeLimit);
 
   };
 }

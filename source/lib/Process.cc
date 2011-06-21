@@ -9,6 +9,7 @@ namespace blitzortung {
     transfer_(transfer),
     output_(output),
     eventCountBuffer_(60*60),
+    amplitudeLimit_(0.0),
     logger_("Process")
   {
     DataThread dataThread(eventQueue_, eventCountBuffer_, transfer, output);
@@ -24,7 +25,11 @@ namespace blitzortung {
   void Process::push(data::Event::AP data) {
     if (logger_.isDebugEnabled())
       logger_.debugStream() << "push() " << data->getWaveform().getTime();
-    eventQueue_.push(data);
+
+    const data::Waveform& waveform = data->getWaveform();
+
+    if (waveform.isEmpty() || waveform.getAmplitude(waveform.getMaxIndex()) >= amplitudeLimit_)
+      eventQueue_.push(data);
   }
 
   const DataThread::EventCountBuffer& Process::getEventCountBuffer() const {
@@ -37,6 +42,10 @@ namespace blitzortung {
       
   const output::Base& Process::getOutput() const {
     return output_;
+  }
+
+  void Process::setAmplitudeLimit(double amplitudeLimit) {
+    amplitudeLimit_ = amplitudeLimit;
   }
 }
 
