@@ -32,7 +32,7 @@ namespace blitzortung {
       eventQueue_.push(data);
     } else {
       std::ostringstream oss;
-      oss << "small amptlitude signal at " << waveform.getTime();
+      oss << "small amptlitude signal at " << waveform.getTime().time_of_day();
       logger_.notice(oss.str());
     }
   }
