@@ -27,12 +27,13 @@ namespace blitzortung {
       logger_.debugStream() << "push() " << data->getWaveform().getTime();
 
     const data::Waveform& waveform = data->getWaveform();
-
-    if (waveform.isEmpty() || waveform.getAmplitude(waveform.getMaxIndex()) >= amplitudeLimit_) {
+    float maximalSignalAmplitude = waveform.getAmplitude(waveform.getMaxIndex());
+    if (waveform.isEmpty() || maximalSignalAmplitude >= amplitudeLimit_) {
       eventQueue_.push(data);
     } else {
       std::ostringstream oss;
-      oss << "filtered small amplitude signal with origin at " << waveform.getTime().time_of_day();
+      oss.precision(2);
+      oss << "filtered signal with amplitude " << maximalSignalAmplitude << " at " << waveform.getTime().time_of_day();
       logger_.notice(oss.str());
     }
   }

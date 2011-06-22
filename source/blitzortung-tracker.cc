@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
   std::string outputFile = "";
   unsigned short serialBaudRate = 19200;
   double eventRateLimit = 5.0;
-  double amplitudeLimit = 0.1;
+  double amplitudeLimit = 0.05;
   std::string gpsType = "sirf";
   std::string firmwareVersion = "-";
 
