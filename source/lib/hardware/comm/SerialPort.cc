@@ -182,7 +182,6 @@ namespace blitzortung {
 	    }
 
 	  } else {
-	    logger_.warnStream() << "returned no characters in receive()";
 	    break;
 	  }
 	}

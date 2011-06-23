@@ -55,7 +55,8 @@ namespace blitzortung {
 	    }
 	  }
 	} else {
-	  logger_.noticeStream() << "checkLine() invalid line '" << line << "'";
+	  if (line != "")
+	    logger_.noticeStream() << "checkLine() invalid line '" << line << "'";
 	}
 	return "";
       }
