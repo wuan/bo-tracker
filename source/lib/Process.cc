@@ -23,18 +23,30 @@ namespace blitzortung {
   }
 
   void Process::push(data::Event::AP data) {
-    if (logger_.isDebugEnabled())
-      logger_.debugStream() << "push() " << data->getWaveform().getTime();
+    if (data.get() != 0) {
+      const data::Waveform& waveform = data->getWaveform();
 
-    const data::Waveform& waveform = data->getWaveform();
-    float maximalSignalAmplitude = waveform.getAmplitude(waveform.getMaxIndex());
-    if (waveform.isEmpty() || maximalSignalAmplitude >= amplitudeLimit_) {
-      eventQueue_.push(data);
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "push() " << data->getWaveform().getTime();
+
+      bool eventShouldBeProcessed = false;
+      if (waveform.isEmpty()) {
+	eventShouldBeProcessed = true;
+      } else {
+	float maximalSignalAmplitude = waveform.getAmplitude(waveform.getMaxIndex());
+	if (maximalSignalAmplitude >= amplitudeLimit_) {
+	  eventShouldBeProcessed = true;
+	} else {
+	  std::ostringstream oss;
+	  oss.precision(2);
+	  oss << "filtered signal with amplitude " << maximalSignalAmplitude << " at " << waveform.getTime().time_of_day();
+	  logger_.notice(oss.str());
+	}
+      }
+      if (eventShouldBeProcessed)
+	eventQueue_.push(data);
     } else {
-      std::ostringstream oss;
-      oss.precision(2);
-      oss << "filtered signal with amplitude " << maximalSignalAmplitude << " at " << waveform.getTime().time_of_day();
-      logger_.notice(oss.str());
+      logger_.warnStream() << "received empty event";
     }
   }
 
