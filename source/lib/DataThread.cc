@@ -109,14 +109,14 @@ namespace blitzortung {
 
 	  // remove empty events from list
 	  for (data::Event::VI event = events_->begin(); event != events_->end();) {
-	    if (event->getWaveform().isEmpty())
+	    if (event->getWaveform().isEmpty()) {
 	      events_->erase(event);
-	    else
+	    } else {
 	      event++;
+	    }
 	  }
 
 	  output_.output(*events_);
-
 	}
 
 	// record number of events for the actual second

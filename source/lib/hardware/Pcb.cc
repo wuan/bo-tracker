@@ -68,7 +68,6 @@ namespace blitzortung {
 
 	  if (lastSampleCreated_.is_not_a_date_time()) {
 	    lastSampleCreated_ = gps_.getTime();
-	    logger_.infoStream() << "read() initialize lastSampleCreated to " << gps_.getTime();
 	  }
 
 	  if (gps_.getTime() - lastSampleCreated_ >= pt::minutes(10)) {
@@ -83,9 +82,6 @@ namespace blitzortung {
 	    logger_.debugStream() << "read() parse samples";
 
 	  if (samplesParser.isValid()) { 
-	    //if (logger_.isDebugEnabled())
-	    //  logger_.debugStream() << "read() SampleParser is valid";
-
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "read() set lastSampleCreated to " << gps_.getTime();
 	    lastSampleCreated_ = gps_.getTime();
@@ -95,9 +91,6 @@ namespace blitzortung {
 	  }
 	}
       }
-
-      //if (logger_.isDebugEnabled())
-      //logger_.debug("read() returning empty event");
 
       return data::Event::AP();
     }
