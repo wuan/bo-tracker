@@ -52,6 +52,12 @@ namespace blitzortung {
         //! do btree search for event position
 	unsigned int findEvent(const pt::time_duration& target, unsigned int start, unsigned int end);
 
+	//! set read position to element with given index
+	void seekEvent(int index);
+
+	//! read index range
+	Events::AP readInternal(int index, int size);
+
       public:
 
 	//! constructor
@@ -75,8 +81,11 @@ namespace blitzortung {
 	//! overwrite or create a new file
 	void write(const Events&);
 	
-	//! read time range from file
-	Events::AP read(const pt::time_duration& start = pt::time_duration(pt::not_a_date_time), const pt::time_duration& end = pt::time_duration(pt::not_a_date_time));
+	//! read index range
+	Events::AP read(const int index, int size=-1);
+
+	//! read time range
+	Events::AP read(const pt::time_duration& start, const pt::time_duration& end = pt::time_duration(pt::not_a_date_time));
     };
 
   }

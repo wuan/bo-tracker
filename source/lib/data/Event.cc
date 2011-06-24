@@ -40,11 +40,7 @@ namespace blitzortung {
     bool Event::CompareAmplitude::operator()(const first_argument_type &x, const second_argument_type &y) const {
       return x.getWaveform().getAmplitude(0) < y.getWaveform().getAmplitude(0);
     } 
-
-    unsigned short Event::getNumberOfSamples() const {
-      return waveform_->getNumberOfSamples();
-    }
-
+    
     void Event::toStream(std::iostream& stream) const {
 
       // write waveform to stream

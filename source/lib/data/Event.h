@@ -63,9 +63,6 @@ namespace blitzortung {
 	  bool operator()(const first_argument_type& x, const second_argument_type& y) const;
 	};
 	
-	//! getter for number of samples in waveform
-	virtual unsigned short getNumberOfSamples() const;
-
 	//! write object as binary data to stream
 	void toStream(std::iostream&) const;
 

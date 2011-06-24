@@ -90,6 +90,9 @@ namespace blitzortung {
 	unsigned int getSize() const;
     };
 
+    //! stream output operator
+    std::ostream& operator<<(std::ostream& os, const EventsHeader& header);
+
   }
 }
 

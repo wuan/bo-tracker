@@ -20,6 +20,7 @@
 
 #include "namespaces.h"
 #include "data/Events.h"
+#include "data/EventsFile.h"
 #include "exception/Base.h"
 #include "Logger.h"
 
@@ -113,6 +114,7 @@ int main(int argc, char **argv) {
   desc.add_options()
     ("help,h", "show program help")
     ("input-file,i", po::value<std::string>(&file), "file name")
+    ("info", "show file info")
     ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
     ("endtime,e", po::value<std::string>(&endTimeString), "end time in HHMM or HHMMSS format")
     #ifdef HAVE_BOOST_ACCUMULATORS_ACCUMULATORS_HPP
@@ -153,6 +155,18 @@ int main(int argc, char **argv) {
 
   if (vm.count("debug")) {
     logger.setPriority(log4cpp::Priority::DEBUG);
+  }
+
+  if (vm.count("info")) {
+    bo::data::EventsFile eventsFile(file);
+
+    bo::data::Events::AP start(eventsFile.read(0,1));
+    bo::data::Events::AP end(eventsFile.read(-1,1));
+
+    printEventTime(start->front());
+    printEventTime(end->front());
+
+    return 0;
   }
 
   pt::time_duration startTime(pt::not_a_date_time);
