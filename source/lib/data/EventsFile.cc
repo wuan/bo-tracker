@@ -47,6 +47,12 @@ namespace blitzortung {
       }
     }
 
+    void EventsFile::seekEvent(int index) {
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "seekEvent() " << index;
+      fstream_.seekg(header_.getSize() + index * header_.getEventSize(), std::ios::beg);
+    }
+
     void EventsFile::close() {
       if (isOpen()) {
 	fstream_.close();
@@ -98,7 +104,7 @@ namespace blitzortung {
 	} else {
 	  header_.write(getFilename());
 	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "writeEvents() write header " << header_.getDate() << " " << header_.getDataFormat() << " ";
+	    logger_.debugStream() << "writeEvents() write header " << header_;
 	}
 	
 	open(std::ios::out | std::ios::binary | std::ios::app);
@@ -126,7 +132,7 @@ namespace blitzortung {
       unsigned int middle = (start + end) / 2;
 
       // read event
-      fstream_.seekg(header_.getSize() + middle * header_.getEventSize(), std::ios::beg);
+      seekEvent(middle);
       Event::AP event = header_.createEvent(fstream_);
 
       // recursive btree search
@@ -141,7 +147,7 @@ namespace blitzortung {
       // check, if search has reached last iteration
       if ((end - start) <= 1) {
 
-	fstream_.seekg(header_.getSize() + start * header_.getEventSize(), std::ios::beg);
+	seekEvent(start);
 
 	event = header_.createEvent(fstream_);
 
@@ -159,10 +165,10 @@ namespace blitzortung {
 		
     Events::AP EventsFile::read(const pt::time_duration& start, const pt::time_duration& end) {
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "read()";
-
-      header_.read(name_);
+	logger_.debugStream() << "read(" << start << ", " << end << ")";
      
+      header_.read(name_);
+
       open(std::ios::in | std::ios::binary);
 
       unsigned int startIndex = 0;
@@ -174,23 +180,48 @@ namespace blitzortung {
       if (! end.is_not_a_date_time())
 	endIndex = findEvent(end, startIndex, endIndex);
 
-      fstream_.seekg(header_.getSize() + startIndex * header_.getEventSize() , std::ios::beg);
-
       unsigned int numberOfEvents = endIndex - startIndex;
 
+      Events::AP events(readInternal(startIndex, numberOfEvents));
+
+      close();
+
+      return events;
+    }
+
+    Events::AP EventsFile::read(int startIndex, int numberOfEvents) {
+
+      header_.read(name_);
+
+      if (startIndex < 0)
+	startIndex = header_.getNumberOfEvents() + startIndex;
+      if (numberOfEvents < 0)
+	numberOfEvents = header_.getNumberOfEvents() - startIndex + numberOfEvents;
+
+      open(std::ios::in | std::ios::binary);
+
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "read() read " << numberOfEvents << " events (" << startIndex << " - " << endIndex - 1 << ")";
+	logger_.debugStream() << "read() read " << numberOfEvents << " events (" << startIndex << " - " << startIndex + numberOfEvents - 1 << ")";
+
+      Events::AP events(readInternal(startIndex, numberOfEvents));
+
+      close();
+
+      return events;
+    }
+
+    Events::AP EventsFile::readInternal(int startIndex, int numberOfEvents) {
 
       Events::AP events(new Events(header_));
       
-      for(unsigned int i=0; i < numberOfEvents; i++) {
+      seekEvent(startIndex);
+
+      for(unsigned int i=0; i < (unsigned int)(numberOfEvents); i++) {
 	Event::AP event(header_.createEvent(fstream_));
 
 	events->add(event);
       }
 
-      close();
-      
       return events;
     }
   }

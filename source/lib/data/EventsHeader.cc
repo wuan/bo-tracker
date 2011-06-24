@@ -26,7 +26,7 @@ namespace blitzortung {
       logger_("data.EventsHeader")
     {
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "construct() date " << date;
+	logger_.debugStream() << "construct() date " << date_ << ", format " << *dataFormat_;
     }
 
     EventsHeader::~EventsHeader() {
@@ -35,6 +35,8 @@ namespace blitzortung {
     void EventsHeader::set(const Events& events) {
       date_ = events.getDate();
       dataFormat_ = events.getDataFormat();
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "set() date " << date_ << ", format " << *dataFormat_;
     }
 
     const gr::date& EventsHeader::getDate() const {
@@ -142,6 +144,9 @@ namespace blitzortung {
 
     void EventsHeader::write(const std::string& filename) const {
 
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "write() date " << date_ << " #events " << numberOfEvents_;
+
       if (date_ == gr::date(pt::not_a_date_time))
 	throw exception::Base("data::EventsHeader writeHeader() invalid file date");
 
@@ -187,6 +192,11 @@ namespace blitzortung {
       return 12;
     }
     
+    std::ostream& operator<<(std::ostream& os, const EventsHeader& header) {
+      os << "header(" << header.getDate() << ", " << *(header.getDataFormat()) << ")";
+
+      return os;
+    }
   }
 }
 

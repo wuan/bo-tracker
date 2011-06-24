@@ -24,7 +24,7 @@ namespace blitzortung {
       logger_("data.Events")
     {
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "create(header) " << this;
+	logger_.debugStream() << "create(header) " << this << " " << header;
       dataFormat_ = header.getDataFormat();
       date_ = header.getDate();
     }
