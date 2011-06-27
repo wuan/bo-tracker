@@ -141,7 +141,10 @@ namespace blitzortung {
 	std::string writeToFile(const std::string&);
 
 	//! read events from given file
-	void readFromFile(const std::string&, const pt::time_duration& starttime = pt::time_duration(pt::not_a_date_time), const pt::time_duration& endtime = pt::time_duration(pt::not_a_date_time));
+	void readFromFile(const std::string&, const pt::time_duration& starttime, const pt::time_duration& endtime = pt::time_duration(pt::not_a_date_time));
+
+	//! read events from given file
+	void readFromFile(const std::string&, const int startIndex=0, const int endIndex=-1);
     };
 
   }

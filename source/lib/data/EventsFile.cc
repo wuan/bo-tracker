@@ -194,9 +194,9 @@ namespace blitzortung {
       header_.read(name_);
 
       if (startIndex < 0)
-	startIndex = header_.getNumberOfEvents() + startIndex;
+	startIndex = header_.getNumberOfEvents() + startIndex + 1;
       if (numberOfEvents < 0)
-	numberOfEvents = header_.getNumberOfEvents() - startIndex + numberOfEvents;
+	numberOfEvents = header_.getNumberOfEvents() - startIndex + numberOfEvents + 1;
 
       open(std::ios::in | std::ios::binary);
 
