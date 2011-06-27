@@ -62,12 +62,21 @@ void printEvent(const bo::data::Event& event) {
   std::cout << event << std::endl;
 }
 
-void printEventTime(const bo::data::Event& event) {
+std::string getTimestampString(const bo::data::Event& event) {
   pt::time_facet *timefacet = new pt::time_facet();
   timefacet->format("%Y-%m-%d %H:%M:%S.%f");
-  std::locale oldLocale = std::cout.imbue(std::locale(std::locale::classic(), timefacet));
 
-  std::cout << event.getWaveform().getTime() << std::endl;
+  std::ostringstream oss;
+
+  oss.imbue(std::locale(std::locale::classic(), timefacet));
+
+  oss << event.getWaveform().getTime();
+
+  return oss.str();
+}
+
+void printEventTime(const bo::data::Event& event) {
+  std::cout << getTimestampString(event) << std::endl;
 }
 
 void printAllSamplesOfEvent(const bo::data::Event& event) {
@@ -163,8 +172,10 @@ int main(int argc, char **argv) {
     bo::data::Events::AP start(eventsFile.read(0,1));
     bo::data::Events::AP end(eventsFile.read(-1,1));
 
-    printEventTime(start->front());
-    printEventTime(end->front());
+    std::cout << getTimestampString(start->front()) << " " << 0 << std::endl;
+    std::cout << getTimestampString(end->front()) << " " << eventsFile.getHeader().getNumberOfEvents() << std::endl;
+    std::cout << eventsFile.getHeader().getNumberOfEvents() << std::endl;;
+
 
     return 0;
   }
