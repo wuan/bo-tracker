@@ -185,6 +185,16 @@ namespace blitzortung {
       replace(*(eventsFile.read(startTime, endTime)));
     }
 
+    void Events::readFromFile(const std::string& fileName, const int startIndex, const int endIndex) {
+
+      if (logger_.isDebugEnabled()) {
+	logger_.debugStream() << "readFromFile() " << fileName << " (from " << startIndex << " to " << endIndex <<")";
+      }
+
+      EventsFile eventsFile(fileName);
+      replace(*(eventsFile.read(startIndex, endIndex)));
+    }
+
     void Events::replace(Events& source) {
 
       date_ = source.date_;

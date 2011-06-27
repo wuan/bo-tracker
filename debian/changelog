@@ -1,5 +1,6 @@
-blitzortung-tracker (0.9.5SNAPSHOT201106211413) unstable; urgency=low
+blitzortung-tracker (0.9.5SNAPSHOT201106272205) unstable; urgency=low
 
+  * made ipc interface more robust during startup
   * added filter for signals with amplitude below trigger level
   * added simple statistics to blitzortung-data
   * separated python code into blitzortung-tracker-tools package

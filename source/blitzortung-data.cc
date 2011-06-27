@@ -115,6 +115,7 @@ int main(int argc, char **argv) {
   std::string file = "";
   std::string mode = "default";
   std::string startTimeString, endTimeString;
+  int startIndex, endIndex;
 
   bo::Logger logger("");
 
@@ -126,6 +127,8 @@ int main(int argc, char **argv) {
     ("info", "show file info")
     ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
     ("endtime,e", po::value<std::string>(&endTimeString), "end time in HHMM or HHMMSS format")
+    ("start", po::value<int>(&startIndex)->default_value(0), "start index")
+    ("end", po::value<int>(&endIndex)->default_value(-1), "end index")
     #ifdef HAVE_BOOST_ACCUMULATORS_ACCUMULATORS_HPP
     ("mode", po::value<std::string>(&mode)->default_value(mode), "data mode [default, statistics, histogram]")
     #endif
@@ -169,30 +172,37 @@ int main(int argc, char **argv) {
   if (vm.count("info")) {
     bo::data::EventsFile eventsFile(file);
 
+    const bo::data::EventsHeader& header = eventsFile.getHeader();
+
     bo::data::Events::AP start(eventsFile.read(0,1));
     bo::data::Events::AP end(eventsFile.read(-1,1));
 
     std::cout << getTimestampString(start->front()) << " " << 0 << std::endl;
-    std::cout << getTimestampString(end->front()) << " " << eventsFile.getHeader().getNumberOfEvents() << std::endl;
-    std::cout << eventsFile.getHeader().getNumberOfEvents() << std::endl;;
+    std::cout << getTimestampString(end->front()) << " " << header.getNumberOfEvents() << std::endl;
 
+    const bo::data::Format::CP format = header.getDataFormat();
+    std::cout << format->getNumberOfBitsPerSample() << " bits, " << format->getNumberOfChannels() << " channels, " << format->getNumberOfSamples() << " samples" << std::endl;;
 
     return 0;
   }
 
-  pt::time_duration startTime(pt::not_a_date_time);
-  if (vm.count("starttime")) {
-    startTime = parseTime(startTimeString);
-  }
-
-  pt::time_duration endTime(pt::not_a_date_time);
-  if (vm.count("endtime")) {
-    endTime = parseTime(endTimeString, true);
-  }
-
   bo::data::Events events;
 
-  events.readFromFile(file, startTime, endTime);
+  if (vm.count("starttime") || vm.count("endtime")) {
+    pt::time_duration startTime(pt::not_a_date_time);
+    if (vm.count("starttime")) {
+      startTime = parseTime(startTimeString);
+    }
+
+    pt::time_duration endTime(pt::not_a_date_time);
+    if (vm.count("endtime")) {
+      endTime = parseTime(endTimeString, true);
+    }
+
+    events.readFromFile(file, startTime, endTime);
+  } else {
+    events.readFromFile(file, startIndex, endIndex);
+  }
 
   void (*eventOperation)(const bo::data::Event&);
 
