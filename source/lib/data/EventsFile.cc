@@ -194,7 +194,7 @@ namespace blitzortung {
       header_.read(name_);
 
       if (startIndex < 0)
-	startIndex = header_.getNumberOfEvents() + startIndex + 1;
+	startIndex = header_.getNumberOfEvents() + startIndex;
       if (numberOfEvents < 0)
 	numberOfEvents = header_.getNumberOfEvents() - startIndex + numberOfEvents + 1;
 
