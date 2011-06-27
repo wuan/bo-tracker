@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
   std::string file = "";
   std::string mode = "default";
   std::string startTimeString, endTimeString;
-  int startIndex, endIndex;
+  int startIndex, numberOfEvents;
 
   bo::Logger logger("");
 
@@ -127,8 +127,8 @@ int main(int argc, char **argv) {
     ("info", "show file info")
     ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
     ("endtime,e", po::value<std::string>(&endTimeString), "end time in HHMM or HHMMSS format")
-    ("start", po::value<int>(&startIndex)->default_value(0), "start index")
-    ("end", po::value<int>(&endIndex)->default_value(-1), "end index")
+    ("start", po::value<int>(&startIndex)->default_value(0), "start index of first event")
+    ("number", po::value<int>(&numberOfEvents)->default_value(-1), "number of events")
     #ifdef HAVE_BOOST_ACCUMULATORS_ACCUMULATORS_HPP
     ("mode", po::value<std::string>(&mode)->default_value(mode), "data mode [default, statistics, histogram]")
     #endif
@@ -178,10 +178,15 @@ int main(int argc, char **argv) {
     bo::data::Events::AP end(eventsFile.read(-1,1));
 
     std::cout << getTimestampString(start->front()) << " " << 0 << std::endl;
-    std::cout << getTimestampString(end->front()) << " " << header.getNumberOfEvents() << std::endl;
+    std::cout << getTimestampString(end->front()) << " " << header.getNumberOfEvents() - 1 << std::endl;
 
     const bo::data::Format::CP format = header.getDataFormat();
-    std::cout << format->getNumberOfBitsPerSample() << " bits, " << format->getNumberOfChannels() << " channels, " << format->getNumberOfSamples() << " samples" << std::endl;;
+
+    std::cout << header.getNumberOfEvents() << " events, ";
+    std::cout << format->getNumberOfSamples() << " samples, ";
+    std::cout << format->getNumberOfChannels() << " channels, ";
+    std::cout << format->getNumberOfBitsPerSample() << " bits";
+    std::cout << std::endl;
 
     return 0;
   }
@@ -201,7 +206,7 @@ int main(int argc, char **argv) {
 
     events.readFromFile(file, startTime, endTime);
   } else {
-    events.readFromFile(file, startIndex, endIndex);
+    events.readFromFile(file, startIndex, numberOfEvents);
   }
 
   void (*eventOperation)(const bo::data::Event&);
