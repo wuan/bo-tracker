@@ -1,3 +1,7 @@
+blitzortung-tracker (0.9.6SNAPSHOT201107112000) unstable; urgency=low
+
+ -- Andreas Wuerl <awuerl@gmx.net>  Sun, 11 Jul 2011 20:00:00 +0200
+
 blitzortung-tracker (0.9.5) unstable; urgency=low
 
   * made ipc interface more robust during startup
