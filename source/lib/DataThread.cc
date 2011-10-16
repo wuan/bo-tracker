@@ -18,11 +18,6 @@ namespace blitzortung {
       logger_.debugStream() << "initalized(eventRateLimit: " << eventRateLimit_ << ")";
   }
 
-  DataThread::~DataThread() {
-    if (logger_.isDebugEnabled())
-      logger_.debugStream() << "deleted";
-  }
-
   void DataThread::setEventRateLimit(const double eventRateLimit) {
     eventRateLimit_ = eventRateLimit;
   }
@@ -83,7 +78,8 @@ namespace blitzortung {
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "() pop sample from queue " << sampleQueue_.front().getWaveform().getTime();
 
-	  events_->add(sampleQueue_.pop());
+	  data::Event::AP event = std::move(sampleQueue_.pop());
+	  events_->add(event);
 	}
 
 	if (events_->size() > 0) {

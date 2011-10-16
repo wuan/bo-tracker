@@ -21,7 +21,7 @@ namespace blitzortung {
         typedef Event::VI I;
         typedef Event::CVI CI;
 	typedef boost::shared_ptr<Events> P;
-	typedef std::auto_ptr<Events> AP;
+	typedef std::unique_ptr<Events> AP;
 
       private:
       
@@ -64,7 +64,7 @@ namespace blitzortung {
 	virtual ~Events();
 
 	//! add event to collection
-	void add(Event::AP);
+	void add(Event::AP&);
 
 	//! add event to collection
 	void add(Event::V::auto_type);

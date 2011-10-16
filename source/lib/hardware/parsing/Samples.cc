@@ -91,7 +91,7 @@ namespace blitzortung {
       }
 
       data::Waveform::AP Samples::getWaveform() {
-	return waveform_;
+	return std::move(waveform_);
       }
 
       const std::string& Samples::getRawData() const {

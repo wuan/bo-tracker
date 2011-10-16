@@ -16,7 +16,7 @@ namespace blitzortung {
 	typedef V::iterator VI;
 	typedef V::const_iterator CVI;
 	typedef boost::shared_ptr<V> VP;
-	typedef std::auto_ptr<MEvent> AP;
+	typedef std::unique_ptr<MEvent> AP;
 
       private:
 
@@ -24,7 +24,7 @@ namespace blitzortung {
 
       public:
 
-	MEvent(Waveform::AP, GpsInfo::AP, const std::string&);
+	MEvent(Waveform::AP&, GpsInfo::AP, const std::string&);
 
 	virtual ~MEvent();
 

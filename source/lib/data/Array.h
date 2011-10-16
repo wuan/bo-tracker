@@ -15,7 +15,7 @@ namespace blitzortung {
 
       public:
 
-	typedef std::auto_ptr<Array> AP;
+	typedef std::unique_ptr<Array> AP;
 
       private:
 

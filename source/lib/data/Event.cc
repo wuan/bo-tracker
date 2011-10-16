@@ -3,10 +3,10 @@
 namespace blitzortung {
   namespace data {
 
-    Event::Event(Waveform::AP waveform, GpsInfo::AP gpsInfo) :
-      waveform_(waveform),
-      gpsInfo_(gpsInfo)
+    Event::Event(Waveform::AP& waveform, GpsInfo::AP& gpsInfo)
     {
+      waveform_ = std::move(waveform);
+      gpsInfo_ = std::move(gpsInfo);
     }
 
     Event::Event(data::Format::CP format, const gr::date& date, std::iostream& stream) {
@@ -22,7 +22,7 @@ namespace blitzortung {
     }
 
     Waveform::AP Event::releaseWaveform() {
-      return waveform_;
+      return std::move(waveform_);
     }
 
     const GpsInfo& Event::getGpsInfo() const {
@@ -30,7 +30,7 @@ namespace blitzortung {
     }
 
     GpsInfo::AP Event::releaseGpsInfo() {
-      return gpsInfo_;
+      return std::move(gpsInfo_);
     }
 
     bool Event::operator<(const Event &rhs) const {

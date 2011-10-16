@@ -21,8 +21,8 @@ namespace blitzortung {
 	typedef boost::ptr_vector<Event> V;
 	typedef V::iterator VI;
 	typedef V::const_iterator CVI;
-	typedef boost::shared_ptr<V> VP;
-	typedef std::auto_ptr<Event> AP;
+	typedef std::shared_ptr<V> VP;
+	typedef std::unique_ptr<Event> AP;
 
       private:
 
@@ -35,7 +35,7 @@ namespace blitzortung {
       public:
 
         //! construct Event with Data
-	Event(Waveform::AP, GpsInfo::AP);
+	Event(Waveform::AP&, GpsInfo::AP&);
 
 	//! construct Event from stream 
 	Event(data::Format::CP dataFormat, const gr::date& date, std::iostream& stream);

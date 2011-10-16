@@ -38,7 +38,7 @@ namespace blitzortung {
 	virtual ~Queue();
 
 	//! push one element to the end of the queue
-	void push(std::auto_ptr<T> data);
+	void push(std::unique_ptr<T>& data);
 
 	//! check if the queue is empty
 	bool empty() const;
@@ -56,7 +56,7 @@ namespace blitzortung {
 	void timed_wait(const boost::xtime& xtime);
 
 	//! retrieve the first element of the queue
-	std::auto_ptr<T> pop();
+	std::unique_ptr<T> pop();
     };
 
 }

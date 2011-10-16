@@ -28,8 +28,6 @@
 #include "ipc/server/factory/Json.h"
 #include "Logger.h"
 
-//#include "ui/ui_blitzortung-tracker.h"
-
 int main(int argc, char **argv) {
 
   std::string username, password;
@@ -135,12 +133,10 @@ int main(int argc, char **argv) {
       throw bo::exception::Base(oss.str());
   }
 
-  // create serial port object
-
   bo::hardware::comm::Base::AP comm;
   bo::hardware::comm::SerialPort::AP serialPort;
 
-  if (serialPortName == "dummy") {
+if (serialPortName == "dummy") {
     comm = bo::hardware::comm::Base::AP(new bo::hardware::comm::Dummy(true));
     comm->setBaudRate(serialBaudRate);
     dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,11C2CC,A,084638,200311,4648.1313,N,01332.6202,E,532.8,09,27b");
@@ -160,7 +156,7 @@ int main(int argc, char **argv) {
   bo::hardware::gps::Base::AP gps;
   {
     bool disableSbas = vm.count("gps-disable-sbas");
-    // select type of gps hardware
+
     if (gpsType == "garmin") {
       gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Garmin(*comm, disableSbas));
     } else if (gpsType == "sirf") {
@@ -175,7 +171,6 @@ int main(int argc, char **argv) {
   // create hardware driver object for blitzortung measurement hardware
   bo::hardware::Pcb hardware(*comm, *gps, firmwareVersion);
 
-  //! set credentials/parameters for network connection
   bo::network::Creds creds;
   creds.setServername(servername);
   creds.setServerport(serverport);
@@ -192,7 +187,6 @@ int main(int argc, char **argv) {
     output = bo::output::Base::AP(new bo::output::None());
   }
 
-  //! create object of network driver for event transmission
   bo::Process process(transfer, eventRateLimit, *output);
   process.setAmplitudeLimit(amplitudeLimit);
 
