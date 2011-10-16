@@ -123,12 +123,12 @@ namespace blitzortung {
 
 	rawData.append(getInfoString());
 
-	return data::Event::AP(new data::MEvent(waveform, gps_.getInfo(), rawData));
+	return std::move(data::Event::AP(new data::MEvent(waveform, gps_.getInfo(), rawData)));
       } else {
 	logger_.warnStream() << "createSample() GPS information is not yet valid -> no event created";
       }
 
-      return data::Event::AP();
+      return std::move(data::Event::AP());
     }
 
     std::string Pcb::getInfoString() const {
