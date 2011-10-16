@@ -32,7 +32,7 @@ bo::data::Event::AP EventTest::createEventWithFormat(bo::data::Format::CP dataFo
   // create GpsInfo
   bo::data::GpsInfo::AP gpsInfo(new bo::data::GpsInfo());
 
-  return bo::data::Event::AP(new bo::data::MEvent(wfm, gpsInfo, "n/a"));
+  return std::move(bo::data::Event::AP(new bo::data::MEvent(wfm, gpsInfo, "n/a")));
 }
 
 bo::data::Events::P EventTest::createEvents1() {
