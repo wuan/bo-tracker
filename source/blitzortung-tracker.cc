@@ -203,7 +203,7 @@ int main(int argc, char **argv) {
   try {
     while (hardware.isOpen()) {
 
-      bo::data::Event::AP event = hardware.read();
+      auto event = hardware.read();
 
       if (event.get() != 0) {
 	process.push(event);
