@@ -53,9 +53,6 @@ namespace blitzortung {
       //! create network transfer object
       DataThread(Queue<data::Event>& sampleQueue, EventCountBuffer& eventCountBuffer, network::transfer::Base& transfer, output::Base&);
 
-      //! delete nework transfer object
-      virtual ~DataThread();
-
       //! set limit of average number of events per minute transmitted
       void setEventRateLimit(const double eventRateLimit);
 

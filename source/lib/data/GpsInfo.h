@@ -51,7 +51,7 @@ namespace blitzortung {
 	
 	GpsInfo();
 
-	typedef std::auto_ptr<GpsInfo> AP;
+	typedef std::unique_ptr<GpsInfo> AP;
 
 	//! destroy a waveform object
 	virtual ~GpsInfo();

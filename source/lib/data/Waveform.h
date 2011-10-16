@@ -17,7 +17,7 @@ namespace blitzortung {
 
       public:
 
-	typedef std::auto_ptr<Waveform> AP;
+	typedef std::unique_ptr<Waveform> AP;
 
       private:
 
@@ -40,11 +40,11 @@ namespace blitzortung {
 
         //! create a waveform object
 	/*!
-	\param array auto_ptr to Array object
+	\param array unique_ptr to Array object
 	\param t0 reference time of waveform
 	\param dt time between consecutive data (non zero if Array has more than one sample
 	*/
-	Waveform(data::Array::AP array, const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
+	Waveform(data::Array::AP& array, const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
 
         //! create a waveform object from a stream
 	/*!

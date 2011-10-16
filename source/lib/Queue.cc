@@ -15,7 +15,7 @@ namespace blitzortung {
     // TODO add code to free content of queue here
   }
 
-  template <typename T> void Queue<T>::push(std::auto_ptr<T> data) {
+  template <typename T> void Queue<T>::push(std::unique_ptr<T>& data) {
     boost::mutex::scoped_lock lock(mutex_);
 
     const bool emptyBeforePush = queue_.empty();
@@ -57,10 +57,10 @@ namespace blitzortung {
     condition_.timed_wait(lock, xtime);
   }
 
-  template <typename T> std::auto_ptr<T> Queue<T>::pop() {
+  template <typename T> std::unique_ptr<T> Queue<T>::pop() {
     boost::mutex::scoped_lock lock(mutex_);
 
-    std::auto_ptr<T> autoPtr(queue_.front());
+    std::unique_ptr<T> autoPtr(queue_.front());
     queue_.pop();
 
     return autoPtr;
