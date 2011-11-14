@@ -6,6 +6,11 @@
 
 //CPPUNIT_TEST_SUITE_REGISTRATION( EventTest );
 
+void EventTest::addEvent(bo::data::Events& events, const pt::ptime& time) {
+  bo::data::Event::AP event(createEvent(time));
+  events.add(event);
+}
+
 bo::data::Event::AP EventTest::createEvent(const pt::ptime& time) {
   return createEventWithFormat(dataFormat_, time);
 }
@@ -32,7 +37,7 @@ bo::data::Event::AP EventTest::createEventWithFormat(bo::data::Format::CP dataFo
   // create GpsInfo
   bo::data::GpsInfo::AP gpsInfo(new bo::data::GpsInfo());
 
-  return std::move(bo::data::Event::AP(new bo::data::MEvent(wfm, gpsInfo, "n/a")));
+  return bo::data::Event::AP(new bo::data::MEvent(wfm, gpsInfo, "n/a"));
 }
 
 bo::data::Events::P EventTest::createEvents1() {
@@ -74,9 +79,7 @@ bo::data::Events::P EventTest::createEvents1() {
 
   for (std::vector<pt::time_duration>::iterator eventTime = eventTimes.begin(); eventTime != eventTimes.end(); eventTime++) {
     pt::ptime eventDateTime(eventDate, *eventTime);
-    bo::data::Event::AP event = createEvent(eventDateTime);
-
-    events->add(event);
+    addEvent(*events, eventDateTime);
   }
 
   return events;
@@ -98,14 +101,14 @@ void EventTest::testAdd() {
 
   bo::data::Events events;
 
-  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,20,00))));
-  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,21,00))));
-  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,22,00))));
-  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,22,00))));
-  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,25,00))));
-  events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,30,00))));
+  addEvent(events, (pt::ptime(eventDate, pt::time_duration(11,20,00))));
+  addEvent(events, (pt::ptime(eventDate, pt::time_duration(11,21,00))));
+  addEvent(events, (pt::ptime(eventDate, pt::time_duration(11,22,00))));
+  addEvent(events, (pt::ptime(eventDate, pt::time_duration(11,22,00))));
+  addEvent(events, (pt::ptime(eventDate, pt::time_duration(11,25,00))));
+  addEvent(events, (pt::ptime(eventDate, pt::time_duration(11,30,00))));
 
-  CPPUNIT_ASSERT_THROW(events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,30,00)) + gr::days(1))), bo::exception::Base);
+  CPPUNIT_ASSERT_THROW(addEvent(events, (pt::ptime(eventDate, pt::time_duration(11,30,00)) + gr::days(1))), bo::exception::Base);
 
   /*for(bo::data::Events::I event=events.begin(); event != events.end(); event++) {
     std::cout << *event << std::endl;

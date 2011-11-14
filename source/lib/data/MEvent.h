@@ -24,7 +24,7 @@ namespace blitzortung {
 
       public:
 
-	MEvent(Waveform::AP&, GpsInfo::AP, const std::string&);
+	MEvent(Waveform::AP&, GpsInfo::AP&, const std::string&);
 
 	virtual ~MEvent();
 

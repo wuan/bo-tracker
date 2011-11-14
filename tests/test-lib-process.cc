@@ -20,6 +20,11 @@ void ProcessTest::setUp() {
 void ProcessTest::tearDown() {
 }
 
+void pushEvent(bo::Process& process, bo::data::Event::AP event)
+{
+  process.push(event);
+}
+
 void ProcessTest::testAroundMidnight() {
   bo::network::transfer::None transfer;
   bo::output::None output;
@@ -28,14 +33,14 @@ void ProcessTest::testAroundMidnight() {
 
   bo::data::Format::CP dataFormat(new bo::data::Format(12,2,1));
 
-  process.push(EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,10), pt::time_duration(23,59,56))));
-  process.push(EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,10), pt::time_duration(23,59,57))));
-  process.push(EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,10), pt::time_duration(23,59,58))));
-  process.push(EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,10), pt::time_duration(23,59,59))));
-  process.push(EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,11), pt::time_duration(0,0,0))));
-  process.push(EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,11), pt::time_duration(0,0,1))));
-  process.push(EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,11), pt::time_duration(0,0,2))));
-  process.push(EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,11), pt::time_duration(0,0,3))));
+  pushEvent(process, EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,10), pt::time_duration(23,59,56))));
+  pushEvent(process, EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,10), pt::time_duration(23,59,57))));
+  pushEvent(process, EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,10), pt::time_duration(23,59,58))));
+  pushEvent(process, EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,10), pt::time_duration(23,59,59))));
+  pushEvent(process, EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,11), pt::time_duration(0,0,0))));
+  pushEvent(process, EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,11), pt::time_duration(0,0,1))));
+  pushEvent(process, EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,11), pt::time_duration(0,0,2))));
+  pushEvent(process, EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,11), pt::time_duration(0,0,3))));
 
   sleep(10);
 }
