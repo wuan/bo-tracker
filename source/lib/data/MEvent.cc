@@ -3,7 +3,7 @@
 namespace blitzortung {
   namespace data {
 
-    MEvent::MEvent(Waveform::AP& waveform, GpsInfo::AP gpsInfo, const std::string& rawData) :
+    MEvent::MEvent(Waveform::AP& waveform, GpsInfo::AP& gpsInfo, const std::string& rawData) :
       Event(waveform, gpsInfo),
       rawData_(rawData)
     {
