@@ -104,8 +104,7 @@ namespace blitzortung {
       std::string rawData("-");
       rawData.append(getInfoString());
 
-      data::GpsInfo::AP gpsInfo = gps_.getInfo();
-      data::Event::AP event(new data::MEvent(waveform, gpsInfo, rawData));
+      data::Event::AP event(new data::MEvent(waveform, gps_.getInfo(), rawData));
 
       return event;
     }
@@ -124,13 +123,12 @@ namespace blitzortung {
 
 	rawData.append(getInfoString());
 
-	data::GpsInfo::AP gpsInfo = gps_.getInfo();
-	return data::Event::AP(new data::MEvent(waveform, gpsInfo, rawData));
+	return data::Event::AP(new data::MEvent(waveform, gps_.getInfo(), rawData));
       } else {
 	logger_.warnStream() << "createSample() GPS information is not yet valid -> no event created";
       }
 
-      return std::move(data::Event::AP());
+      return data::Event::AP();
     }
 
     std::string Pcb::getInfoString() const {

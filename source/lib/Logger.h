@@ -2,7 +2,6 @@
 #define BLITZORTUNG_LOGGER_H_
 
 #include <log4cpp/Category.hh>
-#include <boost/shared_ptr.hpp>
 
 namespace blitzortung {
 

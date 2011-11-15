@@ -36,6 +36,7 @@ namespace blitzortung {
 
     void Events::add(Event* event) {
       setOrCheckDate(event->getWaveform().getTime().date());
+
       if (!event->getWaveform().isEmpty())
         setOrCheckDataFormat(event->getWaveform().getArray().getFormat());
 

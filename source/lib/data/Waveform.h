@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-#include <boost/shared_ptr.hpp>
-
 #include "namespaces.h"
 #include "Array.h"
 #include "exception/Base.h"
@@ -44,7 +42,7 @@ namespace blitzortung {
 	\param t0 reference time of waveform
 	\param dt time between consecutive data (non zero if Array has more than one sample
 	*/
-	Waveform(data::Array::AP& array, const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
+	Waveform(data::Array::AP&& array, const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
 
         //! create a waveform object from a stream
 	/*!

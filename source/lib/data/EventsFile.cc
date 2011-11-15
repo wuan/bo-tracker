@@ -217,9 +217,7 @@ namespace blitzortung {
       seekEvent(startIndex);
 
       for(unsigned int i=0; i < (unsigned int)(numberOfEvents); i++) {
-	Event::AP event(header_.createEvent(fstream_));
-
-	events->add(event);
+	events->add(header_.createEvent(fstream_));
       }
 
       return events;

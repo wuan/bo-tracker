@@ -42,7 +42,6 @@ namespace blitzortung {
     } 
     
     void Event::toStream(std::iostream& stream) const {
-
       // write waveform to stream
       waveform_->toStream(stream);
 

@@ -1,8 +1,6 @@
 #ifndef BLITZORTUNG_DATA_GPSINFO_H_
 #define BLITZORTUNG_DATA_GPSINFO_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "namespaces.h"
 #include "exception/Base.h"
 

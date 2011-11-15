@@ -1,8 +1,6 @@
 #ifndef BLITZORTUNG_DATA_EVENTS_H_
 #define BLITZORTUNG_DATA_EVENTS_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "namespaces.h"
 #include "data/Event.h"
 #include "data/EventsHeader.h"
@@ -20,7 +18,7 @@ namespace blitzortung {
       public:
         typedef Event::VI I;
         typedef Event::CVI CI;
-	typedef boost::shared_ptr<Events> P;
+	typedef std::shared_ptr<Events> P;
 	typedef std::unique_ptr<Events> AP;
 
       private:

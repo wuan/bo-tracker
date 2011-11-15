@@ -1,6 +1,8 @@
 #ifndef BLITZORTUNG_HARDWARE_SERIALPORT_H_
 #define BLITZORTUNG_HARDWARE_SERIALPORT_H_
 
+#include "namespaces.h"
+
 #include <string>
 #include <boost/noncopyable.hpp>
 
@@ -10,11 +12,11 @@ namespace blitzortung {
   namespace hardware {
     namespace comm {
 
-      class SerialPort :  boost::noncopyable {
+      class SerialPort : boost::noncopyable {
 
 	public:
 
-	  typedef std::auto_ptr<SerialPort> AP;
+	  typedef std::unique_ptr<SerialPort> AP;
 
 	private:
 
@@ -36,7 +38,7 @@ namespace blitzortung {
 	public:
 	
 	  //! constructor
-	  SerialPort(const std::string &port="/dev/ttyS0", const unsigned int baudRate = 19200);
+	  SerialPort(const std::string& port="/dev/ttyS0", const unsigned int baudRate = 19200);
 
 	  //! destructor
 	  virtual ~SerialPort();
@@ -60,7 +62,7 @@ namespace blitzortung {
 	  void send(unsigned char);
 
 	  //! send string via serial port
-	  void send(const std::string &);
+	  void send(const std::string&);
 
 	  //! flush input buffer of serial port	  
 	  void flushInput() const;
