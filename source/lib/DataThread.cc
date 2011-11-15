@@ -38,7 +38,7 @@ namespace blitzortung {
 
       deletedEvents->transfer(deletedEvents->end(), events_->begin(), events_->end(), *events_);
 
-	logger_.warnStream() << "prepareData() limit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed << ", erasing to " << sampleLimit << " elements (new # of elements: " << events_->size() << ")" << " deleted # " << deletedEvents->size();
+      logger_.warnStream() << "prepareData() limit " << eventRateLimit_ << " reached, interval seconds: " << secondsElapsed << ", erasing to " << sampleLimit << " elements (new # of elements: " << events_->size() << ")" << " deleted # " << deletedEvents->size();
 
       // time sort events
       events_->sort();
@@ -78,7 +78,7 @@ namespace blitzortung {
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "() pop sample from queue " << sampleQueue_.front().getWaveform().getTime();
 
-	  data::Event::AP event = std::move(sampleQueue_.pop());
+	  auto event = std::move(sampleQueue_.pop());
 	  events_->add(event);
 	}
 

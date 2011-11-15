@@ -42,7 +42,7 @@ namespace blitzortung {
       events_.push_back(event);
     }
 
-    void Events::add(Event::AP& event) {
+    void Events::add(Event::AP&& event) {
       add(event.release());
     }
 
