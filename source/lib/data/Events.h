@@ -64,7 +64,7 @@ namespace blitzortung {
 	virtual ~Events();
 
 	//! add event to collection
-	void add(Event::AP&);
+	void add(Event::AP&&);
 
 	//! add event to collection
 	void add(Event::V::auto_type);
