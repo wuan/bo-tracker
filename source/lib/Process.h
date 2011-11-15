@@ -47,7 +47,7 @@ namespace blitzortung {
       virtual ~Process();
 
       //! add event to send queue
-      void push(data::Event::AP&);
+      void push(data::Event::AP&&);
 
       //! get reference to event count buffer
       const DataThread::EventCountBuffer& getEventCountBuffer() const;

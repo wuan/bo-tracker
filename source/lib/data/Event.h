@@ -1,9 +1,7 @@
 #ifndef BLITZORTUNG_DATA_EVENT_H_
 #define BLITZORTUNG_DATA_EVENT_H_
 
-#include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/ptr_container/ptr_list.hpp>
 
 #include "namespaces.h"
 #include "data/Waveform.h"

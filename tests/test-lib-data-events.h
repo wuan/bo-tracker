@@ -23,7 +23,6 @@ class EventTest : public CPPUNIT_NS :: TestFixture
 
     bo::data::Events::P createEvents1();
     bo::data::Events::P createEvents2();
-    void addEvent(bo::data::Events& events, const pt::ptime&);
     bo::data::Event::AP createEvent(const pt::ptime&);
 
   protected:

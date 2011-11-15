@@ -1,8 +1,6 @@
 #ifndef BLITZORTUNG_DATA_FORMAT_H_
 #define BLITZORTUNG_DATA_FORMAT_H_
 
-#include <boost/shared_ptr.hpp>
-
 #include "namespaces.h"
 #include "Logger.h"
 #include "exception/Base.h"
@@ -16,7 +14,7 @@ namespace blitzortung {
       public:
 
         // typedef for Format shared pointer
-	typedef boost::shared_ptr<const Format> CP;
+	typedef std::shared_ptr<const Format> CP;
 
 	// enum for the storage type of single data values
 	enum Type {BYTE=1, SHORT=2, INT=4};

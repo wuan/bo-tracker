@@ -10,7 +10,7 @@ namespace blitzortung {
     {
     }
 
-    Waveform::Waveform(data::Array::AP& array, const pt::ptime& t0, const pt::time_duration& dt) :
+    Waveform::Waveform(data::Array::AP&& array, const pt::ptime& t0, const pt::time_duration& dt) :
       t0_(t0),
       dt_(dt)
     {
