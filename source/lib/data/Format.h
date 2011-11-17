@@ -13,11 +13,8 @@ namespace blitzortung {
 
       public:
 
-        // typedef for Format shared pointer
-	typedef std::shared_ptr<const Format> CP;
-
 	// enum for the storage type of single data values
-	enum Type {BYTE=1, SHORT=2, INT=4};
+	enum class Type : unsigned short {BYTE=1, SHORT=2, INT=4};
 
       private:
 
@@ -55,8 +52,13 @@ namespace blitzortung {
 	//! construct from stream
 	Format(std::iostream&);
 
+	//! copy constructor
+	Format(const Format&) = default;
+
 	//! delete waveform object
-	virtual ~Format();
+	virtual ~Format() = default;
+
+	Format& operator=(const Format& other);
 
 	//! returns the number of bits per sample
 	unsigned short getNumberOfBitsPerSample() const;
@@ -82,8 +84,14 @@ namespace blitzortung {
 	//! returns the index position of the data value
 	unsigned int getIndex(unsigned short index, unsigned char channel) const;
 
+    	//! returns true if format is valid
+	bool isValid() const;
+
 	//! write format parameters to stream
 	void toStream(std::iostream&) const;
+
+	//! read format parameters from stream
+	void fromStream(std::iostream&);
 
 	//! comparison operator for data format
 	bool operator==(const Format& other) const;

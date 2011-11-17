@@ -10,21 +10,21 @@ bo::data::Event::AP EventTest::createEvent(const pt::ptime& time) {
   return createEventWithFormat(dataFormat_, time);
 }
 
-bo::data::Event::AP EventTest::createEventWithFormat(bo::data::Format::CP dataFormat, const pt::ptime& time) {
+bo::data::Event::AP EventTest::createEventWithFormat(const bo::data::Format& dataFormat, const pt::ptime& time) {
 
   bo::data::Array::AP array(new bo::data::Array(dataFormat));
 
   int valueOffset[] = {100, -50};
 
-  for (unsigned int sample=0; sample < dataFormat->getNumberOfSamples(); sample++) {
-    for (unsigned int channel=0; channel < dataFormat->getNumberOfChannels(); channel++) {
+  for (unsigned int sample=0; sample < dataFormat.getNumberOfSamples(); sample++) {
+    for (unsigned int channel=0; channel < dataFormat.getNumberOfChannels(); channel++) {
       array->set(valueOffset[channel] + sample, sample, channel);
     }
   }
 
   pt::time_duration dt = pt::nanoseconds(0);
 
-  if (dataFormat->getNumberOfSamples() > 1)
+  if (dataFormat.getNumberOfSamples() > 1)
     dt = pt::nanoseconds(3125);
 
   bo::data::Waveform::AP wfm(new bo::data::Waveform(array, time + pt::nanoseconds(3125) * 10, dt));

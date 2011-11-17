@@ -32,7 +32,7 @@ namespace blitzortung {
 	gr::date date_;
 
 	//! data format
-	Format::CP dataFormat_;
+	Format dataFormat_;
 	
 	//! events per entry
 	unsigned short numberOfEvents_;
@@ -45,10 +45,10 @@ namespace blitzortung {
       public:
 
 	//! constructor
-	EventsHeader(Format::CP dataFormat=Format::CP(new Format(0,0,0)), const gr::date& date = gr::date(gr::not_a_date_time));
+	EventsHeader(const Format& dataFormat=Format(0,0,0), const gr::date& date = gr::date(gr::not_a_date_time));
 
 	//! destructor
-	~EventsHeader();
+	virtual ~EventsHeader() = default;
 
 	//! read header from stream
 	void read(std::ifstream&);
@@ -60,7 +60,7 @@ namespace blitzortung {
 	const gr::date& getDate() const;
 
 	//! get data format
-	const Format::CP& getDataFormat() const;
+	const Format& getDataFormat() const;
 	
 	//! get number of events in file
 	unsigned int getNumberOfEvents() const;

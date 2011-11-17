@@ -20,8 +20,8 @@ class FormatTest : public CPPUNIT_NS :: TestFixture
   void setUp();
   void tearDown();
 
-  void doIndexTest(bo::data::Format::CP format);
-  void doOffsetTest(bo::data::Format::CP format);
+  void doIndexTest(const bo::data::Format&& format);
+  void doOffsetTest(const bo::data::Format&& format);
 
   //! tests
 

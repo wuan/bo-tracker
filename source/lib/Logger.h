@@ -19,7 +19,7 @@ namespace blitzortung {
       Logger(const std::string& loggerName="");
 
       //! destruct logger
-      virtual ~Logger();
+      virtual ~Logger() = default;
 
       //! set logging priority
       void setPriority(const log4cpp::Priority::Value priority);

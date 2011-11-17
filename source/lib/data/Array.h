@@ -18,10 +18,10 @@ namespace blitzortung {
       private:
 
 	//! reference to data format object
-	const Format::CP format_;
+	const Format format_;
 
 	//! vector for x channel data
-	void* data_;
+	std::unique_ptr<char> data_;
 
       public:
 
@@ -29,10 +29,12 @@ namespace blitzortung {
 	/*!
 	\param format reference to array format definition
 	*/
-	Array(const Format::CP& format);
+	Array(const Format& format);
+
+	Array(Array&& old, const Format& format);
 
 	//! delete waveform object
-	virtual ~Array();
+	virtual ~Array()=default;
 
 	//! returns the number of bits per sample
 	unsigned short getNumberOfBitsPerSample() const;
@@ -56,7 +58,7 @@ namespace blitzortung {
 	void fromStream(std::iostream&);
 
 	//! return the actual format
-	const Format::CP& getFormat() const;
+	const Format& getFormat() const;
 	
     };
 
