@@ -1,6 +1,9 @@
-blitzortung-tracker (0.9.6SNAPSHOT201111141845) unstable; urgency=low
+blitzortung-tracker (0.9.6SNAPSHOT201111172229) unstable; urgency=low
 
-  * code migration to C++11 features
+  * code migration to subset of C++11 features (gcc >= 4.4 required)
+    * rvalue refereces
+    * default methods
+    * strongly typed enums
 
  -- Andreas Wuerl <awuerl@gmx.net>  Sun, 11 Jul 2011 20:00:00 +0200
 
