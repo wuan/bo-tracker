@@ -27,7 +27,7 @@ namespace blitzortung {
 	gr::date date_;
 
 	//! data format
-	Format::CP dataFormat_;
+	Format dataFormat_;
 
 	//! storage for events
 	Event::V events_;
@@ -45,7 +45,7 @@ namespace blitzortung {
 	void setOrCheckDate(const gr::date&);
 
 	//! set data format of event collection or check for mismatch
-	void setOrCheckDataFormat(const data::Format::CP&);
+	void setOrCheckDataFormat(const data::Format&);
 
       public:
 
@@ -56,7 +56,7 @@ namespace blitzortung {
 	Events(const EventsHeader& header);
 
 	//! create Events with date and dataformat
-	Events(const gr::date& date, const Format::CP& dataFormat);
+	Events(const gr::date& date, const Format& dataFormat);
 
 	//! destructor
 	virtual ~Events();
@@ -77,7 +77,7 @@ namespace blitzortung {
 	const gr::date& getDate() const;
 
 	//! get dataFormat
-	const Format::CP& getDataFormat() const;
+	const Format& getDataFormat() const;
 
 	//! get number of events
 	int size() const;

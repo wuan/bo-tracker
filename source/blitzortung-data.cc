@@ -180,12 +180,12 @@ int main(int argc, char **argv) {
     std::cout << getTimestampString(start->front()) << " " << 0 << std::endl;
     std::cout << getTimestampString(end->front()) << " " << header.getNumberOfEvents() - 1 << std::endl;
 
-    const bo::data::Format::CP format = header.getDataFormat();
+    const bo::data::Format& format = header.getDataFormat();
 
     std::cout << header.getNumberOfEvents() << " events, ";
-    std::cout << format->getNumberOfSamples() << " samples, ";
-    std::cout << format->getNumberOfChannels() << " channels, ";
-    std::cout << format->getNumberOfBitsPerSample() << " bits";
+    std::cout << format.getNumberOfSamples() << " samples, ";
+    std::cout << format.getNumberOfChannels() << " channels, ";
+    std::cout << format.getNumberOfBitsPerSample() << " bits";
     std::cout << std::endl;
 
     return 0;

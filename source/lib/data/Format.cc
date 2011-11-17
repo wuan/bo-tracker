@@ -25,14 +25,15 @@ namespace blitzortung {
     Format::Format(std::iostream& stream) :
       logger_("data.Format")
     {
-      util::Stream::ReadValue(stream, numberOfSamples_);
-      util::Stream::ReadValue(stream, numberOfChannels_);
-      util::Stream::ReadValue(stream, numberOfBits_);
-
-      updateDataType();
+      fromStream(stream);
     }
 
-    Format::~Format() {
+    Format& Format::operator=(const Format& other) {
+      numberOfBits_ = other.numberOfBits_;
+      numberOfChannels_ = other.numberOfChannels_;
+      numberOfSamples_ = other.numberOfSamples_;
+      sampleType_ = other.sampleType_;
+      return *this;
     }
 
     unsigned short Format::getNumberOfBitsPerSample() const {
@@ -53,11 +54,11 @@ namespace blitzortung {
 
     void Format::updateDataType() {      
       if (numberOfBits_ <= 8) {
-	sampleType_ = BYTE;
+	sampleType_ = Type::BYTE;
       } else if (numberOfBits_ <= 16) {
-	sampleType_ = SHORT;
+	sampleType_ = Type::SHORT;
       } else {
-	sampleType_ = INT;
+	sampleType_ = Type::INT;
       }
     }
 
@@ -66,21 +67,33 @@ namespace blitzortung {
     }
 
     unsigned short Format::getNumberOfBytesPerSample() const {
-      return sampleType_;
+      return (unsigned short)(sampleType_);
     }
 
     unsigned int Format::getDataSize() const {
-      return sampleType_ * numberOfChannels_ * numberOfSamples_;
+      return getNumberOfBytesPerSample() * numberOfChannels_ * numberOfSamples_;
     }
 
     unsigned int Format::getIndex(unsigned short index, unsigned char channel) const {
       return index * numberOfChannels_ + channel;
     }
 
+    bool Format::isValid() const {
+      return getDataSize() > 0;
+    }
+
     void Format::toStream(std::iostream& stream) const {
       util::Stream::WriteValue(stream, numberOfSamples_);
       util::Stream::WriteValue(stream, numberOfChannels_);
       util::Stream::WriteValue(stream, numberOfBits_);
+    }
+
+    void Format::fromStream(std::iostream& stream) {
+      util::Stream::ReadValue(stream, numberOfSamples_);
+      util::Stream::ReadValue(stream, numberOfChannels_);
+      util::Stream::ReadValue(stream, numberOfBits_);
+
+      updateDataType();
     }
 
     bool Format::operator==(const Format& other) const {

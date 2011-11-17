@@ -21,10 +21,10 @@ namespace blitzortung {
 
 	private:
 
-	  static const data::Format::CP FORMAT_8_2_1;
-	  static const data::Format::CP FORMAT_12_2_1;
-	  static const data::Format::CP FORMAT_8_2_64;
-	  static const data::Format::CP FORMAT_8_1_128;
+	  static const data::Format FORMAT_8_2_1;
+	  static const data::Format FORMAT_12_2_1;
+	  static const data::Format FORMAT_8_2_64;
+	  static const data::Format FORMAT_8_1_128;
 
 	  //! combined date time string
 	  data::Waveform::AP waveform_;
@@ -34,6 +34,9 @@ namespace blitzortung {
 
 	  //! logger for this class
 	  mutable Logger logger_;
+
+	  //! set parsed waveform
+	  void setWaveform(const data::Format&, const pt::ptime&, const pt::time_duration&, const std::string&&);
 
 	public:
 

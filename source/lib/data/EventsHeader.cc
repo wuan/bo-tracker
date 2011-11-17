@@ -20,30 +20,27 @@ namespace blitzortung {
       return ! file.fail();
     }
 
-    EventsHeader::EventsHeader(Format::CP dataFormat, const gr::date& date) :
+    EventsHeader::EventsHeader(const Format& dataFormat, const gr::date& date) :
       date_(date),
       dataFormat_(dataFormat),
       logger_("data.EventsHeader")
     {
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "construct() date " << date_ << ", format " << *dataFormat_;
-    }
-
-    EventsHeader::~EventsHeader() {
+	logger_.debugStream() << "construct() date " << date_ << ", format " << dataFormat_;
     }
 
     void EventsHeader::set(const Events& events) {
       date_ = events.getDate();
       dataFormat_ = events.getDataFormat();
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "set() date " << date_ << ", format " << *dataFormat_;
+	logger_.debugStream() << "set() date " << date_ << ", format " << dataFormat_;
     }
 
     const gr::date& EventsHeader::getDate() const {
       return date_;
     }
 
-    const Format::CP& EventsHeader::getDataFormat() const {
+    const Format& EventsHeader::getDataFormat() const {
       return dataFormat_;
     }
 
@@ -98,7 +95,7 @@ namespace blitzortung {
 	  logger_.debugStream() << "read() epoch: " << fileEpochDays << " = " << date_;
       }
 
-      dataFormat_ = Format::CP(new Format(fstream));
+      dataFormat_ = Format(fstream);
 
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "read() data format: " << dataFormat_;
@@ -163,7 +160,7 @@ namespace blitzortung {
 	fstream.write((char*) &fileEpochDays, sizeof(unsigned int));
       }
 
-      dataFormat_->toStream(fstream);
+      dataFormat_.toStream(fstream);
 
       //std::cout << " header size: " << fstream.tellg() << " should be " << getSize();
 
@@ -177,7 +174,7 @@ namespace blitzortung {
     }
     
     bool EventsHeader::operator==(const EventsHeader& other) {
-      return date_ == other.date_ && *dataFormat_ == *(other.dataFormat_);
+      return date_ == other.date_ && dataFormat_ == other.dataFormat_;
     }
 	
     bool EventsHeader::operator!=(const EventsHeader& other) {
@@ -193,7 +190,7 @@ namespace blitzortung {
     }
     
     std::ostream& operator<<(std::ostream& os, const EventsHeader& header) {
-      os << "header(" << header.getDate() << ", " << *(header.getDataFormat()) << ")";
+      os << "header(" << header.getDate() << ", " << header.getDataFormat() << ")";
 
       return os;
     }

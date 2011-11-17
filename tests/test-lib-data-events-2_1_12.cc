@@ -9,6 +9,6 @@ unsigned int Event_2_1_12_Test::getDataSize() const {
 }
 
 void Event_2_1_12_Test::setUp() {
-  dataFormat_ = bo::data::Format::CP(new bo::data::Format(12, 2, 1));
+  dataFormat_ = bo::data::Format(12, 2, 1);
 }
 

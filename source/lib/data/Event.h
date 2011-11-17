@@ -36,7 +36,7 @@ namespace blitzortung {
 	Event(Waveform::AP&&, GpsInfo::AP&&);
 
 	//! construct Event from stream 
-	Event(data::Format::CP dataFormat, const gr::date& date, std::iostream& stream);
+	Event(const data::Format& dataFormat, const gr::date& date, std::iostream& stream);
 
 	//! destruct Event
 	virtual ~Event();
@@ -68,7 +68,7 @@ namespace blitzortung {
 	unsigned int getSize() const;
 
 	//! determine storage size of event in bytes
-	static unsigned int GetSize(const Format::CP& dataFormat);
+	static unsigned int GetSize(const Format& dataFormat);
 
     };
 

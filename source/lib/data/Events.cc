@@ -11,22 +11,22 @@ namespace blitzortung {
 	logger_.debugStream() << "create() " << this;
     }
 
-    Events::Events(const gr::date& date, const Format::CP& dataFormat) :
+    Events::Events(const gr::date& date, const Format& dataFormat) :
+      date_(date),
+      dataFormat_(dataFormat),
       logger_("data.Events")
     {
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "create(" << date << ", " << dataFormat << ") " << this;
-      date_ = date;
-      dataFormat_ = dataFormat;
     }
 
     Events::Events(const EventsHeader& header) :
+      date_(header.getDate()),
+      dataFormat_(header.getDataFormat()),
       logger_("data.Events")
     {
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "create(header) " << this << " " << header;
-      dataFormat_ = header.getDataFormat();
-      date_ = header.getDate();
     }
 
     Events::~Events() {
@@ -67,15 +67,15 @@ namespace blitzortung {
       }
     }
       
-    const Format::CP& Events::getDataFormat() const {
+    const Format& Events::getDataFormat() const {
       return dataFormat_;
     }
 
-    void Events::setOrCheckDataFormat(const data::Format::CP& dataFormat) {
-      if ((events_.size() == 0 || dataFormat_.get() == 0) && dataFormat.get() != 0) {
+    void Events::setOrCheckDataFormat(const data::Format& dataFormat) {
+      if ((events_.size() == 0 || !dataFormat_.isValid()) && dataFormat.isValid()) {
 	  dataFormat_ = dataFormat;
       } else {
-	if (!dataFormat.get() != 0 && *(dataFormat_) != *(dataFormat))
+	if (dataFormat.isValid() && dataFormat_ != dataFormat)
 	  throw exception::Base("data::Events::setOrCheckDataFormat() event dataformat mismatch");
       }
     }
