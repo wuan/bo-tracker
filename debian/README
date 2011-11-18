@@ -60,4 +60,4 @@ By default the software is installed to /usr/local, other targets can be set by 
 > ./configure --prefix=<desired path prefix>
 after make -f Makefile.cvs.
 
- -- Andreas Wuerl <awuerl@gmx.net>  Mon, 13 Jun 2011 09:32:00 +0200
+ -- Andreas Wuerl <blitzortung@tryb.de>  Mon, 13 Jun 2011 09:32:00 +0200
