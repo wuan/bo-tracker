@@ -10,7 +10,7 @@
 #                    placed in /etc/init.d.
 ### END INIT INFO
 
-# Author: Andreas Würl <awuerl@gmx.net>
+# Author: Andreas Würl <blitzortung@tryb.de>
 #
 
 # Do NOT "set -e"

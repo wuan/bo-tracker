@@ -1,6 +1,6 @@
 /*  
 
-    Copyright (C) 2010       Andreas Würl <awuerl@gmx.net>
+    Copyright (C) 2010-2011  Andreas Würl <blitzortung@tryb.de>
 
 */
 

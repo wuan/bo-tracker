@@ -1,6 +1,6 @@
 /*  
 
-    Copyright (C) 2010       Andreas Würl <awuerl@gmx.net>
+    Copyright (C) 2010-2011  Andreas Würl <blitzortung@tryb.de>
 
 */
 
@@ -10,6 +10,7 @@
 #include <string>
 
 #include <boost/program_options.hpp>
+
 #ifdef HAVE_BOOST_ACCUMULATORS_ACCUMULATORS_HPP
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>

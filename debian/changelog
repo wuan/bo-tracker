@@ -5,7 +5,7 @@ blitzortung-tracker (0.9.6SNAPSHOT201111172229) unstable; urgency=low
     * default methods
     * strongly typed enums
 
- -- Andreas Wuerl <awuerl@gmx.net>  Sun, 11 Jul 2011 20:00:00 +0200
+ -- Andreas Wuerl <blitzortung@tryb.de>  Sun, 11 Jul 2011 20:00:00 +0200
 
 blitzortung-tracker (0.9.5) unstable; urgency=low
 
@@ -16,7 +16,7 @@ blitzortung-tracker (0.9.5) unstable; urgency=low
   * іmproved socket information for current activity
   * made package compatibile with Debian 5
 
- -- Andreas Wuerl <awuerl@gmx.net>  Sun, 3 Jul 2011 22:38:00 +0200
+ -- Andreas Wuerl <blitzortung@tryb.de>  Sun, 3 Jul 2011 22:38:00 +0200
 
 blitzortung-tracker (0.9.4) unstable; urgency=low
 
@@ -26,7 +26,7 @@ blitzortung-tracker (0.9.4) unstable; urgency=low
   * added analysis cronjob
   * better documentation / support for non Debian/Ubuntu systems
 
- -- Andreas Wuerl <awuerl@gmx.net>  Thu, 20 May 2011 07:25:00 +0200
+ -- Andreas Wuerl <blitzortung@tryb.de>  Thu, 20 May 2011 07:25:00 +0200
 
 blitzortung-tracker (0.9.3) unstable; urgency=low
 
@@ -38,7 +38,7 @@ blitzortung-tracker (0.9.3) unstable; urgency=low
   * changing firmware version storage from integer to string
   * minor fixeѕ
 
- -- Andreas Wuerl <awuerl@gmx.net>  Thu, 31 Mar 2011 19:15:00 +0200
+ -- Andreas Wuerl <blitzortung@tryb.de>  Thu, 31 Mar 2011 19:15:00 +0200
 
 blitzortung-tracker (0.9.2) unstable; urgency=low
 
@@ -50,7 +50,7 @@ blitzortung-tracker (0.9.2) unstable; urgency=low
   * transmission of data via UDP instead of TCP
   * complete rework of internal sample processing using a flexible internal sample format
 
- -- Andreas Wuerl <awuerl@gmx.net>  Wed, 2 Mar 2011 19:41:45 +0100
+ -- Andreas Wuerl <blitzortung@tryb.de>  Wed, 2 Mar 2011 19:41:45 +0100
 
 blitzortung-tracker (0.9.1) unstable; urgency=low
 
@@ -60,7 +60,7 @@ blitzortung-tracker (0.9.1) unstable; urgency=low
   * rework of sample to use waveform and gpsInfo substructures
   * rework of creation of samples. now using factory objects
 
- -- Andreas Wuerl <awuerl@gmx.net>  Wed, 14 Nov 2010 21:14:45 +0100
+ -- Andreas Wuerl <blitzortung@tryb.de>  Wed, 14 Nov 2010 21:14:45 +0100
 
 blitzortung-tracker (0.9) unstable; urgency=low
 
@@ -71,4 +71,4 @@ blitzortung-tracker (0.9) unstable; urgency=low
     * first version of binary data export
     * includes additional software to generate raw data statistics
 
- -- Andreas Wuerl <awuerl@gmx.net>  Wed, 25 Aug 2010 18:45:10 +0200
+ -- Andreas Wuerl <blitzortung@tryb.de>  Wed, 25 Aug 2010 18:45:10 +0200
