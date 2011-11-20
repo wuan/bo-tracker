@@ -21,6 +21,10 @@ namespace blitzortung {
       typedef std::auto_ptr<Process> AP;
 
     private:
+
+      //! time when process object was created
+      const pt::ptime startTime_;
+
       //! queue for data transfer from measurement thread
       Queue<data::Event> eventQueue_;
 
@@ -61,6 +65,11 @@ namespace blitzortung {
       //! set amplitude limit
       void setAmplitudeLimit(double amplitudeLimit);
 
+      //! get start time of process object
+      const pt::ptime& getStartTime() const;
+
+      //! get uptime of process object
+      const pt::time_duration getUptime() const;
   };
 }
 
