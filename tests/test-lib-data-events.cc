@@ -29,10 +29,7 @@ bo::data::Event::AP EventTest::createEventWithFormat(const bo::data::Format& dat
 
   bo::data::Waveform::AP wfm(new bo::data::Waveform(array, time + pt::nanoseconds(3125) * 10, dt));
 
-  // create GpsInfo
-  bo::data::GpsInfo::AP gpsInfo(new bo::data::GpsInfo());
-
-  return bo::data::Event::AP(new bo::data::MEvent(wfm, gpsInfo, "n/a"));
+  return bo::data::Event::AP(new bo::data::MEvent(wfm, bo::data::GpsInfo::AP(new bo::data::GpsInfo()), "n/a"));
 }
 
 bo::data::Events::P EventTest::createEvents1() {
@@ -104,6 +101,8 @@ void EventTest::testAdd() {
   events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,30,00))));
 
   CPPUNIT_ASSERT_THROW(events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,30,00)) + gr::days(1))), bo::exception::Base);
+
+  std::cout << "data format at " << &events.getDataFormat() << std::endl;
 
   /*for(bo::data::Events::I event=events.begin(); event != events.end(); event++) {
     std::cout << *event << std::endl;

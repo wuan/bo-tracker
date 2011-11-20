@@ -111,6 +111,11 @@ namespace blitzortung {
       array_->toStream(stream);
     }
 
+    void Waveform::updateFormatRef(const Format& format) {
+      assert(format == array_->getFormat());
+      array_ = Array::AP(new Array(*array_, format));
+    }
+
     bool Waveform::isEmpty() const {
       return array_.get() == 0;
     }
