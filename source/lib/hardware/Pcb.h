@@ -34,7 +34,7 @@ namespace blitzortung {
 	gps::Base& gps_;
 
 	//! get info string which is appended to the raw data
-	std::string getInfoString() const;
+	void appendInfoString(std::string&) const;
 
       private:
 
