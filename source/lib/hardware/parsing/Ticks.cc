@@ -23,7 +23,6 @@ namespace blitzortung {
 
 	unsigned int index = 1;
 	if (fields[0] == "BS") {
-	  // BS,2370CF,A,160540,190311,4808.1291,N,01132.6191,E,525.0,06,27b
 	    counterIndex = index++;
 	    gpsStatusIndex =  index++;
 	    timeIndex = index++;
@@ -64,9 +63,6 @@ namespace blitzortung {
 	}
 
 	if (valid_) {
-	  //if (logger_.isDebugEnabled())
-	  //  logger_.debugStream() << "valid fields";
-
 	  // read counter value
 	  counter_ = parseHex(fields[counterIndex]);
 
@@ -114,11 +110,11 @@ namespace blitzortung {
 	return numberOfSatellites_;
       }
 
-      float Ticks::getLongitude() const {
+      const float Ticks::getLongitude() const {
 	return longitude_;
       }
 
-      float Ticks::getLatitude() const {
+      const float Ticks::getLatitude() const {
 	return latitude_;
       }
 

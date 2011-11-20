@@ -36,7 +36,7 @@ namespace blitzortung {
 	  mutable Logger logger_;
 
 	  //! set parsed waveform
-	  void setWaveform(const data::Format&, const pt::ptime&, const pt::time_duration&, const std::string&&);
+	  void setWaveform(const data::Format&, const pt::ptime&, const pt::time_duration&&, const std::string&&);
 
 	public:
 
