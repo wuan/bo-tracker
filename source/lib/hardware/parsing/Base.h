@@ -17,8 +17,10 @@ namespace blitzortung {
 
 	protected:
 
+	  //! is parsed data valid?
 	  bool valid_;
 
+	  //! parsed counter value
 	  unsigned int counter_;
 
 	  //! parse int string
@@ -39,10 +41,12 @@ namespace blitzortung {
 	  Base();
 
 	  //! destructor
-	  virtual ~Base();
-	  
+	  virtual ~Base() = default;
+
+	  //! parsing successful
 	  bool isValid() const;
 	  
+	  //! get tick counter value
 	  unsigned int getCounterValue() const;
       };
 

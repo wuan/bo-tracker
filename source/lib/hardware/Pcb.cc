@@ -30,7 +30,6 @@ namespace blitzortung {
       return comm_.isOpen();
     }
     
-
     const std::string& Pcb::getFirmwareVersion() const {
       return firmwareVersion_;
     }
@@ -50,17 +49,12 @@ namespace blitzortung {
 	logger_.infoStream() << "read() input: '" << line << "'";
 
       if (line.length() > 0) {
-
 	std::vector<std::string> fields;
-
 	util::String::split(line, fields, ",");
 
 	parsing::Ticks ticksParser(fields);
 
 	if (ticksParser.isValid()) {
-	  //if (logger_.isDebugEnabled())
-	  //  logger_.debugStream() << "read() TicksParser is valid";
-
 	  gps_.set(ticksParser);
 
 	  if (ticksParser.getFirmwareVersion() != "")
@@ -68,23 +62,19 @@ namespace blitzortung {
 
 	  if (lastSampleCreated_.is_not_a_date_time()) {
 	    lastSampleCreated_ = gps_.getTime();
-	  }
-
-	  if (gps_.getTime() - lastSampleCreated_ >= pt::minutes(10)) {
-	    lastSampleCreated_ = gps_.getTime();
-	    return createKeepaliveSample();
+	  } else {
+	    if (gps_.getTime() - lastSampleCreated_ >= pt::minutes(10)) {
+	      lastSampleCreated_ = gps_.getTime();
+	      return createKeepaliveSample();
+	    }
 	  }
 
 	} else {
 	  parsing::Samples samplesParser(fields, gps_);
 
-	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "read() parse samples";
-
 	  if (samplesParser.isValid()) { 
-	    if (logger_.isDebugEnabled())
-	      logger_.debugStream() << "read() set lastSampleCreated to " << gps_.getTime();
 	    lastSampleCreated_ = gps_.getTime();
+
 	    return createSample(samplesParser);
 	  } else {
 	    logger_.warnStream() << "unknown data '" << line << "'";
@@ -102,7 +92,7 @@ namespace blitzortung {
       data::Waveform::AP waveform(new data::Waveform(gps_.getTime()));
 
       std::string rawData("-");
-      rawData.append(getInfoString());
+      appendInfoString(rawData);
 
       data::Event::AP event(new data::MEvent(waveform, gps_.getInfo(), rawData));
 
@@ -121,7 +111,7 @@ namespace blitzortung {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "createSample() waveform " << *waveform;
 
-	rawData.append(getInfoString());
+	appendInfoString(rawData);
 
 	return data::Event::AP(new data::MEvent(waveform, gps_.getInfo(), rawData));
       } else {
@@ -131,9 +121,7 @@ namespace blitzortung {
       return data::Event::AP();
     }
 
-    std::string Pcb::getInfoString() const {
-	std::string rawData;
-
+    void Pcb::appendInfoString(std::string& rawData) const {
 	rawData.append(" ");
 
 	rawData.append(TRACKER_VERSION);
@@ -154,7 +142,6 @@ namespace blitzortung {
 	rawData.append(" ");
 
 	rawData.append(gps_.getType());
-	return rawData;
     }
 
   }
