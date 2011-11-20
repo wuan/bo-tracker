@@ -85,6 +85,9 @@ namespace blitzortung {
 	//! write to stream
 	void toStream(std::iostream&);
 
+	//! update reference to data format
+	void updateFormatRef(const Format&);
+
 	//! returns true if the waveform array is empty
 	bool isEmpty() const;
 
