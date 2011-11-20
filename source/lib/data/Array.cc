@@ -9,6 +9,12 @@ namespace blitzortung {
     {
     }
 
+    Array::Array(Array&& array, const Format& format) :
+      format_(format),
+      data_(std::move(array.data_))
+    {
+    }
+
     unsigned short Array::getNumberOfBitsPerSample() const {
       return format_.getNumberOfBitsPerSample();
     }
