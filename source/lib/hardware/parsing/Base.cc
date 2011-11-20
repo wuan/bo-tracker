@@ -7,11 +7,9 @@ namespace blitzortung {
   namespace hardware {
     namespace parsing {
 
-      Base::Base() {
-	valid_ = false;
-      }
-
-      Base::~Base() {
+      Base::Base() :
+        valid_(false)
+      {
       }
 
       int Base::parseInt(const std::string& intString) const {

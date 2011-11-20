@@ -55,10 +55,10 @@ namespace blitzortung {
 	  const char getGpsStatus() const;
 
 	  //! get longitude value
-	  float getLongitude() const;
+	  const float getLongitude() const;
 
 	  //! get latitude value
-	  float getLatitude() const;
+	  const float getLatitude() const;
 
 	  //! get altitude value
 	  short getAltitude() const;
