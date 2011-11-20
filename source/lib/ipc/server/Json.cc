@@ -65,9 +65,12 @@ namespace blitzortung {
 	    logger_.debugStream() << "process";
 	    json_object* jsonProcess = json_object_new_object();
 	    try {
-	    json_object_object_add(jsonProcess, "numberOfSeconds", json_object_new_int(process_.getEventCountBuffer().getActualSize()));
-	    json_object_object_add(jsonProcess, "numberOfEvents", json_object_new_int(process_.getEventCountBuffer().getSum()));
-	    json_object_object_add(jsonProcess, "eventsPerSecond", json_object_new_double(process_.getEventCountBuffer().getAverage()));
+	      json_object_object_add(jsonProcess, "numberOfSeconds", json_object_new_int(process_.getEventCountBuffer().getActualSize()));
+	      json_object_object_add(jsonProcess, "numberOfEvents", json_object_new_int(process_.getEventCountBuffer().getSum()));
+	      json_object_object_add(jsonProcess, "eventsPerSecond", json_object_new_double(process_.getEventCountBuffer().getAverage()));
+	      std::ostringstream oss;
+	      oss << process_.getUptime();
+	      json_object_object_add(jsonProcess, "uptime", json_object_new_string(oss.str().c_str()));
 	    } catch (exception::Base &e) {
 	    }
 	    json_object_object_add(jsonResponse_, "process", jsonProcess);
