@@ -36,17 +36,17 @@ bo::data::Events::P EventTest::createEvents1() {
   gr::date eventDate(2010,8,1);
 
   std::vector<pt::time_duration> eventTimes;
-  eventTimes.push_back(pt::time_duration( 0, 0, 0,0));
-  eventTimes.push_back(pt::time_duration( 0, 0, 0,010));
-  eventTimes.push_back(pt::time_duration( 0, 0, 0,020));
-  eventTimes.push_back(pt::time_duration( 0, 0, 0,050));
-  eventTimes.push_back(pt::time_duration( 0, 0, 0,075));
-  eventTimes.push_back(pt::time_duration( 0, 0, 0,100));
-  eventTimes.push_back(pt::time_duration( 0, 0, 0,150));
-  eventTimes.push_back(pt::time_duration( 0, 0, 0,200));
-  eventTimes.push_back(pt::time_duration( 0, 0, 0,250));
-  eventTimes.push_back(pt::time_duration( 0, 0, 0,500));
-  eventTimes.push_back(pt::time_duration( 0, 0, 0,750));
+  eventTimes.push_back(pt::time_duration( 0, 0, 0,   0));
+  eventTimes.push_back(pt::time_duration( 0, 0, 0,  10));
+  eventTimes.push_back(pt::time_duration( 0, 0, 0,  20));
+  eventTimes.push_back(pt::time_duration( 0, 0, 0,  50));
+  eventTimes.push_back(pt::time_duration( 0, 0, 0,  75));
+  eventTimes.push_back(pt::time_duration( 0, 0, 0, 100));
+  eventTimes.push_back(pt::time_duration( 0, 0, 0, 150));
+  eventTimes.push_back(pt::time_duration( 0, 0, 0, 200));
+  eventTimes.push_back(pt::time_duration( 0, 0, 0, 250));
+  eventTimes.push_back(pt::time_duration( 0, 0, 0, 500));
+  eventTimes.push_back(pt::time_duration( 0, 0, 0, 750));
   eventTimes.push_back(pt::time_duration( 0, 0, 1,0));
   eventTimes.push_back(pt::time_duration( 0, 0,10,0));
   eventTimes.push_back(pt::time_duration( 0, 0,30,0));
@@ -101,8 +101,6 @@ void EventTest::testAdd() {
   events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,30,00))));
 
   CPPUNIT_ASSERT_THROW(events.add(createEvent(pt::ptime(eventDate, pt::time_duration(11,30,00)) + gr::days(1))), bo::exception::Base);
-
-  std::cout << "data format at " << &events.getDataFormat() << std::endl;
 
   /*for(bo::data::Events::I event=events.begin(); event != events.end(); event++) {
     std::cout << *event << std::endl;

@@ -41,11 +41,8 @@ namespace blitzortung {
 	//! replace events by events of given structure
 	void replace(Events&);
 
-	//! set date of event collection or check for mismatch
-	void setOrCheckDate(const gr::date&);
-
-	//! set data format of event collection or check for mismatch
-	void setOrCheckDataFormat(const data::Format&);
+	//! set events properties from or check events properties agains a single event
+        void setOrCheckProperties(Event& event);
 
       public:
 

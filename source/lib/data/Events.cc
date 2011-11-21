@@ -35,11 +35,7 @@ namespace blitzortung {
     }
 
     void Events::add(Event* event) {
-      setOrCheckDate(event->getWaveform().getTime().date());
-
-      if (!event->getWaveform().isEmpty())
-        setOrCheckDataFormat(event->getWaveform().getArray().getFormat());
-
+      setOrCheckProperties(*event);
       events_.push_back(event);
     }
 
@@ -51,33 +47,38 @@ namespace blitzortung {
       add(event.release());
     }
 
-    void Events::add(Events&) throw(exception::Base) {
+    void Events::add(Events& source) throw(exception::Base) {
+      transfer(end(), source);
+    }
+
+    void Events::setOrCheckProperties(Event& event) {
+      const gr::date& date = event.getWaveform().getTime().date();
+      Format dataFormat;
+      if (!event.getWaveform().isEmpty()) {
+	dataFormat = event.getWaveform().getArray().getFormat();
+      }
+
+      if (size() == 0) {
+        date_ = date;
+	dataFormat_ = dataFormat;
+      } else {
+	if (date_ != date) 
+	  throw exception::Base("data::Events::setOrCheckProperties() date mismatch");
+	if (dataFormat_ != dataFormat)
+	  throw exception::Base("data::Events::setOrCheckProperties() date mismatch");
+      }
+
+      if (!event.getWaveform().isEmpty()) {
+        event.updateFormatRef(dataFormat_);
+      }
     }
 
     const gr::date& Events::getDate() const {
       return date_;
     }
 
-    void Events::setOrCheckDate(const gr::date& date) {
-      if (events_.size() == 0 || date_.is_not_a_date()) {
-	date_ = date;
-      } else {
-	if (date_ != date)
-	  throw exception::Base("data::Events::setDate() event date mismatch");
-      }
-    }
-      
     const Format& Events::getDataFormat() const {
       return dataFormat_;
-    }
-
-    void Events::setOrCheckDataFormat(const data::Format& dataFormat) {
-      if ((events_.size() == 0 || !dataFormat_.isValid()) && dataFormat.isValid()) {
-	  dataFormat_ = dataFormat;
-      } else {
-	if (dataFormat.isValid() && dataFormat_ != dataFormat)
-	  throw exception::Base("data::Events::setOrCheckDataFormat() event dataformat mismatch");
-      }
     }
 
     int Events::size() const {
@@ -133,11 +134,14 @@ namespace blitzortung {
     }
 
     void Events::transfer(Event::VI target, Event::VI begin, Event::VI end, Events& source) {
+      for (auto event=begin; event != end; event++)
+        setOrCheckProperties(*event);
+
       events_.transfer(target, begin, end, source.events_);
     }
 
     void Events::transfer(Event::VI target, Events& source) {
-      events_.transfer(target, source.events_);
+      transfer(target, source.begin(), source.end(), source);
     }
 
     Event::AP Events::release(Event::VI target) {
@@ -145,26 +149,24 @@ namespace blitzortung {
     }
 
     std::string Events::appendToFile(const std::string& fileName) const {
-      if (events_.size() > 0) {
+      if (size() > 0) {
 
 	if (logger_.isDebugEnabled()) {
-	  logger_.debugStream() << "appendToFile() " << fileName << " (" << events_.size() << " events)";
+	  logger_.debugStream() << "appendToFile() " << fileName << " (" << size() << " events)";
 	}
 
 	EventsFile eventsFile(fileName);
-
 	eventsFile.append(*this);
-	
 	return eventsFile.getFilename();
       }
       return "";
     }
 
     std::string Events::writeToFile(const std::string& fileName) {
-      if (events_.size() > 0) {
+      if (size() > 0) {
 
 	if (logger_.isDebugEnabled()) {
-	  logger_.debugStream() << "appendToFile() " << fileName << " (" << events_.size() << " events)";
+	  logger_.debugStream() << "writeToFile() " << fileName << " (" << size() << " events)";
 	}
 
 	EventsFile eventsFile(fileName);
@@ -201,8 +203,8 @@ namespace blitzortung {
       date_ = source.date_;
       dataFormat_ = source.dataFormat_;
 
-      events_.clear();
-      events_.transfer(events_.begin(), source.events_);
+      clear();
+      transfer(end(), source);
     }
 
 

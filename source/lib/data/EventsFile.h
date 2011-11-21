@@ -38,7 +38,7 @@ namespace blitzortung {
 	Event::AP readEvent();
 
 	//! append/write events to file with given filename
-	void writeEvents(const std::string&, const Events&, bool append=false);
+	void writeEvents(const Events&, bool append=false);
 
 	//! open the fstream
 	void open(std::ios_base::openmode);
