@@ -105,13 +105,15 @@ namespace blitzortung {
 
       fstream.seekg(0, std::ios::end);
       unsigned int filesize = fstream.tellg();
-
       
       fstream.close();
       
       filesize -= getSize();
 
       numberOfEvents_ = filesize / getEventSize();
+
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "read() numberofevents: " << filesize << " / " << getEventSize() << " = " << filesize / getEventSize() << " => filesize = " << numberOfEvents_ * getEventSize();
 
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "read() date " << date_ << " #events " << numberOfEvents_ << " eventsize " << getEventSize() << " filesize " << filesize;
@@ -182,7 +184,11 @@ namespace blitzortung {
     }
 
     Event::AP EventsHeader::createEvent(std::iostream& stream) const {
-      return Event::AP(new Event(dataFormat_, date_, stream));
+      return createEvent(stream, dataFormat_);
+    }
+
+    Event::AP EventsHeader::createEvent(std::iostream& stream, const Format& dataFormat) const {
+      return Event::AP(new Event(dataFormat, date_, stream));
     }
 	
     unsigned int EventsHeader::getSize() const {

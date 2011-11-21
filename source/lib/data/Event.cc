@@ -49,6 +49,10 @@ namespace blitzortung {
       gpsInfo_->toStream(stream);
     }
 
+    void Event::updateFormatRef(const Format& format) {
+      waveform_->updateFormatRef(format);
+    }
+
     //! get binary storage size of sample
     unsigned int Event::getSize() const {
       return GetSize(waveform_->getArray().getFormat());

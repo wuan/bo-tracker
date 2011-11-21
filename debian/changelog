@@ -1,5 +1,6 @@
 blitzortung-tracker (0.9.6SNAPSHOT201111172229) unstable; urgency=low
 
+  * performance: use data format reference instead of shared_ptr
   * code migration to subset of C++11 features (gcc >= 4.4 required)
     * rvalue refereces
     * default methods

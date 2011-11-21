@@ -67,30 +67,33 @@ namespace blitzortung {
     }
 
     void EventsFile::write(const Events& events) {
-      writeEvents(name_, events); 
+      header_.set(events);
+      writeEvents(events); 
     }
 
     void EventsFile::append(const Events& events) {
-
       header_.set(events);
 
       if (header_.fileExists(name_)) {
-	writeEvents(name_, events, true);
+	writeEvents(events, true);
       } else {
-	writeEvents(name_, events);
+	writeEvents(events);
       }
     }
     
-    void EventsFile::writeEvents(const std::string& name, const Events& events, bool append) {
+    void EventsFile::writeEvents(const Events& events, bool append) {
 
       if (events.size() > 0) {
 
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "writeEvents() " << name << " append: " << append;
+	  logger_.debugStream() << "writeEvents() " << name_ << " append: " << append;
 
-	header_.set(events);
+	if (events.getDataFormat() != events.front().getWaveform().getArray().getFormat()) {
+	  std::cout << std::endl << "  " << events.getDataFormat() << " vs. " << events.front().getWaveform().getArray().getFormat() << std::endl;
+	  throw exception::Base("data::EventsFile() writeEvents() events format mismatch");
+	}
 
-	setFilename(name);
+	setFilename(name_);
 
 	if (append) {
 	  EventsHeader header;
@@ -109,15 +112,19 @@ namespace blitzortung {
 	
 	open(std::ios::out | std::ios::binary | std::ios::app);
 
-	if (logger_.isDebugEnabled())
+
+	if (logger_.isDebugEnabled()) {
 	  logger_.debugStream() << "writeEvents() write " << events.size() << " events (" << events.front().getSize() << " bytes per event)";
+	  logger_.debugStream() << "writeEvents() wfm size " << events.getDataFormat() << " " << Waveform::GetSize(events.front().getWaveform().getArray().getFormat());
+	  logger_.debugStream() << "writeEvents() format " << events.getDataFormat() << " " << &events.getDataFormat();
+	}
 
 	unsigned int position = fstream_.tellg();
 
 	for (Event::CVI event = events.begin(); event != events.end(); event++) {
 	  event->toStream(fstream_);
 	  if (logger_.isDebugEnabled()) {
-	    logger_.debugStream() << "writeEvents()   position " << fstream_.tellg() << " delta " << (int(fstream_.tellg()) - position);
+	    logger_.debugStream() << "writeEvents()   position " << position << " delta " << (int(fstream_.tellg()) - position);
 	    position = fstream_.tellg();
 	  }
 
@@ -205,6 +212,8 @@ namespace blitzortung {
 
       Events::AP events(readInternal(startIndex, numberOfEvents));
 
+      logger_.debugStream() << "read() events format " << events->getDataFormat() << " " << &events->getDataFormat();
+
       close();
 
       return events;
@@ -216,9 +225,14 @@ namespace blitzortung {
       
       seekEvent(startIndex);
 
-      for(unsigned int i=0; i < (unsigned int)(numberOfEvents); i++) {
+      for (unsigned int i=0; i < (unsigned int)(numberOfEvents); i++) {
 	events->add(header_.createEvent(fstream_));
       }
+
+      logger_.debugStream() << "readInternal() events with format " << events->getDataFormat() << " " << &events->getDataFormat();
+
+      for (auto event=events->begin(); event != events->end(); event++)
+	logger_.debugStream() << "  " << event->getWaveform().getArray().getFormat() << &event->getWaveform().getArray().getFormat();
 
       return events;
     }

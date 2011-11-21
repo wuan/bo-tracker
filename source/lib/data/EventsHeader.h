@@ -86,6 +86,9 @@ namespace blitzortung {
 	//! create event from stream
 	Event::AP createEvent(std::iostream& stream) const;
 
+	//! create event from stream with given format
+	Event::AP createEvent(std::iostream& stream, const Format& dataFormat) const;
+
 	//! return size of header in bytes
 	unsigned int getSize() const;
     };
