@@ -18,7 +18,7 @@ namespace blitzortung {
       private:
 
 	//! reference to data format object
-	const Format format_;
+	const Format& format_;
 
 	//! vector for x channel data
 	std::unique_ptr<char> data_;
