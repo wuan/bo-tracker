@@ -27,7 +27,10 @@ namespace blitzortung {
 	static const gr::date STARTOFEPOCH;
 
 	//***********************************
-	
+
+	//! file format version
+	unsigned short version_;
+
 	//! file date
 	gr::date date_;
 
