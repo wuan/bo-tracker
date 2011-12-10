@@ -21,6 +21,7 @@ namespace blitzortung {
     }
 
     EventsHeader::EventsHeader(const Format& dataFormat, const gr::date& date) :
+      version_(1),
       date_(date),
       dataFormat_(dataFormat),
       logger_("data.EventsHeader")
@@ -85,12 +86,17 @@ namespace blitzortung {
 	}
       }
 
+      fstream.read((char*)&version_, sizeof(version_));
+      if (logger_.isDebugEnabled())
+	logger_.debugStream() << "read() version: " << version_;
+
       {
 	unsigned int fileEpochDays;
 
 	// read file version from file
-	fstream.read((char*)&fileEpochDays, sizeof(unsigned int));
+	fstream.read((char*)&fileEpochDays, sizeof(fileEpochDays));
 	date_ = STARTOFEPOCH + gr::days(fileEpochDays);
+
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "read() epoch: " << fileEpochDays << " = " << date_;
       }
@@ -157,9 +163,11 @@ namespace blitzortung {
 
       fstream.write(ID, 4);
 
+      fstream.write((char*)&version_, sizeof(version_));
+
       {
 	unsigned int fileEpochDays = (date_ - STARTOFEPOCH).days();
-	fstream.write((char*) &fileEpochDays, sizeof(unsigned int));
+	fstream.write((char*) &fileEpochDays, sizeof(fileEpochDays));
       }
 
       dataFormat_.toStream(fstream);
@@ -192,7 +200,7 @@ namespace blitzortung {
     }
 	
     unsigned int EventsHeader::getSize() const {
-      return 12;
+      return 14;
     }
     
     std::ostream& operator<<(std::ostream& os, const EventsHeader& header) {
