@@ -40,8 +40,8 @@ namespace blitzortung {
 
         //! create a waveform format object
 	/*!
-	\param bits number of bits per sample
-	\param channels number of channels per measurement
+	\param numberOfBits number of bits per sample
+	\param numberOfChannels number of channels per measurement
 	\param numberOfSamples number of measurements per waveform
 	*/
 	Format(unsigned char numberOfBits, unsigned char numberOfChannels, unsigned short numberOfSamples);
