@@ -22,7 +22,9 @@ BLITZORTUNG_TRACKER_LOGFILE="--logfile=/var/log/blitzortung-tracker.log"
 # FIRMWARE
 #BLITZORTUNG_TRACKER_FIRMWARE="--firmware-version=x"
 # file pattern to write data files
-#BLITZORTUNG_DATA_OUTPUT="-o /var/cache/blitzortung/raw/${BLITZORTUNG_USERNAME}_%Y%m%d.bor"
+BLITZORTUNG_DATA_PATH="/var/cache/blitzortung"
+BLITZORTUNG_RAW_DATA_PATH="${BLITZORTUNG_DATA_PATH}/raw"
+#BLITZORTUNG_DATA_OUTPUT="-o ${BLITZORTUNG_RAW_DATA_PATH}/${BLITZORTUNG_USERNAME}_%Y%m%d.bor"
 
 # select the user which is running the tracker (not yet in use)
 BLITZORTUNG_TRACKER_USER=root

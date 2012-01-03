@@ -19,10 +19,6 @@ AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
 AC_PROG_CXX
 
-dnl PKG_CHECK_MODULES([QTCORE], [QtCore])
-dnl AC_SUBST(QTCORE_CFLAGS)
-dnl AC_SUBST(QTCORE_LIBS)
-
 AC_LANG_PUSH([C++])
 AC_CHECK_HEADERS([boost/date_time.hpp], [], [AC_MSG_ERROR(You need the boost date-time libraries)])
 AC_CHECK_HEADERS([boost/thread.hpp], [], [AC_MSG_ERROR(You need the boost thread libraries)])
