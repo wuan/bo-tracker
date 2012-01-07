@@ -11,7 +11,7 @@ namespace blitzortung {
     private:
 
       //! log4cpp logger category
-      log4cpp::Category& category_;
+      log4cpp::Category category_;
 
     public:
 
@@ -19,7 +19,7 @@ namespace blitzortung {
       Logger(const std::string& loggerName="");
 
       //! destruct logger
-      virtual ~Logger() = default;
+      virtual ~Logger();
 
       //! set logging priority
       void setPriority(const log4cpp::Priority::Value priority);

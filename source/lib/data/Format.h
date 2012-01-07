@@ -52,11 +52,8 @@ namespace blitzortung {
 	//! construct from stream
 	Format(std::iostream&);
 
-	//! copy constructor
-	Format(const Format&) = default;
-
 	//! delete waveform object
-	virtual ~Format() = default;
+	virtual ~Format();
 
 	Format& operator=(const Format& other);
 

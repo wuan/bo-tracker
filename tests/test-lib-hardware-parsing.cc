@@ -85,7 +85,7 @@ void HardwareParsingTest::testTicksParsingF25() {
       8, "V", "27b");
 }
 
-void HardwareParsingTest::samplesParsingTest(const std::string& input, bo::hardware::gps::Base& gps, unsigned int counterValue, bo::data::Format format, const std::string& rawData) {
+void HardwareParsingTest::samplesParsingTest(const std::string&& input, bo::hardware::gps::Base& gps, unsigned int counterValue, const bo::data::Format&& format, const std::string& rawData) {
   std::vector<std::string> fields;
 
   bo::util::String::split(input, fields, ",");

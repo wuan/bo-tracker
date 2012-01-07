@@ -12,6 +12,8 @@ namespace blitzortung {
       {
       }
 
+      Base::~Base() = default;
+
       int Base::parseInt(const std::string& intString) const {
 	  int intValue;
 

@@ -115,7 +115,7 @@ namespace blitzortung {
       if (format != array_->getFormat())
 	std::cout << std::endl << "update format ref format mismatch " << format << " vs. " << array_->getFormat() << std::endl;
       assert(format == array_->getFormat());
-      array_ = Array::AP(new Array(*array_, format));
+      array_ = Array::AP(new Array(std::move(*array_), format));
     }
 
     bool Waveform::isEmpty() const {

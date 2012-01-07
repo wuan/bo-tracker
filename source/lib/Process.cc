@@ -45,7 +45,7 @@ namespace blitzortung {
 	}
       }
       if (eventShouldBeProcessed)
-	eventQueue_.push(data);
+	eventQueue_.push(std::move(data));
     } else {
       logger_.warnStream() << "received empty event";
     }

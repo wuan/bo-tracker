@@ -22,7 +22,7 @@ void ProcessTest::tearDown() {
 
 void pushEvent(bo::Process& process, bo::data::Event::AP event)
 {
-  process.push(event);
+  process.push(std::move(event));
 }
 
 void ProcessTest::testAroundMidnight() {

@@ -27,8 +27,7 @@ namespace blitzortung {
     }
   }
 
-  Logger::~Logger() {
-  }
+  Logger::~Logger() = default;
 
   void Logger::setPriority(const log4cpp::Priority::Value priority) {
     category_.setPriority(priority);

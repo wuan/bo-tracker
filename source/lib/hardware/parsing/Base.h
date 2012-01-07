@@ -41,7 +41,7 @@ namespace blitzortung {
 	  Base();
 
 	  //! destructor
-	  virtual ~Base() = default;
+	  virtual ~Base();
 
 	  //! parsing successful
 	  bool isValid() const;

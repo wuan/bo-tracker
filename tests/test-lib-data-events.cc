@@ -27,9 +27,9 @@ bo::data::Event::AP EventTest::createEventWithFormat(const bo::data::Format& dat
   if (dataFormat.getNumberOfSamples() > 1)
     dt = pt::nanoseconds(3125);
 
-  bo::data::Waveform::AP wfm(new bo::data::Waveform(array, time + pt::nanoseconds(3125) * 10, dt));
+  bo::data::Waveform::AP wfm(new bo::data::Waveform(std::move(array), time + pt::nanoseconds(3125) * 10, dt));
 
-  return bo::data::Event::AP(new bo::data::MEvent(wfm, bo::data::GpsInfo::AP(new bo::data::GpsInfo()), "n/a"));
+  return bo::data::Event::AP(new bo::data::MEvent(std::move(wfm), bo::data::GpsInfo::AP(new bo::data::GpsInfo()), "n/a"));
 }
 
 bo::data::Events::P EventTest::createEvents1() {

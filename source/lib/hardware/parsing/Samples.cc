@@ -26,22 +26,22 @@ namespace blitzortung {
 		  setWaveform(FORMAT_8_2_1, eventtime, pt::nanoseconds(0), fields[2] + fields[3]);
 		} else if (fields[2].size() == 3 && fields[3].size() ==3) {
 		  // BLSIG type 2
-		  setWaveform(FORMAT_12_2_1, eventtime, pt::nanoseconds(0), fields[2] + fields[3]);
+		  setWaveform(FORMAT_12_2_1, eventtime, pt::nanoseconds(0), std::move(fields[2] + fields[3]));
 		}
 	      }
 	    } else if (fields[0] == "BLSEQ") {
 	      if (fields[2].size() == 256) {
 		// BLSIG type 2
-		setWaveform(FORMAT_8_2_64, eventtime, pt::nanoseconds(2900), fields[2]);
+		setWaveform(FORMAT_8_2_64, eventtime, pt::nanoseconds(2900), std::move(fields[2]));
 	      }
 	    } else if (fields[0] == "BD") {
 	      if (fields[2].size() == 256) {
 		// BD type 1
-		setWaveform(FORMAT_8_2_64, eventtime, pt::nanoseconds(2800), fields[2]);
+		setWaveform(FORMAT_8_2_64, eventtime, pt::nanoseconds(2800), std::move(fields[2]));
 	      }
 	    } else if (fields[0] == "BM") {
 	      // BM type 1
-	      setWaveform(FORMAT_8_1_128, eventtime, pt::nanoseconds(2800), fields[2]);
+	      setWaveform(FORMAT_8_1_128, eventtime, pt::nanoseconds(2800), std::move(fields[2]));
 	    }
 	  }
 
@@ -83,7 +83,7 @@ namespace blitzortung {
 	    }
 	  }
 
-	  waveform_ = data::Waveform::AP(new data::Waveform(array, eventtime, sampleDt));
+	  waveform_ = data::Waveform::AP(new data::Waveform(std::move(array), eventtime, sampleDt));
 	  valid_ = true;
 
 	}

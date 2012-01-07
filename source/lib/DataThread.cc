@@ -79,7 +79,7 @@ namespace blitzortung {
 	    logger_.debugStream() << "() pop sample from queue " << sampleQueue_.front().getWaveform().getTime();
 
 	  auto event = std::move(sampleQueue_.pop());
-	  events_->add(event);
+	  events_->add(std::move(event));
 	}
 
 	if (events_->size() > 0) {

@@ -1,4 +1,4 @@
-blitzortung-tracker (0.9.6SNAPSHOT201201031959) unstable; urgency=low
+blitzortung-tracker (0.9.6SNAPSHOT201201061945) unstable; urgency=low
 
   * added raw file version number to header (makes reading/writing incompatible from older versions)
   * performance: use data format reference instead of shared_ptr
