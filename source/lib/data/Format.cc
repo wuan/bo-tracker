@@ -28,6 +28,8 @@ namespace blitzortung {
       fromStream(stream);
     }
 
+    Format::~Format() = default;
+
     Format& Format::operator=(const Format& other) {
       numberOfBits_ = other.numberOfBits_;
       numberOfChannels_ = other.numberOfChannels_;

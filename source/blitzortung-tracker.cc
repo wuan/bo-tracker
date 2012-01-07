@@ -200,7 +200,7 @@ if (serialPortName == "dummy") {
       auto event = hardware.read();
 
       if (event.get() != 0) {
-	process.push(event);
+	process.push(std::move(event));
       }
 
     }

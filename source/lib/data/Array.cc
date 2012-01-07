@@ -15,6 +15,8 @@ namespace blitzortung {
     {
     }
 
+    Array::~Array() = default;
+
     unsigned short Array::getNumberOfBitsPerSample() const {
       return format_.getNumberOfBitsPerSample();
     }

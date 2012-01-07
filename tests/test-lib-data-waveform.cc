@@ -19,6 +19,6 @@ void WaveformTest::testCreate() {
   bo::data::Array::AP array(new bo::data::Array(format));
 
   pt::ptime now;
-  bo::data::Waveform wfm(array, now, pt::nanoseconds(3125));
+  bo::data::Waveform wfm(std::move(array), now, pt::nanoseconds(3125));
 }
 

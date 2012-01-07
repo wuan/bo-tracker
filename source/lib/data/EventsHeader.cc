@@ -30,6 +30,8 @@ namespace blitzortung {
 	logger_.debugStream() << "construct() date " << date_ << ", format " << dataFormat_;
     }
 
+    EventsHeader::~EventsHeader() = default;
+
     void EventsHeader::set(const Events& events) {
       date_ = events.getDate();
       dataFormat_ = events.getDataFormat();

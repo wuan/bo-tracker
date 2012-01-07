@@ -51,7 +51,7 @@ namespace blitzortung {
 	EventsHeader(const Format& dataFormat=Format(0,0,0), const gr::date& date = gr::date(gr::not_a_date_time));
 
 	//! destructor
-	virtual ~EventsHeader() = default;
+	virtual ~EventsHeader();
 
 	//! read header from stream
 	void read(std::ifstream&);

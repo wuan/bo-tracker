@@ -34,7 +34,7 @@ namespace blitzortung {
 	Array(Array&& old, const Format& format);
 
 	//! delete waveform object
-	virtual ~Array()=default;
+	virtual ~Array();
 
 	//! returns the number of bits per sample
 	unsigned short getNumberOfBitsPerSample() const;
