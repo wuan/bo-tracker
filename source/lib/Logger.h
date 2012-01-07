@@ -11,7 +11,7 @@ namespace blitzortung {
     private:
 
       //! log4cpp logger category
-      log4cpp::Category category_;
+      log4cpp::Category& category_;
 
     public:
 
