@@ -13,17 +13,17 @@ namespace blitzortung {
 
     Events::Events(const gr::date& date, const Format& dataFormat) :
       date_(date),
+      dataFormat_(dataFormat),
       logger_("data.Events")
     {
-      dataFormat_ = dataFormat;
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "create(" << date << ", " << dataFormat << ") " << this;
     }
 
     Events::Events(const EventsHeader& header) :
-      date_(header.getDate())
+      date_(header.getDate()),
+      dataFormat_(header.getDataFormat())
     {
-      dataFormat_ = header.getDataFormat();
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "create(header) " << this << " " << header;
     }
