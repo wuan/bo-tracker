@@ -149,6 +149,7 @@ namespace blitzortung {
 	  default:
 	    std::ostringstream oss;
 	    oss << "blitzortung::hardware::comm::SerialPort::getBaudRate() " << portName_ << " unsupported Baud-Rate-Bit: " << baudBit;
+	    logger_.errorStream() << oss.str();
 	    throw exception::Base(oss.str());
 	}
       }
@@ -182,7 +183,12 @@ namespace blitzortung {
 	    }
 
 	  } else {
-	    break;
+	    if (readlength < 0) {
+	      logger_.errorStream() << "read error in receive() " << readlength;
+	      sleep(1);
+	    } else {
+	      break;
+	    }
 	  }
 	}
 
