@@ -173,7 +173,6 @@ namespace blitzortung {
 	  readlength = read(serialFd_, &character, 1);
 
 	  if (readlength > 0) {
-
 	    if (character != '\n') {
 	      buffer_ += character;
 	    } else {
@@ -181,14 +180,9 @@ namespace blitzortung {
 	      buffer_.clear();
 	      return line;
 	    }
-
 	  } else {
-	    if (readlength < 0) {
-	      logger_.errorStream() << "read error in receive() " << readlength;
-	      sleep(1);
-	    } else {
-	      break;
-	    }
+	    logger_.errorStream() << "read error in receive() " << readlength;
+	    exit(1);
 	  }
 	}
 
