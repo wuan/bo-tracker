@@ -22,7 +22,6 @@ AC_PROG_CXX
 
 AC_LANG_PUSH([C++])
 AC_CHECK_HEADERS([boost/date_time.hpp], [], [AC_MSG_ERROR(You need the boost date-time libraries)])
-AC_CHECK_HEADERS([boost/thread.hpp], [], [AC_MSG_ERROR(You need the boost thread libraries)])
 AC_CHECK_HEADERS([boost/regex.hpp], [], [AC_MSG_ERROR(You need the boost regex libraries)])
 AC_CHECK_HEADERS([boost/program_options.hpp], [], [AC_MSG_ERROR(You need the boost program-options libraries)])
 AC_CHECK_HEADERS([boost/accumulators/accumulators.hpp], [AC_SUBST([BOOST_MATH_LDFLAGS], [-lboost_math_c99])])
