@@ -20,9 +20,6 @@ namespace blitzortung {
     std::thread thread(dataThread);
   }
 
-  Process::~Process() {
-  }
-
   void Process::push(data::Event::AP&& data) {
     if (data.get() != 0) {
       const data::Waveform& waveform = data->getWaveform();

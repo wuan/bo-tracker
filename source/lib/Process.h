@@ -22,9 +22,6 @@ namespace blitzortung {
 
     private:
 
-      Process(const Process&) = delete;
-      Process& operator=(const Process&) = delete;
-
       //! time when process object was created
       const pt::ptime startTime_;
 
@@ -46,12 +43,16 @@ namespace blitzortung {
       //! logger for this class
       mutable Logger logger_;
 
+      // disable copying of objects
+      Process(const Process&) = delete;
+      Process& operator=(const Process&) = delete;
+
     public:
       //! constructor
       Process(network::transfer::Base& transfer, const double eventRateLimit, output::Base& output);
 
       //! destructor
-      virtual ~Process();
+      virtual ~Process() = default;
 
       //! add event to send queue
       void push(data::Event::AP&&);
