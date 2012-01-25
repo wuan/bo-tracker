@@ -1,6 +1,8 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
+#include <thread>
+
 #include "ipc/Listener.h"
 #include "ipc/UnixSocket.h"
 
@@ -36,7 +38,7 @@ namespace blitzortung {
 
         Listener listener(socket_, (struct sockaddr*)&sockaddr, addrlen, serverFactory);
 
-        boost::thread thread(listener);
+        std::thread(listener).detach();
       } else {
         logger_.warnStream() << "binding to socket file '" << sockaddr.sun_path << "' failed, socket-server not started";
       }
