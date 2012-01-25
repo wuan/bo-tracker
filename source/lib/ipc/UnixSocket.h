@@ -1,8 +1,6 @@
 #ifndef BLITZORTUNG_IPC_UNIXSOCKET_H_
 #define BLITZORTUNG_IPC_UNIXSOCKET_H_
 
-#include <boost/thread/thread.hpp>
-
 #include "Logger.h"
 #include "ipc/server/factory/Base.h"
 

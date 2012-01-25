@@ -1,9 +1,6 @@
 #ifndef BLITZORTUNG_IPC_SERVER_JSON_H_
 #define BLITZORTUNG_IPC_SERVER_JSON_H_
 
-#include <boost/thread/thread.hpp>
-#include <boost/thread/condition.hpp>
-
 #include <json/json.h>
 
 #include "hardware/Pcb.h"

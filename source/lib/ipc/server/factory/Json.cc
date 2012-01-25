@@ -15,7 +15,7 @@ namespace blitzortung {
 	}
 
 	void Json::createServerThread(unsigned int socket) const {
-	  boost::thread(ipc::server::Json(socket, process_, pcb_));
+	  std::thread(ipc::server::Json(socket, process_, pcb_)).detach();
 	}
 
       }

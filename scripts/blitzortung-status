@@ -31,6 +31,12 @@ try:
 
   s.send(json.dumps({'cmd':command}))
   jsonObject = json.loads(s.recv(10240))
+  s.send(json.dumps({'cmd':command}))
+  jsonObject = json.loads(s.recv(10240))
+  s.send(json.dumps({'cmd':command}))
+  jsonObject = json.loads(s.recv(10240))
+  print "wait"
+  time.sleep(10)
   jsonFormatter(jsonObject)
   s.close()
 except socket.error:
