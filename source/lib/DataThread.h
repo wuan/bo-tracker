@@ -1,10 +1,6 @@
 #ifndef BLITZORTUNG_DATATHREAD_H_
 #define BLITZORTUNG_DATATHREAD_H_
 
-#include <boost/thread/thread.hpp>
-#include <boost/thread/xtime.hpp>
-#include <boost/thread/condition.hpp>
-
 #include "data/Events.h"
 #include "Queue.h"
 #include "network/transfer/Base.h"

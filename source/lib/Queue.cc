@@ -16,7 +16,7 @@ namespace blitzortung {
   }
 
   template <typename T> void Queue<T>::push(std::unique_ptr<T>&& data) {
-    boost::mutex::scoped_lock lock(mutex_);
+    std::unique_lock<std::mutex> lock(mutex_);
 
     const bool emptyBeforePush = queue_.empty();
 
@@ -27,40 +27,36 @@ namespace blitzortung {
   }
 
   template <typename T> bool Queue<T>::empty() const {
-    boost::mutex::scoped_lock lock(mutex_);
-
     return queue_.empty();
   }
 
   template <typename T> T& Queue<T>::front() {
-    boost::mutex::scoped_lock lock(mutex_);
-
     return *(queue_.front());
   }
 
   template <typename T> T const& Queue<T>::front() const {
-    boost::mutex::scoped_lock lock(mutex_);
     return *(queue_.front());
   }
 
   template <typename T> void Queue<T>::wait() {
-    boost::mutex::scoped_lock lock(mutex_);
+    std::unique_lock<std::mutex> lock(mutex_);
 
     while (queue_.empty()) {
       condition_.wait(lock);
     }
   }
 
-  template <typename T> void Queue<T>::timed_wait(const boost::xtime& xtime) {
-    boost::mutex::scoped_lock lock(mutex_);
+  template <typename T> void Queue<T>::timed_wait(const std::chrono::seconds& duration) {
+    std::unique_lock<std::mutex> lock(mutex_);
 
-    condition_.timed_wait(lock, xtime);
+    condition_.wait_for(lock, duration);
   }
 
   template <typename T> std::unique_ptr<T> Queue<T>::pop() {
-    boost::mutex::scoped_lock lock(mutex_);
+    std::unique_lock<std::mutex> lock(mutex_);
 
     std::unique_ptr<T> uniquePtr(queue_.front());
+
     queue_.pop();
 
     return uniquePtr;

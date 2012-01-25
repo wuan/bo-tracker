@@ -53,15 +53,11 @@ namespace blitzortung {
       logger_.infoStream() << "() started";
 
     while (true) {
-      boost::xtime xt;
-      boost::xtime_get(&xt, boost::TIME_UTC);
-      xt.sec += 1;
-
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "() wait for data";
 
       // wait for next incoming sample
-      sampleQueue_.timed_wait(xt);
+      sampleQueue_.timed_wait(std::chrono::seconds(1));
 
       bool sendAgain = false;
       do {

@@ -6,6 +6,7 @@ blitzortung-tracker (0.9.6SNAPSHOT201201192228) unstable; urgency=low
     * rvalue refereces
     * default methods
     * strongly typed enums
+    * threads, mutex, etc.
   * serial communication error handling
   * configuration of amplitude limit through configuration file
 
