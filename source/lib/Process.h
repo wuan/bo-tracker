@@ -14,13 +14,16 @@
 namespace blitzortung {
 
   //! class providing data interface of network transfer
-  class Process : private boost::noncopyable {
+  class Process {
 
     public:
 
       typedef std::auto_ptr<Process> AP;
 
     private:
+
+      Process(const Process&) = delete;
+      Process& operator=(const Process&) = delete;
 
       //! time when process object was created
       const pt::ptime startTime_;

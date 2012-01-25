@@ -17,7 +17,7 @@ namespace blitzortung {
 
     dataThread.setEventRateLimit(eventRateLimit);
 
-    boost::thread thread(dataThread);
+    std::thread thread(dataThread);
   }
 
   Process::~Process() {

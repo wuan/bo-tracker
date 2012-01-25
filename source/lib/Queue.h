@@ -3,15 +3,15 @@
 
 #include <queue>
 
-#include <boost/thread/thread.hpp>
-#include <boost/thread/condition.hpp>
+#include <thread>
+#include <chrono>
 
 #include "Logger.h"
 
 namespace blitzortung {
 
   template <typename T>
-    class Queue : private boost::noncopyable {
+    class Queue {
 
       private:
 	//! wait timeout in seconds
@@ -21,10 +21,10 @@ namespace blitzortung {
 	std::queue<T*> queue_;
 
 	//! mutex to ensure exclusive access to queue
-	mutable boost::mutex mutex_;
+	mutable std::mutex mutex_;
 
 	//! condition to enable waiting on queue
-	boost::condition condition_;
+	std::condition_variable condition_;
 
 	//! logger for this class
 	mutable Logger logger_;
@@ -33,6 +33,7 @@ namespace blitzortung {
 
 	//! construct queue
 	Queue(int timeout=0);
+
 
 	//! destruct queue
 	virtual ~Queue();
@@ -53,10 +54,15 @@ namespace blitzortung {
 	void wait();
 
 	//! wait with timeout until an element is pushed to the end of the queue
-	void timed_wait(const boost::xtime& xtime);
+	void timed_wait(const std::chrono::seconds& duration);
 
 	//! retrieve the first element of the queue
 	std::unique_ptr<T> pop();
+
+      private:
+
+	Queue(const Queue&) = delete;
+	Queue& operator=(const Queue&) = delete;
     };
 
 }
