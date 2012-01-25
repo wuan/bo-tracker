@@ -1,11 +1,13 @@
 The Debian Package blitzortung-tracker
 --------------------------------------
 
-On older systems (prior to Debian Squeeze or Ubuntu 10.4, which do not include the boost math library, data statistics in blitzortung-data is not available, in this case libboost-math-dev is not available and can be removed from the following commands.
+On older systems (prior to Debian Squeeze or Ubuntu 10.4, which do not include the boost math library, data statistics in blitzortung-data is not available, in this case libboost-math-dev is not available and can be omitted from the following commands.
+
+The minimum gcc version required is 4.4.
 
 To build the package, first install the missing dependencies via
 > sudo apt-get install debhelper build-essential autotools-dev libtool fakeroot
-> sudo apt-get install libboost-program-options-dev libboost-thread-dev libboost-date-time-dev libboost-regex-dev libboost-math-dev libcppunit-dev liblog4cpp5-dev libjson0-dev
+> sudo apt-get install libboost-program-options-dev libboost-date-time-dev libboost-regex-dev libboost-math-dev libcppunit-dev liblog4cpp5-dev libjson0-dev
 
 > make -f Makefile.cvs
 
@@ -44,7 +46,6 @@ Building on non Debian/Ubuntu systems
   * libboost-date-time (>= 1.34 ?)
   * libboost-regex (>= 1.34 ?)
   * libboost-program-options (>= 1.34 ?)
-  * libboost-thread (>= 1.34 ?)
   * libboost-math (>= 1.38) is optional
 
 prepare makefiles via
