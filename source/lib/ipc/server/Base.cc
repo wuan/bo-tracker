@@ -9,8 +9,6 @@ namespace blitzortung {
 	socket_(socket),
 	logger_("ipc.server.Base")
       {
-	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "initialize for socket " << socket_;
       }
 
       void Base::operator ()() {

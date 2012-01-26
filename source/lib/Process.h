@@ -37,6 +37,9 @@ namespace blitzortung {
       //! ring buffer for data rate limiter
       DataThread::EventCountBuffer eventCountBuffer_;
 
+      //! data thread
+      std::thread dataThread_;
+
       //! lower limit of amplitude
       double amplitudeLimit_;
       
