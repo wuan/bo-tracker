@@ -17,9 +17,7 @@ namespace blitzortung {
 
     dataThread.setEventRateLimit(eventRateLimit);
 
-    std::thread thread(dataThread);
-    if (thread.joinable())
-      thread.detach();
+    dataThread_ = std::move(std::thread(dataThread));
   }
 
   void Process::push(data::Event::AP&& data) {

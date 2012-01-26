@@ -7,7 +7,7 @@
 namespace blitzortung {
   namespace ipc {
 
-    class UnixSocket : private boost::noncopyable {
+    class UnixSocket  {
 
       private:
 
@@ -19,6 +19,10 @@ namespace blitzortung {
 
 	//! logger for this class
 	mutable Logger logger_;
+
+	// make class objects noncopyable
+	UnixSocket(const UnixSocket&) = delete;
+	UnixSocket& operator=(const UnixSocket&) = delete;
 
       public:
 
