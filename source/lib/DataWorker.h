@@ -10,7 +10,7 @@
 
 namespace blitzortung {
 
-  class DataThread {
+  class DataWorker {
 
     public:
 
@@ -47,7 +47,7 @@ namespace blitzortung {
     public:
 
       //! create network transfer object
-      DataThread(Queue<data::Event>& sampleQueue, EventCountBuffer& eventCountBuffer, network::transfer::Base& transfer, output::Base&);
+      DataWorker(Queue<data::Event>& sampleQueue, EventCountBuffer& eventCountBuffer, network::transfer::Base& transfer, output::Base&);
 
       //! set limit of average number of events per minute transmitted
       void setEventRateLimit(const double eventRateLimit);

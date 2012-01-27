@@ -1,5 +1,5 @@
 #include "Process.h"
-#include "DataThread.h"
+#include "DataWorker.h"
 
 #include "exception/Base.h"
 
@@ -13,11 +13,12 @@ namespace blitzortung {
     amplitudeLimit_(0.0),
     logger_("Process")
   {
-    DataThread dataThread(eventQueue_, eventCountBuffer_, transfer, output);
+    DataWorker dataWorker(eventQueue_, eventCountBuffer_, transfer, output);
 
-    dataThread.setEventRateLimit(eventRateLimit);
+    dataWorker.setEventRateLimit(eventRateLimit);
 
-    dataThread_ = std::move(std::thread(dataThread));
+    std::thread dataThread(dataWorker);
+    dataThread.detach();
   }
 
   void Process::push(data::Event::AP&& data) {
@@ -48,7 +49,7 @@ namespace blitzortung {
     }
   }
 
-  const DataThread::EventCountBuffer& Process::getEventCountBuffer() const {
+  const DataWorker::EventCountBuffer& Process::getEventCountBuffer() const {
     return eventCountBuffer_;
   }
   
