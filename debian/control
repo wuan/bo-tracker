@@ -12,4 +12,4 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Conflicts:
 Replaces:
 Description: blitzortung.org tracker software
- This software contains a tracker software for the blitzortung.org project which can be used to record and transmit local sferics events measured through the blitzortung.org hardware.
+ This package provides a tracker software suitable for the acquisition hardware used within the blitzortung.org lightning detection community projcet. It can be used to record and transmit measured atmospheric electricity transients in order to participate in the project.
