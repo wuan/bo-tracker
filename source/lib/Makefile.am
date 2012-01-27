@@ -19,7 +19,7 @@ libblitzortung_la_LDFLAGS = \
 	-no undefined
 
 libblitzortung_la_SOURCES = \
-	DataThread.h DataThread.cc \
+	DataWorker.h DataWorker.cc \
 	\
 	data/Array.h data/Array.cc \
 	data/Format.h data/Format.cc \

@@ -7,7 +7,7 @@
 #include "Queue.h"
 #include "output/Base.h"
 #include "network/transfer/Base.h"
-#include "DataThread.h"
+#include "DataWorker.h"
 
 #include "data/Event.h"
 
@@ -35,7 +35,7 @@ namespace blitzortung {
       const output::Base& output_;
 
       //! ring buffer for data rate limiter
-      DataThread::EventCountBuffer eventCountBuffer_;
+      DataWorker::EventCountBuffer eventCountBuffer_;
 
       //! data thread
       std::thread dataThread_;
@@ -61,7 +61,7 @@ namespace blitzortung {
       void push(data::Event::AP&&);
 
       //! get reference to event count buffer
-      const DataThread::EventCountBuffer& getEventCountBuffer() const;
+      const DataWorker::EventCountBuffer& getEventCountBuffer() const;
       
       //! get reference to transfer object
       const network::transfer::Base& getTransfer() const;

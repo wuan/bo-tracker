@@ -1,16 +1,16 @@
 
-#include "DataThread.h"
+#include "DataWorker.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
 
-  DataThread::DataThread(Queue<data::Event>& sampleQueue, EventCountBuffer& eventCountBuffer, network::transfer::Base& transfer, output::Base& output) :
+  DataWorker::DataWorker(Queue<data::Event>& sampleQueue, EventCountBuffer& eventCountBuffer, network::transfer::Base& transfer, output::Base& output) :
     sampleQueue_(sampleQueue),
     eventCountBuffer_(eventCountBuffer),
     transfer_(transfer),
     events_(new data::Events()),
     output_(output),
-    logger_("DataThread")
+    logger_("DataWorker")
   {
     eventRateLimit_ = 1.0;
 
@@ -18,11 +18,11 @@ namespace blitzortung {
       logger_.debugStream() << "initalized(eventRateLimit: " << eventRateLimit_ << ")";
   }
 
-  void DataThread::setEventRateLimit(const double eventRateLimit) {
+  void DataWorker::setEventRateLimit(const double eventRateLimit) {
     eventRateLimit_ = eventRateLimit;
   }
 
-  data::Events::AP DataThread::prepareData() {
+  data::Events::AP DataWorker::prepareData() {
     data::Events::AP deletedEvents(new data::Events());
 
     double secondsElapsed = eventCountBuffer_.getActualSize();
@@ -47,7 +47,7 @@ namespace blitzortung {
     return deletedEvents;
   }
 
-  void DataThread::operator()() {
+  void DataWorker::operator()() {
 
     if (logger_.isInfoEnabled())
       logger_.infoStream() << "() started";

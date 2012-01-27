@@ -25,7 +25,7 @@ namespace blitzortung {
 
       for (;;) {
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "() listen";
+	  logger_.debugStream() << "() wait for new connection";
 
         listen(socket_, 10);
 
@@ -37,8 +37,6 @@ namespace blitzortung {
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "() start server";
 
-	  //std::thread&& serverThread = serverFactory_.createServerThread(connectionSocket);
-	  //serverThread.detach();
 	  serverFactory_.createServerThread(connectionSocket);
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "  received server thread";
