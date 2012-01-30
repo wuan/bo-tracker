@@ -59,6 +59,7 @@ namespace blitzortung {
       // wait for next incoming sample
       sampleQueue_.timed_wait(std::chrono::seconds(1));
 
+      pt::ptime actualSecond(std::move(getSecond()));
       bool sendAgain = false;
       do {
 	// get new events from queue until it is empty
@@ -123,6 +124,11 @@ namespace blitzortung {
 
     if (logger_.isInfoEnabled())
       logger_.infoStream() << "() terminated";
+  }
+
+  pt::ptime&& DataWorker::getSecond() const {
+    pt::ptime second(pt::second_clock::universal_time());
+    return std::move(second);
   }
 
 }
