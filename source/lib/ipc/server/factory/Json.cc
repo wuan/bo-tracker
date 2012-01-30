@@ -14,15 +14,13 @@ namespace blitzortung {
 	    logger_.debugStream() << "initialize factory ";
 	}
 
-	std::thread Json::createServerThread(unsigned int socket) const {
+	void Json::createServerThread(unsigned int socket) const {
 	  std::thread thread(ipc::server::Json(socket, process_, pcb_));
 
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "create server thread for socket " << socket;
 
 	  thread.detach();
-
-	  return std::move(thread);
 	}
 
       }

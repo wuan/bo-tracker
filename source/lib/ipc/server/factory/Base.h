@@ -23,7 +23,7 @@ namespace blitzortung {
 	    //! construct socket
 	    Base();
 
-	    virtual std::thread createServerThread(const unsigned int socket) const = 0; 
+	    virtual void createServerThread(const unsigned int socket) const = 0; 
 	};
 
       }
