@@ -28,8 +28,8 @@ namespace blitzortung {
     double secondsElapsed = eventCountBuffer_.getActualSize();
     double eventRate = double(eventCountBuffer_.getSum()) / secondsElapsed;
 
-    if (logger_.isInfoEnabled())
-      logger_.infoStream() << "prepareData() " << events_->size() << " events (rate " << eventRate << " events/second)";
+    //if (logger_.isInfoEnabled())
+    logger_.warnStream() << "prepareData() " << events_->size() << " events (rate " << eventRate << " events/second)";
 
     if (eventRate > eventRateLimit_) {
       events_->sort(data::Event::CompareAmplitude());
