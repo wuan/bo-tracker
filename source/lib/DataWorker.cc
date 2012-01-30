@@ -59,7 +59,9 @@ namespace blitzortung {
       // wait for next incoming sample
       sampleQueue_.timed_wait(std::chrono::seconds(1));
 
-      pt::ptime actualSecond(std::move(getSecond()));
+      pt::ptime&& second(std::move(getSecond()));
+      int eventsPerSecond = 0;
+
       bool sendAgain = false;
       do {
 	// get new events from queue until it is empty
@@ -112,8 +114,15 @@ namespace blitzortung {
 	  output_.output(*events_);
 	}
 
-	// record number of events for the actual second
-        eventCountBuffer_.add(events_->size());
+	pt::ptime&& currentSecond(getSecond());
+	if (currentSecond > second) {
+
+	  // record number of events for the actual second
+          eventCountBuffer_.add(eventsPerSecond);
+	  eventsPerSecond = 0;
+	  second = currentSecond;
+	}
+	eventsPerSecond += events_->size();
 
 	// delete all events
 	events_->clear();
