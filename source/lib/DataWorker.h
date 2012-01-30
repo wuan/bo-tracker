@@ -39,7 +39,7 @@ namespace blitzortung {
       mutable Logger logger_;
 
       //! prepare data for transmission
-      data::Events::AP prepareData();
+      data::Events::AP prepareData(int eventsPerSecond);
 
       //! get string to be transmitted for every sample
       std::string sampleToString(const data::Event& sample);

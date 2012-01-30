@@ -22,14 +22,14 @@ namespace blitzortung {
     eventRateLimit_ = eventRateLimit;
   }
 
-  data::Events::AP DataWorker::prepareData() {
+  data::Events::AP DataWorker::prepareData(int eventsPerSecond) {
     data::Events::AP deletedEvents(new data::Events());
 
     double secondsElapsed = eventCountBuffer_.getActualSize();
-    double eventRate = double(eventCountBuffer_.getSum()) / secondsElapsed;
+    double eventRate = double(eventCountBuffer_.getSum() + eventsPerSecond) / (secondsElapsed + 1);
 
-    //if (logger_.isInfoEnabled())
-    logger_.warnStream() << "prepareData() " << events_->size() << " events (rate " << eventRate << " events/second)";
+    if (logger_.isInfoEnabled())
+      logger_.warnStream() << "prepareData() " << events_->size() << " events (rate " << eventRate << " events/second)";
 
     if (eventRate > eventRateLimit_) {
       events_->sort(data::Event::CompareAmplitude());
@@ -88,7 +88,7 @@ namespace blitzortung {
 	    logger_.debug("() transmitting/saving data");
 
 	  // prepare data for transmission
-	  data::Events::AP deletedEvents = prepareData();
+	  data::Events::AP deletedEvents = prepareData(eventsPerSecond);
 
 	  // transmit data
 	  transfer_.send(*events_);
@@ -117,7 +117,6 @@ namespace blitzortung {
 
 	pt::ptime currentSecond(std::move(getSecond()));
 	if (currentSecond > second) {
-	  logger_.warnStream() << "second " << currentSecond << " - " << second << " # " << eventsPerSecond;
 	  // record number of events for the actual second
           eventCountBuffer_.add(eventsPerSecond);
 	  eventsPerSecond = 0;
