@@ -53,6 +53,7 @@ namespace blitzortung {
       logger_.infoStream() << "() started";
 
     pt::ptime second(std::move(getSecond()));
+    int eventsPerSecond = 0;
 
     while (true) {
       if (logger_.isDebugEnabled())
@@ -61,7 +62,6 @@ namespace blitzortung {
       // wait for next incoming sample
       sampleQueue_.timed_wait(std::chrono::seconds(1));
 
-      int eventsPerSecond = 0;
 
       bool sendAgain = false;
       do {

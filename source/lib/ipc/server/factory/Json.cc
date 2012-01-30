@@ -22,7 +22,7 @@ namespace blitzortung {
 
 	  thread.detach();
 
-	  return thread;
+	  return std::move(thread);
 	}
 
       }
