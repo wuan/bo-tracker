@@ -117,6 +117,7 @@ namespace blitzortung {
 	pt::ptime&& currentSecond(getSecond());
 	if (currentSecond > second) {
 
+	  logger_.warnStream() << "second " << currentSecond << " - " << second << " # " << eventsPerSecond;
 	  // record number of events for the actual second
           eventCountBuffer_.add(eventsPerSecond);
 	  eventsPerSecond = 0;
