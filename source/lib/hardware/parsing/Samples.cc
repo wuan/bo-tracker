@@ -27,22 +27,38 @@ namespace blitzortung {
 		} else if (fields[2].size() == 3 && fields[3].size() ==3) {
 		  // BLSIG type 2
 		  setWaveform(FORMAT_12_2_1, eventtime, pt::nanoseconds(0), std::move(fields[2] + fields[3]));
+		} else {
+		  logger_.warnStream() << "Samples() BLSIG field size mismatch 2: '" << fields[2] << "', 3: '" << fields[3] << "'";
 		}
+	      } else {
+		logger_.warnStream() << "Samples() BLSIG total number of fields mismatch: " << fields.size();
 	      }
 	    } else if (fields[0] == "BLSEQ") {
 	      if (fields[2].size() == 256) {
 		// BLSIG type 2
 		setWaveform(FORMAT_8_2_64, eventtime, pt::nanoseconds(2900), std::move(fields[2]));
+	      } else {
+		logger_.warnStream() << "Samples() BLSEQ field 2 size mismatch: " << fields[2].size() << " vs. 256";
 	      }
 	    } else if (fields[0] == "BD") {
 	      if (fields[2].size() == 256) {
 		// BD type 1
 		setWaveform(FORMAT_8_2_64, eventtime, pt::nanoseconds(2800), std::move(fields[2]));
+	      } else {
+		logger_.warnStream() << "Samples() BD field 2 size mismatch: " << fields[2].size() << " vs. 256";
 	      }
 	    } else if (fields[0] == "BM") {
-	      // BM type 1
-	      setWaveform(FORMAT_8_1_128, eventtime, pt::nanoseconds(2800), std::move(fields[2]));
+	      if (fields[2].size() == 256) {
+		// BM type 1
+		setWaveform(FORMAT_8_1_128, eventtime, pt::nanoseconds(2800), std::move(fields[2]));
+	      } else {
+		logger_.warnStream() << "Samples() BM field 2 size mismatch: " << fields[2].size() << " vs. 256";
+	      }
+	    } else {
+	      logger_.warnStream() << "Samples() unknown sample type '" << fields[0] << "'";
 	    }
+	  } else {
+	    logger_.warnStream() << "Samples() invalid event time";
 	  }
 
 	  if (! valid_) {
@@ -52,7 +68,7 @@ namespace blitzortung {
 	    for (std::vector<std::string>::const_iterator field = fields.begin(); field != fields.end(); field++)
 	      line += *field + " ";
 
-	    logger_.warnStream() << "Ticks() could not parse sample '" << line << "'";
+	    logger_.warnStream() << "Samples() could not parse '" << line << "'";
 	  }
 	}
       }
@@ -85,7 +101,8 @@ namespace blitzortung {
 
 	  waveform_ = data::Waveform::AP(new data::Waveform(std::move(array), eventtime, sampleDt));
 	  valid_ = true;
-
+	} else {
+	  logger_.warnStream() << "invalid format " << format;
 	}
       }
 
