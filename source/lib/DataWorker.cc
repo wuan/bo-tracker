@@ -52,6 +52,8 @@ namespace blitzortung {
     if (logger_.isInfoEnabled())
       logger_.infoStream() << "() started";
 
+    pt::ptime second(std::move(getSecond()));
+
     while (true) {
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "() wait for data";
@@ -59,7 +61,6 @@ namespace blitzortung {
       // wait for next incoming sample
       sampleQueue_.timed_wait(std::chrono::seconds(1));
 
-      pt::ptime&& second(std::move(getSecond()));
       int eventsPerSecond = 0;
 
       bool sendAgain = false;
@@ -114,10 +115,8 @@ namespace blitzortung {
 	  output_.output(*events_);
 	}
 
-	pt::ptime&& currentSecond(getSecond());
-	logger_.warnStream() << "second " << currentSecond << " - " << second << " # " << eventsPerSecond;
+	pt::ptime currentSecond(std::move(getSecond()));
 	if (currentSecond > second) {
-
 	  logger_.warnStream() << "second " << currentSecond << " - " << second << " # " << eventsPerSecond;
 	  // record number of events for the actual second
           eventCountBuffer_.add(eventsPerSecond);
@@ -137,9 +136,8 @@ namespace blitzortung {
       logger_.infoStream() << "() terminated";
   }
 
-  pt::ptime&& DataWorker::getSecond() const {
-    pt::ptime second(pt::second_clock::universal_time());
-    return std::move(second);
+  pt::ptime DataWorker::getSecond() const {
+    return pt::second_clock::universal_time();
   }
 
 }

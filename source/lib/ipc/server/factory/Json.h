@@ -30,7 +30,7 @@ namespace blitzortung {
 	    Json(const Process& process, const hardware::Pcb& pcb);
 
 	    //! create a server thread using an object of the corresponding class
-	    std::thread&& createServerThread(const unsigned int socket) const;
+	    std::thread createServerThread(const unsigned int socket) const;
 	};
 
       }

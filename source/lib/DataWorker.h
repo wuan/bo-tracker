@@ -55,8 +55,7 @@ namespace blitzortung {
       //! network transfer thread: wait for new samples and send them from time to time
       void operator ()();
 
-      pt::ptime&& getSecond() const;
-
+      pt::ptime getSecond() const;
   };
 }
 
