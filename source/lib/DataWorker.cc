@@ -82,6 +82,15 @@ namespace blitzortung {
 	  events_->add(std::move(event));
 	}
 
+	pt::ptime currentSecond(std::move(getSecond()));
+	if (currentSecond > second) {
+	  // record number of events for the actual second
+	  logger_.warnStream() << second << " " << eventsPerSecond;
+          eventCountBuffer_.add(eventsPerSecond);
+	  eventsPerSecond = 0;
+	  second = currentSecond;
+	}
+
 	if (events_->size() > 0) {
 
 	  if (logger_.isDebugEnabled())
@@ -89,6 +98,8 @@ namespace blitzortung {
 
 	  // prepare data for transmission
 	  data::Events::AP deletedEvents = prepareData(eventsPerSecond);
+
+	  eventsPerSecond += events_->size();
 
 	  // transmit data
 	  transfer_.send(*events_);
@@ -114,15 +125,6 @@ namespace blitzortung {
 
 	  output_.output(*events_);
 	}
-
-	pt::ptime currentSecond(std::move(getSecond()));
-	if (currentSecond > second) {
-	  // record number of events for the actual second
-          eventCountBuffer_.add(eventsPerSecond);
-	  eventsPerSecond = 0;
-	  second = currentSecond;
-	}
-	eventsPerSecond += events_->size();
 
 	// delete all events
 	events_->clear();

@@ -49,8 +49,11 @@ namespace blitzortung {
 	  //! return standard deviation of buffer content
 	  double getStddev() const;
 
-	  //! return actual size of data
+	  //! return actual size of data in buffer
 	  int getActualSize() const;
+
+	  //! return size of buffer
+	  int getSize() const;
 
 	  //! index operation
 	  T operator[](unsigned int index) const;

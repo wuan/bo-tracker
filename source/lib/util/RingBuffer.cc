@@ -71,6 +71,10 @@ namespace blitzortung {
       return actualSize_;
     }
 
+    template <typename T> int RingBuffer<T>::getSize() const {
+      return size_;
+    }
+
     template <typename T> T RingBuffer<T>::sqr(T x) const {
       return x*x;
     }
