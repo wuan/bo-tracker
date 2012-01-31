@@ -29,7 +29,7 @@ namespace blitzortung {
     double eventRate = double(eventCountBuffer_.getSum() + eventsPerSecond) / (secondsElapsed + 1);
 
     if (logger_.isInfoEnabled())
-      logger_.warnStream() << "prepareData() " << events_->size() << " events (rate " << eventRate << " events/second)";
+      logger_.infoStream() << "prepareData() " << events_->size() << " events (rate " << eventRate << " events/second)";
 
     if (eventRate > eventRateLimit_) {
       events_->sort(data::Event::CompareAmplitude());
@@ -85,7 +85,6 @@ namespace blitzortung {
 	pt::ptime currentSecond(std::move(getSecond()));
 	if (currentSecond > second) {
 	  // record number of events for the actual second
-	  logger_.warnStream() << second << " " << eventsPerSecond;
           eventCountBuffer_.add(eventsPerSecond);
 	  eventsPerSecond = 0;
 	  second = currentSecond;
