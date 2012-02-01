@@ -1,4 +1,4 @@
-blitzortung-tracker (0.9.6SNAPSHOT201201271025) unstable; urgency=low
+blitzortung-tracker (0.9.6SNAPSHOT201202010059) unstable; urgency=low
 
   * added raw file version number to header (makes reading/writing incompatible from older versions)
   * performance: use data format reference instead of shared_ptr
@@ -10,6 +10,7 @@ blitzortung-tracker (0.9.6SNAPSHOT201201271025) unstable; urgency=low
     * make class objects non-copyable
   * serial communication error handling
   * configuration of amplitude limit through configuration file
+  * fixed sample handling and sample rate limiter
 
  -- Andreas Wuerl <blitzortung@tryb.de>  Sun, 11 Jul 2011 20:00:00 +0200
 
