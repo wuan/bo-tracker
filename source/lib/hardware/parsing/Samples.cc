@@ -42,17 +42,24 @@ namespace blitzortung {
 	      }
 	    } else if (fields[0] == "BD") {
 	      if (fields[2].size() == 256) {
-		// BD type 1
+		// BD type
 		setWaveform(FORMAT_8_2_64, eventtime, pt::nanoseconds(2800), std::move(fields[2]));
 	      } else {
 		logger_.warnStream() << "Samples() BD field 2 size mismatch: " << fields[2].size() << " vs. 256";
 	      }
 	    } else if (fields[0] == "BM") {
 	      if (fields[2].size() == 256) {
-		// BM type 1
+		// BM type
 		setWaveform(FORMAT_8_1_128, eventtime, pt::nanoseconds(2800), std::move(fields[2]));
 	      } else {
 		logger_.warnStream() << "Samples() BM field 2 size mismatch: " << fields[2].size() << " vs. 256";
+	      }
+	    } else if (fields[0] == "L") {
+	      if (fields[2].size() == 1024) {
+		// L type
+		setWaveform(FORMAT_8_2_256, eventtime, pt::nanoseconds(1950), std::move(fields[2]));
+	      } else {
+		logger_.warnStream() << "Samples() BD field 2 size mismatch: " << fields[2].size() << " vs. 256";
 	      }
 	    } else {
 	      logger_.warnStream() << "Samples() unknown sample type '" << fields[0] << "'";
