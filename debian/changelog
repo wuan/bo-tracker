@@ -11,6 +11,7 @@ blitzortung-tracker (0.9.6SNAPSHOT201202010059) unstable; urgency=low
   * serial communication error handling
   * configuration of amplitude limit through configuration file
   * fixed sample handling and sample rate limiter
+  * Support for Firmware 30 and newer
 
  -- Andreas Wuerl <blitzortung@tryb.de>  Sun, 11 Jul 2011 20:00:00 +0200
 
