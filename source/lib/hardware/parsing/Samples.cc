@@ -125,6 +125,7 @@ namespace blitzortung {
       const data::Format Samples::FORMAT_12_2_1(12,2,1);
       const data::Format Samples::FORMAT_8_2_64(8,2,64);
       const data::Format Samples::FORMAT_8_1_128(8,1,128);
+      const data::Format Samples::FORMAT_8_2_256(8,2,256);
     }
   }
 }

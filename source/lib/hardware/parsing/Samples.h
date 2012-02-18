@@ -25,6 +25,7 @@ namespace blitzortung {
 	  static const data::Format FORMAT_12_2_1;
 	  static const data::Format FORMAT_8_2_64;
 	  static const data::Format FORMAT_8_1_128;
+	  static const data::Format FORMAT_8_2_256;
 
 	  //! combined date time string
 	  data::Waveform::AP waveform_;

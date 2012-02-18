@@ -33,6 +33,7 @@ void ProcessTest::testAroundMidnight() {
 
   bo::data::Format dataFormat(12,2,1);
 
+  sleep(2);
   pushEvent(process, EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,10), pt::time_duration(23,59,56))));
   pushEvent(process, EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,10), pt::time_duration(23,59,57))));
   pushEvent(process, EventTest::createEventWithFormat(dataFormat, pt::ptime(gr::date(2002,1,10), pt::time_duration(23,59,58))));
