@@ -22,7 +22,7 @@ namespace blitzortung {
 	unsigned int firmwareVersionIndex = 0;
 
 	unsigned int index = 1;
-	if (fields[0] == "BS" || fields[0] == "S") {
+	if (fields[0] == "BS" || fields[0] == "S") {
 	    counterIndex = index++;
 	    gpsStatusIndex =  index++;
 	    timeIndex = index++;

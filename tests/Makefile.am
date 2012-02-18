@@ -19,6 +19,7 @@ test_lib_SOURCES = \
 	test-lib-data-events-2_1_8.cc test-lib-data-events-2_1_8.h \
 	test-lib-data-events-2_1_12.cc test-lib-data-events-2_1_12.h \
 	test-lib-data-events-2_64_8.cc test-lib-data-events-2_64_8.h \
+	test-lib-data-events-2_256_8.cc test-lib-data-events-2_256_8.h \
 	test-lib-data-events-1_128_8.cc test-lib-data-events-1_128_8.h \
 	test-lib-data-format.cc test-lib-data-format.h \
 	test-lib-data-waveform.cc test-lib-data-waveform.h \
