@@ -1,4 +1,4 @@
-blitzortung-tracker (0.9.6SNAPSHOT201202010059) unstable; urgency=low
+blitzortung-tracker (0.9.6) unstable; urgency=low
 
   * added raw file version number to header (makes reading/writing incompatible from older versions)
   * performance: use data format reference instead of shared_ptr
@@ -11,9 +11,9 @@ blitzortung-tracker (0.9.6SNAPSHOT201202010059) unstable; urgency=low
   * serial communication error handling
   * configuration of amplitude limit through configuration file
   * fixed sample handling and sample rate limiter
-  * Support for Firmware 30 and newer
+  * added support for firmware version 30 and newer
 
- -- Andreas Wuerl <blitzortung@tryb.de>  Sun, 11 Jul 2011 20:00:00 +0200
+ -- Andreas Wuerl <blitzortung@tryb.de>  Sun, 19 Feb 2012 09:16:00 +0100
 
 blitzortung-tracker (0.9.5) unstable; urgency=low
 
