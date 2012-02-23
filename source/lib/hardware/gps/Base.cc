@@ -13,9 +13,11 @@ namespace blitzortung {
 	satelliteCount_(data::Base::BUFFERSIZE),
 	status_(0),
 	logger_("hardware.gps.Base"),
-	baudRate(baudRate),
+	baudRate_(baudRate),
 	disableSbas_(disableSbas)
       {
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "Base(" << communication_.getBaudRate() << ", " << baudRate_ << ", " << disableSbas_ << ")";
       }
 
       Base::~Base() {
@@ -69,56 +71,50 @@ namespace blitzortung {
 
 	const unsigned int targetBaudRate = communication_.getBaudRate();
 
-	if (fullInitialization) {
-	  
+
+	if (targetBaudRate == baudRate_ &&fullInitialization) {
+
 	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "init() perform full initialization";
+	    logger_.debugStream() << "init() perform full initialization " << targetBaudRate << " vs. " << baudRate_;
 
 	  // fill vector of supported baud rates
 	  std::vector<unsigned int> initializingBaudRates;
 
-	  if (targetBaudRate == baudRate) {
-	    initializingBaudRates.push_back(4800);
-	    initializingBaudRates.push_back(9600);
-	    initializingBaudRates.push_back(19200);
-	    initializingBaudRates.push_back(38400);
+	  initializingBaudRates.push_back(4800);
+	  initializingBaudRates.push_back(9600);
+	  initializingBaudRates.push_back(19200);
+	  initializingBaudRates.push_back(38400);
 
-	    // send initialization for every supported baud rate except the target baud rate
-	    for (auto baudRate=initializingBaudRates.begin(); baudRate != initializingBaudRates.end(); baudRate++) {
-	      if (*baudRate != targetBaudRate) {
+	  // send initialization for every supported baud rate except the target baud rate
+	  for (auto baudRate=initializingBaudRates.begin(); baudRate != initializingBaudRates.end(); baudRate++) {
+	    if (*baudRate != targetBaudRate) {
 
-		if (logger_.isDebugEnabled())
-		  logger_.debugStream() << "init() @ " << *baudRate << " to " << targetBaudRate << " baud";
+	      if (logger_.isDebugEnabled())
+		logger_.debugStream() << "init() @ " << *baudRate << " baud to " << targetBaudRate << " baud";
 
-		communication_.setBaudRate(*baudRate);
+	      communication_.setBaudRate(*baudRate);
 
-		sleep(1);
+	      sleep(1);
 
-		initWrite(targetBaudRate);
+	      initWrite(targetBaudRate);
 
-		sleep(1);
-	      }
+	      sleep(1);
 	    }
 	  }
-
-	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "init() @/to " << targetBaudRate << " baud";
-
-	  // switch the interface to the target baud rate
-	  communication_.setBaudRate(targetBaudRate);
-
-	  sleep(1);
-
-	  // send initalization with the target baud rate at the end
-	  initWrite(targetBaudRate);
-
-	  sleep(1);
-	} else {
-	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "init() gps @ " << targetBaudRate << " to " << baudRate << " baud";
-
-	  initWrite(baudRate);
 	}
+
+	if (logger_.isDebugEnabled())
+	  logger_.debugStream() << "init() @ " << targetBaudRate << " baud to " << baudRate_ << " baud";
+
+	// switch the interface to the target baud rate
+	communication_.setBaudRate(targetBaudRate);
+
+	sleep(1);
+
+	// send initalization with the target baud rate at the end
+	initWrite(baudRate_);
+
+	sleep(1);
 
 	dateInitialized_ = pt::second_clock::universal_time().date();
       }
@@ -147,6 +143,10 @@ namespace blitzortung {
 
       bo::data::GpsInfo::AP Base::getInfo() const {
 	return bo::data::GpsInfo::AP(new bo::data::GpsInfo(*this));
+      }
+
+      unsigned short Base::getBaudRate() const {
+	return baudRate_;
       }
     }
   }
