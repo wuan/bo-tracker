@@ -65,7 +65,7 @@ namespace blitzortung {
 	protected:
 	
 	  //! gps baud rate
-	  const unsigned short baudRate;
+	  const unsigned short baudRate_;
 
 	  //! disable SBASE flag
 	  bool disableSbas_;
@@ -113,6 +113,9 @@ namespace blitzortung {
 
 	  //! get gps device type
 	  virtual const std::string getType() const = 0;
+
+	  //! get gps baud rate
+	  unsigned short getBaudRate() const;
       };
 
     }

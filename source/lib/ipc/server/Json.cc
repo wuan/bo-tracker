@@ -47,6 +47,7 @@ namespace blitzortung {
 	      json_object_object_add(jsonGps, "ticksPerSecond", json_object_new_double(gps.getTicksPerSecond()));
 	      json_object_object_add(jsonGps, "tickError", json_object_new_double(gps.getTickError()));
 	      json_object_object_add(jsonGps, "satelliteCount", json_object_new_int(gps.getSatelliteCount()));
+	      json_object_object_add(jsonGps, "baudRate", json_object_new_int(gps.getBaudRate()));
 	    } catch (exception::Base &e) {
 	    logger_.debugStream() << "gps failed";
 	    }

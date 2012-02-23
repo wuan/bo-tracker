@@ -153,7 +153,7 @@ namespace blitzortung {
 	speed_t baudBit = cfgetospeed(&serialAttr);
 
 	if (logger_.isDebugEnabled())
-	  logger_.infoStream() << "getBaudRate() bit " << baudBit;
+	  logger_.debugStream() << "getBaudRate() bit " << baudBit;
 
 	switch(baudBit) {
 	  case B4800:
