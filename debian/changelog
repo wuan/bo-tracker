@@ -1,3 +1,9 @@
+blitzortung-tracker (0.9.7-SNAPSHOT-20120223214421) unstable; urgency=low
+
+  * added separate gps baud rate setting
+
+ -- Andreas Wuerl <blitzortung@tryb.de>  Sun, 19 Feb 2012 09:16:00 +0100
+
 blitzortung-tracker (0.9.6) unstable; urgency=low
 
   * added raw file version number to header (makes reading/writing incompatible from older versions)

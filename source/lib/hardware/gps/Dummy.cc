@@ -7,8 +7,8 @@ namespace blitzortung {
   namespace hardware {
     namespace gps {
 
-      Dummy::Dummy(comm::Base& communication) :
-	Base(communication, false),
+      Dummy::Dummy(comm::Base& communication, const unsigned short gpsBaudRate) :
+	Base(communication, gpsBaudRate, false),
 	logger_("hardware.gps.Dummy")
       {
       }

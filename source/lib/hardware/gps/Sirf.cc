@@ -7,8 +7,8 @@ namespace blitzortung {
   namespace hardware {
     namespace gps {
 
-      Sirf::Sirf(comm::Base& communication, bool disableSbas) :
-	Base(communication, disableSbas),
+      Sirf::Sirf(comm::Base& communication, const unsigned short gpsBaudRate, bool disableSbas) :
+	Base(communication, gpsBaudRate, disableSbas),
 	logger_("hardware.gps.Sirf")
       {
 	init(true);

@@ -35,7 +35,8 @@ int main(int argc, char **argv) {
   unsigned short serverport;
   std::string serialPortName = "/dev/ttyUSB0";
   std::string outputFile = "";
-  unsigned short serialBaudRate = 19200;
+  unsigned int serialBaudRate = 19200;
+  unsigned short gpsBaudRate = 4800;
   double eventRateLimit = 2.0;
   double amplitudeLimit = 0.05;
   std::string gpsType = "sirf";
@@ -50,12 +51,13 @@ int main(int argc, char **argv) {
   desc.add_options()
     ("help", "show program help")
     ("serial-device,d", po::value<std::string>(&serialPortName)->default_value(serialPortName), "path to serial device")
-    ("baud-rate,b", po::value<unsigned short>(&serialBaudRate)->default_value(serialBaudRate), "baud rate of serial port (4800, 9600, 19200, 38400)")
+    ("baud-rate,b", po::value<unsigned int>(&serialBaudRate)->default_value(serialBaudRate), "baud rate of serial port (4800, 9600, 19200, 38400, 115200, 230400, 250000, 500000)")
     ("username,u", po::value<std::string>(&username), "username of blitzortung.org")
     ("password,p", po::value<std::string>(&password), "password of blitzortung.org")
     ("server-host,h", po::value<std::string>(&servername)->default_value(servername), "blitzortung.org servername")
     ("server-port", po::value<unsigned short>(&serverport)->default_value(8308), "blitzortung.org serverport")
     ("gps-type,g", po::value<std::string>(&gpsType)->default_value(gpsType), "type of gps device (garmin or sirf)")
+    ("gps-baud-rate", po::value<unsigned short>(&gpsBaudRate)->default_value(gpsBaudRate), "baud rate of gps serial port (4800, 9600, 19200, 38400) ignored for serial port baud rates < 115200")
     ("gps-disable-sbas", "disable GPS SBAS")
     ("logfile", po::value<std::string>(&logFileName), "file name for log output (defaults to stdout)")
     ("amplitude-limit,a", po::value<double>(&amplitudeLimit)->default_value(amplitudeLimit), "lower limit of signal amplitude")
@@ -125,12 +127,29 @@ int main(int argc, char **argv) {
     case 9600:
     case 19200:
     case 38400:
+      gpsBaudRate = serialBaudRate;
+      break;
+
+    case 115200:
+    case 230400:
+    case 250000:
+    case 500000:
+      switch (gpsBaudRate) {
+	case 4800:
+	case 9600:
+	case 19200:
+	case 38400:
+	  break;
+
+	default:
+	  std::cerr << "invalid gps baud rate: " << serialBaudRate;
+	  exit(10);
+      }
       break;
 
     default:
-      std::ostringstream oss;
-      oss << "invalid serial baud rate: " << serialBaudRate;
-      throw bo::exception::Base(oss.str());
+      std::cerr << "invalid serial baud rate: " << serialBaudRate;
+      exit(10);
   }
 
   bo::hardware::comm::Base::AP comm;
@@ -158,13 +177,12 @@ if (serialPortName == "dummy") {
     bool disableSbas = vm.count("gps-disable-sbas");
 
     if (gpsType == "garmin") {
-      gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Garmin(*comm, disableSbas));
+      gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Garmin(*comm, gpsBaudRate, disableSbas));
     } else if (gpsType == "sirf") {
-      gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Sirf(*comm, disableSbas));
+      gps = bo::hardware::gps::Base::AP(new bo::hardware::gps::Sirf(*comm, gpsBaudRate, disableSbas));
     } else {
-      std::ostringstream oss;
-      oss << "invalid value of gps-type: '" << gpsType << "'";
-      throw bo::exception::Base(oss.str());
+      std::cerr << "invalid value of gps-type: '" << gpsType << "'";
+      exit(10);
     }
   }
 

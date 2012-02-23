@@ -64,7 +64,10 @@ namespace blitzortung {
 
 	protected:
 	
-	  //! disalbe SBASE flag
+	  //! gps baud rate
+	  const unsigned short baudRate;
+
+	  //! disable SBASE flag
 	  bool disableSbas_;
 
 	  //! initialize GPS hardware
@@ -73,7 +76,7 @@ namespace blitzortung {
 	public:
 
 	  //! constructor
-	  Base(comm::Base&, bool disableSbas);
+	  Base(comm::Base&, const unsigned short baudRate, bool disableSbas);
 
 	  //! destructor
 	  virtual ~Base();
