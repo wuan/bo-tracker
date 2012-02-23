@@ -72,6 +72,7 @@ namespace blitzortung {
 
 	isOpen_ = true;
 
+
 	setBaudRate(baudRate);
       }
 
@@ -96,7 +97,7 @@ namespace blitzortung {
 
 	tcgetattr(serialFd_, &serialAttr);
 
-	int baudBit = 0;
+	speed_t baudBit = 0;
 
 	switch(baudRate) {
 	  case 4800:
@@ -149,7 +150,10 @@ namespace blitzortung {
 
 	tcgetattr(serialFd_, &serialAttr);
 
-	int baudBit = cfgetospeed(&serialAttr);
+	speed_t baudBit = cfgetospeed(&serialAttr);
+
+	if (logger_.isDebugEnabled())
+	  logger_.infoStream() << "getBaudRate() bit " << baudBit;
 
 	switch(baudBit) {
 	  case B4800:
