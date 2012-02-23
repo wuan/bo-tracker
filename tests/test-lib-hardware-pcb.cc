@@ -15,7 +15,7 @@
 CPPUNIT_TEST_SUITE_REGISTRATION( HardwareTest );
 
 void HardwareTest::run(bo::hardware::comm::Base& comm, unsigned int expectedSamples) {
-  bo::hardware::gps::Dummy gps(comm);
+  bo::hardware::gps::Dummy gps(comm, 4800);
 
   bo::hardware::Pcb pcb(comm, gps);
 

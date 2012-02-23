@@ -12,7 +12,7 @@ namespace blitzortung {
   namespace hardware {
     namespace comm {
 
-      class SerialPort : boost::noncopyable {
+      class SerialPort {
 
 	public:
 
@@ -40,8 +40,12 @@ namespace blitzortung {
 	  //! constructor
 	  SerialPort(const std::string& port="/dev/ttyS0", const unsigned int baudRate = 19200);
 
+	  // make object nocopyable
+	  SerialPort(SerialPort &) = delete;
+	  SerialPort operator=(SerialPort&) = delete;
+
 	  //! destructor
-	  virtual ~SerialPort();
+	  virtual ~SerialPort() = default;
 
 	  //! returns true if serial port is open
 	  bool isOpen() const;

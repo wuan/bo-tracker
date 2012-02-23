@@ -7,8 +7,8 @@ namespace blitzortung {
   namespace hardware {
     namespace gps {
 
-      Garmin::Garmin(comm::Base& communication, bool disableSbas) :
-	Base(communication, disableSbas),
+      Garmin::Garmin(comm::Base& communication, const unsigned short gpsBaudRate, bool disableSbas) :
+	Base(communication, gpsBaudRate, disableSbas),
 	logger_("hardware.gps.Garmin")
       {
 	init(true);

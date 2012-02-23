@@ -31,10 +31,10 @@ namespace blitzortung {
 	public:
 
 	  //! constructor
-	  Garmin(comm::Base&, bool disableSbas);
+	  Garmin(comm::Base&, const unsigned short baudRate, bool disableSbas);
 
 	  //! destructor
-	  virtual ~Garmin();
+	  virtual ~Garmin() = default;
 
 	  const std::string getType() const;
       };

@@ -130,7 +130,7 @@ void HardwareParsingTest::testSamplesParsing() {
   std::vector<std::string> fields;
   
   bo::hardware::comm::Dummy comm;
-  bo::hardware::gps::Dummy gps(comm);
+  bo::hardware::gps::Dummy gps(comm, 4800);
 
   {
     bo::util::String::split("BS,37E912,A,084639,200311,4808.1313,N,01132.6201,E,532.9,09,27b", fields, ",");
