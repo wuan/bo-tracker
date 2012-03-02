@@ -136,6 +136,9 @@ namespace blitzortung {
 
 	{
 	  std::ostringstream oss;
+	  if (comm_.getBaudRate() != gps_.getBaudRate()) {
+	    oss << gps_.getBaudRate() << "/";
+	  }
 	  oss << comm_.getBaudRate();
 	  rawData.append(oss.str());
 	}

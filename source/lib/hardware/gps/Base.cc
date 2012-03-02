@@ -69,13 +69,12 @@ namespace blitzortung {
 
       void Base::init(bool fullInitialization) {
 
-	const unsigned int targetBaudRate = communication_.getBaudRate();
+	const unsigned int dataBaudRate = communication_.getBaudRate();
 
-
-	if (targetBaudRate == baudRate_ &&fullInitialization) {
+	if (fullInitialization) {
 
 	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "init() perform full initialization " << targetBaudRate << " vs. " << baudRate_;
+	    logger_.debugStream() << "init() perform full initialization " << dataBaudRate << " baud for data ./. " << baudRate_ << " baud for GPS";
 
 	  // fill vector of supported baud rates
 	  std::vector<unsigned int> initializingBaudRates;
@@ -87,16 +86,16 @@ namespace blitzortung {
 
 	  // send initialization for every supported baud rate except the target baud rate
 	  for (auto baudRate=initializingBaudRates.begin(); baudRate != initializingBaudRates.end(); baudRate++) {
-	    if (*baudRate != targetBaudRate) {
+	    if (*baudRate != baudRate_) {
 
 	      if (logger_.isDebugEnabled())
-		logger_.debugStream() << "init() @ " << *baudRate << " baud to " << targetBaudRate << " baud";
+		logger_.debugStream() << "init() @ " << *baudRate << " baud to " << baudRate_ << " baud";
 
 	      communication_.setBaudRate(*baudRate);
 
 	      sleep(1);
 
-	      initWrite(targetBaudRate);
+	      initWrite(baudRate_);
 
 	      sleep(1);
 	    }
@@ -104,10 +103,10 @@ namespace blitzortung {
 	}
 
 	if (logger_.isDebugEnabled())
-	  logger_.debugStream() << "init() @ " << targetBaudRate << " baud to " << baudRate_ << " baud";
+	  logger_.debugStream() << "init() @ " << baudRate_ << " baud";
 
 	// switch the interface to the target baud rate
-	communication_.setBaudRate(targetBaudRate);
+	communication_.setBaudRate(baudRate_);
 
 	sleep(1);
 
@@ -115,6 +114,16 @@ namespace blitzortung {
 	initWrite(baudRate_);
 
 	sleep(1);
+
+	if (baudRate_ != dataBaudRate) {
+	  if (logger_.isDebugEnabled())
+	    logger_.debugStream() << "init() restore data baud rate to " << dataBaudRate << " baud";
+	  
+	  // switch the interface to the target baud rate
+	  communication_.setBaudRate(dataBaudRate);
+
+	  sleep(1);
+	}
 
 	dateInitialized_ = pt::second_clock::universal_time().date();
       }
