@@ -1,4 +1,4 @@
-blitzortung-tracker (0.9.7-SNAPSHOT-20120302211749) unstable; urgency=low
+blitzortung-tracker (0.9.7) unstable; urgency=low
 
   * added separate gps baud rate setting
   * improved support for PCB6.8
