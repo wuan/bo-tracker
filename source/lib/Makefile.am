@@ -1,19 +1,11 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
 AM_LDFLAGS = \
-	-lboost_regex \
-	-lboost_thread \
-	-llog4cpp \
-	-ljson \
 	$(NULL)
 
 lib_LTLIBRARIES = libblitzortung.la
 
 libblitzortung_la_LDFLAGS = \
-	-lboost_thread \
-	-lboost_regex \
-	-llog4cpp \
-	-ljson \
 	-release ${VERSION} \
 	-version_info ${LIBRARY_VERSION} \
 	-no undefined
@@ -81,5 +73,6 @@ libblitzortung_la_SOURCES = \
 	util/Size.h \
 	util/String.h util/String.cc \
 	util/Stream.h \
+	\
 	$(NULL)
 

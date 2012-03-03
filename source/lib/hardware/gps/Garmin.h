@@ -34,7 +34,7 @@ namespace blitzortung {
 	  Garmin(comm::Base&, const unsigned short baudRate, bool disableSbas);
 
 	  //! destructor
-	  virtual ~Garmin() = default;
+	  virtual ~Garmin();
 
 	  const std::string getType() const;
       };

@@ -55,7 +55,7 @@ namespace blitzortung {
       Process(network::transfer::Base& transfer, const double eventRateLimit, output::Base& output);
 
       //! destructor
-      virtual ~Process() = default;
+      virtual ~Process();
 
       //! add event to send queue
       void push(data::Event::AP&&);
