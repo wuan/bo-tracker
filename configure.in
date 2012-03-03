@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(blitzortung-tracker, 0.9.7)
+AC_INIT([blitzortung-tracker],[0.9.7])
 
 dnl Every other copy of the package version number gets its value from here
 AM_INIT_AUTOMAKE()
@@ -8,16 +8,14 @@ AM_INIT_AUTOMAKE()
 AC_CONFIG_MACRO_DIR([m4])
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 CXXFLAGS="${CXXFLAGS} -std=gnu++0x -pthread"
 CXXFLAGS="${CXXFLAGS} -fsigned-char -Wall -DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG"
 AC_SUBST(CXXFLAGS)
 
 # include libtool support
-#AC_LIBTOOL_DLOPEN
-AC_PROG_LIBTOOL
-LT_INIT([disable-static])
+LT_INIT([pic-only, disable-static])
 AC_PROG_CXX
 
 AC_LANG_PUSH([C++])
@@ -30,10 +28,12 @@ AC_CHECK_HEADERS([cppunit/TestFixture.h], [], [AC_MSG_ERROR(You need the cppunit
 AC_CHECK_HEADERS([json/json.h], [], [AC_MSG_ERROR(You need the json-c libraries)])
 AC_LANG_POP([C++])
 
-AC_OUTPUT( \
+AC_CONFIG_FILES([\
 	Makefile \
 	source/Makefile \
 	source/lib/Makefile \
 	scripts/Makefile \
 	tests/Makefile
-    )
+    ])
+
+AC_OUTPUT
