@@ -45,7 +45,7 @@ namespace blitzortung {
 	  SerialPort operator=(SerialPort&) = delete;
 
 	  //! destructor
-	  virtual ~SerialPort() = default;
+	  virtual ~SerialPort();
 
 	  //! returns true if serial port is open
 	  bool isOpen() const;

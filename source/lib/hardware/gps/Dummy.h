@@ -34,7 +34,7 @@ namespace blitzortung {
 	  Dummy(comm::Base&, const unsigned short gpsBaudRate);
 
 	  //! destructor
-	  virtual ~Dummy() = default;
+	  virtual ~Dummy();
 
 	  const std::string getType() const;
       };
