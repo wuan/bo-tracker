@@ -6,6 +6,9 @@ AM_LDFLAGS = \
 lib_LTLIBRARIES = libblitzortung.la
 
 libblitzortung_la_LDFLAGS = \
+	-llog4cpp \
+	-ljson \
+	-lboost_regex \
 	-release ${VERSION} \
 	-version_info ${LIBRARY_VERSION} \
 	-no undefined
