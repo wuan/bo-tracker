@@ -8,7 +8,8 @@ AM_CXXFLAGS = \
 	-I lib
 
 AM_LDFLAGS = \
-	$(BOOST_PROGRAM_OPTIONS_LDFLAGS) \
+	-llog4cpp \
+        -lboost_program_options \
 	$(BOOST_MATH_LDFLAGS) \
 	$(NULL)
 
