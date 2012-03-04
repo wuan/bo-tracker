@@ -14,9 +14,10 @@ CXXFLAGS="${CXXFLAGS} -std=gnu++0x -pthread"
 CXXFLAGS="${CXXFLAGS} -fsigned-char -Wall -DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG"
 AC_SUBST(CXXFLAGS)
 
-# include libtool support
-LT_INIT([pic-only, disable-static])
 AC_PROG_CXX
+# include libtool support
+AC_PROG_LIBTOOL
+LT_INIT([pic-only, disable-static])
 
 AC_LANG_PUSH([C++])
 AC_CHECK_HEADERS([boost/date_time.hpp], [], [AC_MSG_ERROR(You need the boost date-time libraries)])
