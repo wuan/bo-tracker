@@ -8,6 +8,7 @@ BLITZORTUNG_TRACKER=no
 # credentials and server name
 BLITZORTUNG_USERNAME=""
 BLITZORTUNG_PASSWORD=""
+# "rechenserver.de" for Region 1, "rechenserver.com" for all other regions
 BLITZORTUNG_SERVERHOST="rechenserver.de"
 
 # communication and hardware parameters
@@ -15,7 +16,7 @@ BLITZORTUNG_SERVERHOST="rechenserver.de"
 BLITZORTUNG_TRACKER_GPSTYPE=sirf
 # serial device
 BLITZORTUNG_TRACKER_DEVICE="/dev/ttyS0"
-# BAUDRATE (4800, 19200, 38400)
+# BAUDRATE (4800, 19200, 38400, 115200, 230400, 250000, 500000)
 BLITZORTUNG_TRACKER_BAUDRATE=19200
 # LOGFILE
 BLITZORTUNG_TRACKER_LOGFILE="--logfile=/var/log/blitzortung-tracker.log"
