@@ -39,6 +39,9 @@ namespace blitzortung {
       private:
 
 	//! firmware version of controller
+	const static std::string version_;
+
+	//! firmware version of controller
 	std::string firmwareVersion_;
 
 	//! logger for objects of this class
@@ -66,6 +69,9 @@ namespace blitzortung {
 
 	//! returns the firmware version string
 	const std::string& getFirmwareVersion() const;
+	
+	//! returns the firmware version string
+	const std::string& getVersion() const;
 	
 	//! returns a reference to the gps object
 	const gps::Base& getGps() const;
