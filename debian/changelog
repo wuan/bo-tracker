@@ -1,3 +1,9 @@
+blitzortung-tracker (1.0.2SNAPSHOT201203041202) unstable; urgency=low
+
+  * cleanup configuration files
+
+ -- Andreas Wuerl <blitzortung@tryb.de>  Sun, 19 Feb 2012 09:16:00 +0100
+
 blitzortung-tracker (1.0.1) unstable; urgency=low
 
   * added separate gps baud rate setting
