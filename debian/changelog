@@ -1,11 +1,11 @@
-blitzortung-tracker (0.9.7) unstable; urgency=low
+blitzortung-tracker (1.0.1) unstable; urgency=low
 
   * added separate gps baud rate setting
   * improved support for PCB6.8
 
  -- Andreas Wuerl <blitzortung@tryb.de>  Sun, 19 Feb 2012 09:16:00 +0100
 
-blitzortung-tracker (0.9.6) unstable; urgency=low
+blitzortung-tracker (1.0.0) unstable; urgency=low
 
   * added raw file version number to header (makes reading/writing incompatible from older versions)
   * performance: use data format reference instead of shared_ptr
