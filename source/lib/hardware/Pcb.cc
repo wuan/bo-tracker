@@ -6,7 +6,6 @@
 #include "data/MEvent.h"
 #include "hardware/parsing/Ticks.h"
 
-#define TRACKER_VERSION "debT&nbsp;1.0.1"
 
 namespace blitzortung {
   namespace hardware {
@@ -26,12 +25,18 @@ namespace blitzortung {
 	logger_.debugStream() << "destroyed";
     }
 
+    const std::string Pcb::version_ = "debT&nbsp;1.0.1";
+
     bool Pcb::isOpen() const {
       return comm_.isOpen();
     }
     
     const std::string& Pcb::getFirmwareVersion() const {
       return firmwareVersion_;
+    }
+
+    const std::string& Pcb::getVersion() const {
+      return version_;
     }
 	
     const gps::Base& Pcb::getGps() const {
@@ -124,7 +129,7 @@ namespace blitzortung {
     void Pcb::appendInfoString(std::string& rawData) const {
 	rawData.append(" ");
 
-	rawData.append(TRACKER_VERSION);
+	rawData.append(version_);
 	rawData.append(" ");
 
 	if (firmwareVersion_ != "") {

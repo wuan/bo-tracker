@@ -75,6 +75,10 @@ namespace blitzortung {
 	    } catch (exception::Base &e) {
 	    }
 	    json_object_object_add(jsonResponse_, "process", jsonProcess);
+
+	    json_object* jsonSoftware = json_object_new_object();
+	    json_object_object_add(jsonSoftware, "version", json_object_new_string(hardware_.getVersion().c_str()));
+	    json_object_object_add(jsonResponse_, "software", jsonSoftware);
       }
 
       std::string Json::respond(const std::string& input) {
