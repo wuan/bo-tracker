@@ -8,10 +8,7 @@ AM_CXXFLAGS = \
 	-I lib
 
 AM_LDFLAGS = \
-	-ljson \
-        -lboost_regex \
-	-lboost_program_options \
-	-llog4cpp \
+	$(BOOST_PROGRAM_OPTIONS_LDFLAGS) \
 	$(BOOST_MATH_LDFLAGS) \
 	$(NULL)
 
