@@ -155,7 +155,7 @@ int main(int argc, char **argv) {
   bo::hardware::comm::Base::AP comm;
   bo::hardware::comm::SerialPort::AP serialPort;
 
-if (serialPortName == "dummy") {
+  if (serialPortName == "dummy") {
     comm = bo::hardware::comm::Base::AP(new bo::hardware::comm::Dummy(true));
     comm->setBaudRate(serialBaudRate);
     dynamic_cast<bo::hardware::comm::Dummy*>(comm.get())->addReceivedLine("BS,11C2CC,A,084638,200311,4648.1313,N,01332.6202,E,532.8,09,27b");

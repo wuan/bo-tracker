@@ -67,6 +67,7 @@ namespace blitzortung {
 
 	  if (lastSampleCreated_.is_not_a_date_time()) {
 	    lastSampleCreated_ = gps_.getTime();
+	    return createKeepaliveSample();
 	  } else {
 	    if (gps_.getTime() - lastSampleCreated_ >= pt::minutes(10)) {
 	      lastSampleCreated_ = gps_.getTime();
@@ -91,8 +92,8 @@ namespace blitzortung {
     }
 
     data::Event::AP Pcb::createKeepaliveSample() {
-      if (logger_.isDebugEnabled())
-	logger_.debugStream() << "createKeepaliveSample()";
+      if (logger_.isInfoEnabled())
+	logger_.infoStream() << "createKeepaliveSample()";
 
       data::Waveform::AP waveform(new data::Waveform(gps_.getTime()));
 
