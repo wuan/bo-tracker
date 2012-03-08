@@ -23,6 +23,7 @@ namespace blitzortung {
     Events::Events(const EventsHeader& header) :
       date_(header.getDate()),
       dataFormat_(header.getDataFormat())
+      logger_("data.Events")
     {
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "create(header) " << this << " " << header;

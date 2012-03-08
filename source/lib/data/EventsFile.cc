@@ -112,7 +112,6 @@ namespace blitzortung {
 	
 	open(std::ios::out | std::ios::binary | std::ios::app);
 
-
 	if (logger_.isDebugEnabled()) {
 	  logger_.debugStream() << "writeEvents() write " << events.size() << " events (" << events.front().getSize() << " bytes per event)";
 	  logger_.debugStream() << "writeEvents() wfm size " << events.getDataFormat() << " " << Waveform::GetSize(events.front().getWaveform().getArray().getFormat());
