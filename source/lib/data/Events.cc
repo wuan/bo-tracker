@@ -22,7 +22,7 @@ namespace blitzortung {
 
     Events::Events(const EventsHeader& header) :
       date_(header.getDate()),
-      dataFormat_(header.getDataFormat())
+      dataFormat_(header.getDataFormat()),
       logger_("data.Events")
     {
       if (logger_.isDebugEnabled())
