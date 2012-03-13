@@ -17,7 +17,7 @@ AC_SUBST(CXXFLAGS)
 AC_PROG_CXX
 # include libtool support
 AC_PROG_LIBTOOL
-# LT_INIT([pic-only, disable-static])
+LT_INIT([pic-only, disable-static])
 
 AC_LANG_PUSH([C++])
 AC_CHECK_HEADERS([boost/date_time.hpp], [], [AC_MSG_ERROR(You need the boost date-time libraries)])
