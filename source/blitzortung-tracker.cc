@@ -1,7 +1,7 @@
 /*  
 
     Copyright (C) 2003-2010  Egon Wanke <blitzortung@gmx.org>
-    Copyright (C) 2010-2011  Andreas Würl <blitzortung@tryb.de>
+    Copyright (C) 2010-2012  Andreas Würl <blitzortung@tryb.de>
 
 */
 
