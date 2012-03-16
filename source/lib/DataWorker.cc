@@ -99,8 +99,6 @@ namespace blitzortung {
 	  // prepare data for transmission
 	  data::Events::AP deletedEvents = prepareData(eventsPerSecond);
 
-	  eventsPerSecond += events_->size();
-
 	  // transmit data
 	  transfer_.send(*events_);
 
@@ -122,6 +120,8 @@ namespace blitzortung {
 	      event++;
 	    }
 	  }
+
+	  eventsPerSecond += events_->size();
 
 	  output_.output(*events_);
 	}
