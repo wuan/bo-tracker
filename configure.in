@@ -16,7 +16,6 @@ AC_SUBST(CXXFLAGS)
 
 AC_PROG_CXX
 # include libtool support
-AC_PROG_LIBTOOL
 LT_INIT([pic-only, disable-static])
 
 AC_LANG_PUSH([C++])
