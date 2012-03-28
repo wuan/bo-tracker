@@ -20,6 +20,7 @@ void HardwareTest::run(bo::hardware::comm::Base& comm, unsigned int expectedSamp
   bo::hardware::Pcb pcb(comm, gps);
 
   unsigned int count = 0;
+
   while (pcb.isOpen()) {
 
     bo::data::Event::AP event = pcb.read();
@@ -28,14 +29,17 @@ void HardwareTest::run(bo::hardware::comm::Base& comm, unsigned int expectedSamp
 
     if (event.get() != 0) {
       bo::data::MEvent& mevent = dynamic_cast<bo::data::MEvent&>(*event);
-      // TODO
-      //std::cout << std::endl;
-      //std::cout << "data: '" << mevent.getRawData() << "'\n";
-      //std::cout << "format: " << *(mevent.getWaveform().getArray().getFormat()) << std::endl;
 
-      //std::cout << transfer.eventToString(mevent) << std::endl;
-      //std::cout << *event << std::endl;
-      count++;
+      if (!mevent.getWaveform().isEmpty()) {
+	// TODO
+	//std::cout << std::endl;
+	//std::cout << "data: '" << mevent.getRawData() << "'\n";
+	//std::cout << "format: " << *(mevent.getWaveform().getArray().getFormat()) << std::endl;
+
+	//std::cout << transfer.eventToString(mevent) << std::endl;
+	//std::cout << *event << std::endl;
+	count++;
+      }
     }
 
   }
