@@ -15,54 +15,49 @@ namespace blitzortung {
 
 	typedef std::unique_ptr<Array> AP;
 
-      private:
+      protected:
 
-	//! reference to data format object
-	const Format& format_;
-
-	//! vector for x channel data
-	std::unique_ptr<char> data_;
+	//! returns the size of a single data element
+	virtual unsigned char getElementSize() const = 0;
 
       public:
-
-        //! create a waveform array object
-	/*!
-	\param format reference to array format definition
-	*/
-	Array(const Format& format);
-
-	Array(Array&& old, const Format& format);
 
 	//! delete waveform object
 	virtual ~Array();
 
-	//! returns the number of bits per sample
-	unsigned short getNumberOfBitsPerSample() const;
-
 	//! returns the number of measurements per waveform
-	unsigned int getNumberOfSamples() const;
+	virtual unsigned int getNumberOfSamples() const = 0;
 
 	//! returns the number of channels per measurement
-	unsigned short getNumberOfChannels() const;
+	virtual unsigned short getNumberOfChannels() const = 0;
+	
+	//! returns true if the waveform array is empty
+	virtual bool isEmpty() const = 0;
 
 	//! set a particular sample in a given channel to a value
-	void set(int value, unsigned int sample, unsigned short channel=0);
+	virtual void set(int value, unsigned int sample, unsigned short channel=0) = 0;
+
+	//! set a particular sample in a given channel to a value
+	virtual void set(float value, unsigned int sample, unsigned short channel=0) = 0;
 
 	//! return the value of a sample in a given channel
-	float get(unsigned int sample, unsigned short channel=0) const;
+	virtual int get(unsigned int sample, unsigned short channel=0) const = 0;
+
+	//! return the value of a sample in a given channel
+	virtual float getFloat(unsigned int sample, unsigned short channel=0) const = 0;
+
+	//! returns amplitude at index
+	float getAmplitude(unsigned int index) const;
+
+	//! returns index of maximum value
+	unsigned int getMaxIndex() const;
 
 	//! write binary object data to stream
-	void toStream(std::iostream&) const;
+	virtual void toStream(std::iostream&) const = 0;
 
 	//! read binary object data from stream
-	void fromStream(std::iostream&);
-
-	//! return the actual format
-	const Format& getFormat() const;
-	
+	virtual void fromStream(std::iostream&) = 0; 
     };
-
-    std::ostream& operator <<(std::ostream& os, const Array&);
 
   }
 }
