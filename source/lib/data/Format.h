@@ -3,6 +3,7 @@
 
 #include "namespaces.h"
 #include "Logger.h"
+#include "WaveformOf.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
@@ -89,6 +90,9 @@ namespace blitzortung {
 
 	//! read format parameters from stream
 	void fromStream(std::iostream&);
+
+	//! create waveform from stream
+	Waveform::AP createWaveformFromStream(const gr::date&, std::iostream&) const;
 
 	//! comparison operator for data format
 	bool operator==(const Format& other) const;

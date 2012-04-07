@@ -17,6 +17,7 @@ libblitzortung_la_SOURCES = \
 	DataWorker.h DataWorker.cc \
 	\
 	data/Array.h data/Array.cc \
+	data/ArrayOf.h data/ArrayOf.cc \
 	data/Format.h data/Format.cc \
 	data/Event.h data/Event.cc \
 	data/MEvent.h data/MEvent.cc \
@@ -24,6 +25,7 @@ libblitzortung_la_SOURCES = \
 	data/EventsFile.h data/EventsFile.cc \
 	data/EventsHeader.h data/EventsHeader.cc \
 	data/Waveform.h data/Waveform.cc \
+	data/WaveformOf.h data/WaveformOf.cc \
 	data/GpsInfo.h data/GpsInfo.cc \
 	\
 	exception/Base.h exception/Base.cc \

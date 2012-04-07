@@ -98,6 +98,25 @@ namespace blitzortung {
       updateDataType();
     }
 
+    Waveform::AP Format::createWaveformFromStream(const gr::date& date, std::iostream& stream) const {
+
+      switch (sampleType_) {
+
+	case SampleType::BYTE:
+	  return new WaveformOf<signed char>(numberOfChannels_, numberOfSamples_, date, stream);
+
+	case SHORT:
+	  return new WaveformOf<signed short>(numberOfChannels_, numberOfSamples_, date, stream);
+
+	case INT:
+	  return new WaveformOf<signed int>(numberOfChannels_, numberOfSamples_, date, stream);
+
+	default:
+	  throw new exception::Base("unknown sample type");
+      }
+    }
+
+
     bool Format::operator==(const Format& other) const {
       return numberOfBits_ == other.numberOfBits_ &&
 	numberOfSamples_ == other.numberOfSamples_ &&
