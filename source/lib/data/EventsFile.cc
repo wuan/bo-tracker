@@ -210,8 +210,6 @@ namespace blitzortung {
 
       Events::AP events(readInternal(startIndex, numberOfEvents));
 
-      logger_.debugStream() << "read() events format " << events->getDataFormat() << " " << &events->getDataFormat();
-
       close();
 
       return events;
@@ -226,11 +224,6 @@ namespace blitzortung {
       for (unsigned int i=0; i < (unsigned int)(numberOfEvents); i++) {
 	events->add(header_.createEvent(fstream_));
       }
-
-      logger_.debugStream() << "readInternal() events with format " << events->getDataFormat() << " " << &events->getDataFormat();
-
-      for (auto event=events->begin(); event != events->end(); event++)
-	logger_.debugStream() << "  " << event->getWaveform().getFormat() << &event->getWaveform().getFormat();
 
       return events;
     }
