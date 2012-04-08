@@ -17,8 +17,8 @@ namespace blitzortung {
     }
 
     template<typename T>
-    Format&& ArrayOf<T>::getFormat() const {
-      return std::move(Format(getElementSize(), getNumberOfChannels(), getNumberOfSamples()));
+    Format ArrayOf<T>::getFormat() const {
+      return Format(getElementSize(), getNumberOfChannels(), getNumberOfSamples());
     }
 
     template<typename T>
@@ -71,12 +71,12 @@ namespace blitzortung {
 
     template<typename T>
     void ArrayOf<T>::toStream(std::iostream& stream) const {
-      stream.write((char*)&data_[0], getStorageSize());
+      stream.write((char*)&data_[0], ArrayOf<T>::getStorageSize());
     }
 
     template<typename T>
     void ArrayOf<T>::fromStream(std::iostream& stream) {
-      stream.read((char*)&data_[0], getStorageSize());
+      stream.read((char*)&data_[0], ArrayOf<T>::getStorageSize());
     }
 
     template<typename T>
