@@ -64,10 +64,10 @@ namespace blitzortung {
 	virtual unsigned int getStorageSize() const;
 
 	//! write binary object data to stream
-	void toStream(std::iostream&) const;
+	virtual void toStream(std::iostream&) const;
 
 	//! read binary object data from stream
-	void fromStream(std::iostream&); 
+	virtual void fromStream(std::iostream&); 
 
     };
 

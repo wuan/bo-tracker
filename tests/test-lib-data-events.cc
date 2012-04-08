@@ -116,15 +116,15 @@ void EventTest::testWrite() {
 
   events->clear();
 
-  CPPUNIT_ASSERT_EQUAL(events->size() , 0);
+  CPPUNIT_ASSERT_EQUAL(0, events->size());
 
   events->readFromFile(fileName);
 
-  CPPUNIT_ASSERT_EQUAL(events->size() , originalSize);
+  CPPUNIT_ASSERT_EQUAL(originalSize, events->size());
 
   events->readFromFile(fileName);
 
-  CPPUNIT_ASSERT_EQUAL(events->size() , originalSize);
+  CPPUNIT_ASSERT_EQUAL(originalSize, events->size());
 }
 
 void EventTest::testAppend() {
@@ -137,13 +137,13 @@ void EventTest::testAppend() {
 
   events->readFromFile(fileName);
 
-  CPPUNIT_ASSERT_EQUAL(events->size() , originalSize);
+  CPPUNIT_ASSERT_EQUAL(originalSize, events->size());
 
   events->appendToFile(fileName);
 
   events->readFromFile(fileName);
 
-  CPPUNIT_ASSERT_EQUAL(events->size() , originalSize * 2);
+  CPPUNIT_ASSERT_EQUAL(2 * originalSize, events->size());
 }
 
 void EventTest::testSize() {

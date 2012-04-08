@@ -63,8 +63,11 @@ namespace blitzortung {
 	//! return delta time of waveform
 	const pt::time_duration& getTimeDelta() const;
 
+	//! returns the storage size of the array in bytes
+	virtual unsigned int getStorageSize() const;
+
 	//! write to stream
-	void toStream(std::iostream&);
+	virtual void toStream(std::iostream&) const;
 
 	//! static function to determine size of a particular waveform structure
 	static unsigned int GetSize(const data::Format& dataFormat);

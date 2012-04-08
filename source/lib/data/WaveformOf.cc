@@ -18,7 +18,6 @@ namespace blitzortung {
     WaveformOf<T>::WaveformOf(unsigned char numberOfChannels, unsigned short numberOfSamples, const gr::date& date, std::iostream& stream) :
       ArrayOf<T>(numberOfChannels, numberOfSamples)
     {
-
       {
 	unsigned long long int nanoseconds;
 	util::Stream::ReadValue(stream, nanoseconds);
@@ -60,7 +59,22 @@ namespace blitzortung {
     }
 
     template<typename T>
-    void WaveformOf<T>::toStream(std::iostream& stream) {
+    unsigned int WaveformOf<T>::getStorageSize() const {
+      util::Size size;
+
+      long long int nanoseconds;
+      size.add(nanoseconds);
+
+      if (this->getNumberOfSamples() > 1) {
+	unsigned short deltaNanoseconds;
+	size.add(deltaNanoseconds);
+      }
+
+      return size.get() + ArrayOf<T>::getStorageSize();
+    }
+
+    template<typename T>
+    void WaveformOf<T>::toStream(std::iostream& stream) const {
       unsigned long long int nanoseconds = t0_.time_of_day().total_nanoseconds();
       util::Stream::WriteValue(stream, nanoseconds);
 

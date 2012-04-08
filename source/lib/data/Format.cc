@@ -105,7 +105,6 @@ namespace blitzortung {
     }
 
     Waveform::AP Format::createWaveformFromStream(const gr::date& date, std::iostream& stream) const {
-
       switch (sampleType_) {
 
 	case Type::BYTE:

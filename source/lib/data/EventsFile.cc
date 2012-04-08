@@ -126,7 +126,6 @@ namespace blitzortung {
 	    logger_.debugStream() << "writeEvents()   position " << position << " delta " << (int(fstream_.tellg()) - position);
 	    position = fstream_.tellg();
 	  }
-
 	}
 
 	close();
