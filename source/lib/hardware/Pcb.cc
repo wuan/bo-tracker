@@ -98,7 +98,7 @@ namespace blitzortung {
 
       data::Waveform::AP waveform(new data::WaveformOf<signed char>(0, 0, gps_.getTime()));
 
-      std::string rawData("-");
+      std::string rawData("0 0 0 -");
       appendInfoString(rawData);
 
       data::Event::AP event(new data::MEvent(std::move(waveform), gps_.getInfo(), rawData));
