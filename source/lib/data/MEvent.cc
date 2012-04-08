@@ -1,3 +1,4 @@
+#include "data/Format.h"
 #include "data/MEvent.h"
 
 namespace blitzortung {

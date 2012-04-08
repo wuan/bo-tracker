@@ -4,6 +4,7 @@
 #include "util/String.h"
 #include "hardware/Pcb.h"
 #include "data/MEvent.h"
+#include "data/WaveformOf.h"
 #include "hardware/parsing/Ticks.h"
 
 
@@ -95,7 +96,7 @@ namespace blitzortung {
       if (logger_.isInfoEnabled())
 	logger_.infoStream() << "createKeepaliveSample()";
 
-      data::Waveform::AP waveform(new data::Waveform(gps_.getTime()));
+      data::Waveform::AP waveform(new data::WaveformOf<signed char>(0, 0, gps_.getTime()));
 
       std::string rawData("-");
       appendInfoString(rawData);

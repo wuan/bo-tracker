@@ -1,3 +1,4 @@
+#include "data/Format.h"
 #include "data/Waveform.h"
 #include "util/Stream.h"
 #include "util/Size.h"
@@ -22,6 +23,11 @@ namespace blitzortung {
 
       // gps data size + two times the size of an element (for x and y value)
       return size.get() + dataFormat.getDataSize();
+    }
+
+    std::ostream& operator <<(std::ostream& os, const bo::data::Waveform& wfm) {
+	os << "Waveform(" << wfm.getTime() << ", dt " << wfm.getTimeDelta() << ")";
+	return os;
     }
 
   }

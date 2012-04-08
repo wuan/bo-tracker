@@ -64,11 +64,8 @@ namespace blitzortung {
 	//! write object as binary data to stream
 	void toStream(std::iostream&) const;
 
-	//! update reference to data format
-	void updateFormatRef(const Format&);
-
 	//! get binary storage size of sample
-	unsigned int getSize() const;
+	unsigned int getStorageSize() const;
 
 	//! determine storage size of event in bytes
 	static unsigned int GetSize(const Format& dataFormat);

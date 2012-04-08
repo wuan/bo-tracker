@@ -12,21 +12,12 @@
 class FormatTest : public CPPUNIT_NS :: TestFixture
 {
   CPPUNIT_TEST_SUITE( FormatTest );
-  CPPUNIT_TEST( testIndex );
-  CPPUNIT_TEST( testOffset );
   CPPUNIT_TEST_SUITE_END();
 
   public:
   void setUp();
   void tearDown();
 
-  void doIndexTest(const bo::data::Format&& format);
-  void doOffsetTest(const bo::data::Format&& format);
-
-  //! tests
-
-  void testIndex();
-  void testOffset();
 };
 
 #endif

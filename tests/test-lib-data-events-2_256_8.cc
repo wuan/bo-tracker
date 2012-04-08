@@ -8,6 +8,6 @@ unsigned int Event_2_256_8_Test::getDataSize() const {
 }
 
 void Event_2_256_8_Test::setUp() {
-  dataFormat_ = bo::data::Format(8, 2, 256);
+  dataFormat_ = bo::data::Format(1, 2, 256);
 }
 

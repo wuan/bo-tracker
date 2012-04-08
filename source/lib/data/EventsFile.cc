@@ -1,4 +1,4 @@
-
+#include "data/Format.h"
 #include "data/EventsFile.h"
 #include "data/Event.h"
 #include "exception/Base.h"
@@ -88,8 +88,8 @@ namespace blitzortung {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "writeEvents() " << name_ << " append: " << append;
 
-	if (events.getDataFormat() != events.front().getWaveform().getArray().getFormat()) {
-	  std::cout << std::endl << "  " << events.getDataFormat() << " vs. " << events.front().getWaveform().getArray().getFormat() << std::endl;
+	if (events.getDataFormat() != events.front().getWaveform().getFormat()) {
+	  std::cout << std::endl << "  " << events.getDataFormat() << " vs. " << events.front().getWaveform().getFormat() << std::endl;
 	  throw exception::Base("data::EventsFile() writeEvents() events format mismatch");
 	}
 
@@ -113,8 +113,8 @@ namespace blitzortung {
 	open(std::ios::out | std::ios::binary | std::ios::app);
 
 	if (logger_.isDebugEnabled()) {
-	  logger_.debugStream() << "writeEvents() write " << events.size() << " events (" << events.front().getSize() << " bytes per event)";
-	  logger_.debugStream() << "writeEvents() wfm size " << events.getDataFormat() << " " << Waveform::GetSize(events.front().getWaveform().getArray().getFormat());
+	  logger_.debugStream() << "writeEvents() write " << events.size() << " events (" << events.front().getStorageSize() << " bytes per event)";
+	  logger_.debugStream() << "writeEvents() wfm size " << events.getDataFormat() << " " << events.front().getWaveform().getStorageSize();
 	  logger_.debugStream() << "writeEvents() format " << events.getDataFormat() << " " << &events.getDataFormat();
 	}
 
@@ -231,7 +231,7 @@ namespace blitzortung {
       logger_.debugStream() << "readInternal() events with format " << events->getDataFormat() << " " << &events->getDataFormat();
 
       for (auto event=events->begin(); event != events->end(); event++)
-	logger_.debugStream() << "  " << event->getWaveform().getArray().getFormat() << &event->getWaveform().getArray().getFormat();
+	logger_.debugStream() << "  " << event->getWaveform().getFormat() << &event->getWaveform().getFormat();
 
       return events;
     }

@@ -1,5 +1,6 @@
 #include <fstream>
 
+#include "data/Format.h"
 #include "data/EventsHeader.h"
 #include "data/Event.h"
 #include "exception/Base.h"
