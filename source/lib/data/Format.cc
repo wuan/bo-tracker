@@ -1,25 +1,24 @@
 #include "data/Format.h"
+#include "data/WaveformOf.h"
 #include "util/Stream.h"
 
 namespace blitzortung {
   namespace data {
 
-    Format::Format(unsigned char numberOfBits, unsigned char numberOfChannels, unsigned short numberOfSamples) :
-      numberOfBits_(numberOfBits),
+    Format::Format(unsigned char numberOfBytes, unsigned char numberOfChannels, unsigned short numberOfSamples) :
       numberOfChannels_(numberOfChannels),
       numberOfSamples_(numberOfSamples),
       logger_("data.Format")
     {
-      updateDataType();
+      updateSampleType(numberOfBytes);
     }
 
     Format::Format() :
-      numberOfBits_(0),
+      sampleType_(Type::BYTE),
       numberOfChannels_(0),
       numberOfSamples_(0),
       logger_("data.Format")
     {
-      updateDataType();
     }
 
     Format::Format(std::iostream& stream) :
@@ -31,22 +30,13 @@ namespace blitzortung {
     Format::~Format() = default;
 
     Format& Format::operator=(const Format& other) {
-      numberOfBits_ = other.numberOfBits_;
       numberOfChannels_ = other.numberOfChannels_;
       numberOfSamples_ = other.numberOfSamples_;
       sampleType_ = other.sampleType_;
       return *this;
     }
 
-    unsigned short Format::getNumberOfBitsPerSample() const {
-      return numberOfBits_;
-    }
-
-    int Format::getSampleZeroOffset() const {
-      return -(1 << (getNumberOfBitsPerSample() - 1));
-    }
-
-    unsigned short Format::getNumberOfChannels() const {
+    unsigned char Format::getNumberOfChannels() const {
       return numberOfChannels_;
     }
 
@@ -54,10 +44,11 @@ namespace blitzortung {
       return numberOfSamples_;
     }
 
-    void Format::updateDataType() {      
-      if (numberOfBits_ <= 8) {
+    void Format::updateSampleType(unsigned char numberOfBytesPerSample) {      
+
+      if (numberOfBytesPerSample == 1) {
 	sampleType_ = Type::BYTE;
-      } else if (numberOfBits_ <= 16) {
+      } else if (numberOfBytesPerSample <= 16) {
 	sampleType_ = Type::SHORT;
       } else {
 	sampleType_ = Type::INT;
@@ -68,16 +59,12 @@ namespace blitzortung {
       return sampleType_;
     }
 
-    unsigned short Format::getNumberOfBytesPerSample() const {
-      return (unsigned short)(sampleType_);
+    unsigned char Format::getNumberOfBytesPerSample() const {
+      return (unsigned char)(sampleType_);
     }
 
     unsigned int Format::getDataSize() const {
       return getNumberOfBytesPerSample() * numberOfChannels_ * numberOfSamples_;
-    }
-
-    unsigned int Format::getIndex(unsigned short index, unsigned char channel) const {
-      return index * numberOfChannels_ + channel;
     }
 
     bool Format::isValid() const {
@@ -87,29 +74,48 @@ namespace blitzortung {
     void Format::toStream(std::iostream& stream) const {
       util::Stream::WriteValue(stream, numberOfSamples_);
       util::Stream::WriteValue(stream, numberOfChannels_);
-      util::Stream::WriteValue(stream, numberOfBits_);
+      util::Stream::WriteValue(stream, (unsigned char)sampleType_);
     }
 
     void Format::fromStream(std::iostream& stream) {
       util::Stream::ReadValue(stream, numberOfSamples_);
       util::Stream::ReadValue(stream, numberOfChannels_);
-      util::Stream::ReadValue(stream, numberOfBits_);
+      {
+	unsigned char numberOfBytesPerSample;
+	util::Stream::ReadValue(stream, numberOfBytesPerSample);
+	updateSampleType(numberOfBytesPerSample);
+      }
+    }
 
-      updateDataType();
+    Waveform::AP Format::createWaveform(const pt::ptime& t0, const pt::time_duration& dt) const {
+      switch (sampleType_) {
+
+	case Type::BYTE:
+	  return Waveform::AP(new WaveformOf<signed char>(numberOfChannels_, numberOfSamples_, t0, dt));
+
+	case Type::SHORT:
+	  return Waveform::AP(new WaveformOf<signed short>(numberOfChannels_, numberOfSamples_, t0, dt));
+
+	case Type::INT:
+	  return Waveform::AP(new WaveformOf<signed int>(numberOfChannels_, numberOfSamples_, t0, dt));
+
+	default:
+	  throw new exception::Base("unknown sample type");
+      }
     }
 
     Waveform::AP Format::createWaveformFromStream(const gr::date& date, std::iostream& stream) const {
 
       switch (sampleType_) {
 
-	case SampleType::BYTE:
-	  return new WaveformOf<signed char>(numberOfChannels_, numberOfSamples_, date, stream);
+	case Type::BYTE:
+	  return Waveform::AP(new WaveformOf<signed char>(numberOfChannels_, numberOfSamples_, date, stream));
 
-	case SHORT:
-	  return new WaveformOf<signed short>(numberOfChannels_, numberOfSamples_, date, stream);
+	case Type::SHORT:
+	  return Waveform::AP(new WaveformOf<signed short>(numberOfChannels_, numberOfSamples_, date, stream));
 
-	case INT:
-	  return new WaveformOf<signed int>(numberOfChannels_, numberOfSamples_, date, stream);
+	case Type::INT:
+	  return Waveform::AP(new WaveformOf<signed int>(numberOfChannels_, numberOfSamples_, date, stream));
 
 	default:
 	  throw new exception::Base("unknown sample type");
@@ -118,7 +124,7 @@ namespace blitzortung {
 
 
     bool Format::operator==(const Format& other) const {
-      return numberOfBits_ == other.numberOfBits_ &&
+      return sampleType_ == other.sampleType_ &&
 	numberOfSamples_ == other.numberOfSamples_ &&
 	numberOfChannels_ == other.numberOfChannels_;
     }
@@ -129,9 +135,9 @@ namespace blitzortung {
 
     std::ostream& operator<<(std::ostream& os, const Format& format) {
       os << "(";
-      os << int(format.getNumberOfBitsPerSample()) << " bit, ";
+      os << int(format.getNumberOfBytesPerSample()) << " byte(s), ";
       os << int(format.getNumberOfChannels()) << " ch, ";
-      os << format.getNumberOfSamples() << " samples = ";
+      os << format.getNumberOfSamples() << " sample(s) = ";
       os << format.getDataSize() << " bytes)";
 
       return os;

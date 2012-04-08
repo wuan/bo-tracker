@@ -1,3 +1,4 @@
+#include "data/Format.h"
 #include "hardware/parsing/Samples.h"
 #include "exception/Base.h"
 
@@ -26,7 +27,7 @@ namespace blitzortung {
 		  setWaveform(FORMAT_8_2_1, eventtime, pt::nanoseconds(0), fields[2] + fields[3]);
 		} else if (fields[2].size() == 3 && fields[3].size() ==3) {
 		  // BLSIG type 2
-		  setWaveform(FORMAT_12_2_1, eventtime, pt::nanoseconds(0), std::move(fields[2] + fields[3]));
+		  setWaveform(FORMAT_12_2_1, eventtime, pt::nanoseconds(0), std::move(fields[2] + fields[3]), 12);
 		} else {
 		  logger_.warnStream() << "Samples() BLSIG field size mismatch 2: '" << fields[2] << "', 3: '" << fields[3] << "'";
 		}
@@ -80,19 +81,26 @@ namespace blitzortung {
 	}
       }
 
-      void Samples::setWaveform(const data::Format& format, const pt::ptime& eventtime, const pt::time_duration&& sampleDt, const std::string&& rawData) {
-	rawData_ = rawData;
+      void Samples::setWaveform(const data::Format& format, const pt::ptime& eventtime, const pt::time_duration&& sampleDt, const std::string&& rawData, unsigned char numberOfBitsPerSample) {
+	if (numberOfBitsPerSample == 0) {
+	  numberOfBitsPerSample = format.getNumberOfBytesPerSample() * 8;
+	}
+
+	std::ostringstream oss;
+	oss << (int)format.getNumberOfChannels() << " " << format.getNumberOfSamples() << " "  << (int)numberOfBitsPerSample <<  " " << rawData;
+	rawData_ = oss.str();
 
 	// parse lighning event information
 	if (format.isValid()) {
 	  int numberOfEvents = rawData.size() >> 2;
 
-	  data::Array::AP array(new data::Array(format));
 
-	  unsigned short hexCharsPerSample = (format.getNumberOfBitsPerSample() + 3 ) / 4;
+	  waveform_ = format.createWaveform(eventtime, sampleDt);
+
+	  unsigned short hexCharsPerSample = (numberOfBitsPerSample + 3 ) / 4;
 	  unsigned short numberOfChannels = format.getNumberOfChannels();
 
-	  int offset = format.getSampleZeroOffset();
+	  int offset =  -(1 << (numberOfBitsPerSample - 1));
 
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "#ch " << numberOfChannels << ", #chars/sample " << hexCharsPerSample << " zeroOffset " << offset;
@@ -101,12 +109,11 @@ namespace blitzortung {
 	  for (int sample=0; sample < numberOfEvents; sample++) {
 	    for (int channel=0; channel < numberOfChannels; channel++) {
 	      std::string hexString = rawData_.substr(index, hexCharsPerSample);
-	      array->set(int(offset + parseHex(hexString)), sample, channel);
+	      waveform_->set(int(offset + parseHex(hexString)), sample, channel);
 	      index += hexCharsPerSample;
 	    }
 	  }
 
-	  waveform_ = data::Waveform::AP(new data::Waveform(std::move(array), eventtime, sampleDt));
 	  valid_ = true;
 	} else {
 	  logger_.warnStream() << "invalid format " << format;
@@ -121,11 +128,11 @@ namespace blitzortung {
 	return rawData_;
       }
 
-      const data::Format Samples::FORMAT_8_2_1(8,2,1);
-      const data::Format Samples::FORMAT_12_2_1(12,2,1);
-      const data::Format Samples::FORMAT_8_2_64(8,2,64);
-      const data::Format Samples::FORMAT_8_1_128(8,1,128);
-      const data::Format Samples::FORMAT_8_2_256(8,2,256);
+      const data::Format Samples::FORMAT_8_2_1(1,2,1);
+      const data::Format Samples::FORMAT_12_2_1(2,2,1);
+      const data::Format Samples::FORMAT_8_2_64(1,2,64);
+      const data::Format Samples::FORMAT_8_1_128(1,1,128);
+      const data::Format Samples::FORMAT_8_2_256(1,2,256);
     }
   }
 }

@@ -1,3 +1,4 @@
+#include "data/Format.h"
 #include "data/Events.h"
 #include "data/EventsFile.h"
 
@@ -53,10 +54,8 @@ namespace blitzortung {
 
     void Events::setOrCheckProperties(Event& event) {
       const gr::date& date = event.getWaveform().getTime().date();
-      Format dataFormat;
-      if (!event.getWaveform().isEmpty()) {
-	dataFormat = event.getWaveform().getArray().getFormat();
-      }
+      const Waveform& wfm = event.getWaveform();
+      Format dataFormat(wfm.getElementSize(), wfm.getNumberOfChannels(), wfm.getNumberOfSamples());
 
       if (size() == 0) {
         date_ = date;
@@ -66,10 +65,6 @@ namespace blitzortung {
 	  throw exception::Base("data::Events::setOrCheckProperties() date mismatch");
 	if (dataFormat_ != dataFormat)
 	  throw exception::Base("data::Events::setOrCheckProperties() date mismatch");
-      }
-
-      if (!event.getWaveform().isEmpty()) {
-        event.updateFormatRef(dataFormat_);
       }
     }
 
@@ -185,7 +180,11 @@ namespace blitzortung {
       }
 
       EventsFile eventsFile(fileName);
-      replace(*(eventsFile.read(startTime, endTime)));
+
+      logger_.debugStream() << "readFromFile() read";
+      Events::AP events = eventsFile.read(startTime, endTime);
+      logger_.debugStream() << "readFromFile() replace";
+      replace(*events);
     }
 
     void Events::readFromFile(const std::string& fileName, const int startIndex, const int endIndex) {

@@ -109,7 +109,7 @@ void HardwareParsingTest::samplesParsingTest(const std::string&& input, bo::hard
 
   CPPUNIT_ASSERT_EQUAL(counterValue, samplesParser.getCounterValue());
   bo::data::Waveform::AP waveform = samplesParser.getWaveform();
-  CPPUNIT_ASSERT_EQUAL(format, waveform->getArray().getFormat());
+  CPPUNIT_ASSERT_EQUAL(format, waveform->getFormat());
   CPPUNIT_ASSERT_EQUAL(rawData, samplesParser.getRawData());
 }
 

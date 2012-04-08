@@ -33,11 +33,14 @@ namespace blitzortung {
 	  //! string containing the raw data transmitted from the hardware
 	  std::string rawData_;
 
+	  //! bits per data sample
+	  unsigned char bitsPerSample_;
+
 	  //! logger for this class
 	  mutable Logger logger_;
 
 	  //! set parsed waveform
-	  void setWaveform(const data::Format&, const pt::ptime&, const pt::time_duration&&, const std::string&&);
+	  void setWaveform(const data::Format&, const pt::ptime&, const pt::time_duration&&, const std::string&&, unsigned char bitsPerSample=0);
 
 	public:
 

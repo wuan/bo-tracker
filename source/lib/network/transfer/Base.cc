@@ -41,16 +41,14 @@ namespace blitzortung {
 	if (wfm.isEmpty()) {
 	  oss << " 0 0 0";
 	} else {
-	  oss << " " << wfm.getArray().getNumberOfChannels() << " " << wfm.getArray().getNumberOfSamples() << " " << wfm.getArray().getNumberOfBitsPerSample();
+	  oss << " " << static_cast<const data::MEvent&>(event).getRawData();
 	}
-	oss << " " << static_cast<const data::MEvent&>(event).getRawData();
 
 	// restore original locale
 	oss.imbue(oldLocale);
 
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "eventToString() '" << oss.str() << "'";
-
 
 	return oss.str();
       }

@@ -186,7 +186,7 @@ int main(int argc, char **argv) {
     std::cout << header.getNumberOfEvents() << " events, ";
     std::cout << format.getNumberOfSamples() << " samples, ";
     std::cout << format.getNumberOfChannels() << " channels, ";
-    std::cout << format.getNumberOfBitsPerSample() << " bits";
+    std::cout << format.getNumberOfBytesPerSample()*8 << " bits";
     std::cout << std::endl;
 
     return 0;

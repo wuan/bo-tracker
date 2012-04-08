@@ -3,7 +3,7 @@
 
 #include "namespaces.h"
 #include "Logger.h"
-#include "WaveformOf.h"
+#include "Waveform.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
@@ -15,12 +15,12 @@ namespace blitzortung {
       public:
 
 	// enum for the storage type of single data values
-	enum class Type : unsigned short {BYTE=1, SHORT=2, INT=4};
+	enum class Type : unsigned short {BYTE=sizeof(char), SHORT=sizeof(short), INT=sizeof(int)};
 
       private:
 
-	//! number of bits per sample
-	unsigned char numberOfBits_;
+	//! storage type of samples
+	Type sampleType_;
 
 	//! number of channels
 	unsigned char numberOfChannels_;
@@ -28,14 +28,11 @@ namespace blitzortung {
 	//! number of samples per channel
 	unsigned short numberOfSamples_;
 
-	//! intermediate value of bytes per sample value
-	Type sampleType_;
-
 	//! logger for this class
 	mutable Logger logger_;
 
 	//! update the data storage type according to the number of bits per sample value
-	void updateDataType();
+	void updateSampleType(unsigned char numberOfBytes);
 
       public:
 
@@ -45,7 +42,7 @@ namespace blitzortung {
 	\param numberOfChannels number of channels per measurement
 	\param numberOfSamples number of measurements per waveform
 	*/
-	Format(unsigned char numberOfBits, unsigned char numberOfChannels, unsigned short numberOfSamples);
+	Format(unsigned char sampleStorageSize, unsigned char numberOfChannels, unsigned short numberOfSamples);
 
 	//! create an invalid format
 	Format();
@@ -58,29 +55,20 @@ namespace blitzortung {
 
 	Format& operator=(const Format& other);
 
-	//! returns the number of bits per sample
-	unsigned short getNumberOfBitsPerSample() const;
-
-	//! returns the number of bits per sample
-	int getSampleZeroOffset() const;
-
 	//! returns the number of channels per measurement
-	unsigned short getNumberOfChannels() const;
+	unsigned char getNumberOfChannels() const;
 
 	//! returns the number of measurements per waveform
 	unsigned short getNumberOfSamples() const;
 
 	//! returns the number of bytes per single sample
-	unsigned short getNumberOfBytesPerSample() const;
+	unsigned char getNumberOfBytesPerSample() const;
 
 	//! get data type of format
 	Type getDataType() const;
 
 	//! returns the total size of the data according to the format
 	unsigned int getDataSize() const;
-
-	//! returns the index position of the data value
-	unsigned int getIndex(unsigned short index, unsigned char channel) const;
 
     	//! returns true if format is valid
 	bool isValid() const;
@@ -92,6 +80,9 @@ namespace blitzortung {
 	void fromStream(std::iostream&);
 
 	//! create waveform from stream
+	Waveform::AP createWaveform(const pt::ptime&, const pt::time_duration&) const;
+
+	//! create waveform from stream
 	Waveform::AP createWaveformFromStream(const gr::date&, std::iostream&) const;
 
 	//! comparison operator for data format
@@ -99,7 +90,6 @@ namespace blitzortung {
 
 	//! comparison operator for data format
 	bool operator!=(const Format& other) const;
-
     };
 
     //! stream output operator

@@ -1,3 +1,4 @@
+#include "data/Format.h"
 #include "data/WaveformOf.h"
 #include "util/Stream.h"
 #include "util/Size.h"
@@ -6,7 +7,7 @@ namespace blitzortung {
   namespace data {
 
     template<typename T>
-    Waveform<T>::Waveform(unsigned char numberOfChannels, unsigned short numberOfSamples, const pt::ptime& t0, const pt::time_duration& dt) :
+    WaveformOf<T>::WaveformOf(unsigned char numberOfChannels, unsigned short numberOfSamples, pt::ptime const& t0, pt::time_duration const& dt) :
       ArrayOf<T>(numberOfChannels, numberOfSamples),
       t0_(t0),
       dt_(dt)
@@ -14,7 +15,7 @@ namespace blitzortung {
     }
 
     template<typename T>
-    Waveform<T>::Waveform(unsigned char numberOfChannels, unsigned short numberOfSamples, const gr::date& date, std::iostream& stream) :
+    WaveformOf<T>::WaveformOf(unsigned char numberOfChannels, unsigned short numberOfSamples, const gr::date& date, std::iostream& stream) :
       ArrayOf<T>(numberOfChannels, numberOfSamples)
     {
 
@@ -39,27 +40,27 @@ namespace blitzortung {
     }
 
     template<typename T>
-    Waveform<T>::~Waveform()
+    WaveformOf<T>::~WaveformOf()
     {
     }
 
     template<typename T>
-    const pt::ptime& Waveform<T>::getTime() const {
+    const pt::ptime& WaveformOf<T>::getTime() const {
       return t0_;
     }
 
     template<typename T>
-    pt::ptime Waveform<T>::getTime(unsigned int index) const {
+    pt::ptime WaveformOf<T>::getTime(unsigned int index) const {
       return t0_ + dt_ * index;
     }
 
     template<typename T>
-    const pt::time_duration& Waveform<T>::getTimeDelta() const {
+    const pt::time_duration& WaveformOf<T>::getTimeDelta() const {
       return dt_;
     }
 
     template<typename T>
-    void Waveform<T>::toStream(std::iostream& stream) {
+    void WaveformOf<T>::toStream(std::iostream& stream) {
       unsigned long long int nanoseconds = t0_.time_of_day().total_nanoseconds();
       util::Stream::WriteValue(stream, nanoseconds);
 
@@ -68,11 +69,11 @@ namespace blitzortung {
 	util::Stream::WriteValue(stream, deltaNanoseconds);
       }
 
-      Array::toStream(stream);
+      ArrayOf<T>::toStream(stream);
     }
 
     template<typename T>
-    unsigned int Waveform<T>::GetSize(const data::Format& dataFormat) {
+    unsigned int WaveformOf<T>::GetSize(const data::Format& dataFormat) {
       util::Size size;
 
       long long int nanoseconds;
@@ -88,11 +89,21 @@ namespace blitzortung {
     }
 
     template<typename T>
-    std::ostream& operator <<(std::ostream& os, const bo::data::Waveform<T>& wfm) {
+    std::ostream& operator <<(std::ostream& os, const bo::data::WaveformOf<T>& wfm) {
       os << dynamic_cast<ArrayOf<T>>(wfm);
 
       return os;
     }
+
+    //! explicit instatiation of functions to be linked afterwards
+    template class WaveformOf<signed char>;
+    template class WaveformOf<unsigned char>;
+    template class WaveformOf<signed short>;
+    template class WaveformOf<unsigned short>;
+    template class WaveformOf<signed int>;
+    template class WaveformOf<unsigned int>;
+    template class WaveformOf<float>;
+    template class WaveformOf<double>;
 
   }
 }

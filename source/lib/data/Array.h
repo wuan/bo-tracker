@@ -2,11 +2,12 @@
 #define BLITZORTUNG_DATA_ARRAY_H_
 
 #include "namespaces.h"
-#include "data/Format.h"
 #include "exception/Base.h"
 
 namespace blitzortung {
   namespace data {
+
+    class Format;
 
     //! class for waveform arrays
     class Array : boost::noncopyable {
@@ -15,15 +16,16 @@ namespace blitzortung {
 
 	typedef std::unique_ptr<Array> AP;
 
-      protected:
-
-	//! returns the size of a single data element
-	virtual unsigned char getElementSize() const = 0;
-
       public:
 
 	//! delete waveform object
 	virtual ~Array();
+
+	//! returns the data format of the current array
+	virtual Format&& getFormat() const = 0;
+
+	//! returns the size of a single data element
+	virtual unsigned char getElementSize() const = 0;
 
 	//! returns the number of measurements per waveform
 	virtual unsigned int getNumberOfSamples() const = 0;
@@ -51,6 +53,9 @@ namespace blitzortung {
 
 	//! returns index of maximum value
 	unsigned int getMaxIndex() const;
+
+	//! returns the storage size of the array in bytes
+	virtual unsigned int getStorageSize() const = 0;
 
 	//! write binary object data to stream
 	virtual void toStream(std::iostream&) const = 0;

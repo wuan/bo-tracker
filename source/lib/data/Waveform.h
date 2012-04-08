@@ -37,6 +37,7 @@ namespace blitzortung {
 	static unsigned int GetSize(const data::Format& dataFormat);
     };
 
+    std::ostream& operator <<(std::ostream& os, const bo::data::Waveform& wfm);
   }
 }
 #endif

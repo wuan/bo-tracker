@@ -49,7 +49,7 @@ namespace blitzortung {
 	\param date of the stream 
 	\param elements number of elements to read
 	*/
-	WaveformOf(unsigned char numberOfChannels, unsigned short numberOfSamples, const gr::date date&, std::iostream& stream);
+	WaveformOf(unsigned char numberOfChannels, unsigned short numberOfSamples, const gr::date& date, std::iostream& stream);
 
 	//! delete waveform object
 	virtual ~WaveformOf();

@@ -36,6 +36,9 @@ namespace blitzortung {
 	//! delete waveform object
 	virtual ~ArrayOf();
 
+	//! returns the data format of the current array
+	Format&& getFormat() const;
+
 	//! returns the number of measurements per waveform
 	unsigned int getNumberOfSamples() const;
 
@@ -56,6 +59,9 @@ namespace blitzortung {
 
 	//! return the value of a sample in a given channel
 	float getFloat(unsigned int sample, unsigned short channel=0) const;
+
+	//! returns the storage size of the array in bytes
+	virtual unsigned int getStorageSize() const;
 
 	//! write binary object data to stream
 	void toStream(std::iostream&) const;

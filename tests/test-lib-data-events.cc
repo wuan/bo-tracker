@@ -12,22 +12,20 @@ bo::data::Event::AP EventTest::createEvent(const pt::ptime& time) {
 
 bo::data::Event::AP EventTest::createEventWithFormat(const bo::data::Format& dataFormat, const pt::ptime& time) {
 
-  bo::data::Array::AP array(new bo::data::Array(dataFormat));
-
-  int valueOffset[] = {100, -50};
-
-  for (unsigned int sample=0; sample < dataFormat.getNumberOfSamples(); sample++) {
-    for (unsigned int channel=0; channel < dataFormat.getNumberOfChannels(); channel++) {
-      array->set(valueOffset[channel] + sample, sample, channel);
-    }
-  }
-
   pt::time_duration dt = pt::nanoseconds(0);
 
   if (dataFormat.getNumberOfSamples() > 1)
     dt = pt::nanoseconds(3125);
 
-  bo::data::Waveform::AP wfm(new bo::data::Waveform(std::move(array), time + pt::nanoseconds(3125) * 10, dt));
+  bo::data::Waveform::AP wfm = dataFormat.createWaveform(time + pt::nanoseconds(3125) * 10, dt);
+
+  int valueOffset[] = {100, -50};
+
+  for (unsigned int sample=0; sample < dataFormat.getNumberOfSamples(); sample++) {
+    for (unsigned int channel=0; channel < dataFormat.getNumberOfChannels(); channel++) {
+     wfm->set((signed int)(valueOffset[channel] + sample), sample, channel);
+    }
+  }
 
   return bo::data::Event::AP(new bo::data::MEvent(std::move(wfm), bo::data::GpsInfo::AP(new bo::data::GpsInfo()), "n/a"));
 }
@@ -160,7 +158,7 @@ void EventTest::testSize() {
 
   event->toStream(ss);
 
-  CPPUNIT_ASSERT_EQUAL(dataSize, event->getSize());
+  CPPUNIT_ASSERT_EQUAL(dataSize, event->getStorageSize());
 
   CPPUNIT_ASSERT_EQUAL(dataSize, ss.str().size());
 }
