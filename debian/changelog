@@ -1,5 +1,6 @@
-blitzortung-tracker (1.0.2SNAPSHOT201203041202) unstable; urgency=low
+blitzortung-tracker (1.0.2SNAPSHOT201204082322) unstable; urgency=low
 
+  * refactored data containers
   * cleanup configuration files
   * use debhelper instead of cdbs for package building
 

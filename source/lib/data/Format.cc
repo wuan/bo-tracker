@@ -48,10 +48,17 @@ namespace blitzortung {
 
       if (numberOfBytesPerSample == 1) {
 	sampleType_ = Type::BYTE;
-      } else if (numberOfBytesPerSample <= 16) {
+      } else if (numberOfBytesPerSample == 2) {
 	sampleType_ = Type::SHORT;
-      } else {
+      } else if (numberOfBytesPerSample == 4) {
 	sampleType_ = Type::INT;
+      } else {
+	// handle older format with number of bits per sample
+	if (numberOfBytesPerSample > 8) {
+	  sampleType_ = Type::SHORT;
+	} else {
+	  sampleType_ = Type::BYTE;
+	}
       }
     }
 
