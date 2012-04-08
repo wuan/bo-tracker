@@ -71,12 +71,12 @@ namespace blitzortung {
 
     template<typename T>
     void ArrayOf<T>::toStream(std::iostream& stream) const {
-      stream.write((char*)&data_, getStorageSize());
+      stream.write((char*)&data_[0], getStorageSize());
     }
 
     template<typename T>
     void ArrayOf<T>::fromStream(std::iostream& stream) {
-      stream.read((char*)&data_, getStorageSize());
+      stream.read((char*)&data_[0], getStorageSize());
     }
 
     template<typename T>

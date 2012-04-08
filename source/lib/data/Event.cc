@@ -15,8 +15,7 @@ namespace blitzortung {
       gpsInfo_ = GpsInfo::AP(new GpsInfo(stream));
     }
 
-    Event::~Event() {
-    }
+    Event::~Event() = default;
 
     const Waveform& Event::getWaveform() const {
       return *waveform_;

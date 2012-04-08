@@ -107,7 +107,7 @@ namespace blitzortung {
       dataFormat_ = Format(fstream);
 
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "read() data format: " << dataFormat_;
+	logger_.debugStream() << "read() data format: " << dataFormat_ << ", event size: " << getEventSize();
 
       // check if read position corresponds to header size
       assert(fstream.tellg() == getSize());

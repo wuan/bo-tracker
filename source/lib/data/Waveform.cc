@@ -6,9 +6,7 @@
 namespace blitzortung {
   namespace data {
 
-    Waveform::~Waveform()
-    {
-    }
+    Waveform::~Waveform() = default;
 
     unsigned int Waveform::GetSize(const data::Format& dataFormat) {
       util::Size size;
