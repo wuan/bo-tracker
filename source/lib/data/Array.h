@@ -22,7 +22,7 @@ namespace blitzortung {
 	virtual ~Array();
 
 	//! returns the data format of the current array
-	virtual Format&& getFormat() const = 0;
+	virtual Format getFormat() const = 0;
 
 	//! returns the size of a single data element
 	virtual unsigned char getElementSize() const = 0;

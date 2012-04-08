@@ -37,7 +37,7 @@ namespace blitzortung {
 	virtual ~ArrayOf();
 
 	//! returns the data format of the current array
-	Format&& getFormat() const;
+	Format getFormat() const;
 
 	//! returns the number of measurements per waveform
 	unsigned int getNumberOfSamples() const;
