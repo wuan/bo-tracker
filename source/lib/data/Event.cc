@@ -85,7 +85,7 @@ namespace blitzortung {
       os.precision(2);
       double squareSum = 0.0;
       for (unsigned int channel = 0; channel < wfm.getNumberOfChannels(); channel++) {
-	double value = wfm.get(maxIndex, channel);
+	double value = wfm.getFloat(maxIndex, channel);
 	os << " " << value;
 	squareSum += value * value;
       }

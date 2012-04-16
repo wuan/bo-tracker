@@ -37,13 +37,13 @@ namespace blitzortung {
 	virtual bool isEmpty() const = 0;
 
 	//! set a particular sample in a given channel to a value
-	virtual void set(int value, unsigned int sample, unsigned short channel=0) = 0;
+	virtual void setInt(int value, unsigned int sample, unsigned short channel=0) = 0;
 
 	//! set a particular sample in a given channel to a value
-	virtual void set(float value, unsigned int sample, unsigned short channel=0) = 0;
+	virtual void setFloat(float value, unsigned int sample, unsigned short channel=0) = 0;
 
 	//! return the value of a sample in a given channel
-	virtual int get(unsigned int sample, unsigned short channel=0) const = 0;
+	virtual int getInt(unsigned int sample, unsigned short channel=0) const = 0;
 
 	//! return the value of a sample in a given channel
 	virtual float getFloat(unsigned int sample, unsigned short channel=0) const = 0;

@@ -49,13 +49,19 @@ namespace blitzortung {
 	bool isEmpty() const;
 
 	//! set a particular sample in a given channel to a value
-	void set(int value, unsigned int sample, unsigned short channel=0);
+	void set(T value, unsigned int sample, unsigned short channel=0);
 
 	//! set a particular sample in a given channel to a value
-	void set(float value, unsigned int sample, unsigned short channel=0);
+	void setInt(int value, unsigned int sample, unsigned short channel=0);
+	
+	//! set a particular sample in a given channel to a value
+	void setFloat(float value, unsigned int sample, unsigned short channel=0);
 
 	//! return the value of a sample in a given channel
-	int get(unsigned int sample, unsigned short channel=0) const;
+	T get(unsigned int sample, unsigned short channel=0) const;
+
+	//! return the value of a sample in a given channel
+	int getInt(unsigned int sample, unsigned short channel=0) const;
 
 	//! return the value of a sample in a given channel
 	float getFloat(unsigned int sample, unsigned short channel=0) const;
