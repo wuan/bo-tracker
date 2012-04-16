@@ -50,23 +50,33 @@ namespace blitzortung {
     }
 
     template<typename T>
-    int ArrayOf<T>::get(unsigned int sample, unsigned short channel) const {
+    T ArrayOf<T>::get(unsigned int sample, unsigned short channel) const {
       return data_[sample * numberOfChannels_ + channel];
+    }
+
+    template<typename T>
+    int ArrayOf<T>::getInt(unsigned int sample, unsigned short channel) const {
+      return (int)get(sample, channel);
     }
 
     template<typename T>
     float ArrayOf<T>::getFloat(unsigned int sample, unsigned short channel) const {
-      return data_[sample * numberOfChannels_ + channel];
+      return (float)get(sample, channel);
     }
 
     template<typename T>
-    void ArrayOf<T>::set(int value, unsigned int sample, unsigned short channel) {
+    void ArrayOf<T>::set(T value, unsigned int sample, unsigned short channel) {
       data_[sample * numberOfChannels_ + channel] = value;
     }
 
     template<typename T>
-    void ArrayOf<T>::set(float value, unsigned int sample, unsigned short channel) {
-      data_[sample * numberOfChannels_ + channel] = value;
+    void ArrayOf<T>::setInt(int value, unsigned int sample, unsigned short channel) {
+      set(value, sample, channel);
+    }
+
+    template<typename T>
+    void ArrayOf<T>::setFloat(float value, unsigned int sample, unsigned short channel) {
+      set(value, sample, channel);
     }
 
     template<typename T>

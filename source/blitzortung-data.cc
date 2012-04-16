@@ -96,7 +96,7 @@ void printAllSamplesOfEvent(const bo::data::Event& event) {
     std::cout << waveform.getTime(sample) << " " << timeDeltaNanoseconds * sample;
     double sum = 0.0;
     for (unsigned int channel = 0; channel < numberOfChannels; channel++) {
-      double value = waveform.get(sample, channel);
+      double value = waveform.getFloat(sample, channel);
       sum += value * value;
       std::cout << " " << value;
     }

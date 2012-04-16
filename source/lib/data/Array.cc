@@ -17,7 +17,7 @@ namespace blitzortung {
 
 	return sqrt(sum);
       } else {
-	return get(index, 0);
+	return getFloat(index, 0);
       }
     }
 

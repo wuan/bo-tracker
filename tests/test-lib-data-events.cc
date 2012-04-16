@@ -23,7 +23,7 @@ bo::data::Event::AP EventTest::createEventWithFormat(const bo::data::Format& dat
 
   for (unsigned int sample=0; sample < dataFormat.getNumberOfSamples(); sample++) {
     for (unsigned int channel=0; channel < dataFormat.getNumberOfChannels(); channel++) {
-     wfm->set((signed int)(valueOffset[channel] + sample), sample, channel);
+     wfm->setInt((signed int)(valueOffset[channel] + sample), sample, channel);
     }
   }
 
