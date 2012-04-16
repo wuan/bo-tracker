@@ -108,7 +108,7 @@ namespace blitzortung {
 	  int index = 0;
 	  for (int sample=0; sample < numberOfEvents; sample++) {
 	    for (int channel=0; channel < numberOfChannels; channel++) {
-	      std::string hexString = rawData_.substr(index, hexCharsPerSample);
+	      std::string hexString = rawData.substr(index, hexCharsPerSample);
 	      waveform_->setInt(int(offset + parseHex(hexString)), sample, channel);
 	      index += hexCharsPerSample;
 	    }
