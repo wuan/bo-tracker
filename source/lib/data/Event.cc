@@ -49,7 +49,7 @@ namespace blitzortung {
       gpsInfo_->toStream(stream);
     }
 
-    //! get binary storage size of sample
+    //! get binary storage size of event
     unsigned int Event::getStorageSize() const {
       unsigned int gpsSize = GpsInfo::GetSize();
 
@@ -58,7 +58,7 @@ namespace blitzortung {
       return gpsSize + waveformSize;
     }
 
-    //! get binary storage size of sample
+    //! get binary storage size of event
     unsigned int Event::GetSize(const Format& dataFormat) {
       unsigned int gpsSize = GpsInfo::GetSize();
 
@@ -67,33 +67,59 @@ namespace blitzortung {
       return gpsSize + waveformSize;
     }
 
-    std::ostream& operator <<(std::ostream& os, const bo::data::Event &sample) {
-      const data::Waveform& wfm = sample.getWaveform();
-      const data::GpsInfo& gpsInfo = sample.getGpsInfo();
-
+    std::string Event::getTimestampAsString(unsigned int index) const {
       pt::time_facet *timefacet = new pt::time_facet();
       timefacet->format("%Y-%m-%d %H:%M:%S.%f");
-      std::locale oldLocale = os.imbue(std::locale(std::locale::classic(), timefacet));
+
+      std::ostringstream oss;
+      std::locale oldLocale = oss.imbue(std::locale(std::locale::classic(), timefacet));
+
+      oss << waveform_->getTime(index);
+
+      oss.imbue(oldLocale);
+
+      return oss.str();
+    }
+
+    json_object* Event::asJson() const {
+      json_object* jsonArray = json_object_new_array();
+
+      pt::time_facet *timefacet = new pt::time_facet();
+      timefacet->format("%Y-%m-%d %H:%M:%S");
+
+      std::ostringstream oss;
+      std::locale oldLocale = oss.imbue(std::locale(std::locale::classic(), timefacet));
+
+      oss << waveform_->getTime(0);
+
+      json_object_array_add(jsonArray, json_object_new_string(oss.str().c_str()));
+
+      json_object_array_add(jsonArray, json_object_new_int(waveform_->getTime(0).time_of_day().fractional_seconds()));
+      json_object_array_add(jsonArray, json_object_new_double(gpsInfo_->getLongitude()));
+      json_object_array_add(jsonArray, json_object_new_double(gpsInfo_->getLatitude()));
+      json_object_array_add(jsonArray, json_object_new_int(gpsInfo_->getAltitude()));
+      json_object_array_add(jsonArray, json_object_new_int(gpsInfo_->getNumberOfSatellites())); 
+      json_object_array_add(jsonArray, json_object_new_int(waveform_->getTimeDelta().total_nanoseconds()));
+      json_object_array_add(jsonArray, json_object_new_double(waveform_->getAmplitude(waveform_->getMaxIndex())));
+      json_object_array_add(jsonArray, json_object_new_int(waveform_->getMaxIndex()));
+
+      return jsonArray;
+    }
+
+    std::ostream& operator <<(std::ostream& os, const bo::data::Event &event) {
+      const data::Waveform& wfm = event.getWaveform();
+      const data::GpsInfo& gpsInfo = event.getGpsInfo();
 
       os.setf(std::ios::fixed);
       os.precision(4);
       unsigned int maxIndex = wfm.getMaxIndex();
       
-      os << wfm.getTime(maxIndex) << " " << gpsInfo;
+      os << event.getTimestampAsString(maxIndex) << " " << gpsInfo;
       os << " " << wfm.getTimeDelta().total_nanoseconds();
 
       os.precision(2);
-      double squareSum = 0.0;
-      for (unsigned int channel = 0; channel < wfm.getNumberOfChannels(); channel++) {
-	double value = wfm.getFloat(maxIndex, channel);
-	os << " " << value;
-	squareSum += value * value;
-      }
-      os << " " << sqrt(squareSum);
-      os << " " << maxIndex;
-
-      // restore original locale
-      os.imbue(oldLocale);
+      os << " " << wfm.getAmplitude(wfm.getMaxIndex());
+      os << " " << wfm.getMaxIndex();
 
       return os;
     }

@@ -1,5 +1,5 @@
 
 bin_SCRIPTS = \
-	blitzortung-status \
+	bo-tracker-status \
 	$(NULL)
 
