@@ -74,13 +74,12 @@ namespace blitzortung {
 
 	// check for correct file ID
 	fstream.read(tempId, 4);
-	tempId[4] = 0;
+	tempId[sizeof(tempId)-1] = 0;
 
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "read() ID: '" << tempId << "'";
 	
 	std::string fileId(tempId);
-	tempId[sizeof(tempId)-1] = 0;
 
 	if (std::string(tempId) != ID) {
 	  std::ostringstream oss;

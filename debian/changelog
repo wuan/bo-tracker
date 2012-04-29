@@ -1,9 +1,11 @@
-blitzortung-tracker (1.0.2SNAPSHOT201204162024) unstable; urgency=low
+blitzortung-tracker (1.0.2SNAPSHOT201204292238) unstable; urgency=low
 
   * refactored data containers
   * cleanup configuration files
   * use debhelper instead of cdbs for package building
   * added tests
+  * renamed binaries/scripts from blitzortung-* to bo-*
+  * added JSON output mode to bo-data
 
  -- Andreas Wuerl <blitzortung@tryb.de>  Sun, 19 Feb 2012 09:16:00 +0100
 

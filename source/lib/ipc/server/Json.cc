@@ -19,66 +19,66 @@ namespace blitzortung {
       }
 
       void Json::cmdGetInfo() {
-	    json_object* jsonHardware = json_object_new_object();
-	    json_object_object_add(jsonHardware, "firmware", json_object_new_string(hardware_.getFirmwareVersion().c_str()));
-	    json_object_object_add(jsonResponse_, "hardware", jsonHardware);
+	json_object* jsonHardware = json_object_new_object();
+	json_object_object_add(jsonHardware, "firmware", json_object_new_string(hardware_.getFirmwareVersion().c_str()));
+	json_object_object_add(jsonResponse_, "hardware", jsonHardware);
 
-	    const hardware::gps::Base& gps = hardware_.getGps();
-	    json_object* jsonGps = json_object_new_object();
+	const hardware::gps::Base& gps = hardware_.getGps();
+	json_object* jsonGps = json_object_new_object();
 
-	    logger_.debugStream() << "gps";
-	    try {
-	      json_object_object_add(jsonGps, "longitude", json_object_new_double(gps.getLocation().getLongitude()));
-	      json_object_object_add(jsonGps, "longitudeError", json_object_new_double(gps.getLocation().getLongitudeError()));
-	      json_object_object_add(jsonGps, "latitude", json_object_new_double(gps.getLocation().getLatitude()));
-	      json_object_object_add(jsonGps, "latitudeError", json_object_new_double(gps.getLocation().getLatitudeError()));
-	      json_object_object_add(jsonGps, "altitude", json_object_new_int(gps.getLocation().getAltitude()));
-	      json_object_object_add(jsonGps, "altitudeError", json_object_new_int(gps.getLocation().getAltitudeError()));
-	      pt::ptime gpsTime = gps.getTime();
-	      std::ostringstream oss;
-	      gr::date_facet *datefacet = new gr::date_facet();
-	      datefacet->format("%Y-%m-%d");
-	      oss.imbue(std::locale(std::locale::classic(), datefacet));
-	      oss << gpsTime.date();
-	      json_object_object_add(jsonGps, "date", json_object_new_string(oss.str().c_str()));
-	      oss.str("");
-	      oss << gpsTime.time_of_day();
-	      json_object_object_add(jsonGps, "time", json_object_new_string(oss.str().c_str()));
-	      json_object_object_add(jsonGps, "ticksPerSecond", json_object_new_double(gps.getTicksPerSecond()));
-	      json_object_object_add(jsonGps, "tickError", json_object_new_double(gps.getTickError()));
-	      json_object_object_add(jsonGps, "satelliteCount", json_object_new_int(gps.getSatelliteCount()));
-	      json_object_object_add(jsonGps, "baudRate", json_object_new_int(gps.getBaudRate()));
-	    } catch (exception::Base &e) {
-	    logger_.debugStream() << "gps failed";
-	    }
-	    char gpsStatus = gps.getStatus();
-	    json_object_object_add(jsonGps, "status", json_object_new_string_len(&gpsStatus, 1));
-	    json_object_object_add(jsonGps, "type", json_object_new_string(gps.getType().c_str()));
-	    json_object_object_add(jsonHardware, "gps", jsonGps);
-	    
-	    logger_.debugStream() << "comm";
-	    const hardware::comm::Base& comm = hardware_.getComm();
-	    json_object* jsonComm = json_object_new_object();
-	    json_object_object_add(jsonComm, "baudRate", json_object_new_int(comm.getBaudRate()));
-	    json_object_object_add(jsonComm, "interfaceName", json_object_new_string(comm.getInterfaceName().c_str()));
-	    json_object_object_add(jsonHardware, "comm", jsonComm);
+	logger_.debugStream() << "gps";
+	try {
+	  json_object_object_add(jsonGps, "longitude", json_object_new_double(gps.getLocation().getLongitude()));
+	  json_object_object_add(jsonGps, "longitudeError", json_object_new_double(gps.getLocation().getLongitudeError()));
+	  json_object_object_add(jsonGps, "latitude", json_object_new_double(gps.getLocation().getLatitude()));
+	  json_object_object_add(jsonGps, "latitudeError", json_object_new_double(gps.getLocation().getLatitudeError()));
+	  json_object_object_add(jsonGps, "altitude", json_object_new_int(gps.getLocation().getAltitude()));
+	  json_object_object_add(jsonGps, "altitudeError", json_object_new_int(gps.getLocation().getAltitudeError()));
+	  pt::ptime gpsTime = gps.getTime();
+	  std::ostringstream oss;
+	  gr::date_facet *datefacet = new gr::date_facet();
+	  datefacet->format("%Y-%m-%d");
+	  oss.imbue(std::locale(std::locale::classic(), datefacet));
+	  oss << gpsTime.date();
+	  json_object_object_add(jsonGps, "date", json_object_new_string(oss.str().c_str()));
+	  oss.str("");
+	  oss << gpsTime.time_of_day();
+	  json_object_object_add(jsonGps, "time", json_object_new_string(oss.str().c_str()));
+	  json_object_object_add(jsonGps, "ticksPerSecond", json_object_new_double(gps.getTicksPerSecond()));
+	  json_object_object_add(jsonGps, "tickError", json_object_new_double(gps.getTickError()));
+	  json_object_object_add(jsonGps, "satelliteCount", json_object_new_int(gps.getSatelliteCount()));
+	  json_object_object_add(jsonGps, "baudRate", json_object_new_int(gps.getBaudRate()));
+	} catch (exception::Base &e) {
+	  logger_.debugStream() << "gps failed";
+	}
+	char gpsStatus = gps.getStatus();
+	json_object_object_add(jsonGps, "status", json_object_new_string_len(&gpsStatus, 1));
+	json_object_object_add(jsonGps, "type", json_object_new_string(gps.getType().c_str()));
+	json_object_object_add(jsonHardware, "gps", jsonGps);
 
-	    logger_.debugStream() << "process";
-	    json_object* jsonProcess = json_object_new_object();
-	    try {
-	      json_object_object_add(jsonProcess, "numberOfSeconds", json_object_new_int(process_.getEventCountBuffer().getActualSize()));
-	      json_object_object_add(jsonProcess, "numberOfEvents", json_object_new_int(process_.getEventCountBuffer().getSum()));
-	      json_object_object_add(jsonProcess, "eventsPerSecond", json_object_new_double(process_.getEventCountBuffer().getAverage()));
-	      std::ostringstream oss;
-	      oss << process_.getUptime();
-	      json_object_object_add(jsonProcess, "uptime", json_object_new_string(oss.str().c_str()));
-	    } catch (exception::Base &e) {
-	    }
-	    json_object_object_add(jsonResponse_, "process", jsonProcess);
+	logger_.debugStream() << "comm";
+	const hardware::comm::Base& comm = hardware_.getComm();
+	json_object* jsonComm = json_object_new_object();
+	json_object_object_add(jsonComm, "baudRate", json_object_new_int(comm.getBaudRate()));
+	json_object_object_add(jsonComm, "interfaceName", json_object_new_string(comm.getInterfaceName().c_str()));
+	json_object_object_add(jsonHardware, "comm", jsonComm);
 
-	    json_object* jsonSoftware = json_object_new_object();
-	    json_object_object_add(jsonSoftware, "version", json_object_new_string(hardware_.getVersion().c_str()));
-	    json_object_object_add(jsonResponse_, "software", jsonSoftware);
+	logger_.debugStream() << "process";
+	json_object* jsonProcess = json_object_new_object();
+	try {
+	  json_object_object_add(jsonProcess, "numberOfSeconds", json_object_new_int(process_.getEventCountBuffer().getActualSize()));
+	  json_object_object_add(jsonProcess, "numberOfEvents", json_object_new_int(process_.getEventCountBuffer().getSum()));
+	  json_object_object_add(jsonProcess, "eventsPerSecond", json_object_new_double(process_.getEventCountBuffer().getAverage()));
+	  std::ostringstream oss;
+	  oss << process_.getUptime();
+	  json_object_object_add(jsonProcess, "uptime", json_object_new_string(oss.str().c_str()));
+	} catch (exception::Base &e) {
+	}
+	json_object_object_add(jsonResponse_, "process", jsonProcess);
+
+	json_object* jsonSoftware = json_object_new_object();
+	json_object_object_add(jsonSoftware, "version", json_object_new_string(hardware_.getVersion().c_str()));
+	json_object_object_add(jsonResponse_, "software", jsonSoftware);
       }
 
       std::string Json::respond(const std::string& input) {
@@ -96,7 +96,7 @@ namespace blitzortung {
 	      cmdGetInfo();
 	    else if (command =="getActivity")
 	      cmdGetActivity();
-	    	    
+
 	    json_object_put(cmd_obj);
 	  }
 
@@ -114,43 +114,43 @@ namespace blitzortung {
       }
 
       void Json::cmdGetActivity() {
-	    json_object* jsonActivity = json_object_new_array();
+	json_object* jsonActivity = json_object_new_array();
 
-	    const unsigned int intervalSeconds = 60;
-	    const int totalNumberOfSeconds = process_.getEventCountBuffer().getActualSize();
-	    const int totalNumberOfIntervals = totalNumberOfSeconds / intervalSeconds;
+	const unsigned int intervalSeconds = 60;
+	const int totalNumberOfSeconds = process_.getEventCountBuffer().getActualSize();
+	const int totalNumberOfIntervals = totalNumberOfSeconds / intervalSeconds;
 
 
-	    for (int interval = totalNumberOfIntervals; interval > 0; interval--) {
-	      int eventsPerInterval = 0;
-	      for (unsigned int second = 0; second < intervalSeconds; second ++) {
-		int index = (totalNumberOfIntervals - interval) * intervalSeconds + second;
-		eventsPerInterval += process_.getEventCountBuffer()[index];
-	      }
-	      json_object_array_add(jsonActivity, json_object_new_int(eventsPerInterval));
+	for (int interval = totalNumberOfIntervals; interval > 0; interval--) {
+	  int eventsPerInterval = 0;
+	    for (unsigned int second = 0; second < intervalSeconds; second ++) {
+	      int index = (totalNumberOfIntervals - interval) * intervalSeconds + second;
+	      eventsPerInterval += process_.getEventCountBuffer()[index];
 	    }
+	  json_object_array_add(jsonActivity, json_object_new_int(eventsPerInterval));
+	}
 
-	    json_object_object_add(jsonResponse_, "activity", jsonActivity);
+	json_object_object_add(jsonResponse_, "activity", jsonActivity);
 
-	    json_object_object_add(jsonResponse_, "intervalSeconds", json_object_new_int(intervalSeconds));
+	json_object_object_add(jsonResponse_, "intervalSeconds", json_object_new_int(intervalSeconds));
 
-	    const hardware::gps::Base& gps = hardware_.getGps();
-	    pt::ptime gpsTime;
-	    try {
-	      gpsTime = gps.getTime();
-	    } catch (exception::Base &e) {
-	      gpsTime = pt::not_a_date_time;
-	    }
+	const hardware::gps::Base& gps = hardware_.getGps();
+	pt::ptime gpsTime;
+	try {
+	  gpsTime = gps.getTime();
+	} catch (exception::Base &e) {
+	  gpsTime = pt::not_a_date_time;
+	}
 
-	    std::ostringstream oss;
-	    gr::date_facet *datefacet = new gr::date_facet();
-	    datefacet->format("%Y-%m-%d");
-	    oss.imbue(std::locale(std::locale::classic(), datefacet));
-	    oss << gpsTime.date();
-	    json_object_object_add(jsonResponse_, "date", json_object_new_string(oss.str().c_str()));
-	    oss.str("");
-	    oss << gpsTime.time_of_day();
-	    json_object_object_add(jsonResponse_, "time", json_object_new_string(oss.str().c_str()));
+	std::ostringstream oss;
+	gr::date_facet *datefacet = new gr::date_facet();
+	datefacet->format("%Y-%m-%d");
+	oss.imbue(std::locale(std::locale::classic(), datefacet));
+	oss << gpsTime.date();
+	json_object_object_add(jsonResponse_, "date", json_object_new_string(oss.str().c_str()));
+	oss.str("");
+	oss << gpsTime.time_of_day();
+	json_object_object_add(jsonResponse_, "time", json_object_new_string(oss.str().c_str()));
       }
 
 

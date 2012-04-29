@@ -2,6 +2,7 @@
 #define BLITZORTUNG_DATA_EVENT_H_
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <json/json.h>
 
 #include "namespaces.h"
 #include "data/Waveform.h"
@@ -64,12 +65,17 @@ namespace blitzortung {
 	//! write object as binary data to stream
 	void toStream(std::iostream&) const;
 
+	//! get timestamp as string
+	std::string getTimestampAsString(unsigned int index=0) const;
+
 	//! get binary storage size of sample
 	unsigned int getStorageSize() const;
 
 	//! determine storage size of event in bytes
 	static unsigned int GetSize(const Format& dataFormat);
 
+	//! return as json object
+	json_object* asJson() const;
     };
 
     std::ostream& operator<< (std::ostream& os, const Event&);

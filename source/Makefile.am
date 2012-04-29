@@ -1,7 +1,7 @@
 SUBDIRS = lib
 
-bin_PROGRAMS = blitzortung-tracker \
-	       blitzortung-data \
+bin_PROGRAMS = bo-tracker \
+	       bo-data \
 	       $(NULL)
 
 AM_CXXFLAGS = \
@@ -13,14 +13,14 @@ AM_LDFLAGS = \
 	$(BOOST_MATH_LDFLAGS) \
 	$(NULL)
 
-blitzortung_tracker_SOURCES = \
-	blitzortung-tracker.cc
+bo_tracker_SOURCES = \
+	bo-tracker.cc
 
-blitzortung_tracker_LDADD = \
+bo_tracker_LDADD = \
 	lib/libblitzortung.la
 
-blitzortung_data_SOURCES = \
-	blitzortung-data.cc
+bo_data_SOURCES = \
+	bo-data.cc
 
-blitzortung_data_LDADD = \
+bo_data_LDADD = \
 	lib/libblitzortung.la

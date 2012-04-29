@@ -32,6 +32,9 @@ namespace blitzortung {
 	//! storage for events
 	Event::V events_;
 
+	//! index of first event in file (-1 if not set)
+	int startIndex_;
+
 	//! logger for this class
 	mutable Logger logger_;
 
@@ -75,6 +78,12 @@ namespace blitzortung {
 
 	//! get dataFormat
 	const Format& getDataFormat() const;
+
+	//! set start index when events are read from a file
+	void setStartIndex(int);
+
+	//! get start index
+	int getStartIndex() const;
 
 	//! get number of events
 	int size() const;

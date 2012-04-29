@@ -15,6 +15,7 @@ namespace blitzortung {
     Events::Events(const gr::date& date, const Format& dataFormat) :
       date_(date),
       dataFormat_(dataFormat),
+      startIndex_(-1),
       logger_("data.Events")
     {
       if (logger_.isDebugEnabled())
@@ -24,6 +25,7 @@ namespace blitzortung {
     Events::Events(const EventsHeader& header) :
       date_(header.getDate()),
       dataFormat_(header.getDataFormat()),
+      startIndex_(-1),
       logger_("data.Events")
     {
       if (logger_.isDebugEnabled())
@@ -50,6 +52,14 @@ namespace blitzortung {
 
     void Events::add(Events& source) throw(exception::Base) {
       transfer(end(), source);
+    }
+
+    void Events::setStartIndex(int startIndex) {
+      startIndex_ = startIndex;
+    }
+
+    int Events::getStartIndex() const {
+      return startIndex_;
     }
 
     void Events::setOrCheckProperties(Event& event) {
@@ -201,6 +211,7 @@ namespace blitzortung {
 
       date_ = source.date_;
       dataFormat_ = source.dataFormat_;
+      startIndex_ = source.startIndex_;
 
       clear();
       transfer(end(), source);

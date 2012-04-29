@@ -87,6 +87,31 @@ namespace blitzortung {
     }
 
     template<typename T>
+    json_object* WaveformOf<T>::asJson() const {
+      json_object* jsonArray = json_object_new_array();
+
+      json_object* xvalues = json_object_new_array();
+      json_object_array_add(jsonArray, xvalues);
+
+      json_object* yvalues[getNumberOfChannels() + 1];
+      for (unsigned short channel = 0; channel < getNumberOfChannels(); channel++) {
+	yvalues[channel] = json_object_new_array();
+	json_object_array_add(jsonArray, yvalues[channel]);
+      }
+
+      float scaleFactor = 1 << (getElementSize() * 8 - 1);
+      int timeDelta = getTimeDelta().total_nanoseconds();
+      for (unsigned int sample = 0; sample < getNumberOfSamples(); sample++) {
+	json_object_array_add(xvalues, json_object_new_int(sample * timeDelta));
+	for (unsigned short channel = 0; channel < getNumberOfChannels(); channel++) {
+	  json_object_array_add(yvalues[channel], json_object_new_double(getFloat(sample, channel) / scaleFactor));
+	}
+      }
+
+      return jsonArray;
+    }
+
+    template<typename T>
     unsigned int WaveformOf<T>::GetSize(const data::Format& dataFormat) {
       util::Size size;
 

@@ -18,7 +18,7 @@
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Blitzortung.org tracker"
-NAME=blitzortung-tracker
+NAME=bo-tracker
 DAEMON=/usr/bin/$NAME
 DAEMON_ARGS="--help"
 PIDFILE=/var/run/$NAME.pid
