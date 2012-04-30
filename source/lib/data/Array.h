@@ -51,6 +51,9 @@ namespace blitzortung {
 	//! returns amplitude at index
 	float getAmplitude(unsigned int index) const;
 
+	//! returns amplitude at index
+	float getPhase(unsigned int index) const;
+
 	//! returns index of maximum value
 	unsigned int getMaxIndex() const;
 

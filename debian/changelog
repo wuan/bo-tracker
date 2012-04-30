@@ -1,13 +1,14 @@
-blitzortung-tracker (1.0.2SNAPSHOT201204292238) unstable; urgency=low
+blitzortung-tracker (1.0.2) unstable; urgency=low
 
   * refactored data containers
   * cleanup configuration files
   * use debhelper instead of cdbs for package building
   * added tests
   * renamed binaries/scripts from blitzortung-* to bo-*
-  * added JSON output mode to bo-data
+  * added JSON output mode to bo-data (data::Event and data::WaveformOf now have a toJson() method)
+  * normalized amplitude output, added phase at maximum to event output
 
- -- Andreas Wuerl <blitzortung@tryb.de>  Sun, 19 Feb 2012 09:16:00 +0100
+ -- Andreas Wuerl <blitzortung@tryb.de>  Mon, 30 Apr 2012 21:55:00 +0200
 
 blitzortung-tracker (1.0.1) unstable; urgency=low
 
