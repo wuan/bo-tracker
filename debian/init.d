@@ -28,7 +28,7 @@ SCRIPTNAME=/etc/init.d/$NAME
 [ -x "$DAEMON" ] || exit 0
 
 # Read configuration variable file if it is present
-[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+[ -r /etc/default/blitzortung-tracker ] && . /etc/default/blitzortung-tracker
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
