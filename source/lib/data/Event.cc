@@ -100,7 +100,10 @@ namespace blitzortung {
       json_object_array_add(jsonArray, json_object_new_int(gpsInfo_->getAltitude()));
       json_object_array_add(jsonArray, json_object_new_int(gpsInfo_->getNumberOfSatellites())); 
       json_object_array_add(jsonArray, json_object_new_int(waveform_->getTimeDelta().total_nanoseconds()));
-      json_object_array_add(jsonArray, json_object_new_double(waveform_->getAmplitude(waveform_->getMaxIndex())));
+
+      float scaleFactor = 1 << (waveform_->getElementSize() * 8 - 1);
+      json_object_array_add(jsonArray, json_object_new_double(waveform_->getAmplitude(waveform_->getMaxIndex())/scaleFactor));
+      json_object_array_add(jsonArray, json_object_new_double(waveform_->getPhase(waveform_->getMaxIndex())));
       json_object_array_add(jsonArray, json_object_new_int(waveform_->getMaxIndex()));
 
       return jsonArray;
@@ -118,7 +121,9 @@ namespace blitzortung {
       os << " " << wfm.getTimeDelta().total_nanoseconds();
 
       os.precision(2);
-      os << " " << wfm.getAmplitude(wfm.getMaxIndex());
+      float scaleFactor = 1 << (wfm.getElementSize() * 8 - 1);
+      os << " " << wfm.getAmplitude(wfm.getMaxIndex())/scaleFactor;
+      os << " " << wfm.getPhase(wfm.getMaxIndex());
       os << " " << wfm.getMaxIndex();
 
       return os;

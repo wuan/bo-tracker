@@ -21,6 +21,18 @@ namespace blitzortung {
       }
     }
 
+    float Array::getPhase(unsigned int index) const {
+
+      unsigned short channels = getNumberOfChannels();
+
+      if (channels == 1) {
+	return 0;
+      } else {
+	return atan2(getFloat(index, 1), getFloat(index, 0));
+      }
+    }
+
+
     unsigned int Array::getMaxIndex() const {
       unsigned int maxIndex = 0;
       float maxAmplitude = 0.0;

@@ -159,7 +159,7 @@ class LongStreamOutput : public StreamOutput {
 	if (numberOfChannels > 1) {
 	  stream_ << " " << sqrt(sum);
 	  if (numberOfChannels == 2) {
-	    float phaseval = atan2(waveform.getFloat(sample, 1), waveform.getFloat(sample, 0));
+	    float phaseval = waveform.getPhase(sample);
 
 	    if (phaseval*lastphase < -sqr(phaseCorrectionFactor*M_PI)) {
 	      phaseOffset += int(sgn(lastphase));
