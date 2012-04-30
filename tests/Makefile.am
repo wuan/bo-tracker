@@ -15,7 +15,6 @@ noinst_PROGRAMS = test-lib \
 
 test_lib_SOURCES = \
 	test-lib.cc \
-	test-lib-data-arrayof.cc test-lib-data-arrayof.h \
 	test-lib-data-events.cc test-lib-data-events.h \
 	test-lib-data-events-2_1_8.cc test-lib-data-events-2_1_8.h \
 	test-lib-data-events-2_1_12.cc test-lib-data-events-2_1_12.h \
