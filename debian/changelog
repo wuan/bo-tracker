@@ -1,9 +1,9 @@
 blitzortung-tracker (1.0.2) unstable; urgency=low
 
-  * refactored data containers
-  * cleanup configuration files
+  * refactored data container to use templates and new class structure
+  * cleanup of configuration files
   * use debhelper instead of cdbs for package building
-  * added tests
+  * added some tests
   * renamed binaries/scripts from blitzortung-* to bo-*
   * added JSON output mode to bo-data (data::Event and data::WaveformOf now have a toJson() method)
   * normalized amplitude output, added phase at maximum to event output
