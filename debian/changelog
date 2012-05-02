@@ -1,3 +1,9 @@
+blitzortung-tracker (1.0.3SNAPSHOT201205020740) unstable; urgency=low
+
+  * refactored Array to prepare signal analysis
+
+ -- Andreas Wuerl <blitzortung@tryb.de>  Mon, 30 Apr 2012 21:55:00 +0200
+
 blitzortung-tracker (1.0.2) unstable; urgency=low
 
   * refactored data container to use templates and new class structure
