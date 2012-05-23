@@ -11,7 +11,7 @@ namespace blitzortung {
       private:
 
 	//! internal variable for gathering sizes
-	unsigned int size_;
+	size_t size_;
 
       public:
 
@@ -21,12 +21,12 @@ namespace blitzortung {
       }
 
 	template<typename T>
-	  unsigned int add(const T& value) {
+	  size_t add(const T& value) {
 	    size_ += sizeof(value);
 	    return size_;
 	  }
 
-	unsigned int get() const {
+	size_t get() const {
 	  return size_;
 	}
     };

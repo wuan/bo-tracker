@@ -94,7 +94,6 @@ namespace blitzortung {
 	if (format.isValid()) {
 	  int numberOfEvents = rawData.size() >> 2;
 
-
 	  waveform_ = format.createWaveform(eventtime, sampleDt);
 
 	  unsigned short hexCharsPerSample = (numberOfBitsPerSample + 3 ) / 4;

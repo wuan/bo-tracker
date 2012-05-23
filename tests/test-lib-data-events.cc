@@ -148,7 +148,7 @@ void EventTest::testAppend() {
 
 void EventTest::testSize() {
 
-  const unsigned int dataSize = getDataSize();
+  const size_t dataSize = getDataSize();
 
   gr::date eventDate(2010,8,1);
 

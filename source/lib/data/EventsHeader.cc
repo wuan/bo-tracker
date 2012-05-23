@@ -201,7 +201,7 @@ namespace blitzortung {
       return Event::AP(new Event(dataFormat, date_, stream));
     }
 	
-    unsigned int EventsHeader::getSize() const {
+    size_t EventsHeader::getSize() const {
       return 14;
     }
     

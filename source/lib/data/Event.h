@@ -69,10 +69,10 @@ namespace blitzortung {
 	std::string getTimestampAsString(unsigned int index=0) const;
 
 	//! get binary storage size of sample
-	unsigned int getStorageSize() const;
+	size_t getStorageSize() const;
 
 	//! determine storage size of event in bytes
-	static unsigned int GetSize(const Format& dataFormat);
+	static size_t GetSize(const Format& dataFormat);
 
 	//! return as json object
 	json_object* asJson() const;
