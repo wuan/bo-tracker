@@ -70,7 +70,7 @@ namespace blitzortung {
       util::Stream::WriteValue(stream, status_);
     }
 
-    unsigned int GpsInfo::getSize() {
+    size_t GpsInfo::getSize() {
 
       util::Size size;
       size.add(longitude_);
@@ -82,7 +82,7 @@ namespace blitzortung {
       return size.get();
     }
 
-    unsigned int GpsInfo::GetSize() {
+    size_t GpsInfo::GetSize() {
       static GpsInfo gpsInfo;
 
       return gpsInfo.getSize();

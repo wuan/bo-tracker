@@ -1,8 +1,9 @@
-blitzortung-tracker (1.0.3SNAPSHOT201205020740) unstable; urgency=low
+blitzortung-tracker (1.0.3) unstable; urgency=low
 
   * refactored Array to prepare signal analysis
+  * fixed compilation on amd64 systems
 
- -- Andreas Wuerl <blitzortung@tryb.de>  Mon, 30 Apr 2012 21:55:00 +0200
+ -- Andreas Wuerl <blitzortung@tryb.de>  Wed, 23 May 2012 18:35:00 +0200
 
 blitzortung-tracker (1.0.2) unstable; urgency=low
 

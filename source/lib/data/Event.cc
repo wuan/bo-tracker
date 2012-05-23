@@ -50,19 +50,19 @@ namespace blitzortung {
     }
 
     //! get binary storage size of event
-    unsigned int Event::getStorageSize() const {
-      unsigned int gpsSize = GpsInfo::GetSize();
+    size_t Event::getStorageSize() const {
+      size_t gpsSize = GpsInfo::GetSize();
 
-      unsigned int waveformSize = waveform_->getStorageSize();
+      size_t waveformSize = waveform_->getStorageSize();
 
       return gpsSize + waveformSize;
     }
 
     //! get binary storage size of event
-    unsigned int Event::GetSize(const Format& dataFormat) {
-      unsigned int gpsSize = GpsInfo::GetSize();
+    size_t Event::GetSize(const Format& dataFormat) {
+      size_t gpsSize = GpsInfo::GetSize();
 
-      unsigned int waveformSize = Waveform::GetSize(dataFormat);
+      size_t waveformSize = Waveform::GetSize(dataFormat);
 
       return gpsSize + waveformSize;
     }

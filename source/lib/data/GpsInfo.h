@@ -73,10 +73,10 @@ namespace blitzortung {
 	void toStream(std::iostream&);
 
 	//! return size of structure in bytes	
-	unsigned int getSize();
+	size_t getSize();
 
 	//! static function to determine size of a particular waveform structure
-	static unsigned int GetSize();
+	static size_t GetSize();
 
     };
 

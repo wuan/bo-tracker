@@ -97,7 +97,7 @@ namespace blitzortung {
       }
 
       float scaleFactor = 1 << (getElementSize() * 8 - 1);
-      int timeDelta = getTimeDelta().total_nanoseconds();
+
       for (unsigned int sample = 0; sample < getNumberOfSamples(); sample++) {
 	for (unsigned short channel = 0; channel < getNumberOfChannels(); channel++) {
 	  json_object_array_add(yvalues[channel], json_object_new_double(getFloat(sample, channel) / scaleFactor));
