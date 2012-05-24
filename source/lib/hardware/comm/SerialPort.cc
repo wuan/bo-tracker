@@ -134,6 +134,10 @@ namespace blitzortung {
 	    baudBit = B500000;
 	    break;
 
+	  case 2500000:
+	    baudBit = B2500000;
+	    break;
+
 	  default:
 	    std::ostringstream oss;
 	    oss << "blitzortung::hardware::comm::SerialPort::setBaudRate() " << portName_ << " unsupported Baud-Rate " << baudRate;
@@ -181,6 +185,9 @@ namespace blitzortung {
 
 	  case B500000:
 	    return 500000;
+
+	  case B2500000:
+	    return 2500000;
 
 	  default:
 	    std::ostringstream oss;

@@ -279,11 +279,18 @@ int main(int argc, char **argv) {
 
   // parse command line options
   po::variables_map vm;
-  po::store(po::command_line_parser(argc, argv).options(desc).run(), vm);
-  po::notify(vm); 
+  bool showHelp = false;
+
+  try {
+    po::store(po::command_line_parser(argc, argv).options(desc).run(), vm);
+    po::notify(vm); 
+  } catch (std::exception& e) {
+    std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
+    showHelp = true;
+  }
 
   // help output or no 'sql-statement' given
-  if (vm.count("help")) {
+  if (vm.count("help") || showHelp) {
     std::cout << argv[0] << " [options]" << std::endl << std::endl;
     std::cout << desc << std::endl;
     std::cout << std::endl;
