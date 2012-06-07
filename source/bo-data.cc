@@ -131,7 +131,15 @@ class DefaultJsonOutput : public JsonOutput {
 
 class LongStreamOutput : public StreamOutput {
 
+  private:
+
+    bool normalize_;
+
   public:
+
+    LongStreamOutput(bool normalize) :
+      normalize_(normalize)
+    {}
 
     void add(const int index, const bo::data::Event& event) {
       stream_ << "# " << event << " " << index << std::endl;
@@ -139,6 +147,9 @@ class LongStreamOutput : public StreamOutput {
       const bo::data::Waveform& waveform = event.getWaveform();
 
       unsigned int maxIndex = waveform.getMaxIndex();
+      float angle = -waveform.getPhase(maxIndex);
+      float cos_angle = cos(angle);
+      float sin_angle = sin(angle);
 
       stream_ << "max index " << maxIndex << " at " << waveform.getTime(maxIndex) << waveform.getFloat(maxIndex, 0) << waveform.getFloat(maxIndex, 1) << std::endl;
       float scaleFactor = 1 << (waveform.getElementSize() * 8 - 1);
@@ -158,6 +169,7 @@ class LongStreamOutput : public StreamOutput {
 	}
 	if (numberOfChannels > 1) {
 	  stream_ << " " << sqrt(sum);
+
 	  if (numberOfChannels == 2) {
 	    float phaseval = waveform.getPhase(sample);
 
@@ -166,6 +178,10 @@ class LongStreamOutput : public StreamOutput {
 	    }
 	    lastphase = phaseval;
 	    stream_ << " " << phaseval << " " << phaseval + phaseOffset*2.0*M_PI;
+	    
+	    float x = waveform.getFloat(sample, 0) / scaleFactor;
+	    float y = waveform.getFloat(sample, 1) / scaleFactor;
+	    stream_ << " " << x * cos_angle - y * sin_angle << " " << x * sin_angle + y * cos_angle;
 	  }
 	}
 	stream_ << std::endl;
@@ -176,10 +192,19 @@ class LongStreamOutput : public StreamOutput {
 
 class LongJsonOutput : public JsonOutput {
 
+  private:
+
+    bool normalize_;
+
   public:
+
+    LongJsonOutput(bool normalize) :
+      normalize_(normalize)
+    {}
+
     void add(const int index, const bo::data::Event& event) {
       json_object* jsonArray = event.asJson();
-      json_object_array_add(jsonArray, event.getWaveform().asJson());
+      json_object_array_add(jsonArray, event.getWaveform().asJson(normalize_));
       json_object_array_add(jsonArray, json_object_new_int(index));
       json_object_array_add(jsonArray_, jsonArray);
     }
@@ -254,6 +279,7 @@ int main(int argc, char **argv) {
   std::string mode = "default";
   std::string startTimeString, endTimeString;
   int startIndex, numberOfEvents;
+  bool normalize = false;
 
   bo::Logger logger("");
 
@@ -271,6 +297,7 @@ int main(int argc, char **argv) {
     ("mode", po::value<std::string>(&mode)->default_value(mode), "data mode [default, statistics, histogram]")
     #endif
     ("verbose,v", "verbose mode")
+    ("normalize", "reduce multiple channel to single best channel")
     ("json,j", "output JSON data")
     ("long-data,l", "output all samples")
     ("event-time", "output eventtime")
@@ -338,6 +365,10 @@ int main(int argc, char **argv) {
     return 0;
   }
 
+  if (vm.count("normalize")) {
+    normalize = true;
+  }
+
   bo::data::Events events;
 
   if (vm.count("starttime") || vm.count("endtime")) {
@@ -384,7 +415,7 @@ int main(int argc, char **argv) {
       AbstractOutput::AP output;
       if (vm.count("json")) {
 	if (vm.count("long-data")) {
-	  output = AbstractOutput::AP(new LongJsonOutput());
+	  output = AbstractOutput::AP(new LongJsonOutput(normalize));
 	} else if (vm.count("event-time")) {
 	  output = AbstractOutput::AP(new TimestampJsonOutput());
 	} else {
@@ -392,7 +423,7 @@ int main(int argc, char **argv) {
 	}
       } else {
 	if (vm.count("long-data")) {
-	  output = AbstractOutput::AP(new LongStreamOutput());
+	  output = AbstractOutput::AP(new LongStreamOutput(normalize));
 	} else if (vm.count("event-time")) {
 	  output = AbstractOutput::AP(new TimestampStreamOutput());
 	} else {

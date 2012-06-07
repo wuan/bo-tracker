@@ -42,7 +42,7 @@ namespace blitzortung {
 	virtual void toStream(std::iostream&) const = 0;
 
 	//! return json object representation
-	virtual json_object* asJson() const = 0;
+	virtual json_object* asJson(bool normalize=true) const = 0;
 	
 	//! static function to determine size of a particular waveform structure
 	static unsigned int GetSize(const data::Format& dataFormat);

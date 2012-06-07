@@ -87,20 +87,37 @@ namespace blitzortung {
     }
 
     template<typename T>
-    json_object* WaveformOf<T>::asJson() const {
+    json_object* WaveformOf<T>::asJson(bool normalize) const {
       json_object* jsonArray = json_object_new_array();
 
-      json_object* yvalues[getNumberOfChannels() + 1];
-      for (unsigned short channel = 0; channel < getNumberOfChannels(); channel++) {
+      int numberOfChannels = getNumberOfChannels();
+      if (normalize && numberOfChannels == 2) {
+	numberOfChannels = 1;
+      } else {
+	normalize = false;
+      }
+
+      json_object* yvalues[numberOfChannels];
+
+      for (unsigned short channel = 0; channel < numberOfChannels; channel++) {
 	yvalues[channel] = json_object_new_array();
 	json_object_array_add(jsonArray, yvalues[channel]);
       }
 
       float scaleFactor = 1 << (getElementSize() * 8 - 1);
 
-      for (unsigned int sample = 0; sample < getNumberOfSamples(); sample++) {
-	for (unsigned short channel = 0; channel < getNumberOfChannels(); channel++) {
-	  json_object_array_add(yvalues[channel], json_object_new_double(getFloat(sample, channel) / scaleFactor));
+      if (normalize) {
+	float angle = -getPhase(getMaxIndex());
+	float angle_cos = cos(angle);
+	float angle_sin = sin(angle);
+	for (unsigned int sample = 0; sample < getNumberOfSamples(); sample++) {
+	    json_object_array_add(yvalues[0], json_object_new_double(getFloat(sample, 0) / scaleFactor * angle_cos - getFloat(sample, 1) / scaleFactor * angle_sin));
+	}
+      } else {
+	for (unsigned int sample = 0; sample < getNumberOfSamples(); sample++) {
+	  for (unsigned short channel = 0; channel < numberOfChannels; channel++) {
+	    json_object_array_add(yvalues[channel], json_object_new_double(getFloat(sample, channel) / scaleFactor));
+	  }
 	}
       }
 
