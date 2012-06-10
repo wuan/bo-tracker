@@ -107,7 +107,7 @@ namespace blitzortung {
       float scaleFactor = 1 << (getElementSize() * 8 - 1);
 
       if (normalize) {
-	float angle = -getPhase(getMaxIndex());
+	float angle = -getPhase(getMaxIndexNoClip());
 	float angle_cos = cos(angle);
 	float angle_sin = sin(angle);
 	for (unsigned int sample = 0; sample < getNumberOfSamples(); sample++) {

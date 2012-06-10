@@ -36,14 +36,25 @@ namespace blitzortung {
       }
     }
 
+    inline float sqr(float x) {
+      return x*x;
+    }
 
-    unsigned int Array::getMaxIndex() const {
+    unsigned int Array::getMaxIndexInternal(bool ignoreClipped) const {
       unsigned int maxIndex = 0;
       float maxAmplitude = 0.0;
+
+      float scaleFactorSquared = sqr(1 << (getElementSize() * 8 - 1));
 
       for (unsigned int sample=0; sample < getNumberOfSamples(); sample++) {
 	double amplitude = getAmplitudeSquare(sample);
 	if (amplitude > maxAmplitude) {
+	  if (ignoreClipped) {
+	    amplitude /= scaleFactorSquared;
+	    if (amplitude > 1.0) {
+	      break;
+	    }
+	  }
 	  maxIndex = sample;
 	  maxAmplitude = amplitude;
 	}
@@ -51,5 +62,12 @@ namespace blitzortung {
       return maxIndex;
     }
 
+    unsigned int Array::getMaxIndex() const {
+      return getMaxIndexInternal(false);
+    }
+
+    unsigned int Array::getMaxIndexNoClip() const {
+      return getMaxIndexInternal(true);
+    }
   }
 }
