@@ -60,6 +60,9 @@ namespace blitzortung {
 	//! returns index of maximum value
 	unsigned int getMaxIndex() const;
 
+	//! returns index of maximum value ignoring clipped amplitudes
+	unsigned int getMaxIndexNoClip() const;
+
 	//! returns the storage size of the array in bytes
 	virtual unsigned int getStorageSize() const = 0;
 
@@ -68,6 +71,12 @@ namespace blitzortung {
 
 	//! read binary object data from stream
 	virtual void fromStream(std::iostream&) = 0; 
+
+      private:
+	
+	//! returns index of maximum value
+	unsigned int getMaxIndexInternal(bool ignoreClip=false) const;
+
     };
 
   }

@@ -147,7 +147,7 @@ class LongStreamOutput : public StreamOutput {
       const bo::data::Waveform& waveform = event.getWaveform();
 
       unsigned int maxIndex = waveform.getMaxIndex();
-      float angle = -waveform.getPhase(maxIndex);
+      float angle = -waveform.getPhase(waveform.getMaxIndexNoClip());
       float cos_angle = cos(angle);
       float sin_angle = sin(angle);
 
