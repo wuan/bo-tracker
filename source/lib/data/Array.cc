@@ -51,7 +51,6 @@ namespace blitzortung {
 	if (amplitude > maxAmplitude) {
 	  if (ignoreClipped) {
 	    if (amplitude > scaleFactorSquared) {
-	      std::cout << amplitude << " div by " << scaleFactorSquared << " amplitude " << getAmplitude(sample) << std::endl;
 	      continue;
 	    }
 	  }

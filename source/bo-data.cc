@@ -297,7 +297,7 @@ int main(int argc, char **argv) {
     ("mode", po::value<std::string>(&mode)->default_value(mode), "data mode [default, statistics, histogram]")
     #endif
     ("verbose,v", "verbose mode")
-    ("normalize", "reduce multiple channel to single best channel")
+    ("normalize", "reduce multiple channel to single best channel, works only in combinatino with long-data mode")
     ("json,j", "output JSON data")
     ("long-data,l", "output all samples")
     ("event-time", "output eventtime")
