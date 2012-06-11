@@ -86,6 +86,10 @@ namespace blitzortung {
       ArrayOf<T>::toStream(stream);
     }
 
+    inline float sqr(float x) {
+      return x*x;
+    }
+
     template<typename T>
     json_object* WaveformOf<T>::asJson(bool normalize) const {
       json_object* jsonArray = json_object_new_array();
@@ -97,11 +101,11 @@ namespace blitzortung {
 	normalize = false;
       }
 
-      json_object* yvalues[numberOfChannels];
+      json_object* values[numberOfChannels];
 
       for (unsigned short channel = 0; channel < numberOfChannels; channel++) {
-	yvalues[channel] = json_object_new_array();
-	json_object_array_add(jsonArray, yvalues[channel]);
+	values[channel] = json_object_new_array();
+	json_object_array_add(jsonArray, values[channel]);
       }
 
       float scaleFactor = 1 << (getElementSize() * 8 - 1);
@@ -110,13 +114,19 @@ namespace blitzortung {
 	float angle = -getPhase(getMaxIndexNoClip());
 	float angle_cos = cos(angle);
 	float angle_sin = sin(angle);
+	float deviation = 0.0;
 	for (unsigned int sample = 0; sample < getNumberOfSamples(); sample++) {
-	    json_object_array_add(yvalues[0], json_object_new_double(getFloat(sample, 0) / scaleFactor * angle_cos - getFloat(sample, 1) / scaleFactor * angle_sin));
+	    float x_value = getFloat(sample, 0) / scaleFactor;
+	    float y_value = getFloat(sample, 1) / scaleFactor;
+	    json_object_array_add(values[0], json_object_new_double(x_value * angle_cos - y_value * angle_sin));
+	    deviation = sqr(x_value * angle_sin) + sqr(y_value * angle_cos);
 	}
+	json_object_array_add(jsonArray, json_object_new_double(-angle));
+	json_object_array_add(jsonArray, json_object_new_double(sqrt(deviation)));
       } else {
 	for (unsigned int sample = 0; sample < getNumberOfSamples(); sample++) {
 	  for (unsigned short channel = 0; channel < numberOfChannels; channel++) {
-	    json_object_array_add(yvalues[channel], json_object_new_double(getFloat(sample, channel) / scaleFactor));
+	    json_object_array_add(values[channel], json_object_new_double(getFloat(sample, channel) / scaleFactor));
 	  }
 	}
       }
