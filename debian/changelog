@@ -1,8 +1,9 @@
-blitzortung-tracker (1.0.4SNAPSHOT201206071335) unstable; urgency=low
+blitzortung-tracker (1.0.4) unstable; urgency=low
 
   * added normalizing to 1 channel for bo-data waveform output
+  * improved command line option handling / help
 
- -- Andreas Wuerl <blitzortung@tryb.de>  Wed, 07 Jun 2012 13:34:00 +0200
+ -- Andreas Wuerl <blitzortung@tryb.de>  Mon, 11 Jun 2012 13:34:00 +0200
 
 blitzortung-tracker (1.0.3) unstable; urgency=low
 
