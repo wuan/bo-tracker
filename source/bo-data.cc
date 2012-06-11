@@ -156,9 +156,6 @@ class LongStreamOutput : public StreamOutput {
       unsigned int numberOfChannels = waveform.getNumberOfChannels();
       unsigned int timeDeltaNanoseconds = waveform.getTimeDelta().total_nanoseconds();
 
-      float lastphase = 0.0;
-      int phaseOffset = 0;
-      const float phaseCorrectionFactor = 0.5;
       for (unsigned int sample = 0; sample < waveform.getNumberOfSamples(); sample++) {
 	stream_ << waveform.getTime(sample) << " " << timeDeltaNanoseconds * sample;
 	double sum = 0.0;
@@ -170,18 +167,10 @@ class LongStreamOutput : public StreamOutput {
 	if (numberOfChannels > 1) {
 	  stream_ << " " << sqrt(sum);
 
-	  if (numberOfChannels == 2) {
-	    float phaseval = waveform.getPhase(sample);
-
-	    if (phaseval*lastphase < -sqr(phaseCorrectionFactor*M_PI)) {
-	      phaseOffset += int(sgn(lastphase));
-	    }
-	    lastphase = phaseval;
-	    stream_ << " " << phaseval << " " << phaseval + phaseOffset*2.0*M_PI;
-	    
-	    float x = waveform.getFloat(sample, 0) / scaleFactor;
-	    float y = waveform.getFloat(sample, 1) / scaleFactor;
-	    stream_ << " " << x * cos_angle - y * sin_angle << " " << x * sin_angle + y * cos_angle;
+	  if (numberOfChannels == 2 && normalize_) {
+	      float x = waveform.getFloat(sample, 0) / scaleFactor;
+	      float y = waveform.getFloat(sample, 1) / scaleFactor;
+	      stream_ << " " << x * cos_angle - y * sin_angle << " " << x * sin_angle + y * cos_angle;
 	  }
 	}
 	stream_ << std::endl;
