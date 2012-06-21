@@ -118,6 +118,8 @@ namespace blitzortung {
 	  logger_.debugStream() << "writeEvents() format " << events.getDataFormat() << " " << &events.getDataFormat();
 	}
 
+        fstream_.seekg(0, std::ios::end);
+	logger_.debugStream() << "writeEvents()   position " << fstream_.tellg();
 	unsigned int position = fstream_.tellg();
 
 	for (Event::CVI event = events.begin(); event != events.end(); event++) {

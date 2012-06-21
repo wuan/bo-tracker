@@ -78,6 +78,15 @@ namespace blitzortung {
       }
     }
 
+    void Events::setDate(const gr::date& date) {
+      if (size() == 0) {
+	date_ = date;
+      } else {
+	if (date_ != date) 
+	  throw exception::Base("data::Events::setDate() date mismatch");
+      }
+    }
+
     const gr::date& Events::getDate() const {
       return date_;
     }

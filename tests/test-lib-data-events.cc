@@ -146,6 +146,25 @@ void EventTest::testAppend() {
   CPPUNIT_ASSERT_EQUAL(2 * originalSize, events->size());
 }
 
+void EventTest::testMultipleAppend() {
+
+  bo::data::Events::P events = createEvents1();
+
+  int originalSize = events->size();
+
+  std::string fileName = events->writeToFile("UserName_%Y%m%d.bos");
+
+  int i;
+
+  for (i=1; i < 200000 / events->size(); i++) {
+    events->appendToFile(fileName);
+  }
+
+  events->readFromFile(fileName);
+
+  CPPUNIT_ASSERT_EQUAL(i * originalSize, events->size());
+}
+
 void EventTest::testSize() {
 
   const size_t dataSize = getDataSize();
