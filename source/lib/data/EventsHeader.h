@@ -38,7 +38,7 @@ namespace blitzortung {
 	Format dataFormat_;
 	
 	//! events per entry
-	unsigned short numberOfEvents_;
+	unsigned int numberOfEvents_;
 
 	//***********************************
 

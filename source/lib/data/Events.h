@@ -73,6 +73,9 @@ namespace blitzortung {
 	//! release event from events
 	Event::AP release(Event::VI);
 
+	//! set date of event collection
+	void setDate(const gr::date& date);
+
 	//! get date of event collection
 	const gr::date& getDate() const;
 

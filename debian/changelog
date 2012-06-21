@@ -1,3 +1,9 @@
+blitzortung-tracker (1.0.5SNAPSHOT201206211934) unstable; urgency=low
+
+  * fixed creation of data files with more than 65535 entries
+
+ -- Andreas Wuerl <blitzortung@tryb.de>  Thu, 21 Jun 2012 19:34:00 +0200
+
 blitzortung-tracker (1.0.4) unstable; urgency=low
 
   * added normalizing to 1 channel for bo-data waveform output

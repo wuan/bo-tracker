@@ -110,8 +110,8 @@ namespace blitzortung {
 
       float scaleFactor = 1 << (getElementSize() * 8 - 1);
 
+      float angle = -getPhase(getMaxIndexNoClip());
       if (normalize) {
-	float angle = -getPhase(getMaxIndexNoClip());
 	float angle_cos = cos(angle);
 	float angle_sin = sin(angle);
 	float deviation = 0.0;
@@ -129,6 +129,7 @@ namespace blitzortung {
 	    json_object_array_add(values[channel], json_object_new_double(getFloat(sample, channel) / scaleFactor));
 	  }
 	}
+	json_object_array_add(jsonArray, json_object_new_double(-angle));
       }
 
       return jsonArray;

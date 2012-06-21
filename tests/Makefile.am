@@ -10,7 +10,8 @@ AM_LDFLAGS = \
 	-lboost_program_options \
 	-lcppunit
 
-noinst_PROGRAMS = test-lib \
+noinst_PROGRAMS = \
+	test-lib \
 	$(NULL)
 
 test_lib_SOURCES = \

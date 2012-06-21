@@ -10,6 +10,7 @@ class Event_2_64_8_Test : public EventTest
   CPPUNIT_TEST( testAdd );
   CPPUNIT_TEST( testWrite );
   CPPUNIT_TEST( testAppend );
+  CPPUNIT_TEST( testMultipleAppend );
   CPPUNIT_TEST( testSize );
   CPPUNIT_TEST_SUITE_END();
 
