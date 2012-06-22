@@ -103,7 +103,7 @@ namespace blitzortung {
 
       float scaleFactor = 1 << (waveform_->getElementSize() * 8 - 1);
       json_object_array_add(jsonArray, json_object_new_double(waveform_->getAmplitude(waveform_->getMaxIndex())/scaleFactor));
-      json_object_array_add(jsonArray, json_object_new_double(waveform_->getPhase(waveform_->getMaxIndex())));
+      json_object_array_add(jsonArray, json_object_new_double(waveform_->getPhase(waveform_->getMaxIndexNoClip())));
       json_object_array_add(jsonArray, json_object_new_int(waveform_->getMaxIndex()));
 
       return jsonArray;
@@ -123,7 +123,7 @@ namespace blitzortung {
       os.precision(2);
       float scaleFactor = 1 << (wfm.getElementSize() * 8 - 1);
       os << " " << wfm.getAmplitude(wfm.getMaxIndex())/scaleFactor;
-      os << " " << wfm.getPhase(wfm.getMaxIndex());
+      os << " " << wfm.getPhase(wfm.getMaxIndexNoClip());
       os << " " << wfm.getMaxIndex();
 
       return os;

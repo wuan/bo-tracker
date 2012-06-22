@@ -121,7 +121,6 @@ namespace blitzortung {
 	    json_object_array_add(values[0], json_object_new_double(x_value * angle_cos - y_value * angle_sin));
 	    deviation = sqr(x_value * angle_sin) + sqr(y_value * angle_cos);
 	}
-	json_object_array_add(jsonArray, json_object_new_double(-angle));
 	json_object_array_add(jsonArray, json_object_new_double(sqrt(deviation)));
       } else {
 	for (unsigned int sample = 0; sample < getNumberOfSamples(); sample++) {
@@ -129,7 +128,6 @@ namespace blitzortung {
 	    json_object_array_add(values[channel], json_object_new_double(getFloat(sample, channel) / scaleFactor));
 	  }
 	}
-	json_object_array_add(jsonArray, json_object_new_double(-angle));
       }
 
       return jsonArray;
