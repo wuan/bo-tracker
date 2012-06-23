@@ -24,6 +24,7 @@
 #include "namespaces.h"
 #include "data/Events.h"
 #include "data/EventsFile.h"
+#include "hardware/parsing/Samples.h"
 #include "exception/Base.h"
 #include "Logger.h"
 
@@ -35,18 +36,6 @@ typedef boost::iterator_range<std::vector<std::pair<double, double> >::iterator 
 
 inline float sqr(float x) {
   return x*x;
-}
-
-inline float sgn(float x)
-{
-  if (x<0) {
-    return -1.0;
-  } else {
-    if (x>0)
-      return 1.0;
-    else
-      return 0.0;
-  }
 }
 
 class AbstractOutput {
@@ -262,9 +251,71 @@ pt::time_duration parseTime(const std::string& inputString, bool isEnd=false) {
     return time;
 }
 
+void addStreamToInputFile(std::istream& istream, const std::string& outputFile) {
+
+  pt::time_input_facet *timefacet = new pt::time_input_facet();
+  timefacet->format("%Y-%m-%d %H:%M:%s");
+  std::istringstream iss;
+  iss.imbue(std::locale(std::locale::classic(), timefacet));
+
+  while (!istream.eof()) {
+
+    std::string line;
+    getline(istream, line);
+
+    if (line.length() > 0) {
+
+      iss.clear();
+      iss.str(line);
+
+      pt::ptime timestamp;
+      float longitude;
+      float latitude;
+      short altitude;
+      unsigned short numberOfChannels;
+      unsigned short numberOfSamples;
+      unsigned short numberOfBitsPerSample;
+      unsigned short sampleTime;
+      std::string data;
+
+      iss >> timestamp >> latitude >> longitude >> altitude >> numberOfChannels >> numberOfSamples >> numberOfBitsPerSample >> sampleTime >> data;
+
+      blitzortung::data::Format format((numberOfBitsPerSample-1)/8+1, numberOfChannels, numberOfSamples);
+
+      blitzortung::hardware::parsing::Samples sampleParser(format, timestamp, sampleTime, data);
+
+      blitzortung::data::Waveform::AP waveform = sampleParser.getWaveform();
+
+      std::cout << *waveform << std::endl;
+
+    }
+  }
+}
+
+void printFileInfo(const std::string& inputFile) {
+  bo::data::EventsFile eventsFile(inputFile);
+
+  const bo::data::EventsHeader& header = eventsFile.getHeader();
+
+  bo::data::Events::AP start(eventsFile.read(0,1));
+  bo::data::Events::AP end(eventsFile.read(-1,1));
+
+  std::cout << start->front().getTimestampAsString() << " " << 0 << std::endl;
+  std::cout << end->front().getTimestampAsString() << " " << header.getNumberOfEvents() - 1 << std::endl;
+
+  const bo::data::Format& format = header.getDataFormat();
+
+  std::cout << header.getNumberOfEvents() << " events, ";
+  std::cout << format.getNumberOfSamples() << " samples, ";
+  std::cout << (short) format.getNumberOfChannels() << " channels, ";
+  std::cout << format.getNumberOfBytesPerSample()*8 << " bits";
+  std::cout << std::endl;
+}
+
 int main(int argc, char **argv) {
 
-  std::string file = "";
+  std::string inputFile = "";
+  std::string outputFile = "";
   std::string mode = "default";
   std::string startTimeString, endTimeString;
   int startIndex, numberOfEvents;
@@ -276,7 +327,8 @@ int main(int argc, char **argv) {
   boost::program_options::options_description desc("program options");
   desc.add_options()
     ("help,h", "show program help")
-    ("input-file,i", po::value<std::string>(&file), "file name")
+    ("input-file,i", po::value<std::string>(&inputFile), "input file name")
+    ("output-file,o", po::value<std::string>(&outputFile), "output file name")
     ("info", "show file info")
     ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
     ("endtime,e", po::value<std::string>(&endTimeString), "end time in HHMM or HHMMSS format")
@@ -314,15 +366,19 @@ int main(int argc, char **argv) {
     return 1;
   }
 
+  // logging setup
+
+  logger.setPriority(log4cpp::Priority::NOTICE);
+
+  if (vm.count("output-file")) {
+    addStreamToInputFile(std::cin, outputFile);
+    return 0;
+  }
 
   if (! vm.count("input-file")) {
     std::cerr << "'input-file' missing\n";
     return 5;
   }
-
-  // logging setup
-
-  logger.setPriority(log4cpp::Priority::NOTICE);
 
   if (vm.count("verbose")) {
     logger.setPriority(log4cpp::Priority::INFO);
@@ -333,24 +389,7 @@ int main(int argc, char **argv) {
   }
 
   if (vm.count("info")) {
-    bo::data::EventsFile eventsFile(file);
-
-    const bo::data::EventsHeader& header = eventsFile.getHeader();
-
-    bo::data::Events::AP start(eventsFile.read(0,1));
-    bo::data::Events::AP end(eventsFile.read(-1,1));
-
-    std::cout << start->front().getTimestampAsString() << " " << 0 << std::endl;
-    std::cout << end->front().getTimestampAsString() << " " << header.getNumberOfEvents() - 1 << std::endl;
-
-    const bo::data::Format& format = header.getDataFormat();
-
-    std::cout << header.getNumberOfEvents() << " events, ";
-    std::cout << format.getNumberOfSamples() << " samples, ";
-    std::cout << format.getNumberOfChannels() << " channels, ";
-    std::cout << format.getNumberOfBytesPerSample()*8 << " bits";
-    std::cout << std::endl;
-
+    printFileInfo(inputFile);
     return 0;
   }
 
@@ -371,9 +410,9 @@ int main(int argc, char **argv) {
       endTime = parseTime(endTimeString, true);
     }
 
-    events.readFromFile(file, startTime, endTime);
+    events.readFromFile(inputFile, startTime, endTime);
   } else {
-    events.readFromFile(file, startIndex, numberOfEvents);
+    events.readFromFile(inputFile, startIndex, numberOfEvents);
   }
 
   #ifdef HAVE_BOOST_ACCUMULATORS_ACCUMULATORS_HPP

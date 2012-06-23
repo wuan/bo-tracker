@@ -27,7 +27,7 @@ namespace blitzortung {
 	  static const data::Format FORMAT_8_1_128;
 	  static const data::Format FORMAT_8_2_256;
 
-	  //! combined date time string
+	  //! parsed waveform
 	  data::Waveform::AP waveform_;
 
 	  //! string containing the raw data transmitted from the hardware
@@ -46,6 +46,10 @@ namespace blitzortung {
 
 	  //! constructor
 	  Samples(const std::vector<std::string>& fields, const hardware::gps::Base& gps);
+
+	  //! constructor
+	  Samples(const data::Format& format, const pt::ptime& timestamp, const unsigned short samplePeriod, const std::string& data);
+
 
 	  //! get raw sample data string
 	  const std::string& getRawData() const;
