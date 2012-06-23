@@ -17,7 +17,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( HardwareParsingTest );
 class ParseBase : public bo::hardware::parsing::Base {
 
   public:
-    unsigned int parseHexString(const std::string hexString) {
+    unsigned int parseHexString(const std::string& hexString) {
       return parseHex(hexString);
     }
 

@@ -81,6 +81,15 @@ namespace blitzortung {
 	}
       }
 
+      Samples::Samples(const data::Format& format, const pt::ptime& timestamp, const unsigned short samplePeriod, const std::string& data) :
+	Base(),
+	logger_("hardware.parsing.Samples")
+      {
+	valid_ = false;
+
+	setWaveform(format, timestamp, pt::nanoseconds(samplePeriod), data);
+      }
+
       void Samples::setWaveform(const data::Format& format, const pt::ptime& eventtime, const pt::time_duration&& sampleDt, const std::string&& rawData, unsigned char numberOfBitsPerSample) {
 	if (numberOfBitsPerSample == 0) {
 	  numberOfBitsPerSample = format.getNumberOfBytesPerSample() * 8;

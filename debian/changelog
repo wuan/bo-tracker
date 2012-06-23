@@ -1,3 +1,10 @@
+blitzortung-tracker (1.0.6SNAPSHOT201206232045) unstable; urgency=low
+
+  * added txt to data file operation to bo-data
+  * code style/syntax improvements
+
+ -- Andreas Wuerl <blitzortung@tryb.de>  Fri, 22 Jun 2012 07:12:31 +0200
+
 blitzortung-tracker (1.0.5) unstable; urgency=low
 
   * fixed creation of data files with more than 65535 entries
