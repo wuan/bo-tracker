@@ -143,7 +143,6 @@ class LongStreamOutput : public StreamOutput {
       float cos_angle = cos(angle);
       float sin_angle = sin(angle);
 
-      stream_ << "max index " << maxIndex << " at " << waveform.getTimestamp(maxIndex) << waveform.getFloat(maxIndex, 0) << waveform.getFloat(maxIndex, 1) << std::endl;
       float scaleFactor = 1 << (waveform.getElementSize() * 8 - 1);
       unsigned int numberOfChannels = waveform.getNumberOfChannels();
       unsigned int timeDeltaNanoseconds = waveform.getTimeDelta().total_nanoseconds();
