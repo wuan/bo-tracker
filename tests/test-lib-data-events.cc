@@ -27,7 +27,7 @@ bo::data::Event::AP EventTest::createEventWithFormat(const bo::data::Format& dat
     }
   }
 
-  return bo::data::Event::AP(new bo::data::MEvent(std::move(wfm), bo::data::GpsInfo::AP(new bo::data::GpsInfo()), "n/a"));
+  return bo::data::Event::AP(new bo::data::MEvent(std::move(wfm), bo::data::GpsInfo::AP(new bo::data::GpsInfo(11,49,500)), "n/a"));
 }
 
 bo::data::Events::P EventTest::createEvents1() {
