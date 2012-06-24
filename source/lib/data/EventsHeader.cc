@@ -174,7 +174,10 @@ namespace blitzortung {
 
       dataFormat_.toStream(fstream);
 
-      //std::cout << " header size: " << fstream.tellg() << " should be " << getSize();
+      if (fstream.tellg() != getSize()) {
+	std::cout << " header size: " << fstream.tellg() << " should be " << getSize() << std::endl;
+	std::cout << dataFormat_ << std::endl;
+      }
 
       assert(fstream.tellg() == getSize());
       
