@@ -142,6 +142,7 @@ int main(int argc, char **argv) {
     case 230400:
     case 250000:
     case 500000:
+    case 2500000:
       switch (gpsBaudRate) {
 	case 4800:
 	case 9600:
@@ -216,7 +217,7 @@ int main(int argc, char **argv) {
   bo::Process process(transfer, eventRateLimit, *output);
   process.setAmplitudeLimit(amplitudeLimit);
 
-  // enable unix domain socket for process information
+  // setup unix domain socket for process information
   bo::ipc::server::factory::Json jsonServerFactory(process, hardware);
   bo::ipc::UnixSocket socket("/tmp/.blitzortung-tracker", jsonServerFactory);
 
