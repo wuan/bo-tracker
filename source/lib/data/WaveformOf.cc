@@ -44,12 +44,12 @@ namespace blitzortung {
     }
 
     template<typename T>
-    const pt::ptime& WaveformOf<T>::getTime() const {
+    const pt::ptime& WaveformOf<T>::getTimestamp() const {
       return t0_;
     }
 
     template<typename T>
-    pt::ptime WaveformOf<T>::getTime(unsigned int index) const {
+    pt::ptime WaveformOf<T>::getTimestamp(unsigned int index) const {
       return t0_ + dt_ * index;
     }
 

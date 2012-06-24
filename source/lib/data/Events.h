@@ -94,6 +94,9 @@ namespace blitzortung {
 	//! sort events
 	void sort();
 
+	//! sort and filter event duplicates
+	void unique();
+
 	//! set event sort behaviour
         template< class Compare >
         void sort( Compare comp ) {

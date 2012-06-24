@@ -63,7 +63,7 @@ namespace blitzortung {
     }
 
     void Events::setOrCheckProperties(Event& event) {
-      const gr::date& date = event.getWaveform().getTime().date();
+      const gr::date& date = event.getWaveform().getTimestamp().date();
       const Waveform& wfm = event.getWaveform();
       Format dataFormat(wfm.getElementSize(), wfm.getNumberOfChannels(), wfm.getNumberOfSamples());
 
@@ -101,6 +101,11 @@ namespace blitzortung {
 
     void Events::sort() {
       events_.sort();
+    }
+
+    void Events::unique() {
+      events_.sort();
+      events_.unique();
     }
 
     void Events::clear() {

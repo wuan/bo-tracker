@@ -143,7 +143,7 @@ namespace blitzortung {
       Event::AP event = header_.createEvent(fstream_);
 
       // recursive btree search
-      if (event->getWaveform().getTime().time_of_day() > target) {
+      if (event->getWaveform().getTimestamp().time_of_day() > target) {
 	// lower interval
 	end = middle;
       } else {
@@ -159,7 +159,7 @@ namespace blitzortung {
 	event = header_.createEvent(fstream_);
 
 	// return index position
-	if (event->getWaveform().getTime().time_of_day() >= target) {
+	if (event->getWaveform().getTimestamp().time_of_day() >= target) {
 	  return start;
 	} else {
 	  return end;

@@ -27,14 +27,13 @@ namespace blitzortung {
 	util::Stream::ReadValue(stream, status_);
     }
 
-    GpsInfo::GpsInfo()
+    GpsInfo::GpsInfo(float longitude, float latitude, short altitude) :
+      longitude_(longitude),
+      latitude_(latitude),
+      altitude_(altitude),
+      numberOfSatellites_(0),
+      status_(0)
     {
-      longitude_ = 11.2;
-      latitude_ = 48.1;
-      altitude_ = 535;
-      
-      numberOfSatellites_ = 6;
-      status_ = 'A';
     }
 
     GpsInfo::~GpsInfo()
@@ -83,7 +82,7 @@ namespace blitzortung {
     }
 
     size_t GpsInfo::GetSize() {
-      static GpsInfo gpsInfo;
+      static GpsInfo gpsInfo(0,0,0);
 
       return gpsInfo.getSize();
     }

@@ -30,7 +30,7 @@ namespace blitzortung {
 	timefacet->format("%Y-%m-%d %H:%M:%S.%f");
 	std::locale oldLocale = oss.imbue(std::locale(std::locale::classic(), timefacet));
 
-	oss << wfm.getTime();
+	oss << wfm.getTimestamp();
 	oss.setf(std::ios::fixed);
 	oss.precision(6);
 

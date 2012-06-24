@@ -54,8 +54,11 @@ namespace blitzortung {
 	//! release gps information from sample object
 	GpsInfo::AP releaseGpsInfo();
 
-	//! comparison operator <, used for time sorting of events
+	//! comparison operator <
 	bool operator<(const Event &) const;
+
+	//! comparison operator ==
+	bool operator==(const Event &) const;
 
 	//! class used to sort events by their maximum amplitude
 	struct CompareAmplitude : public std::binary_function<Event, Event, bool> {
@@ -66,7 +69,10 @@ namespace blitzortung {
 	void toStream(std::iostream&) const;
 
 	//! get timestamp as string
-	std::string getTimestampAsString(unsigned int index=0) const;
+	const pt::ptime& getTimestamp() const;
+
+	//! get timestamp as string
+	pt::ptime getTimestamp(unsigned int index) const;
 
 	//! get binary storage size of sample
 	size_t getStorageSize() const;
