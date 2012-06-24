@@ -24,7 +24,7 @@ namespace blitzortung {
     }
 
     std::ostream& operator <<(std::ostream& os, const bo::data::Waveform& wfm) {
-	os << "Waveform(" << wfm.getTime() << ", dt " << wfm.getTimeDelta() << ")";
+	os << "Waveform(" << wfm.getTimestamp() << ", dt " << wfm.getTimeDelta() << ")";
 	return os;
     }
 

@@ -16,6 +16,10 @@ namespace blitzortung {
     //! class for gps information
     class GpsInfo : boost::noncopyable {
 
+      public:
+
+	typedef std::unique_ptr<GpsInfo> AP;
+
       private:
 
 	//! longitude
@@ -46,11 +50,13 @@ namespace blitzortung {
 	\param stream from which the object should be read
 	*/
 	GpsInfo(std::iostream& stream);
+
+        //! create a gpsinfo object with given parameters
+	/*!
+	\param stream from which the object should be read
+	*/
+	GpsInfo(float longitude, float latitude, short altitude);
 	
-	GpsInfo();
-
-	typedef std::unique_ptr<GpsInfo> AP;
-
 	//! destroy a waveform object
 	virtual ~GpsInfo();
 

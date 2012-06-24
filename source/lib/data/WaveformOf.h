@@ -55,10 +55,10 @@ namespace blitzortung {
 	virtual ~WaveformOf();
 
 	//! return timestamp of waveform
-	const pt::ptime& getTime() const;
+	const pt::ptime& getTimestamp() const;
 
 	//! return time of sample with given index
-	pt::ptime getTime(unsigned int index) const;
+	pt::ptime getTimestamp(unsigned int index) const;
 
 	//! return delta time of waveform
 	const pt::time_duration& getTimeDelta() const;

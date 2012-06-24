@@ -67,7 +67,7 @@ namespace blitzortung {
 	// get new events from queue until it is empty
 	while (! sampleQueue_.empty()) {
 
-	  if (events_->size() != 0 && events_->getDate() != sampleQueue_.front().getWaveform().getTime().date()) {
+	  if (events_->size() != 0 && events_->getDate() != sampleQueue_.front().getWaveform().getTimestamp().date()) {
 	    if (logger_.isDebugEnabled())
 	      logger_.debugStream() << "() stopped reading queue at transition to next day";
 	    sendAgain = true;
@@ -75,7 +75,7 @@ namespace blitzortung {
 	  }
 
 	  if (logger_.isDebugEnabled())
-	    logger_.debugStream() << "() pop sample from queue " << sampleQueue_.front().getWaveform().getTime();
+	    logger_.debugStream() << "() pop sample from queue " << sampleQueue_.front().getWaveform().getTimestamp();
 
 	  auto event = std::move(sampleQueue_.pop());
 	  events_->add(std::move(event));

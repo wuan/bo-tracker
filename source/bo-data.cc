@@ -50,13 +50,27 @@ class AbstractOutput {
 
 class JsonOutput : public AbstractOutput {
 
+  private:
+
+    std::ostringstream secondsTimestamp_;
+
   protected:
     json_object* jsonArray_;
+
+    std::string asSecondsTimestamp(const pt::ptime& timestamp) {
+      secondsTimestamp_.clear();
+      secondsTimestamp_ << timestamp;
+      return secondsTimestamp_.str();
+    }
 
   public:
 
     JsonOutput() {
       jsonArray_ = json_object_new_array();
+
+      pt::time_facet *timefacet = new pt::time_facet();
+      timefacet->format("%Y-%m-%d %H:%M:%S");
+      secondsTimestamp_.imbue(std::locale(std::locale::classic(), timefacet));
     }
 
     virtual ~JsonOutput() {
@@ -75,23 +89,12 @@ class StreamOutput : public AbstractOutput {
 
     std::ostringstream stream_;
 
-    std::string getTimestampString(const bo::data::Event& event) const {
-      pt::time_facet *timefacet = new pt::time_facet();
-      timefacet->format("%Y-%m-%d %H:%M:%S.%f");
-
-      std::ostringstream oss;
-      oss.imbue(std::locale(std::locale::classic(), timefacet));
-      oss << event.getWaveform().getTime();
-
-      return oss.str();
-    }
-
   public:
 
    StreamOutput() {
       pt::time_facet *timefacet = new pt::time_facet();
       timefacet->format("%Y-%m-%d %H:%M:%S.%f");
-      std::locale oldLocale = stream_.imbue(std::locale(std::locale::classic(), timefacet));
+      stream_.imbue(std::locale(std::locale::classic(), timefacet));
    }
 
    std::string getOutput() const {
@@ -140,13 +143,13 @@ class LongStreamOutput : public StreamOutput {
       float cos_angle = cos(angle);
       float sin_angle = sin(angle);
 
-      stream_ << "max index " << maxIndex << " at " << waveform.getTime(maxIndex) << waveform.getFloat(maxIndex, 0) << waveform.getFloat(maxIndex, 1) << std::endl;
+      stream_ << "max index " << maxIndex << " at " << waveform.getTimestamp(maxIndex) << waveform.getFloat(maxIndex, 0) << waveform.getFloat(maxIndex, 1) << std::endl;
       float scaleFactor = 1 << (waveform.getElementSize() * 8 - 1);
       unsigned int numberOfChannels = waveform.getNumberOfChannels();
       unsigned int timeDeltaNanoseconds = waveform.getTimeDelta().total_nanoseconds();
 
       for (unsigned int sample = 0; sample < waveform.getNumberOfSamples(); sample++) {
-	stream_ << waveform.getTime(sample) << " " << timeDeltaNanoseconds * sample;
+	stream_ << waveform.getTimestamp(sample) << " " << timeDeltaNanoseconds * sample;
 	double sum = 0.0;
 	for (unsigned int channel = 0; channel < numberOfChannels; channel++) {
 	  double value = waveform.getFloat(sample, channel) / scaleFactor;
@@ -184,6 +187,7 @@ class LongJsonOutput : public JsonOutput {
       json_object* jsonArray = event.asJson();
       json_object_array_add(jsonArray, event.getWaveform().asJson(normalize_));
       json_object_array_add(jsonArray, json_object_new_int(index));
+
       json_object_array_add(jsonArray_, jsonArray);
     }
 };
@@ -193,7 +197,7 @@ class TimestampStreamOutput : public StreamOutput {
   public:
     void add(const int index, const bo::data::Event& event) {
       const blitzortung::data::Waveform& waveform = event.getWaveform();
-      stream_ << waveform.getTime(waveform.getMaxIndex()) << " " << index << std::endl;
+      stream_ << waveform.getTimestamp(waveform.getMaxIndex()) << " " << index << std::endl;
     }
 };
 
@@ -205,18 +209,8 @@ class TimestampJsonOutput : public JsonOutput {
 
       json_object* jsonArray = json_object_new_array();
 
-      pt::time_facet *timefacet = new pt::time_facet();
-      timefacet->format("%Y-%m-%d %H:%M:%S");
-
-      std::ostringstream oss;
-      std::locale oldLocale = oss.imbue(std::locale(std::locale::classic(), timefacet));
-
-      oss << wfm.getTime(0);
-
-      json_object_array_add(jsonArray, json_object_new_string(oss.str().c_str()));
-
-      json_object_array_add(jsonArray, json_object_new_int(wfm.getTime(0).time_of_day().fractional_seconds()));
-
+      json_object_array_add(jsonArray, json_object_new_string(asSecondsTimestamp(wfm.getTimestamp()).c_str()));
+      json_object_array_add(jsonArray, json_object_new_int(wfm.getTimestamp().time_of_day().fractional_seconds()));
       json_object_array_add(jsonArray, json_object_new_int(index));
 
       json_object_array_add(jsonArray_, jsonArray);
@@ -258,6 +252,8 @@ void addStreamToInputFile(std::istream& istream, const std::string& outputFile) 
   std::istringstream iss;
   iss.imbue(std::locale(std::locale::classic(), timefacet));
 
+  blitzortung::data::Events events;
+
   while (!istream.eof()) {
 
     std::string line;
@@ -286,10 +282,32 @@ void addStreamToInputFile(std::istream& istream, const std::string& outputFile) 
 
       blitzortung::data::Waveform::AP waveform = sampleParser.getWaveform();
 
-      std::cout << *waveform << std::endl;
+      blitzortung::data::GpsInfo::AP gpsInfo(new blitzortung::data::GpsInfo(longitude, latitude, altitude));
 
+      blitzortung::data::Event::AP event(new blitzortung::data::Event(std::move(waveform), gpsInfo));
+
+      if (events.size() != 0 && events.getDate() != event->getWaveform().getTimestamp().date()) {
+	events.appendToFile(outputFile);
+	events.clear();
+      }
+
+      events.add(event);
     }
   }
+  if (events.size() != 0) {
+    events.appendToFile(outputFile);
+  }
+}
+
+void cleanupFile(const std::string& cleanupFile) {
+  blitzortung::data::Events events;
+
+  events.readFromFile(cleanupFile);
+
+  // sort events and remove duplicate elements with identical timestamp
+  events.unique();
+
+  events.writeToFile(cleanupFile);
 }
 
 void printFileInfo(const std::string& inputFile) {
@@ -300,8 +318,15 @@ void printFileInfo(const std::string& inputFile) {
   bo::data::Events::AP start(eventsFile.read(0,1));
   bo::data::Events::AP end(eventsFile.read(-1,1));
 
-  std::cout << start->front().getTimestampAsString() << " " << 0 << std::endl;
-  std::cout << end->front().getTimestampAsString() << " " << header.getNumberOfEvents() - 1 << std::endl;
+  pt::time_facet *timefacet = new pt::time_facet();
+  timefacet->format("%Y-%m-%d %H:%M:%S.%f");
+
+  std::locale oldLocale = std::cout.imbue(std::locale(std::locale::classic(), timefacet));
+
+  std::cout << start->front().getTimestamp() << " " << 0 << std::endl;
+  std::cout << end->front().getTimestamp() << " " << header.getNumberOfEvents() - 1 << std::endl;
+
+  std::cout.imbue(oldLocale);
 
   const bo::data::Format& format = header.getDataFormat();
 
@@ -314,8 +339,7 @@ void printFileInfo(const std::string& inputFile) {
 
 int main(int argc, char **argv) {
 
-  std::string inputFile = "";
-  std::string outputFile = "";
+  std::string fileName = "";
   std::string mode = "default";
   std::string startTimeString, endTimeString;
   int startIndex, numberOfEvents;
@@ -327,8 +351,9 @@ int main(int argc, char **argv) {
   boost::program_options::options_description desc("program options");
   desc.add_options()
     ("help,h", "show program help")
-    ("input-file,i", po::value<std::string>(&inputFile), "input file name")
-    ("output-file,o", po::value<std::string>(&outputFile), "output file name")
+    ("input-file,i", po::value<std::string>(&fileName), "input file name")
+    ("output-file,o", po::value<std::string>(&fileName), "output file name")
+    ("cleanup-file,c", po::value<std::string>(&fileName), "cleanup file name")
     ("info", "show file info")
     ("starttime,s", po::value<std::string>(&startTimeString), "start time in HHMM or HHMMSS format")
     ("endtime,e", po::value<std::string>(&endTimeString), "end time in HHMM or HHMMSS format")
@@ -371,7 +396,12 @@ int main(int argc, char **argv) {
   logger.setPriority(log4cpp::Priority::NOTICE);
 
   if (vm.count("output-file")) {
-    addStreamToInputFile(std::cin, outputFile);
+    addStreamToInputFile(std::cin, fileName);
+    return 0;
+  }
+
+  if (vm.count("cleanup-file")) {
+    cleanupFile(fileName);
     return 0;
   }
 
@@ -389,7 +419,7 @@ int main(int argc, char **argv) {
   }
 
   if (vm.count("info")) {
-    printFileInfo(inputFile);
+    printFileInfo(fileName);
     return 0;
   }
 
@@ -410,9 +440,9 @@ int main(int argc, char **argv) {
       endTime = parseTime(endTimeString, true);
     }
 
-    events.readFromFile(inputFile, startTime, endTime);
+    events.readFromFile(fileName, startTime, endTime);
   } else {
-    events.readFromFile(inputFile, startIndex, numberOfEvents);
+    events.readFromFile(fileName, startIndex, numberOfEvents);
   }
 
   #ifdef HAVE_BOOST_ACCUMULATORS_ACCUMULATORS_HPP

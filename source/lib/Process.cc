@@ -30,7 +30,7 @@ namespace blitzortung {
       const data::Waveform& waveform = data->getWaveform();
 
       if (logger_.isDebugEnabled())
-	logger_.debugStream() << "push() " << data->getWaveform().getTime();
+	logger_.debugStream() << "push() " << data->getWaveform().getTimestamp();
 
       bool eventShouldBeProcessed = false;
       if (waveform.isEmpty()) {
@@ -42,7 +42,7 @@ namespace blitzortung {
 	} else {
 	  std::ostringstream oss;
 	  oss.precision(2);
-	  oss << "filtered signal with amplitude " << maximalSignalAmplitude << " at " << waveform.getTime().time_of_day();
+	  oss << "filtered signal with amplitude " << maximalSignalAmplitude << " at " << waveform.getTimestamp().time_of_day();
 	  logger_.notice(oss.str());
 	}
       }

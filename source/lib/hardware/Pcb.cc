@@ -114,7 +114,7 @@ namespace blitzortung {
 
       std::string rawData = samplesParser.getRawData();
 
-      if (gps_.isValid() && waveform->getTime() != pt::not_a_date_time) {
+      if (gps_.isValid() && waveform->getTimestamp() != pt::not_a_date_time) {
 	if (logger_.isDebugEnabled())
 	  logger_.debugStream() << "createSample() waveform " << *waveform;
 

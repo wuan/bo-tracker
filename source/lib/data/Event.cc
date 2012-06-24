@@ -34,8 +34,13 @@ namespace blitzortung {
     }
 
     bool Event::operator<(const Event &rhs) const {
-      return waveform_->getTime() < rhs.waveform_->getTime();
+      return waveform_->getTimestamp() < rhs.waveform_->getTimestamp();
     } 
+
+    bool Event::operator==(const Event &rhs) const {
+      return waveform_->getTimestamp() == rhs.waveform_->getTimestamp();
+    } 
+
 
     bool Event::CompareAmplitude::operator()(const first_argument_type &x, const second_argument_type &y) const {
       return x.getWaveform().getAmplitude(0) < y.getWaveform().getAmplitude(0);
@@ -67,18 +72,12 @@ namespace blitzortung {
       return gpsSize + waveformSize;
     }
 
-    std::string Event::getTimestampAsString(unsigned int index) const {
-      pt::time_facet *timefacet = new pt::time_facet();
-      timefacet->format("%Y-%m-%d %H:%M:%S.%f");
+    const pt::ptime& Event::getTimestamp() const {
+      return waveform_->getTimestamp();
+    }
 
-      std::ostringstream oss;
-      std::locale oldLocale = oss.imbue(std::locale(std::locale::classic(), timefacet));
-
-      oss << waveform_->getTime(index);
-
-      oss.imbue(oldLocale);
-
-      return oss.str();
+    pt::ptime Event::getTimestamp(unsigned int index) const {
+      return waveform_->getTimestamp(index);
     }
 
     json_object* Event::asJson() const {
@@ -90,11 +89,11 @@ namespace blitzortung {
       std::ostringstream oss;
       std::locale oldLocale = oss.imbue(std::locale(std::locale::classic(), timefacet));
 
-      oss << waveform_->getTime(0);
+      oss << waveform_->getTimestamp();
 
       json_object_array_add(jsonArray, json_object_new_string(oss.str().c_str()));
 
-      json_object_array_add(jsonArray, json_object_new_int(waveform_->getTime(0).time_of_day().fractional_seconds()));
+      json_object_array_add(jsonArray, json_object_new_int(waveform_->getTimestamp().time_of_day().fractional_seconds()));
       json_object_array_add(jsonArray, json_object_new_double(gpsInfo_->getLongitude()));
       json_object_array_add(jsonArray, json_object_new_double(gpsInfo_->getLatitude()));
       json_object_array_add(jsonArray, json_object_new_int(gpsInfo_->getAltitude()));
@@ -117,7 +116,7 @@ namespace blitzortung {
       os.precision(4);
       unsigned int maxIndex = wfm.getMaxIndex();
       
-      os << event.getTimestampAsString(maxIndex) << " " << gpsInfo;
+      os << event.getTimestamp(maxIndex) << " " << gpsInfo;
       os << " " << wfm.getTimeDelta().total_nanoseconds();
 
       os.precision(2);
