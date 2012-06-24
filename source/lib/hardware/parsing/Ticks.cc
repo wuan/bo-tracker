@@ -80,7 +80,6 @@ namespace blitzortung {
 	  if (dateTime_.is_not_a_date_time())
 	    logger_.warnStream() << "Ticks() could not parse datetime '" << dateTime << "'";
 
-	  // exctract actual location and altitude information
 	  longitude_ = parseGpsCoord(fields[longitudeIndex], fields[longitudeHemisphereIndex]);
 	  latitude_ = parseGpsCoord(fields[latitudeIndex], fields[latitudeHemisphereIndex]);
 
@@ -91,7 +90,6 @@ namespace blitzortung {
 	  }
 
 	  if (numberOfSatellitesIndex > 0) {
-	    // add actual satellite count to ringbuffer
 	    numberOfSatellites_ = parseInt(fields[numberOfSatellitesIndex]);
 	  } else {
 	    numberOfSatellites_ = 0;
@@ -110,11 +108,11 @@ namespace blitzortung {
 	return numberOfSatellites_;
       }
 
-      const float Ticks::getLongitude() const {
+      float Ticks::getLongitude() const {
 	return longitude_;
       }
 
-      const float Ticks::getLatitude() const {
+      float Ticks::getLatitude() const {
 	return latitude_;
       }
 
@@ -122,7 +120,7 @@ namespace blitzortung {
 	return altitude_;
       }
 
-      const char Ticks::getGpsStatus() const {
+      char Ticks::getGpsStatus() const {
 	return status_[0];
       }
 

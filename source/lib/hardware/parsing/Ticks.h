@@ -52,13 +52,13 @@ namespace blitzortung {
 	  bool parse(const std::vector<std::string>);
 
 	  //! read GPS status char
-	  const char getGpsStatus() const;
+	  char getGpsStatus() const;
 
 	  //! get longitude value
-	  const float getLongitude() const;
+	  float getLongitude() const;
 
 	  //! get latitude value
-	  const float getLatitude() const;
+	  float getLatitude() const;
 
 	  //! get altitude value
 	  short getAltitude() const;
