@@ -161,7 +161,7 @@ namespace blitzortung {
       
       fstream.open(formatFilename(filename).c_str(), std::ios::out | std::ios::trunc | std::ios::binary);
 
-      if (fstream.bad()) {
+      if (!fstream.is_open()) {
 	throw exception::Base("data::EventsHeader write() could not open file '" + formatFilename(filename) + "'");
       }
       
