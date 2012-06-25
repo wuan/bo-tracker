@@ -155,11 +155,15 @@ namespace blitzortung {
 	logger_.debugStream() << "write() date " << date_ << " #events " << numberOfEvents_;
 
       if (date_ == gr::date(pt::not_a_date_time))
-	throw exception::Base("data::EventsHeader writeHeader() invalid file date");
+	throw exception::Base("data::EventsHeader write() invalid file date");
 
       std::fstream fstream;
       
       fstream.open(formatFilename(filename).c_str(), std::ios::out | std::ios::trunc | std::ios::binary);
+
+      if (fstream.bad()) {
+	throw exception::Base("data::EventsHeader write() could not open file '" + formatFilename(filename) + "'");
+      }
       
       fstream.seekg(0, std::ios::beg);
 
@@ -173,11 +177,6 @@ namespace blitzortung {
       }
 
       dataFormat_.toStream(fstream);
-
-      if (fstream.tellg() != getSize()) {
-	std::cout << " header size: " << fstream.tellg() << " should be " << getSize() << std::endl;
-	std::cout << dataFormat_ << std::endl;
-      }
 
       assert(fstream.tellg() == getSize());
       
