@@ -84,7 +84,7 @@ namespace blitzortung {
 
 	    return createSample(samplesParser);
 	  } else {
-	    logger_.warnStream() << "handled data '" << line << "'";
+	    logger_.warnStream() << "invalid data '" << line << "'";
 	  }
 	}
       }
