@@ -102,6 +102,9 @@ namespace blitzortung {
 	  // transmit data
 	  transfer_.send(*events_);
 
+	  // only count transmitted events
+	  eventsPerSecond += events_->size();
+
 	  if (logger_.isDebugEnabled())
 	    logger_.debugStream() << "() recollect events " << events_->size() << " + " << deletedEvents->size();
 
@@ -118,8 +121,6 @@ namespace blitzortung {
 	      events_->erase(event--);
 	    }
 	  }
-
-	  eventsPerSecond += events_->size();
 
 	  output_.output(*events_);
 	}
