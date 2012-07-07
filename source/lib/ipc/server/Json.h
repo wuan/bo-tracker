@@ -22,14 +22,12 @@ namespace blitzortung {
 	  //! gps hardware reference
 	  const hardware::Pcb& hardware_;
 
-	  json_object* jsonResponse_;
-
 	  //! logger for this class
 	  mutable Logger logger_;
 
-	  void cmdGetInfo();
+	  void cmdGetInfo(json_object* jsonResponse);
 
-	  void cmdGetActivity();
+	  void cmdGetActivity(json_object* jsonResponse);
 
 	  virtual std::string respond(const std::string&);
 

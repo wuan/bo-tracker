@@ -18,10 +18,10 @@ namespace blitzortung {
 	  logger_.debugStream() << "initialize for socket " << socket;
       }
 
-      void Json::cmdGetInfo() {
+      void Json::cmdGetInfo(json_object* jsonResponse) {
 	json_object* jsonHardware = json_object_new_object();
 	json_object_object_add(jsonHardware, "firmware", json_object_new_string(hardware_.getFirmwareVersion().c_str()));
-	json_object_object_add(jsonResponse_, "hardware", jsonHardware);
+	json_object_object_add(jsonResponse, "hardware", jsonHardware);
 
 	const hardware::gps::Base& gps = hardware_.getGps();
 	json_object* jsonGps = json_object_new_object();
@@ -74,15 +74,15 @@ namespace blitzortung {
 	  json_object_object_add(jsonProcess, "uptime", json_object_new_string(oss.str().c_str()));
 	} catch (exception::Base &e) {
 	}
-	json_object_object_add(jsonResponse_, "process", jsonProcess);
+	json_object_object_add(jsonResponse, "process", jsonProcess);
 
 	json_object* jsonSoftware = json_object_new_object();
 	json_object_object_add(jsonSoftware, "version", json_object_new_string(hardware_.getVersion().c_str()));
-	json_object_object_add(jsonResponse_, "software", jsonSoftware);
+	json_object_object_add(jsonResponse, "software", jsonSoftware);
       }
 
       std::string Json::respond(const std::string& input) {
-	jsonResponse_ = json_object_new_object();
+	json_object* jsonResponse = json_object_new_object();
 
 	json_object* jsonObj = json_tokener_parse(input.c_str());
 	if (jsonObj != 0) {
@@ -90,12 +90,12 @@ namespace blitzortung {
 	  if (cmd_obj != 0) {
 	    std::string command(json_object_get_string(cmd_obj));
 
-	    json_object_object_add(jsonResponse_, "command", json_object_new_string(command.c_str()));
+	    json_object_object_add(jsonResponse, "command", json_object_new_string(command.c_str()));
 
 	    if (command == "getInfo")
-	      cmdGetInfo();
+	      cmdGetInfo(jsonResponse);
 	    else if (command =="getActivity")
-	      cmdGetActivity();
+	      cmdGetActivity(jsonResponse);
 
 	    json_object_put(cmd_obj);
 	  }
@@ -103,17 +103,17 @@ namespace blitzortung {
 	  json_object_put(jsonObj);
 	} else {
 	  std::string result = "could not parse command '" + input + "'";
-	  json_object_object_add(jsonResponse_, "error", json_object_new_string(result.c_str()));
+	  json_object_object_add(jsonResponse, "error", json_object_new_string(result.c_str()));
 	  logger_.warnStream() << result;
 	}
 
-	std::string jsonString(json_object_to_json_string(jsonResponse_));
-	json_object_put(jsonResponse_);
+	std::string jsonString(json_object_to_json_string(jsonResponse));
+	json_object_put(jsonResponse);
 
 	return jsonString;
       }
 
-      void Json::cmdGetActivity() {
+      void Json::cmdGetActivity(json_object* jsonResponse) {
 	json_object* jsonActivity = json_object_new_array();
 
 	const unsigned int intervalSeconds = 60;
@@ -130,9 +130,9 @@ namespace blitzortung {
 	  json_object_array_add(jsonActivity, json_object_new_int(eventsPerInterval));
 	}
 
-	json_object_object_add(jsonResponse_, "activity", jsonActivity);
+	json_object_object_add(jsonResponse, "activity", jsonActivity);
 
-	json_object_object_add(jsonResponse_, "intervalSeconds", json_object_new_int(intervalSeconds));
+	json_object_object_add(jsonResponse, "intervalSeconds", json_object_new_int(intervalSeconds));
 
 	const hardware::gps::Base& gps = hardware_.getGps();
 	pt::ptime gpsTime;
@@ -147,10 +147,10 @@ namespace blitzortung {
 	datefacet->format("%Y-%m-%d");
 	oss.imbue(std::locale(std::locale::classic(), datefacet));
 	oss << gpsTime.date();
-	json_object_object_add(jsonResponse_, "date", json_object_new_string(oss.str().c_str()));
+	json_object_object_add(jsonResponse, "date", json_object_new_string(oss.str().c_str()));
 	oss.str("");
 	oss << gpsTime.time_of_day();
-	json_object_object_add(jsonResponse_, "time", json_object_new_string(oss.str().c_str()));
+	json_object_object_add(jsonResponse, "time", json_object_new_string(oss.str().c_str()));
       }
 
 
