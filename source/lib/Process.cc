@@ -7,6 +7,7 @@ namespace blitzortung {
 
   Process::Process(network::transfer::Base& transfer, const double eventRateLimit, output::Base& output) :
     startTime_(pt::second_clock::universal_time()),
+    eventQueue_(),
     transfer_(transfer),
     output_(output),
     eventCountBuffer_(60*60),

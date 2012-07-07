@@ -9,6 +9,7 @@ namespace blitzortung {
       Udp::Udp(const Creds& creds) :
 	Base(creds),
 	sockId_(-1),
+	servAddr_(),
 	logger_("network.transfer.Udp")
       {
 	if (logger_.isDebugEnabled())

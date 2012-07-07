@@ -7,16 +7,13 @@
 namespace blitzortung {
   namespace data {
 
-    GpsInfo::GpsInfo(const hardware::gps::Base& gps)
+    GpsInfo::GpsInfo(const hardware::gps::Base& gps) :
+      longitude_(gps.getLocation().getLongitude()),
+      latitude_(gps.getLocation().getLatitude()),
+      altitude_(gps.getLocation().getAltitude()),
+      numberOfSatellites_(gps.getSatelliteCount()),
+      status_(gps.getStatus())
     {
-      const hardware::gps::data::Location& location = gps.getLocation();
-
-      longitude_ = location.getLongitude();
-      latitude_ = location.getLatitude();
-      altitude_ = location.getAltitude();
-      
-      numberOfSatellites_ = gps.getSatelliteCount();
-      status_ = gps.getStatus();
     }
 
     GpsInfo::GpsInfo(std::iostream& stream) {

@@ -10,9 +10,11 @@ namespace blitzortung {
 
       Dummy::Dummy(bool keepOpen) :
 	keepOpen_(keepOpen),
+	dummyData_(),
+	readPosition_(0),
+	dummyBaud_(0),
 	logger_("hardware.comm.Dummy")
       {
-	readPosition_ = 0;
       }
 
       Dummy::~Dummy() {
@@ -30,7 +32,7 @@ namespace blitzortung {
 	dummyBaud_ = baudRate;
       }
 
-      const unsigned int Dummy::getBaudRate() const {
+      unsigned int Dummy::getBaudRate() const {
 	return dummyBaud_;
       }
       

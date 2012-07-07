@@ -7,6 +7,8 @@ namespace blitzortung {
       namespace data {
 
 	Time::Time() :
+	  second_(),
+	  oldCounter_(),
 	  counterTicksPerSecond_(Base::BUFFERSIZE),
 	  ignoreCounter_(1),
 	  logger_("hardware.gps.data.Time")

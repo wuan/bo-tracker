@@ -15,13 +15,11 @@ namespace blitzortung {
 	portName_(portName),
 	buffer_(""),
 	isOpen_(false),
+	serialFd_(open(portName.c_str(), O_RDWR | O_NOCTTY | O_NDELAY)),
 	logger_("hardware.comm.SerialPort")
       {
-
 	if (logger_.isInfoEnabled())
 	  logger_.infoStream() << "initializing serial port " << portName_.c_str() << " with " << baudRate << " baud";
-
-	serialFd_ = open(portName_.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 
 	if (serialFd_ < 0) {
 	  std::ostringstream oss;
@@ -149,7 +147,7 @@ namespace blitzortung {
 	tcsetattr(serialFd_, TCSANOW, &serialAttr);
       }
 
-      const unsigned int SerialPort::getBaudRate() const {
+      unsigned int SerialPort::getBaudRate() const {
 	struct termios serialAttr;
 
 	tcgetattr(serialFd_, &serialAttr);

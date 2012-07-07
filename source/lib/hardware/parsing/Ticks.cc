@@ -7,6 +7,13 @@ namespace blitzortung {
 
       Ticks::Ticks(const std::vector<std::string>& fields) :
 	Base(),
+	dateTime_(),
+	status_(),
+	longitude_(),
+	latitude_(),
+	altitude_(),
+	numberOfSatellites_(),
+	firmwareVersion_(),
 	logger_("hardware.parsing.Ticks()")
       {
 	unsigned int counterIndex = 0;

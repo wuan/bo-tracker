@@ -8,10 +8,11 @@ namespace blitzortung {
 
       Samples::Samples(const std::vector<std::string>& fields, const hardware::gps::Base& gps) :
 	Base(),
+	waveform_(),
+	rawData_(),
+	bitsPerSample_(0),
 	logger_("hardware.parsing.Samples")
       {
-	valid_ = false;
-
 	if (gps.isValid()) {
 	  // the counter value is always at the second position
 	  counter_ = parseHex(fields[1]);
@@ -83,10 +84,11 @@ namespace blitzortung {
 
       Samples::Samples(const data::Format& format, const pt::ptime& timestamp, const unsigned short samplePeriod, const std::string& data) :
 	Base(),
+	waveform_(),
+	rawData_(),
+	bitsPerSample_(0),
 	logger_("hardware.parsing.Samples")
       {
-	valid_ = false;
-
 	setWaveform(format, timestamp, pt::nanoseconds(samplePeriod), data);
       }
 

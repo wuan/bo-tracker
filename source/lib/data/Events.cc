@@ -6,6 +6,10 @@ namespace blitzortung {
   namespace data {
 
     Events::Events() :
+      date_(),
+      dataFormat_(),
+      events_(),
+      startIndex_(-1),
       logger_("data.Events")
     {
       if (logger_.isDebugEnabled())
@@ -15,6 +19,7 @@ namespace blitzortung {
     Events::Events(const gr::date& date, const Format& dataFormat) :
       date_(date),
       dataFormat_(dataFormat),
+      events_(),
       startIndex_(-1),
       logger_("data.Events")
     {
@@ -25,6 +30,7 @@ namespace blitzortung {
     Events::Events(const EventsHeader& header) :
       date_(header.getDate()),
       dataFormat_(header.getDataFormat()),
+      events_(),
       startIndex_(-1),
       logger_("data.Events")
     {

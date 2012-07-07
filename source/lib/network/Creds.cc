@@ -3,13 +3,6 @@
 namespace blitzortung {
   namespace network {
 
-
-    Creds::Creds() {
-    }
-
-    Creds::~Creds() {
-    }
-
     void Creds::setUsername(const std::string& username) {
       username_ = username;
     }
@@ -38,7 +31,7 @@ namespace blitzortung {
       serverport_ = serverport;
     }
 
-    const unsigned short Creds::getServerport() const {
+    unsigned short Creds::getServerport() const {
       return serverport_;
     }
 

@@ -54,7 +54,7 @@ namespace blitzortung {
 	  void setBaudRate(const unsigned int);
 
 	  //! returns the actual baud rate of the serial port
-	  const unsigned int getBaudRate() const;
+	  unsigned int getBaudRate() const;
 	  
 	  //! return the name of the serial port device
 	  const std::string& getPortName() const;

@@ -26,7 +26,7 @@ namespace blitzortung {
 	  virtual void setBaudRate(const unsigned int) = 0;
 	  
 	  //! returns the actual baud rate
-	  virtual const unsigned int getBaudRate() const = 0;
+	  virtual unsigned int getBaudRate() const = 0;
 	  
 	  //! returns the interface name
 	  virtual const std::string& getInterfaceName() const = 0;

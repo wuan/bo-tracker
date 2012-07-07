@@ -31,6 +31,9 @@ namespace blitzortung {
 	  //! construct socket
 	  Base(const unsigned int socket);
 
+	  //! virtual destructor
+	  virtual ~Base() {};
+
 	  //! server thread procedure
 	  void operator ()();
 

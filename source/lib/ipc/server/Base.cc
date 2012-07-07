@@ -6,6 +6,7 @@ namespace blitzortung {
     namespace server {
 
       Base::Base(const unsigned int socket) :
+	sockaddr_(),
 	socket_(socket),
 	logger_("ipc.server.Base")
       {

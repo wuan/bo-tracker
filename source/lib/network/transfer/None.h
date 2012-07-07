@@ -11,10 +11,10 @@ namespace blitzortung {
 
 	private:
 
+	  Creds localCreds_;
+
 	  //! logger for this class
 	  mutable Logger logger_;
-
-	  Creds localCreds_;
 
 	public:
 

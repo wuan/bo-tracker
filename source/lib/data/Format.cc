@@ -6,6 +6,7 @@ namespace blitzortung {
   namespace data {
 
     Format::Format(unsigned char numberOfBytes, unsigned char numberOfChannels, unsigned short numberOfSamples) :
+      sampleType_(Type::BYTE),
       numberOfChannels_(numberOfChannels),
       numberOfSamples_(numberOfSamples),
       logger_("data.Format")
@@ -22,6 +23,9 @@ namespace blitzortung {
     }
 
     Format::Format(std::iostream& stream) :
+      sampleType_(Type::BYTE),
+      numberOfChannels_(0),
+      numberOfSamples_(0),
       logger_("data.Format")
     {
       fromStream(stream);

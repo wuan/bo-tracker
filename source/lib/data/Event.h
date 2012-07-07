@@ -13,7 +13,7 @@ namespace blitzortung {
   namespace data {
 
     //! class representing a single recorded sferics event with all relevant information
-    class Event : boost::noncopyable {
+    class Event {
 
       public:
 
@@ -41,6 +41,9 @@ namespace blitzortung {
 
 	//! destruct Event
 	virtual ~Event();
+
+	Event(const Event&) = delete;
+	Event& operator=(const Event&) = delete;
 
 	//! return reference to sample waveform
 	const Waveform& getWaveform() const;
