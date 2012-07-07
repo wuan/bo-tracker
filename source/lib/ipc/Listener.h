@@ -16,7 +16,7 @@ namespace blitzortung {
 	//! socket for which this listener is active
 	const unsigned int socket_;
 
-	sockaddr* sockaddr_;
+	sockaddr& sockaddr_;
 
 	socklen_t sockaddrSize_;
 	
@@ -29,10 +29,7 @@ namespace blitzortung {
       public:
 
 	//! construct socket
-	Listener(const unsigned int socket, sockaddr* sockaddr, socklen_t sockaddrSize, const ipc::server::factory::Base& serverFactory);
-
-	Listener(const Listener&) = delete;
-	Listener& operator=(const Listener&) = delete;
+	Listener(const unsigned int socket, sockaddr& sockaddr, socklen_t sockaddrSize, const ipc::server::factory::Base& serverFactory);
 
 	//! listener thread procedure
 	void operator ()();

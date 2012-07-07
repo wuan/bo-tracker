@@ -76,7 +76,6 @@ namespace blitzortung {
 	      return createKeepaliveSample();
 	    }
 	  }
-
 	} else {
 	  parsing::Samples samplesParser(fields, gps_);
 
