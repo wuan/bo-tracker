@@ -8,7 +8,7 @@
 namespace blitzortung {
   namespace ipc {
 
-    Listener::Listener(const unsigned int socket, sockaddr* sockaddr, socklen_t sockaddrSize, const ipc::server::factory::Base& serverFactory) :
+    Listener::Listener(const unsigned int socket, sockaddr& sockaddr, socklen_t sockaddrSize, const ipc::server::factory::Base& serverFactory) :
       socket_(socket),
       sockaddr_(sockaddr),
       sockaddrSize_(sockaddrSize),
@@ -29,7 +29,7 @@ namespace blitzortung {
 
         listen(socket_, 10);
 
-	const int connectionSocket = accept(socket_, sockaddr_, &sockaddrSize_);
+	const int connectionSocket = accept(socket_, &sockaddr_, &sockaddrSize_);
 
 	if (connectionSocket == -1) {
 	  logger_.errorStream() << "connection error";
