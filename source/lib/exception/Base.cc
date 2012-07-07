@@ -3,8 +3,9 @@
 namespace blitzortung {
   namespace exception {
 
-    Base::Base() throw() {
-
+    Base::Base() throw() :
+      msg_()
+    {
     }
 
     Base::Base(const std::string& msg) throw() :

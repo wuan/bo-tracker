@@ -7,7 +7,10 @@ namespace blitzortung {
   namespace data {
 
     EventsFile::EventsFile(const std::string& name) :
+      fstream_(),
+      openmode_(),
       name_(name),
+      header_(),
       logger_("data.EventsFile")
     {
     }

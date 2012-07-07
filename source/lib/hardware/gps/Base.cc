@@ -10,6 +10,9 @@ namespace blitzortung {
 
       Base::Base(comm::Base& communication, const unsigned short baudRate, bool disableSbas) :
 	communication_(communication),
+	time_(),
+	location_(),
+	dateInitialized_(),
 	satelliteCount_(data::Base::BUFFERSIZE),
 	status_(0),
 	logger_("hardware.gps.Base"),
@@ -29,11 +32,11 @@ namespace blitzortung {
 	status_ = status;
       }
 
-      const char Base::getStatus() const {
+      char Base::getStatus() const {
 	return status_;
       }
 
-      const bool Base::isValid() const {
+      bool Base::isValid() const {
 	if (satelliteCount_.getActualSize() ==0)
 	  return false;
 	return true;

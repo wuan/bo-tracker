@@ -16,7 +16,9 @@ namespace blitzortung {
 
     template<typename T>
     WaveformOf<T>::WaveformOf(unsigned char numberOfChannels, unsigned short numberOfSamples, const gr::date& date, std::iostream& stream) :
-      ArrayOf<T>(numberOfChannels, numberOfSamples)
+      ArrayOf<T>(numberOfChannels, numberOfSamples),
+      t0_(),
+      dt_()
     {
       {
 	unsigned long long int nanoseconds;
@@ -101,7 +103,7 @@ namespace blitzortung {
 	normalize = false;
       }
 
-      json_object* values[numberOfChannels];
+      json_object** values = new json_object*[numberOfChannels];
 
       for (unsigned short channel = 0; channel < numberOfChannels; channel++) {
 	values[channel] = json_object_new_array();
@@ -129,6 +131,8 @@ namespace blitzortung {
 	  }
 	}
       }
+
+      delete values;
 
       return jsonArray;
     }

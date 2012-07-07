@@ -10,7 +10,7 @@ namespace blitzortung {
     class Format;
 
     //! class for waveform arrays
-    class Array : boost::noncopyable {
+    class Array {
 
       public:
 
@@ -18,8 +18,13 @@ namespace blitzortung {
 
       public:
 
+	Array() = default;
+
 	//! delete waveform object
 	virtual ~Array();
+
+	Array(const Array&) = delete;
+	Array& operator=(const Array&) = delete;
 
 	//! returns the data format of the current array
 	virtual Format getFormat() const = 0;

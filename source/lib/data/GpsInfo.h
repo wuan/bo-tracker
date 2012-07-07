@@ -14,7 +14,7 @@ namespace blitzortung {
   namespace data {
 
     //! class for gps information
-    class GpsInfo : boost::noncopyable {
+    class GpsInfo {
 
       public:
 
@@ -59,6 +59,9 @@ namespace blitzortung {
 	
 	//! destroy a waveform object
 	virtual ~GpsInfo();
+
+	GpsInfo(const GpsInfo&) = delete;
+	GpsInfo& operator=(const GpsInfo&) = delete;
 
 	//! returns longitude
 	float getLongitude() const;

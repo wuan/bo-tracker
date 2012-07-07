@@ -70,7 +70,7 @@ namespace blitzortung {
 	serialPort_.flushInput();
       }
 
-      const unsigned int Serial::getBaudRate() const {
+      unsigned int Serial::getBaudRate() const {
 	return serialPort_.getBaudRate();
       }
       

@@ -11,7 +11,7 @@ dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AC_CONFIG_HEADERS([config.h])
 
 CXXFLAGS="${CXXFLAGS} -std=gnu++0x -pthread"
-CXXFLAGS="${CXXFLAGS} -fsigned-char -Wall -DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG"
+CXXFLAGS="${CXXFLAGS} -fsigned-char -Wall -Wextra -pedantic -Weffc++ -DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG"
 AC_SUBST(CXXFLAGS)
 
 AC_PROG_CXX

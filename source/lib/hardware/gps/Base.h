@@ -85,10 +85,10 @@ namespace blitzortung {
 	  void set(const hardware::parsing::Ticks& ticksParser);
 
 	  //! read GPS status char
-	  const char getStatus() const;
+	  char getStatus() const;
 
 	  //! is GPS data valid?
-	  const bool isValid() const;
+	  bool isValid() const;
 
 	  //! get average satellite count value
 	  unsigned short getSatelliteCount() const;

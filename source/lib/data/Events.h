@@ -13,7 +13,7 @@ namespace blitzortung {
     class EventsHeader;
 
     //! container class for events
-    class Events : boost::noncopyable {
+    class Events {
 
       public:
         typedef Event::VI I;
@@ -60,6 +60,9 @@ namespace blitzortung {
 
 	//! destructor
 	virtual ~Events();
+
+	Events(const Events&) = delete;
+	Events& operator=(const Events&) = delete;
 
 	//! add event to collection
 	void add(Event::AP&&);

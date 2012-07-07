@@ -24,9 +24,10 @@ namespace blitzortung {
     EventsHeader::EventsHeader(const Format& dataFormat, const gr::date& date) :
       version_(1),
       date_(date),
+      dataFormat_(dataFormat),
+      numberOfEvents_(0),
       logger_("data.EventsHeader")
     {
-      dataFormat_ = dataFormat;
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "construct() date " << date_ << ", format " << dataFormat_;
     }

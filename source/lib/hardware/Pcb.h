@@ -24,9 +24,6 @@ namespace blitzortung {
 	//! reference to communication object
 	comm::Base& comm_;
 
-	//! vector for data fields
-	std::vector<std::string> fields_;
-
 	//! last time when a sample was created
 	pt::ptime lastSampleCreated_;
 

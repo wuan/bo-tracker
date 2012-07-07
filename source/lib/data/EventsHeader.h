@@ -26,8 +26,6 @@ namespace blitzortung {
 	//! static constant for date which marks the start of the epoch
 	static const gr::date STARTOFEPOCH;
 
-	//***********************************
-
 	//! file format version
 	unsigned short version_;
 

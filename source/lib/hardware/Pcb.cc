@@ -13,6 +13,7 @@ namespace blitzortung {
 
     Pcb::Pcb(comm::Base& comm, gps::Base& gps, const std::string& firmwareVersion) :
       comm_(comm),
+      lastSampleCreated_(pt::not_a_date_time),
       gps_(gps),
       firmwareVersion_(firmwareVersion),
       logger_("hardware.Pcb")

@@ -10,10 +10,9 @@ namespace blitzortung {
     transfer_(transfer),
     events_(new data::Events()),
     output_(output),
+    eventRateLimit_(1.0),
     logger_("DataWorker")
   {
-    eventRateLimit_ = 1.0;
-
     if (logger_.isDebugEnabled())
       logger_.debugStream() << "initalized(eventRateLimit: " << eventRateLimit_ << ")";
   }

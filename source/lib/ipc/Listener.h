@@ -31,6 +31,9 @@ namespace blitzortung {
 	//! construct socket
 	Listener(const unsigned int socket, sockaddr* sockaddr, socklen_t sockaddrSize, const ipc::server::factory::Base& serverFactory);
 
+	Listener(const Listener&) = delete;
+	Listener& operator=(const Listener&) = delete;
+
 	//! listener thread procedure
 	void operator ()();
     };

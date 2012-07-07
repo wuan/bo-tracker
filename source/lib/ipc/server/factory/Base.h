@@ -23,6 +23,9 @@ namespace blitzortung {
 	    //! construct socket
 	    Base();
 
+	    //! virtual destructor
+	    virtual ~Base() {};
+
 	    virtual void createServerThread(const unsigned int socket) const = 0; 
 	};
 

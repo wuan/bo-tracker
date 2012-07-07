@@ -4,15 +4,16 @@
 namespace blitzortung {
   namespace data {
 
-    Event::Event(Waveform::AP&& waveform, GpsInfo::AP&& gpsInfo)
+    Event::Event(Waveform::AP&& waveform, GpsInfo::AP&& gpsInfo) :
+      waveform_(std::move(waveform)),
+      gpsInfo_(std::move(gpsInfo))
     {
-      waveform_ = std::move(waveform);
-      gpsInfo_ = std::move(gpsInfo);
     }
 
-    Event::Event(const data::Format& format, const gr::date& date, std::iostream& stream) {
-      waveform_ = format.createWaveformFromStream(date, stream);
-      gpsInfo_ = GpsInfo::AP(new GpsInfo(stream));
+    Event::Event(const data::Format& format, const gr::date& date, std::iostream& stream) :
+      waveform_(format.createWaveformFromStream(date, stream)),
+      gpsInfo_(GpsInfo::AP(new GpsInfo(stream)))
+    {
     }
 
     Event::~Event() = default;

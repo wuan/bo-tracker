@@ -13,6 +13,8 @@ namespace blitzortung {
 	  public:
 	    static const int BUFFERSIZE;
 
+	    virtual ~Base() {};
+
 	};
 
       }

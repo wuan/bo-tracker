@@ -8,7 +8,8 @@ namespace blitzortung {
     namespace parsing {
 
       Base::Base() :
-        valid_(false)
+        valid_(false),
+	counter_(0)
       {
       }
 

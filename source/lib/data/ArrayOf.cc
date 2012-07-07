@@ -6,9 +6,9 @@ namespace blitzortung {
 
     template<typename T>
     ArrayOf<T>::ArrayOf(unsigned char numberOfChannels, unsigned short numberOfSamples) :
+      data_(numberOfChannels * numberOfSamples),
       numberOfChannels_(numberOfChannels)
     {
-      data_.resize(numberOfChannels * numberOfSamples);
     }
 
     template<typename T>

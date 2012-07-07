@@ -6,7 +6,7 @@
 namespace blitzortung {
   namespace network {
 
-    class Creds : private boost::noncopyable {
+    class Creds {
 
       private:
 
@@ -25,10 +25,10 @@ namespace blitzortung {
       public:
 
 	//! constructor
-	Creds();
+	Creds() = default;
 
-	//! destructor
-	virtual ~Creds();
+	Creds(const Creds&) = delete;
+	Creds& operator=(const Creds&) = delete;
 
 	//! set user name of blitzortung participant
 	void setUsername(const std::string&);
@@ -52,7 +52,7 @@ namespace blitzortung {
 	void setServerport(const unsigned short);
 
 	//! get tcp port of blitzortung data target service
-	const unsigned short getServerport() const;
+	unsigned short getServerport() const;
 
     };
   }

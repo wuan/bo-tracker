@@ -6,6 +6,7 @@ namespace blitzortung {
 
       None::None() :
 	Base(localCreds_),
+	localCreds_(),
 	logger_("network.transfer.None")
       {
 	if (logger_.isDebugEnabled())

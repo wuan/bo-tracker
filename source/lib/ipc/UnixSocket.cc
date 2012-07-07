@@ -10,11 +10,10 @@ namespace blitzortung {
   namespace ipc {
 
     UnixSocket::UnixSocket(const std::string& socketFileName, const ipc::server::factory::Base& serverFactory) :
+      socket_(socket(AF_UNIX, SOCK_STREAM, 0)),
       socketFileName_(socketFileName),
       logger_("ipc.UnixSocket")
     {
-      socket_ = socket(AF_UNIX, SOCK_STREAM, 0);
-
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "create unix domain socket " << socket_;
 
@@ -41,13 +40,11 @@ namespace blitzortung {
 
 	logger_.debugStream() << "starting listener for socket " << socket_;
 
-        std::thread(listener).detach();
+        std::thread(std::ref(listener)).detach();
       } else {
         logger_.warnStream() << "binding to socket file '" << sockaddr.sun_path << "' failed, socket-server not started";
       }
-
     }
-
 
     UnixSocket::~UnixSocket()
     {
