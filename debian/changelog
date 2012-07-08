@@ -1,4 +1,4 @@
-blitzortung-tracker (1.0.6SNAPSHOT201206282005) unstable; urgency=low
+blitzortung-tracker (1.0.6SNAPSHOT201207080800) unstable; urgency=low
 
   * added txt to data file operation to bo-data
   * added data file cleanup operation to bo-data
