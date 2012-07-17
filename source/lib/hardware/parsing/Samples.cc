@@ -89,7 +89,7 @@ namespace blitzortung {
 	bitsPerSample_(0),
 	logger_("hardware.parsing.Samples")
       {
-	setWaveform(format, timestamp, pt::nanoseconds(samplePeriod), data);
+	setWaveform(format, timestamp, std::move(pt::nanoseconds(samplePeriod)), std::move(data));
       }
 
       void Samples::setWaveform(const data::Format& format, const pt::ptime& eventtime, const pt::time_duration&& sampleDt, const std::string&& rawData, unsigned char numberOfBitsPerSample) {

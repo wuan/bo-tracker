@@ -34,7 +34,7 @@ namespace blitzortung {
       public:
 
         //! construct Event with Data
-	Event(Waveform::AP&&, GpsInfo::AP&&);
+	Event(Waveform::AP&, GpsInfo::AP&);
 
 	//! construct Event from stream 
 	Event(const data::Format& dataFormat, const gr::date& date, std::iostream& stream);

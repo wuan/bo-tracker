@@ -6,6 +6,9 @@ namespace blitzortung {
 
   template <typename T> Queue<T>::Queue(int timeout) :
     timeout_(timeout),
+    queue_(),
+    mutex_(),
+    condition_(),
     logger_("Queue")
   {
   }
