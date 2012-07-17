@@ -282,14 +282,14 @@ void addStreamToInputFile(std::istream& istream, const std::string& outputFile) 
 
       blitzortung::data::GpsInfo::AP gpsInfo(new blitzortung::data::GpsInfo(longitude, latitude, altitude));
 
-      blitzortung::data::Event::AP event(new blitzortung::data::Event(waveform, gpsInfo));
+      blitzortung::data::Event::AP event(new blitzortung::data::Event(std::move(waveform), std::move(gpsInfo)));
 
       if (events.size() != 0 && events.getDate() != event->getWaveform().getTimestamp().date()) {
 	events.appendToFile(outputFile);
 	events.clear();
       }
 
-      events.add(event);
+      events.add(std::move(event));
     }
   }
   if (events.size() != 0) {

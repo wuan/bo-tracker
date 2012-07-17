@@ -1,6 +1,8 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
+#include <cstdio>
+
 #include <thread>
 
 #include "ipc/Listener.h"
@@ -25,7 +27,7 @@ namespace blitzortung {
 
       strcpy(sockaddr.sun_path, socketFileName_.c_str());
 
-      int failed = unlink(sockaddr.sun_path);
+      int failed = remove(sockaddr.sun_path);
       if (failed)
         logger_.warnStream() << "unlinking socket file '" << sockaddr.sun_path << "' failed";
 	
@@ -48,9 +50,9 @@ namespace blitzortung {
 
     UnixSocket::~UnixSocket()
     {
-      close(socket_);
+      shutdown(socket_, SHUT_RDWR);
 
-      unlink(socketFileName_.c_str());
+      remove(socketFileName_.c_str());
 
       if (logger_.isDebugEnabled())
 	logger_.debugStream() << "close socket " << socket_;
