@@ -101,7 +101,8 @@ namespace blitzortung {
       std::string rawData("0 0 0 -");
       appendInfoString(rawData);
 
-      data::Event::AP event(new data::MEvent(std::move(waveform), gps_.getInfo(), rawData));
+      data::GpsInfo::AP gpsInfo(gps_.getInfo());
+      data::Event::AP event(new data::MEvent(std::move(waveform), std::move(gpsInfo), rawData));
 
       return event;
     }
