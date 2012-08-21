@@ -46,7 +46,6 @@ int main(int argc, char **argv) {
   bo::Logger logger;
   std::string logFileName = "";
 
-  // programm arguments/options
   boost::program_options::options_description desc("program options");
   desc.add_options()
     ("help", "show program help")
@@ -68,8 +67,6 @@ int main(int argc, char **argv) {
     ("debug", "debug mode")
     ;
 
-
-  // parse command line options
   po::variables_map vm;
   bool showHelp = false;
 
@@ -81,7 +78,6 @@ int main(int argc, char **argv) {
     showHelp = true;
   }
 
-  // help output or no 'sql-statement' given
   if (vm.count("help") || showHelp) {
     std::cout << argv[0] << " [options]" << std::endl << std::endl;
     std::cout << desc << std::endl;
@@ -105,18 +101,13 @@ int main(int argc, char **argv) {
     return 5;
   }
 
-  // logging setup
-
   if (vm.count("logfile")) {
     logger.setLogFile(logFileName);
   }
-
   logger.setPriority(log4cpp::Priority::NOTICE);
-
   if (vm.count("verbose")) {
     logger.setPriority(log4cpp::Priority::INFO);
   }
-
   if (vm.count("debug")) {
     logger.setPriority(log4cpp::Priority::DEBUG);
   }
@@ -195,7 +186,6 @@ int main(int argc, char **argv) {
     }
   }
 
-  // create hardware driver object for blitzortung measurement hardware
   bo::hardware::Pcb hardware(*comm, *gps, firmwareVersion);
 
   bo::network::Creds creds;
