@@ -41,10 +41,12 @@ namespace blitzortung {
 	if (maximalSignalAmplitude >= amplitudeLimit_) {
 	  eventShouldBeProcessed = true;
 	} else {
-	  std::ostringstream oss;
-	  oss.precision(2);
-	  oss << "filtered signal with amplitude " << maximalSignalAmplitude << " at " << waveform.getTimestamp().time_of_day();
-	  logger_.notice(oss.str());
+	  if (logger_.isInfoEnabled()) {
+	    std::ostringstream oss;
+	    oss.precision(2);
+	    oss << "filtered signal with amplitude " << maximalSignalAmplitude << " at " << waveform.getTimestamp().time_of_day();
+	    logger_.info(oss.str());
+	  }
 	}
       }
       if (eventShouldBeProcessed)
