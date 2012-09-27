@@ -1,11 +1,12 @@
-blitzortung-tracker (1.0.6SNAPSHOT201207080800) unstable; urgency=low
+blitzortung-tracker (1.0.6) unstable; urgency=low
 
   * added txt to data file operation to bo-data
   * added data file cleanup operation to bo-data
   * code style/syntax improvements
   * only count transmitted events for data rate limit
+  * removed debug output
 
- -- Andreas Wuerl <blitzortung@tryb.de>  Fri, 22 Jun 2012 07:12:31 +0200
+ -- Andreas Wuerl <blitzortung@tryb.de>  Fri, 28 Sep 2012 00:11:25 +0200
 
 blitzortung-tracker (1.0.5) unstable; urgency=low
 
