@@ -95,8 +95,8 @@ namespace blitzortung {
     data::Event::AP Pcb::createKeepaliveSample() {
       if (logger_.isInfoEnabled())
 	logger_.infoStream() << "createKeepaliveSample()";
-
-      data::Waveform::AP waveform(new data::WaveformOf<signed char>(0, 0, gps_.getTime()));
+      
+      data::Waveform::AP waveform(new data::WaveformOf<signed char, 0, 1>(gps_.getTime()));
 
       std::string rawData("0 0 0 -");
       appendInfoString(rawData);

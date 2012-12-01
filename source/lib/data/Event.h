@@ -15,6 +15,12 @@ namespace blitzortung {
     //! class representing a single recorded sferics event with all relevant information
     class Event {
 
+      friend std::ostream& operator<< (std::ostream& os, const Event&);
+
+      private:
+
+	static const pt::time_duration TIMESTAMP_OFFSET;
+
       public:
 
 	typedef boost::ptr_vector<Event> V;

@@ -3,14 +3,9 @@
 
 #include "namespaces.h"
 #include "exception/Base.h"
+#include "data/Gps.h"
 
 namespace blitzortung {
-  namespace hardware {
-    namespace gps {
-      class Base;
-    }
-  }
-
   namespace data {
 
     //! class for gps information
@@ -32,7 +27,7 @@ namespace blitzortung {
 	short altitude_;
 
 	//! number of satellites
-	unsigned char numberOfSatellites_;
+	unsigned char satelliteCount_;
 
 	//! status
 	char status_;
@@ -43,7 +38,7 @@ namespace blitzortung {
 	/*!
 	\param gps const reference to gps hardware
 	*/
-	GpsInfo(const hardware::gps::Base& gps);
+	GpsInfo(const data::Gps& gps);
 
         //! create a gpsinfo object from a stream
 	/*!
@@ -73,7 +68,7 @@ namespace blitzortung {
 	short getAltitude() const;
 
 	//! returns the number of satellites available to the gps module
-	unsigned short getNumberOfSatellites() const;
+	unsigned short getSatelliteCount() const;
 
 	//! returns the acquisition status of the gps module
 	char getStatus() const;

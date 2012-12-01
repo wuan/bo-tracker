@@ -9,6 +9,7 @@
 #include "namespaces.h"
 #include "Logger.h"
 #include "data/GpsInfo.h"
+#include "data/Gps.h"
 #include "util/RingBuffer.h"
 #include "hardware/comm/Base.h"
 #include "hardware/gps/data/Base.h"
@@ -21,7 +22,7 @@ namespace blitzortung {
     namespace gps {
 
       //! base class for gps hardware objects      
-      class Base {
+      class Base : public blitzortung::data::Gps {
 
 	public:
 
@@ -116,6 +117,15 @@ namespace blitzortung {
 
 	  //! get gps baud rate
 	  unsigned short getBaudRate() const;
+
+	  //! returns longitude
+	  virtual float getLongitude() const;
+
+	  //! returns latitude
+	  virtual float getLatitude() const;
+
+	  //! returns altitude
+	  virtual short getAltitude() const;
       };
 
     }
