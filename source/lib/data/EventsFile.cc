@@ -125,7 +125,7 @@ namespace blitzortung {
 	logger_.debugStream() << "writeEvents()   position " << fstream_.tellg();
 	unsigned int position = fstream_.tellg();
 
-	for (Event::CVI event = events.begin(); event != events.end(); event++) {
+	for (Event::CVI event = events.begin(); event != events.end(); ++event) {
 	  event->toStream(fstream_);
 	  if (logger_.isDebugEnabled()) {
 	    logger_.debugStream() << "writeEvents()   position " << position << " delta " << (int(fstream_.tellg()) - position);
