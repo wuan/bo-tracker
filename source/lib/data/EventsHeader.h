@@ -46,7 +46,7 @@ namespace blitzortung {
       public:
 
 	//! constructor
-	EventsHeader(const Format& dataFormat=Format(0,0,0), const gr::date& date = gr::date(gr::not_a_date_time));
+	EventsHeader(const Format& dataFormat=Format(), const gr::date& date = gr::date(gr::not_a_date_time));
 
 	//! destructor
 	virtual ~EventsHeader();

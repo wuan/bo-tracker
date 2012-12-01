@@ -12,12 +12,12 @@ namespace blitzortung {
   namespace data {
 
     //! class for waveforms
-    template<typename T>
-    class WaveformOf : public Waveform, public ArrayOf<T> {
+    template<typename T, int numberOfSamples, int numberOfChannels>
+    class WaveformOf : public Waveform, public ArrayOf<T, numberOfSamples, numberOfChannels> {
 
       public:
 
-	typedef std::unique_ptr<WaveformOf<T>> AP;
+	typedef std::unique_ptr<WaveformOf<T, numberOfSamples, numberOfChannels>> AP;
 
       private:
 
@@ -33,7 +33,7 @@ namespace blitzortung {
 	/*!
 	\param t0 reference time of waveform
 	*/
-	WaveformOf(const pt::ptime& t0);
+	//WaveformOf(const pt::ptime& t0);
 
         //! create a waveform object
 	/*!
@@ -41,7 +41,7 @@ namespace blitzortung {
 	\param t0 reference time of waveform
 	\param dt time between consecutive data (non zero if Array has more than one sample
 	*/
-	WaveformOf(unsigned char numberOfChannels, unsigned short numberOfSamples, const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
+	WaveformOf(const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
 
         //! create a waveform object from a stream
 	/*!
@@ -49,7 +49,7 @@ namespace blitzortung {
 	\param date of the stream 
 	\param elements number of elements to read
 	*/
-	WaveformOf(unsigned char numberOfChannels, unsigned short numberOfSamples, const gr::date& date, std::iostream& stream);
+	WaveformOf(const gr::date& date, std::iostream& stream);
 
 	//! delete waveform object
 	virtual ~WaveformOf();
@@ -76,8 +76,8 @@ namespace blitzortung {
 	static unsigned int GetSize(const data::Format& dataFormat);
     };
 
-    template<typename T>
-    std::ostream& operator <<(std::ostream& os, const bo::data::WaveformOf<T>& wfm);
+    template<typename T, int numberOfSamples, int numberOfChannels>
+    std::ostream& operator <<(std::ostream& os, const bo::data::WaveformOf<T, numberOfSamples, numberOfChannels>& wfm);
 
   }
 }

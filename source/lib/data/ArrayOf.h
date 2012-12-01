@@ -7,18 +7,15 @@ namespace blitzortung {
   namespace data {
 
     //! class for waveform arrays
-    template<typename T>
+    template<typename T, int numberOfSamples, int numberOfChannels>
     class ArrayOf : public virtual Array {
 
       public:
-
 	typedef std::unique_ptr<ArrayOf> AP;
 
       private:
       
         std::vector<T> data_;
-
-	unsigned char numberOfChannels_;
 
       protected:
 
@@ -31,7 +28,7 @@ namespace blitzortung {
 	/*!
 	\param format reference to array format definition
 	*/
-	ArrayOf(unsigned char numberOfChannels, unsigned short numberOfSamples);
+	ArrayOf();
 
 	//! delete waveform object
 	virtual ~ArrayOf();
@@ -77,8 +74,8 @@ namespace blitzortung {
 
     };
 
-    template<typename T>
-    std::ostream& operator <<(std::ostream& os, const ArrayOf<T>&);
+    template<typename T, int numberOfSamples, int numberOfChannels>
+    std::ostream& operator <<(std::ostream& os, const ArrayOf<T, numberOfSamples, numberOfChannels>&);
 
   }
 }

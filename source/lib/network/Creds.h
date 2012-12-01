@@ -25,7 +25,7 @@ namespace blitzortung {
       public:
 
 	//! constructor
-	Creds() = default;
+	Creds();
 
 	Creds(const Creds&) = delete;
 	Creds& operator=(const Creds&) = delete;

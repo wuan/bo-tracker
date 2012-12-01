@@ -28,11 +28,37 @@ namespace blitzortung {
 	//! number of samples per channel
 	unsigned short numberOfSamples_;
 
+	Waveform::AP (*createWaveformWithTimestamp_)(const pt::ptime& t0, const pt::time_duration& dt);
+
+	Waveform::AP (*createWaveformFromStream_)(const gr::date& date, std::iostream& stream);
+
 	//! logger for this class
 	mutable Logger logger_;
 
 	//! update the data storage type according to the number of bits per sample value
 	void updateSampleType(unsigned char numberOfBytes);
+
+	//! update the factory method to create events of the given format
+	void updateFactoryMethod();
+
+	static Waveform::AP createWaveformChar_1_1(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createWaveformChar_1_1(const gr::date& date, std::iostream& stream);
+	static Waveform::AP createWaveformChar_64_1(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createWaveformChar_64_1(const gr::date& date, std::iostream& stream);
+	static Waveform::AP createWaveformChar_128_1(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createWaveformChar_128_1(const gr::date& date, std::iostream& stream);
+	static Waveform::AP createWaveformChar_256_1(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createWaveformChar_256_1(const gr::date& date, std::iostream& stream);
+	static Waveform::AP createWaveformChar_1_2(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createWaveformChar_1_2(const gr::date& date, std::iostream& stream);
+	static Waveform::AP createWaveformChar_64_2(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createWaveformChar_64_2(const gr::date& date, std::iostream& stream);
+	static Waveform::AP createWaveformChar_128_2(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createWaveformChar_128_2(const gr::date& date, std::iostream& stream);
+	static Waveform::AP createWaveformChar_256_2(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createWaveformChar_256_2(const gr::date& date, std::iostream& stream);
+	static Waveform::AP createWaveformShort_1_2(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createWaveformShort_1_2(const gr::date& date, std::iostream& stream);
 
       public:
 
@@ -83,7 +109,7 @@ namespace blitzortung {
 	Waveform::AP createWaveform(const pt::ptime&, const pt::time_duration&) const;
 
 	//! create waveform from stream
-	Waveform::AP createWaveformFromStream(const gr::date&, std::iostream&) const;
+	Waveform::AP createWaveform(const gr::date&, std::iostream&) const;
 
 	//! comparison operator for data format
 	bool operator==(const Format& other) const;

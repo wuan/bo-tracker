@@ -3,6 +3,14 @@
 namespace blitzortung {
   namespace network {
 
+    Creds::Creds() :
+      username_(""),
+      password_(""),
+      servername_(""),
+      serverport_(0)
+    {
+    }
+
     void Creds::setUsername(const std::string& username) {
       username_ = username;
     }

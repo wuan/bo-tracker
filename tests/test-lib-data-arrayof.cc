@@ -13,7 +13,7 @@ void ArrayOfTest::tearDown() {
 
 void ArrayOfTest::testCreate() {
 
-  bo::data::Array::AP array(new bo::data::ArrayOf<signed char>(2, 64));
+  bo::data::Array::AP array(new bo::data::ArrayOf<signed char, 64, 2>());
 
   CPPUNIT_ASSERT_EQUAL((unsigned short)2, array->getNumberOfChannels());
   CPPUNIT_ASSERT_EQUAL((unsigned int)64, array->getNumberOfSamples());
@@ -21,7 +21,7 @@ void ArrayOfTest::testCreate() {
 
 void ArrayOfTest::testSetAndGet() {
 
-  bo::data::Array::AP array(new bo::data::ArrayOf<signed char>(2, 64));
+  bo::data::Array::AP array(new bo::data::ArrayOf<signed char, 64, 2>());
 
   for (unsigned short channel = 0; channel < array->getNumberOfChannels(); channel++) {
     for (unsigned int sample = 0; sample < array->getNumberOfSamples(); sample++) {

@@ -160,6 +160,18 @@ namespace blitzortung {
       unsigned short Base::getBaudRate() const {
 	return baudRate_;
       }
+
+      float Base::getLongitude() const {
+	return location_.getLongitude();
+      }
+
+      float Base::getLatitude() const {
+	return location_.getLatitude();
+      }
+
+      short Base::getAltitude() const {
+	return location_.getAltitude();
+      }
     }
   }
 }
