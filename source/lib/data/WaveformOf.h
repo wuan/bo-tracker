@@ -29,12 +29,6 @@ namespace blitzortung {
 
       public:
 
-        //! create an empty waveform object
-	/*!
-	\param t0 reference time of waveform
-	*/
-	//WaveformOf(const pt::ptime& t0);
-
         //! create a waveform object
 	/*!
 	\param array unique_ptr to Array object

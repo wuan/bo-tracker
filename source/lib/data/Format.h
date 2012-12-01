@@ -41,7 +41,9 @@ namespace blitzortung {
 	//! update the factory method to create events of the given format
 	void updateFactoryMethod();
 
-	static Waveform::AP createWaveformChar_1_1(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createEmptyWaveform(const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
+	static Waveform::AP createEmptyWaveform(const gr::date& date, std::iostream& stream);
+	static Waveform::AP createWaveformChar_1_1(const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
 	static Waveform::AP createWaveformChar_1_1(const gr::date& date, std::iostream& stream);
 	static Waveform::AP createWaveformChar_64_1(const pt::ptime& t0, const pt::time_duration& dt);
 	static Waveform::AP createWaveformChar_64_1(const gr::date& date, std::iostream& stream);
@@ -49,7 +51,7 @@ namespace blitzortung {
 	static Waveform::AP createWaveformChar_128_1(const gr::date& date, std::iostream& stream);
 	static Waveform::AP createWaveformChar_256_1(const pt::ptime& t0, const pt::time_duration& dt);
 	static Waveform::AP createWaveformChar_256_1(const gr::date& date, std::iostream& stream);
-	static Waveform::AP createWaveformChar_1_2(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createWaveformChar_1_2(const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
 	static Waveform::AP createWaveformChar_1_2(const gr::date& date, std::iostream& stream);
 	static Waveform::AP createWaveformChar_64_2(const pt::ptime& t0, const pt::time_duration& dt);
 	static Waveform::AP createWaveformChar_64_2(const gr::date& date, std::iostream& stream);
@@ -57,7 +59,7 @@ namespace blitzortung {
 	static Waveform::AP createWaveformChar_128_2(const gr::date& date, std::iostream& stream);
 	static Waveform::AP createWaveformChar_256_2(const pt::ptime& t0, const pt::time_duration& dt);
 	static Waveform::AP createWaveformChar_256_2(const gr::date& date, std::iostream& stream);
-	static Waveform::AP createWaveformShort_1_2(const pt::ptime& t0, const pt::time_duration& dt);
+	static Waveform::AP createWaveformShort_1_2(const pt::ptime& t0, const pt::time_duration& dt=pt::nanoseconds(0));
 	static Waveform::AP createWaveformShort_1_2(const gr::date& date, std::iostream& stream);
 
       public:
