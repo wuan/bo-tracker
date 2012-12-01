@@ -20,7 +20,7 @@ namespace blitzortung {
       unsigned char Serial::calcChecksum(const std::string& content) {
 	unsigned char checksum = (unsigned char)content[0];
 
-	for (std::string::const_iterator character = content.begin() + 1; character != content.end(); character++) {
+	for (std::string::const_iterator character = content.begin() + 1; character != content.end(); ++character) {
 	  checksum ^= (unsigned char)*character;
 	}
 	return checksum;

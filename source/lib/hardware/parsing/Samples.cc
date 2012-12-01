@@ -74,7 +74,7 @@ namespace blitzortung {
 	    waveform_.reset();
 
 	    std::string line;
-	    for (std::vector<std::string>::const_iterator field = fields.begin(); field != fields.end(); field++)
+	    for (std::vector<std::string>::const_iterator field = fields.begin(); field != fields.end(); ++field)
 	      line += *field + " ";
 
 	    logger_.warnStream() << "Samples() could not parse '" << line << "'";

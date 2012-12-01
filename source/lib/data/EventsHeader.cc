@@ -146,7 +146,6 @@ namespace blitzortung {
       } else {
 
 	return fileformat;
-	throw exception::Base("data::EventsHeader formatFilename() ERROR: no file date");
       }
     }
 
