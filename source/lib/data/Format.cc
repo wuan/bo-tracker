@@ -46,7 +46,6 @@ namespace blitzortung {
       sampleType_ = other.sampleType_;
       createWaveformWithTimestamp_ = other.createWaveformWithTimestamp_;
       createWaveformFromStream_ = other.createWaveformFromStream_;
-      logger_ = other.logger_;
       return *this;
     }
 
