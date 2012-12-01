@@ -108,6 +108,14 @@ namespace blitzortung {
       updateFactoryMethod();
     }
 
+    Waveform::AP Format::createEmptyWaveform(const pt::ptime& t0, const pt::time_duration& dt) {
+      return Waveform::AP(new WaveformOf<signed char, 0, 1>(t0, dt));
+    }
+
+    Waveform::AP Format::createEmptyWaveform(const gr::date& date, std::iostream& stream) {
+      return Waveform::AP(new WaveformOf<signed char, 0, 1>(date, stream));
+    }
+
     Waveform::AP Format::createWaveformChar_1_1(const pt::ptime& t0, const pt::time_duration& dt) {
       return Waveform::AP(new WaveformOf<signed char, 1, 1>(t0, dt));
     }
@@ -195,6 +203,11 @@ namespace blitzortung {
 	  switch (numberOfChannels_) {
 	    case 1:
 	      switch (numberOfSamples_) {
+		case 0:
+		  createWaveformWithTimestamp_ = &Format::createEmptyWaveform;
+		  createWaveformFromStream_ = &Format::createEmptyWaveform;
+		  break;
+
 		case 1:
 		  createWaveformWithTimestamp_ = &Format::createWaveformChar_1_1;
 		  createWaveformFromStream_ = &Format::createWaveformChar_1_1;
@@ -216,7 +229,7 @@ namespace blitzortung {
 		  break;
 
 		default:
-	          throw new exception::Base("unhandled number of samples");
+	          throw exception::Base("unhandled number of samples");
 	      }
 	      break;
 
@@ -243,12 +256,12 @@ namespace blitzortung {
 		  break;
 
 		default:
-	          throw new exception::Base("unhandled number of samples");
+	          throw exception::Base("unhandled number of samples");
 	      }
 	      break;
 
 	    default:
-	      throw new exception::Base("unhandled number of channels");
+	      throw exception::Base("unhandled number of channels");
 	  }
 	  break;
 
@@ -262,17 +275,17 @@ namespace blitzortung {
 		  break;
 
 		default:
-	          throw new exception::Base("unhandled number of samples");
+	          throw exception::Base("unhandled number of samples");
 	      }
 	      break;
 
 	    default:
-	      throw new exception::Base("unhandled number of channels");
+	      throw exception::Base("unhandled number of channels");
 	  }
 	  break;
 
 	default:
-	  throw new exception::Base("unhandled sample type");
+	  throw exception::Base("unhandled sample type");
       }
     }
 
