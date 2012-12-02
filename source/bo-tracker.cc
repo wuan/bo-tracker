@@ -186,32 +186,32 @@ int main(int argc, char **argv) {
     }
   }
 
-  bo::hardware::Pcb hardware(*comm, *gps, firmwareVersion);
-
-  bo::network::Creds creds;
-  creds.setServername(servername);
-  creds.setServerport(serverport);
-  creds.setUsername(username);
-  creds.setPassword(password);
-
-  bo::network::transfer::Udp transfer(creds);
-
-  bo::output::Base::AP output;
-
-  if (vm.count("output")) {
-    output = bo::output::Base::AP(new bo::output::File(outputFile));
-  } else {
-    output = bo::output::Base::AP(new bo::output::None());
-  }
-
-  bo::Process process(transfer, eventRateLimit, *output);
-  process.setAmplitudeLimit(amplitudeLimit);
-
-  // setup unix domain socket for process information
-  bo::ipc::server::factory::Json jsonServerFactory(process, hardware);
-  bo::ipc::UnixSocket socket("/tmp/.blitzortung-tracker", jsonServerFactory);
-
   try {
+    bo::hardware::Pcb hardware(*comm, *gps, firmwareVersion);
+
+    bo::network::Creds creds;
+    creds.setServername(servername);
+    creds.setServerport(serverport);
+    creds.setUsername(username);
+    creds.setPassword(password);
+
+    bo::network::transfer::Udp transfer(creds);
+
+    bo::output::Base::AP output;
+
+    if (vm.count("output")) {
+      output = bo::output::Base::AP(new bo::output::File(outputFile));
+    } else {
+      output = bo::output::Base::AP(new bo::output::None());
+    }
+
+    bo::Process process(transfer, eventRateLimit, *output);
+    process.setAmplitudeLimit(amplitudeLimit);
+
+    // setup unix domain socket for process information
+    bo::ipc::server::factory::Json jsonServerFactory(process, hardware);
+    bo::ipc::UnixSocket socket("/tmp/.blitzortung-tracker", jsonServerFactory);
+
     while (hardware.isOpen()) {
 
       auto event = hardware.read();
@@ -222,7 +222,7 @@ int main(int argc, char **argv) {
 
     }
   } catch (std::exception& e) {
-    logger.errorStream() << "exception caught in main loop: '" << e.what() << "'";
+    logger.errorStream() << "exception caught in bo-tracker: '" << e.what() << "'";
   }
 
 }
