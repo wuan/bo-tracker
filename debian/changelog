@@ -1,3 +1,9 @@
+blitzortung-tracker (1.0.8) unstable; urgency=low
+
+  * fixed setting of 38000 baud for garmin gps devices
+ 
+ -- Andreas Wuerl <blitzortung@tryb.de>  Thu, 06 Jun 2013 23:56:42 +0200
+
 blitzortung-tracker (1.0.7) unstable; urgency=low
 
   * backported data templates from bo-lib

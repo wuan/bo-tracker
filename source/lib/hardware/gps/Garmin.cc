@@ -33,6 +33,10 @@ namespace blitzortung {
 	    targetBaudKey = 5;
 	    break;
 
+	  case 38400:
+	    targetBaudKey = 8;
+	    break;
+
 	  default:
 	    throw exception::Base("hardware.gps.Garmin() initWrite() unsupported BaudRate");
 	}
