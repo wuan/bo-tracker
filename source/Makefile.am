@@ -9,6 +9,7 @@ AM_CXXFLAGS = \
 
 AM_LDFLAGS = \
 	-llog4cpp \
+        -lboost_system \
         -lboost_program_options \
 	$(BOOST_MATH_LDFLAGS) \
 	$(NULL)
