@@ -47,6 +47,7 @@ Building on non Debian/Ubuntu systems
   * libboost-regex (>= 1.34 ?)
   * libboost-program-options (>= 1.34 ?)
   * libboost-math (>= 1.38) is optional
+  * libboost-system is required on some systems
 
 prepare makefiles via
 > make -f Makefile.cvs
