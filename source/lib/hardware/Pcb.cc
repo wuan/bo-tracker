@@ -27,7 +27,7 @@ namespace blitzortung {
 	logger_.debugStream() << "destroyed";
     }
 
-    const std::string Pcb::version_ = "debT&nbsp;1.0.8";
+    const std::string Pcb::version_ = "debT&nbsp;1.0.9";
 
     bool Pcb::isOpen() const {
       return comm_.isOpen();
