@@ -1,5 +1,6 @@
 *.lo
 *.la
+*.o
 .libs
 .deps
 .dirstamp
@@ -11,6 +12,7 @@ Makefile.in
 /libtool
 /ltmain.sh
 /configure
+/aclocal.m4
 /blitzortung-tracker-cpp.wpu
 /build-stamp
 /source/blitzortung-data
