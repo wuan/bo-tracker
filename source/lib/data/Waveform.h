@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include <json/json.h>
+#include <json.h>
 
 #include "namespaces.h"
 #include "data/ArrayOf.h"

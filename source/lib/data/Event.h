@@ -2,7 +2,7 @@
 #define BLITZORTUNG_DATA_EVENT_H_
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <json/json.h>
+#include <json.h>
 
 #include "namespaces.h"
 #include "data/Waveform.h"

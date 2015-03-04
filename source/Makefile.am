@@ -4,11 +4,15 @@ bin_PROGRAMS = bo-tracker \
 	       bo-data \
 	       $(NULL)
 
-AM_CXXFLAGS = \
-	-I lib
+AM_CPPFLAGS = \
+	$(JSON_CFLAGS) \
+	$(LOG4CPP_CFLAGS) \
+	-I lib \
+	$(NULL)
 
 AM_LDFLAGS = \
-	-llog4cpp \
+	$(JSON_LIBS) \
+        $(LOG4CPP_LIBS) \
         -lboost_system \
         -lboost_program_options \
 	$(BOOST_MATH_LDFLAGS) \

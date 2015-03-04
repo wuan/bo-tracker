@@ -3,15 +3,22 @@ AUTOMAKE_OPTIONS = subdir-objects
 AM_LDFLAGS = \
 	$(NULL)
 
+AM_CPPFLAGS = \
+	$(JSON_CFLAGS) \
+	$(LOG4CPP_CFLAGS) \
+	$(NULL)
+
 lib_LTLIBRARIES = libblitzortung.la
 
 libblitzortung_la_LDFLAGS = \
-	-llog4cpp \
-	-ljson \
+	$(JSON_LIBS) \
+	$(LOG4CPP_LIBS) \
 	-lboost_regex \
+        -lboost_system \
 	-release ${VERSION} \
 	-version_info ${LIBRARY_VERSION} \
-	-no undefined
+	-no undefined \
+	$(NULL)
 
 libblitzortung_la_SOURCES = \
 	DataWorker.h DataWorker.cc \

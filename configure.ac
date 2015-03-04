@@ -23,9 +23,9 @@ AC_CHECK_HEADERS([boost/date_time.hpp], [], [AC_MSG_ERROR(You need the boost dat
 AC_CHECK_HEADERS([boost/regex.hpp], [], [AC_MSG_ERROR(You need the boost regex libraries)])
 AC_CHECK_HEADERS([boost/program_options.hpp], [], [AC_MSG_ERROR(You need the boost program-options libraries)])
 AC_CHECK_HEADERS([boost/accumulators/accumulators.hpp], [AC_SUBST([BOOST_MATH_LDFLAGS], [])])
-AC_CHECK_HEADERS([log4cpp/Category.hh], [], [AC_MSG_ERROR(You need the log4cpp libraries)])
-AC_CHECK_HEADERS([cppunit/TestFixture.h], [], [AC_MSG_ERROR(You need the cppunit libraries)])
-AC_CHECK_HEADERS([json/json.h], [], [AC_MSG_ERROR(You need the json-c libraries)])
+PKG_CHECK_MODULES([LOG4CPP], [log4cpp], [], [AC_MSG_ERROR(You need the log4cpp libraries)])
+PKG_CHECK_MODULES([CPPUNIT], [cppunit], [], [AC_MSG_ERROR(You need the cppunit libraries)])
+PKG_CHECK_MODULES([JSON], [json], [], [AC_MSG_ERROR(You need the json0 libraries)])
 AC_LANG_POP([C++])
 
 AC_CONFIG_FILES([\

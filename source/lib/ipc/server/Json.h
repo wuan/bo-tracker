@@ -1,7 +1,7 @@
 #ifndef BLITZORTUNG_IPC_SERVER_JSON_H_
 #define BLITZORTUNG_IPC_SERVER_JSON_H_
 
-#include <json/json.h>
+#include <json.h>
 
 #include "hardware/Pcb.h"
 #include "ipc/server/Base.h"

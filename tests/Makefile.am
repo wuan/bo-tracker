@@ -3,12 +3,19 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/source \
 	-I$(top_srcdir)/source/lib \
-	$(DEBUG_CPPFLAGS) 
+        $(JSON_CFLAGS) \
+        $(LOG4CPP_CFLAGS) \
+        $(CPPUNIT_CFLAGS) \
+	$(DEBUG_CPPFLAGS) \
+	$(NULL)
 
 AM_LDFLAGS = \
 	$(top_srcdir)/source/lib/libblitzortung.la \
-	-lboost_program_options \
-	-lcppunit
+	-lboost_program_options -lboost_system \
+	$(JSON_LIBS) \
+	$(LOG4CPP_LIBS) \
+	$(CPPUNIT_LIBS) \
+	$(NULL)
 
 noinst_PROGRAMS = \
 	test-lib \

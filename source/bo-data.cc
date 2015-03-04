@@ -11,7 +11,7 @@
 
 #include <boost/program_options.hpp>
 
-#include <json/json.h>
+#include <json.h>
 
 #ifdef HAVE_BOOST_ACCUMULATORS_ACCUMULATORS_HPP
 #include <boost/accumulators/accumulators.hpp>
